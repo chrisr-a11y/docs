@@ -8,7 +8,7 @@
     "light": "#2E5CFF"
     },
     "appearance": {
-      "default": "dark",  
+      "default": "light",  
       "strict": false 
     },
   "navigation": {
@@ -77,10 +77,6 @@
     ],
     "global": {
     }
-  },
-  "logo": {
-    "light": "/logo/logo-light.svg",
-    "dark": "/logo/logo-dark.svg"
   },
   "navbar": {
     "links": [
