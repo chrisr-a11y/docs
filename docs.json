@@ -1,14 +1,14 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Polymarket US",
+  "name": "Polymarket Exchange",
   "colors": {
     "primary": "#2E5CFF",
     "dark": "#2E5CFF",
     "light": "#2E5CFF"
     },
     "appearance": {
-      "default": "dark",  
+      "default": "light",  
       "strict": false 
     },
   "navigation": {
@@ -78,23 +78,21 @@
     "global": {
     }
   },
-  "logo": {
-    "light": "/logo/logo-light.svg",
-    "dark": "/logo/logo-dark.svg"
+  "banner":{
+    "content": "This documentation is an early release of the Polymarket Exchange and is subject to modifications without advance notice."
   },
-  "navbar": {
+   "favicon": {
+      "dark": "/logo/favicon.png",
+      "light": "/logo/favicon.png"
+   },
+   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@polymarket.us"
+        "href": "mailto:support@qcex.us"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
+    ]
+    },
   "contextual": {
     "options": [
      "copy",
@@ -106,10 +104,5 @@
      "cursor",
      "vscode"
    ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/polymarket",
-      "github": "https://github.com/Polymarket"   }
   }
 }
