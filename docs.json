@@ -15,23 +15,29 @@
     "tabs": [
       {
         "tab": "Welcome",
+        "pages": [
+          "index"            
+        ]
+      },
+            {
+        "tab": "Getting Started",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
-              "index"            
+              "getting-started/getting-access",
+              "getting-started/rate-limits"            
             ]
-              
           }
         ]
       },
+
       {
-        "tab": "API reference",
+        "tab": "REST API",
         "groups": [
           {
             "group": "API documentation",
             "pages": [
-              "api-reference/introduction",
               "api-reference/auth"
             ]
           },
@@ -43,7 +49,31 @@
                   }
             }
         ]
+      },
+         {
+        "tab": "FIX API",
+        "pages": [
+          "/api-reference/fix-api/ep3-fix-overview",
+          "/api-reference/fix-api/ep3-fix-component-definitions",
+          "/api-reference/fix-api/ep3-fix-session-management",
+          "/api-reference/fix-api/ep3-fix-order-entry-and-matching",
+          "/api-reference/fix-api/ep3-fix-market-data",
+          "/api-reference/fix-api/ep3-fix-api-reference-data",
+          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"    
+        ]
+      },
+            {
+        "tab": "Changelog",
+            "pages": [
+              "changelog"            
+            ]
+        
       }
+
+      
+
+
+
     ],
     "global": {
     }
