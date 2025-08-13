@@ -78,6 +78,9 @@
     "global": {
     }
   },
+  "banner":{
+    "content": "This documentation is an early release of the Polymarket Exchange and is subject to modifications without advance notice."
+  },
    "favicon": {
       "dark": "/logo/favicon.png",
       "light": "/logo/favicon.png"
