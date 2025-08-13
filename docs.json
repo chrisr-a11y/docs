@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Polymarket US",
+  "name": "Polymarket Exchange",
   "colors": {
     "primary": "#2E5CFF",
     "dark": "#2E5CFF",
@@ -86,15 +86,10 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@polymarket.us"
+        "href": "mailto:support@qcex.us"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
+    ]
+    },
   "contextual": {
     "options": [
      "copy",
@@ -106,10 +101,5 @@
      "cursor",
      "vscode"
    ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/polymarket",
-      "github": "https://github.com/Polymarket"   }
   }
 }
