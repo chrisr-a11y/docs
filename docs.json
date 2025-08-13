@@ -25,6 +25,7 @@
           {
             "group": "Getting Started",
             "pages": [
+              "getting-started/getting-access",
               "getting-started/rate-limits"            
             ]
           }
@@ -32,12 +33,11 @@
       },
 
       {
-        "tab": "API reference",
+        "tab": "REST API",
         "groups": [
           {
             "group": "API documentation",
             "pages": [
-              "api-reference/introduction",
               "api-reference/auth"
             ]
           },

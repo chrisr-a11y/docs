@@ -1,8 +1,10 @@
-# Order Entry and Matching
+---
+title: "FIX Order Entry & Matching"
+---
 
 ## Overview
 
-EP3 operates as a continuous central limit order book to match orders within the system according to price-time priority:
+The Exchange operates as a continuous central limit order book to match orders within the system according to price-time priority:
 
 * Higher-priced orders to buy have priority over lower-priced bids,
 * Lower-priced offers to sell buy have priority over higher-priced sells,
@@ -107,9 +109,10 @@ Participants may place orders into the EP3 platform order book to buy or sell se
 | 8000             | SelfMatchPreventionInstruction | C     | String       | Self-match instruction.\<br>O = Cancel oldest (resting) order\<br>N = Cancel newest (aggressive) order                                                                                                                                                                                                                                                                                                                                                   |
 | Standard Trailer |                                | Y     |              |                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 
-Example 5: Entry of a new limit order to buy 1,000 shares at 50.00
-
+**Example 5: Entry of a new limit order to buy 1,000 shares at 50.00**
+```
 8=FIXT.1.1 | 9=123 | 35=D | 49=SENDER | 56=TARGET | 34=16 | 50=SENDERSUB | 52=20240517-19:00:28 | 11=1182560819 | 21=1 | 55=GOOG | 54=1 | 40=2 | 44=50 | 38=1000 | 1=ACCT | 10=166 |
+```
 
 ## Order Acknowledgement & Execution
 

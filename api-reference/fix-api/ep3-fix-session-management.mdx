@@ -1,4 +1,6 @@
-# FIX Session Management
+---
+title: "FIX Session Management"
+---
 
 ## Establishing and Maintaining a FIX Session
 
@@ -19,15 +21,18 @@ The Logon \[A] message initiates a connection to the EP3 platform. FIX sessions 
 
 <br />
 
-Example 1: Logon message
+**Example 1: Logon message**
 
+```
 8=FIXT.1.1 | 9=76 | 35=A | 49=SENDER | 56=TARGET | 34=1 | 52=20240516-14:14:53 | 98=0 | 108=30 | 1137=9 | 141=Y | 10=132 |
+```
 
 <br />
 
 ### Figure 1: Successful Logon
 
-\[]!([https://files.readme.io/688c178-logon.png](https://files.readme.io/688c178-logon.png))
+![](https://files.readme.io/688c178-logon.png)
+
 
 Under normal circumstances, both FIX engines on either side of the connection will regularly exchange Heartbeat messages. The frequency of such a message exchange is determined by the HeartBtInt (108) value indicated in the Logon \[A] message.
 
@@ -122,7 +127,7 @@ Example 2: Logout message\
 
 ### Figure 4: Graceful Logout sequence
 
-\[]!([https://files.readme.io/d4287de-logout.png](https://files.readme.io/d4287de-logout.png))
+![](https://files.readme.io/d4287de-logout.png)
 
 Participants are recommended to schedule a graceful logout before the start of a scheduled maintenance window. If this is not received, then the EP3 Platform will initiate the logout process.
 
@@ -149,9 +154,10 @@ BusinessMessageReject \[j] is a more generic message used to reject errors such 
 
 <br />
 
-Example 3: Reject \[3] example due to bad limit price\
+**Example 3: Reject \[3] example due to bad limit price**
+```
 8=FIXT.1.1 | 9=127 | 35=3 | 34=39 | 49=TARGET | 52=20240517-19:08:47 | 56=SENDER | 45=42 | 58=Value is incorrect (out of range) for this tag | 371=44 | 372=D | 373=5 | 10=237 |
-
+```
 <br />
 
 ### Table 11: BusinessMessageReject (j) message
@@ -168,5 +174,7 @@ Example 3: Reject \[3] example due to bad limit price\
 
 <br />
 
-Example 4: BusinessMessageReject \[j] example due to bad role permissions\
+**Example 4: BusinessMessageReject \[j] example due to bad role permissions**
+```
 8=FIXT.1.1 | 9=116 | 35=j | 34=5 | 49=TARGET | 52=20240516-14:19:40 | 56=SENDER | 45=6 | 58=Supervising firms cannot perform this action | 372=x | 380=6 | 10=082 |
+```

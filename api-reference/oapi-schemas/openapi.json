@@ -552,6 +552,7 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/get_who_am_i:
     post:
+      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: Get Who Am I
@@ -721,6 +722,7 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_accounts:
     post:
+      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: List Accounts
@@ -862,6 +864,7 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_users:
     post:
+      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: List Users
@@ -1003,6 +1006,7 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/search_quotes:
     post:
+      "x-excluded": true,
       tags:
       - QuoteAPI
       summary: Search Quotes
@@ -1030,6 +1034,7 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/search_request_for_quotes:
     post:
+      "x-excluded": true,
       tags:
       - QuoteAPI
       summary: Search Request For Quotes

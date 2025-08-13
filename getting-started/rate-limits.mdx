@@ -1,24 +1,20 @@
 ---
 title: "API Rate Limits"
-description: "Learn about API Rate Limits"
 ---
+## General
 
+The APIs are designed to provide a current snapshot of each category of data, and then streaming events that contain changes to the data. These APIs are not intended to be used as REST APIs where the consumer makes repeated requests to get the "current" state of data. This is a streaming API, and consumers must implement their integrations to support receiving streams of events instead of repeatedly asking for snapshots of data.
 
-The following limits apply to order actions. All limits are **per API key** unless otherwise specified.
+## Caching
 
-| Action              | Rate Limit (per min) | Burst (per sec) | Scope    | Notes |
-|--------------------:|:--------------------:|:---------------:|:--------:|:-----:|
-| Placing Orders      | 120                  | 5               | API key  | Includes all order creation endpoints |
-| Canceling Orders    | 120                  | 5               | API key  | Applies to single and batch cancel endpoints |
+It is expected that API consumers will implement appropriate caching mechanisms in their software implementations, along with appropriate limits on the rate at which requests for data are made to the API.
 
+Historical data can be cached indefinitely.
 
-## Response headers (example)
+Participant data such as positions, balances, orders, etc. should be reasonably cached by the caller to limit the potential abuse of their implementation. This could result in high numbers of requests to the API for the same data where that data is not changing at a rate commensurate with the rate of requests to refresh the data. Abuse of the API or implementations which do not have a reasonable caching system implemented may result in usage restrictions being placed upon the caller's API credentials.
 
-When a request is subject to rate limiting, responses include:
+## Events
 
-```http
-HTTP/1.1 429 Too Many Requests
-Retry-After: 30
-```
+Most commands to retrieve a current snapshot of data also have corresponding events for notifications of changes in that data. Consumers of this API are expected to subscribe to those events and maintain a current state of data instead of making repeated calls to retrieve the data snapshots. 
 
-# THESE ARE NOT REAL RATES DO NOT PUBLISH PLACEHOLDERS ONLY
+If a consumer of this API is observed to be making excessive repeated calls to retrieve data that is updated through the events, usage restrictions may be placed upon the API credentials being used.
