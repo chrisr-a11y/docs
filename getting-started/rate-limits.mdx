@@ -1,0 +1,24 @@
+---
+title: "API Rate Limits"
+description: "Learn about API Rate Limits"
+---
+
+
+The following limits apply to order actions. All limits are **per API key** unless otherwise specified.
+
+| Action              | Rate Limit (per min) | Burst (per sec) | Scope    | Notes |
+|--------------------:|:--------------------:|:---------------:|:--------:|:-----:|
+| Placing Orders      | 120                  | 5               | API key  | Includes all order creation endpoints |
+| Canceling Orders    | 120                  | 5               | API key  | Applies to single and batch cancel endpoints |
+
+
+## Response headers (example)
+
+When a request is subject to rate limiting, responses include:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 30
+```
+
+# THESE ARE NOT REAL RATES DO NOT PUBLISH PLACEHOLDERS ONLY

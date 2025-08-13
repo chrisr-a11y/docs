@@ -1,0 +1,53 @@
+Participants may download a list of the instruments available (or reference data about them) to trade on the EP3 Platform by submitting a SecurityListRequest [x] message.
+
+# Reference Data
+
+## Table 23: SecurityListRequest (x) message
+
+| Tag | Field Name | Req'd | Data Type | Comments |
+|-----|------------|-------|-----------|----------|
+| < Standard Header > | | Y | | 35 = x |
+| 320 | SecurityReqID | Y | String | Unique ID associated with this request. |
+| 336 | TradingSessionID | N | String | Used to filter for instruments of the specified market state:<br/>• CLOSED<br/>• OPEN<br/>• PREOPEN<br/>• SUSPENDED<br/>• EXPIRED<br/>• TERMINATED<br/>• HALTED<br/>• MATCH_AND_CLOSE_AUCTION |
+| 559 | SecurityListRequestType | Y | int | The type of request being made.<br/>0 = Individual symbol<br/>4 = All Securities |
+| 55 | Symbol | C | String | Required if SecurityListRequestType (559) = 0 (individual security) |
+| < Standard Trailer > | | Y | | |
+
+**Example 21: Request for information on all securities**
+```
+8=FIXT.1.1 | 9=75 | 35=x | 49=SENDER | 56=TARGET | 34=12 | 52=20240516-14:28:38 | 320=REF-DATA-001 | 559=4 | 10=048 |
+```
+
+Upon receipt, the EP3 Platform will respond with a SecurityList [y] message containing the requested information. Note that the content provided by the SecurityList [y] message does not differ depending on whether an individual symbol was listed versus all securities.
+
+## Table 24: SecurityList (y) message
+
+| Tag | Field Name | Req'd | Data Type | Comments |
+|-----|------------|-------|-----------|----------|
+| < Standard Header > | | Y | | 35 = y |
+| 320 | SecurityReqID | Y | String | The unique SecurityReqID (320) sent on the request. |
+| 322 | SecurityResponseID | Y | String | Unique ID for this response. Typically a 13 character alphanumeric string. |
+| 560 | SecurityRequestResult | Y | int | The status of the request.<br/>0 = Valid request<br/>1 = Invalid or unsupported request<br/>3 = Not authorized to retrieve instrument data |
+| 146 | NoRelatedSym | C | NumInGroup | Number of instruments to be returned. Only present for valid requests. |
+| → 55 | Symbol | Y | String | Instrument symbol |
+| → 48 | SecurityID | Y | String | Will always equal Symbol (55) |
+| → 22 | SecurityIDSource | Y | int | 8 = Exchange symbol |
+| → 167 | SecurityType | N | String | Type of instrument<br/>CS = Common Stock<br/>FUT = Future<br/>FXSPOT = FX Spot (incl. crypto)<br/>FXSWAP = FX Swap<br/>OOF = Options on Futures<br/>OPT = Option<br/>NONE = Other |
+| → 231 | ContractMultiplier | N | float | The ratio or multiplier to convert from "nominal" units (e.g. contracts) to total units (e.g. shares). Applicable for Fixed Income, Derivatives, etc. |
+| → 864 | NoEvents | Y | NumInGroup | Number of repeating EventType entries. Will always be 1. |
+| →→ 865 | EventType | Y | int | Code to represent the type of event<br/>5 = Activation |
+| →→ 866 | EventDate | Y | LocalMktDate | Date that the instrument first started (or will start) trading on the exchange in YYYYMMDD format. |
+| →→ 868 | EventText | Y | String | Event string. Always 'StartDate'. |
+| → 969 | MinPriceIncrement | Y | float | Minimum price increment (tick size) |
+| → 1151 | SecurityGroup | Y | String | The name of the group of securities to which this instrument belongs. |
+| → 562 | MinTradeVol | Y | Qty | The minimum quantity allowed on an order. This field can be a decimal, indicating the ability to trade fractional shares of this instrument. |
+| → 15 | Currency | Y | Currency | Currency for the instrument, or quote currency in the case of Forex. For example, for BTC-USD, the Currency would be USD. |
+| < Standard Trailer > | | Y | | |
+
+**Example 22: SecurityList [y] indicating two securities (color-coded)**
+```
+8=FIXT.1.1 | 9=336 | 35=y | 34=9 | 49=TARGET | 52=20240516-14:28:38.864954771 | 56=SENDER | 146=2 | 55=GC-Dec-2030 | 48=GC-Dec-2030 | 22=8 | 167=NONE | 231=1 | 864=1 | 865=5 | 866=19700101 | 868=StartDate | 969=0.01 | 1151=GC | 562=1 | 15=USD | 55=GOOG | 48=GOOG | 22=8 | 167=NONE | 231=1 | 864=1 | 865=5 | 866=19700101 | 868=StartDate | 969=0.01 | 1151=Equities | 562=1 | 15=USD | 320=2007026312 | 322=1HPT7F2AA6404 | 560=0 | 10=007 |
+```
+
+### Figure 16: Request form security reference data
+![](https://files.readme.io/e1f144a-security_list.png)

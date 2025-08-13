@@ -781,7 +781,8 @@ paths:
     post:
       tags:
       - MarketDataAPI
-      summary: ListInstruments returns a list of instruments matching the request.
+      summary: List Instruments
+      description: Returns a list of instruments matching the request.
       operationId: MarketDataAPI_ListInstruments
       requestBody:
         content:
