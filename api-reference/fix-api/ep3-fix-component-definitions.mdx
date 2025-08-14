@@ -1,0 +1,28 @@
+---
+title: "FIX Components"
+---
+
+## Standard Header & Trailer
+
+Each FIX message sent to and received from the PMX platform must start and end with a message header and trailer components.
+
+## Standard Header Component
+
+| Tag | Field Name    | Req'd | Data Type | Comments                                                                                                    |
+|-----|---------------|-------|-----------|-------------------------------------------------------------------------------------------------------------|
+| 8   | BeginString   | Y     | String    | FIXT.1.1                                                                                                   |
+| 9   | BodyLength    | Y     | Length    | Standard FIX message body length                                                                           |
+| 35  | MsgType       | Y     | String    | The message type. See relevant section.                                                                   |
+| 49  | SenderCompID  | Y     | String    | Sender identity as agreed with the exchange operator.                                                     |
+| 56  | TargetCompID  | Y     | String    | Intended target identity as agreed with the exchange operator.                                            |
+| 50  | SenderSubID   | C     | String    | Sender sub-identifier representing an individual user (as previously agreed with the exchange operator). Required on all application messages related to the entry or management of orders. |
+| 57  | TargetSubID   | N     | String    | Target sub-identifier representing an individual user (as previously agreed with the exchange operator)  |
+| 34  | MsgSeqNum     | Y     | SeqNum    | FIX Message sequence number                                                                                |
+| 43  | PossDupFlag   | N     | Boolean   | Always required for retransmitted messages as the result of a resend request                             |
+| 52  | SendingTime   | Y     | UTCTime   | Sending time in UTC                                                                                        |
+
+## Standard Trailer Component
+
+| Tag | Field Name | Req'd | Data Type | Comments              |
+|-----|------------|-------|-----------|-----------------------|
+| 10  | Checksum   | Y     | String    | Standard FIX checksum |

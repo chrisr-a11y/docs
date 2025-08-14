@@ -1,0 +1,364 @@
+openapi: 3.0.1
+info:
+  title: Basic Auth REST Proxy
+  version: v0.6.1+20250724.144139.
+servers:
+- url: http://api.polymarketexchange.com
+tags:
+- name: BasicAuthAPI
+paths:
+  /v1beta1/change_password:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: ChangePassword of the given user.
+      operationId: BasicAuthAPI_ChangePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1ChangePasswordRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ChangePasswordResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/check_password:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: CheckPassword checks a password against minimum strength requirements.
+      operationId: BasicAuthAPI_CheckPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1CheckPasswordRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1CheckPasswordResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/confirm_mfa:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: ConfirmMFA confirms the setup of multi-factor authentication is completed
+        by providing a time-based one-time password generated using the enrollment
+        url obtained from EnrollMFA.
+      operationId: BasicAuthAPI_ConfirmMFA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1ConfirmMFARequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1ConfirmMFAResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/enroll_mfa:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: EnrollMFA enrolls a user into multi-factor authentication.
+      operationId: BasicAuthAPI_EnrollMFA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1EnrollMFARequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1EnrollMFAResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/login:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: Login authenticates users and returns a JWT to be used for API requests.
+      operationId: BasicAuthAPI_Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1LoginRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1LoginResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/logout:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: Logout requests that the token currently associated with the authenticated
+        caller be blacklisted.
+      operationId: BasicAuthAPI_Logout
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1LogoutRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1LogoutResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/refresh_access_token:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: RefreshAccessToken request for a new access token using a valid refresh
+        token.
+      operationId: BasicAuthAPI_RefreshAccessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1RefreshAccessTokenRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1RefreshAccessTokenResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+  /v1beta1/register:
+    post:
+      tags:
+      - BasicAuthAPI
+      summary: Register asks the server to register the given user.
+      operationId: BasicAuthAPI_Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/v1beta1RegisterRequest'
+        required: true
+      responses:
+        "200":
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/v1beta1RegisterResponse'
+        default:
+          description: An unexpected error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/rpcStatus'
+      x-codegen-request-body-name: body
+components:
+  schemas:
+    protobufAny:
+      type: object
+      properties:
+        '@type':
+          type: string
+      additionalProperties:
+        type: object
+    rpcStatus:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/protobufAny'
+        message:
+          type: string
+    v1beta1ChangePasswordRequest:
+      type: object
+      properties:
+        newPassword:
+          type: string
+        oldPassword:
+          type: string
+        username:
+          type: string
+    v1beta1ChangePasswordResponse:
+      type: object
+    v1beta1CheckPasswordRequest:
+      type: object
+      properties:
+        password:
+          type: string
+    v1beta1CheckPasswordResponse:
+      type: object
+      properties:
+        acceptable:
+          type: boolean
+        minimumStrength:
+          type: number
+          format: double
+        strength:
+          type: number
+          format: double
+        suggestion:
+          type: string
+    v1beta1ConfirmMFARequest:
+      type: object
+      properties:
+        otp:
+          title: Time-based one-time password
+          type: string
+        password:
+          type: string
+        username:
+          type: string
+    v1beta1ConfirmMFAResponse:
+      type: object
+    v1beta1EnrollMFARequest:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+    v1beta1EnrollMFAResponse:
+      type: object
+      properties:
+        enrollmentUrl:
+          title: "URL that matches the otpauth usage specification draft RFC draft-linuxgemini-otpauth-uri-01\
+            \ (otpauth://totp/[Issuer]:[UserName]?PARAMETERS)"
+          type: string
+    v1beta1LoginRequest:
+      type: object
+      properties:
+        otp:
+          type: string
+          description: Time-based one-time password used when multi-factor authentication
+            is enabled.
+        password:
+          type: string
+        username:
+          type: string
+    v1beta1LoginResponse:
+      type: object
+      properties:
+        accessExpirationTime:
+          type: string
+          format: date-time
+        accessIssueTime:
+          type: string
+          format: date-time
+        accessToken:
+          type: string
+        refreshExpirationTime:
+          type: string
+          format: date-time
+        refreshIssueTime:
+          type: string
+          format: date-time
+        refreshToken:
+          type: string
+    v1beta1LogoutRequest:
+      type: object
+      properties:
+        accessToken:
+          title: "If provided, the access token to revoke as part of logout"
+          type: string
+        refreshToken:
+          title: "If provided, the refresh token to revoke as part of logout"
+          type: string
+    v1beta1LogoutResponse:
+      type: object
+    v1beta1RefreshAccessTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    v1beta1RefreshAccessTokenResponse:
+      type: object
+      properties:
+        accessExpirationTime:
+          type: string
+          format: date-time
+        accessIssueTime:
+          type: string
+          format: date-time
+        accessToken:
+          type: string
+    v1beta1RegisterRequest:
+      type: object
+      properties:
+        password:
+          type: string
+        token:
+          type: string
+    v1beta1RegisterResponse:
+      type: object
+x-original-swagger-version: "2.0"

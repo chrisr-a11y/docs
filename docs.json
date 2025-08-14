@@ -1,0 +1,109 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Polymarket Exchange",
+  "colors": {
+    "primary": "#2E5CFF",
+    "dark": "#2E5CFF",
+    "light": "#2E5CFF"
+    },
+    "appearance": {
+      "default": "light",  
+      "strict": false 
+    },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Welcome",
+        "pages": [
+          "index"            
+        ]
+      },
+            {
+        "tab": "Getting Started",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "getting-started/getting-access",
+              "getting-started/rate-limits",
+              "getting-started/connection-options"            
+            ]
+          }
+        ]
+      },
+
+      {
+        "tab": "REST API",
+        "groups": [
+          {
+            "group": "API documentation",
+            "pages": [
+              "api-reference/auth"
+            ]
+          },
+           {
+      "group": "Trading Endpoints",
+      "openapi": {
+        "source": "/api-reference/oapi-schemas/openapi.json",
+        "directory": "api-reference"
+                  }
+            }
+        ]
+      },
+         {
+        "tab": "FIX API",
+        "pages": [
+          "/api-reference/fix-api/ep3-fix-overview",
+          "/api-reference/fix-api/ep3-fix-component-definitions",
+          "/api-reference/fix-api/ep3-fix-session-management",
+          "/api-reference/fix-api/ep3-fix-order-entry-and-matching",
+          "/api-reference/fix-api/ep3-fix-market-data",
+          "/api-reference/fix-api/ep3-fix-api-reference-data",
+          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"    
+        ]
+      },
+            {
+        "tab": "Changelog",
+            "pages": [
+              "changelog"            
+            ]
+        
+      }
+
+      
+
+
+
+    ],
+    "global": {
+    }
+  },
+  "banner":{
+    "content": "This documentation for the Polymarket Exchange is available in DRAFT form for comment. All aspects subject to change."
+  },
+   "favicon": {
+      "dark": "/logo/favicon.png",
+      "light": "/logo/favicon.png"
+   },
+   "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:support@qcex.com"
+      }
+    ]
+    },
+  "contextual": {
+    "options": [
+     "copy",
+     "view",
+     "chatgpt",
+     "claude",
+     "perplexity",
+     "mcp",
+     "cursor",
+     "vscode"
+   ]
+  }
+}
