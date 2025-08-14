@@ -26,7 +26,8 @@
             "group": "Getting Started",
             "pages": [
               "getting-started/getting-access",
-              "getting-started/rate-limits"            
+              "getting-started/rate-limits",
+              "getting-started/connection-options"            
             ]
           }
         ]
@@ -79,7 +80,7 @@
     }
   },
   "banner":{
-    "content": "This documentation is an early release of the Polymarket Exchange and is subject to modifications without advance notice."
+    "content": "This documentation for the Polymarket Exchange is available in DRAFT form for comment. All aspects subject to change."
   },
    "favicon": {
       "dark": "/logo/favicon.png",
@@ -89,7 +90,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:support@qcex.us"
+        "href": "mailto:support@qcex.com"
       }
     ]
     },
