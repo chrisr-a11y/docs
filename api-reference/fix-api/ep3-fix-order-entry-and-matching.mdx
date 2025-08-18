@@ -185,14 +185,20 @@ All orders entering the Platform are first either accepted or rejected using an 
 
 <br />
 
-Example 6: Acknowledgement of new limit order to buy 1,000 shares at 50.00\
+Example 6: Acknowledgement of new limit order to buy 1,000 shares at 50.00
+```
 8=FIXT.1.1 | 9=269 | 35=8 | 34=14 | 49=TARGET | 52=20240517-19:00:28 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1182560819 | 14=0 | 17=1HPT7DPFMC5KW | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM00 | 38=1000 | 39=0 | 40=2 | 44=50.00 | 48=GOOG | 54=1 | 55=GOOG | 59=0 | 60=20240517-19:00:28.678960817 | 99=0.00 | 150=0 | 151=1000 | 581=3 | 582=1 | 10=088 |
+```
 
-Example 7: Execution of 500 shares at a price of 50.00\
+Example 7: Execution of 500 shares at a price of 50.00
+```
 8=FIXT.1.1 | 9=338 | 35=8 | 34=33 | 49=TARGET | 52=20240517-19:06:47.985808615 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=50.00 | 11=1182560826 | 14=500 | 17=1HPT7DPFMC5M5 | 22=8 | 31=50.00 | 32=500 | 37=1HQ4A5T0EDM07 | 38=500 | 39=2 | 40=2 | 44=50.00 | 48=GOOG | 54=2 | 55=GOOG | 59=0 | 60=20240517-19:06:47.977567695 | 99=0.00 | 119=25000.00 | 150=F | 151=0 | 381=25000.00 | 581=3 | 582=1 | 828=0 | 880=1HPT7DPFMC5M4 | 1057=Y | 10=116 |
+```
 
-Example 8: Expiry of FOK order (without execution)\
+Example 8: Expiry of FOK order (without execution)
+```
 8=FIXT.1.1 | 9=275 | 35=8 | 34=43 | 49=TARGET | 52=20240517-19:09:23.494862156 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1182560830 | 14=0 | 17=1HPT7DPFMC5MB | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM0A | 38=500 | 39=C | 40=2 | 44=50.01 | 48=GOOG | 54=2 | 55=GOOG | 59=4 | 60=20240517-19:09:23.491276593 | 99=0.00 | 150=C | 151=0 | 581=3 | 582=1 | 10=201 |
+```
 
 ## Triggering Stop Orders
 
@@ -206,16 +212,22 @@ They remain outside the central limit order book until the StopPx (99) has been 
 
 <br />
 
-Example 9: Entry of a Stop Limit order\
+Example 9: Entry of a Stop Limit order
+```
 8=FIXT.1.1 | 9=160 | 35=D | 49=SENDER | 56=TARGET | 34=119 | 52=20240521-09:45:21 | 11=1886428727 | 21=1 | 55=GOOG | 54=1 | 60=20240521-09:45:21 | 40=4 | 44=0.03 | 38=1500 | 50=SENDERSUB | 1=ACCT | 59=0 | 99=0.03 | 10=163 |
+```
 
-Example 10: Initial acknowledgement of Stop Limit order\
+Example 10: Initial acknowledgement of Stop Limit order
+```
 8=FIXT.1.1 | 9=279 | 35=8 | 34=112 | 49=TARGET | 52=20240521-09:45:21.252049258 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1886428727 | 14=0 | 17=1HPT7DQ1GC4C4 | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM1T | 38=1500 | 39=0 | 40=4 | 44=0.03 | 48=GOOG | 54=1 | 55=GOOG | 59=0 | 60=20240521-09:45:21.246689976 | 99=0.03 | 150=0 | 151=1500 | 581=3 | 582=1 | 10=079 |
+```
 
-Example 11: ExecutionReport indicating conversion of Stop LImit into Limit order\
+Example 11: ExecutionReport indicating conversion of Stop LImit into Limit order
+```
 8=FIXT.1.1 | 9=293 | 35=8 | 34=126 | 49=TARGET | 52=20240521-09:52:30.011976583 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1886428732 | 14=0 | 17=1HPT7DQ1GC4ET | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM1T | 38=1500 | 39=0 | 40=2 | 41=1886428727 | 44=0.03 | 48=GOOG | 54=1 | 55=GOOG | 59=0 | 60=20240521-09:52:30.004561670 | 99=0.02 | 150=0 | 151=1500 | 581=3 | 582=1 | 10=253 |
+```
 
-## Market-To-Limit Order Behaviour
+## Market-To-Limit Order Behavior
 
 Market-to-limit orders (OrderType (39) = K) are unpriced orders which are designed to execute against any existing orders in the order book upon arrival, with any remaining order balance automatically converted into a Limit order at the last trade or “worst fill” price.
 
@@ -239,8 +251,10 @@ Note that unlike Stop Orders, Market-to-Limit orders retain the same OrdType (40
 
 <br />
 
-Example 12: Initial acknowledgment of Market-to-Limit order indicating end Limit Price (44)\
+Example 12: Initial acknowledgment of Market-to-Limit order indicating end Limit Price (44)
+```
 8=FIXT.1.1 | 9=278 | 35=8 | 34=11 | 49=TARGET | 52=20240521-10:40:28.546598320 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1886428739 | 14=0 | 17=1HPT7DQ1GC4GH | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM20 | 38=1000 | 39=0 | 40=K | 44=0.02 | 48=GOOG | 54=2 | 55=GOOG | 59=0 | 60=20240521-10:40:28.542693638 | 99=0.00 | 150=0 | 151=1000 | 581=3 | 582=1 | 10=012 |
+```
 
 <br />
 
@@ -260,8 +274,10 @@ Where specified, two otherwise-executable orders from the same participant and w
 
 Note that resting order(s) will expire just after the incoming order has been accepted by the Platform, and before any trades have taken place. The incoming order is therefore permitted to trade against other orders in the order book as it entered the market.
 
-Example 13: ExecutionReport indicating resting order expiry as a result of self-match prevention\
+Example 13: ExecutionReport indicating resting order expiry as a result of self-match prevention
+```
 8=FIXT.1.1 | 9=341 | 35=8 | 34=69 | 49=TARGET | 52=20240521-11:22:26.078209896 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1886428747 | 14=0 | 17=1HPT7DQ1GC4JA | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM26 | 38=1 | 39=4 | 40=2 | 41=1886428747 | 44=0.02 | 48=GOOG | 54=1 | 55=GOOG | 58=Self Match Prevention | 59=0 | 60=20240521-11:22:26.075068980 | 99=0.00 | 150=4 | 151=0 | 378=99 | 581=3 | 582=1 | 7928=111 | 8000=O | 10=039 |
+```
 
 If the SelfMatchPreventionInstruction (8000) is N (newest), then it is the incoming order which is rejected to prevent the execution, as shown below. This is the default behavior where SelfMatchPreventionID (7928) is present but SelfMatchPreventionInstruction (8000) is not specified.
 
@@ -275,8 +291,10 @@ Note that the incoming order is fully canceled in the case it would potentially 
 
 <br />
 
-Example 14: ExecutionReport immediately rejecting incoming order as a result of self-match prevention\
+Example 14: ExecutionReport immediately rejecting incoming order as a result of self-match prevention
+```
 8=FIXT.1.1 | 9=314 | 35=8 | 34=109 | 49=TARGET | 52=20240521-11:55:30.495116582 | 56=SENDER | 57=SENDERSUB | 1=ACCT | 6=0.00 | 11=1886428755 | 14=0 | 17=1HPT7DQ1GC4JT | 22=8 | 31=0.00 | 32=0 | 37=1HQ4A5T0EDM2E | 38=10 | 39=8 | 40=2 | 44=0.02 | 48=GOOG | 54=1 | 55=GOOG | 58=Self Match Prevention | 59=0 | 60=20240521-11:55:30.487845738 | 99=0.00 | 103=0 | 150=8 | 151=0 | 581=3 | 582=1 | 7928=222 | 10=165 |
+```
 
 <br />
 
@@ -302,8 +320,10 @@ Note that a modification which increases the remaining order quantity will lose 
 
 <br />
 
-Example 15: Request to replace an existing order\
+Example 15: Request to replace an existing order
+```
 8=FIXT.1.1 | 9=127 | 35=G | 49=SENDER | 56=TARGET| 34=66 | 52=20240517-19:17:08 | 50=SENDERSUB | 41=1182560827 | 11=1182560836 | 55=GOOG | 54=2 | 40=2 | 38=500 | 44=1000 | 10=061 |
+```
 
 If the order can not be modified for any reason (for example if the requested price / order size are not acceptable, or the order has already expired), then the PMX Platform will respond with an OrderCancelReject \[9] message indicating the reason.
 
@@ -339,8 +359,10 @@ If the request to cancel the order passed validation, then the PMX Platform will
 
 ![](https://files.readme.io/4964694-order_cancel.png)
 
-Example 16: Example of order cancel message\
+Example 16: Example of order cancel message
+```
 8=FIXT.1.1 | 9=107 | 35=F | 49=SENDER |  56=TARGET | 34=96 | 52=20240517-19:29:50 | 50=SENDERSUB | 41=1182560834 | 11=1182560840 | 55=GOOG | 54=1 | 10=244 |
+```
 
 Rejected attempts to cancel orders for any reason (for example order is no longer alive) are rejected using the OrderCancelReject \[9] message, which identifies the reason for the rejection.
 
@@ -367,5 +389,6 @@ Rejected attempts to cancel orders for any reason (for example order is no longe
 <br />
 
 Example 17: Rejection of an unsuccessful cancel attempt
-
+```
 8=FIXT.1.1 | 9=145 | 35=9 | 34=91 | 49=TARGET | 52=20240521-09:26:30.378549737 | 56=SENDER | 57=SENDERSUB | 11=1886428723 | 37=NONE | 39=8 | 41=1886428676 | 58=Unknown order | 102=1 | 434=1 | 10=198 |
+```
