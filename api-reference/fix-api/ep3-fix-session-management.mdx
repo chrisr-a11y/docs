@@ -60,7 +60,7 @@ At any point either counterparty can force the opposing FIX engine to send a Hea
 
 ### Figure 2: Using TestRequest \[1] to request Heartbeat \[0] from other side
 
-\[]!([https://files.readme.io/6dc3db8-test\_request.png](https://files.readme.io/6dc3db8-test_request.png))
+![](https://files.readme.io/6dc3db8-test_request.png)
 
 ## Cancel on Disconnect
 
@@ -106,7 +106,8 @@ In the message replay situation described above, to replace a FIX message which 
 
 ### Figure 3: ResendRequest \[2] message triggers re-transmission of missed messages
 
-\[]!([https://files.readme.io/1e36f8b-resend\_request.png](https://files.readme.io/1e36f8b-resend_request.png))
+![](https://files.readme.io/1e36f8b-resend_request.png)
+
 
 ## Terminating a FIX Session
 
@@ -122,12 +123,15 @@ The Logout \[5] message initiates or confirms the termination of a FIX session. 
 
 The expected response to a successful Logout \[5] message is a reciprocal Logout \[5] message, after which the TCP connection should be dropped.
 
-Example 2: Logout message\
+Example 2: Logout message
+```
 8=FIXT.1.1 | 9=51 | 35=5 | 34=2 | 49=SENDER | 52=20240516-14:17:38 | 56=TARGET | 10=237 |
+```
 
 ### Figure 4: Graceful Logout sequence
 
 ![](https://files.readme.io/d4287de-logout.png)
+
 
 Participants are recommended to schedule a graceful logout before the start of a scheduled maintenance window. If this is not received, then the PMX Platform will initiate the logout process.
 
