@@ -1113,14 +1113,14 @@ components:
         qty:
           type: string
           format: int64
-        symbolSubType:
+        symbol_sub_type:
           type: string
       description: BookEntry lists a price and volume for a given record in a market
         data update.
     GetAccountBalanceResponseSecurityEntry:
       type: object
       properties:
-        availableValue:
+        available_value:
           type: string
           description: "Represents the available collateral value of the security,\
             \ which is the balance multiplied by the market value less the haircut\
@@ -1133,10 +1133,10 @@ components:
           description: The haircut value of a single unit of the security ID in units
             of basis points (100 basis points is 1%).
           format: int64
-        marketValue:
+        market_value:
           type: string
           description: The actual mark to market value of the security.
-        notionalValue:
+        notional_value:
           type: string
           description: "Represents the notional value of the security, which is the\
             \ balance multiplied by the market value."
@@ -1146,66 +1146,66 @@ components:
     connamaraep3v1beta1CancelReject:
       type: object
       properties:
-        clordId:
+        clord_id:
           title: Client assigned ID for the order
           type: string
-        isReplace:
+        is_replace:
           title: Set if this cancel reject was for a replace or not
           type: boolean
-        orderId:
+        order_id:
           title: Maps to exchange assigned ID for the order that could not be canceled
             or replaced
           type: string
-        rejectReason:
+        reject_reason:
           $ref: '#/components/schemas/v1beta1CxlRejReason'
         text:
           title: Free format text
           type: string
-        transactTime:
+        transact_time:
           type: string
           format: date-time
       description: CancelReject denotes a cancel or replace request that was rejected.
     connamaraep3v1beta1CancelReplaceOrderRequest:
       type: object
       properties:
-        allOrNone:
+        all_or_none:
           type: boolean
           description: "A flag that if set indicates that either all of the order\
             \ quantity should be filled, or none of it (partial fills will not be\
             \ allowed)."
-        bestLimit:
+        best_limit:
           type: boolean
           description: A flag that if set indicates that the price of a limit order
             shall be set to the price at the top of the book on the same side as this
             order.
-        clordId:
+        clord_id:
           type: string
           description: Client assigned ID for the cancel replace order.
-        goodTillTime:
+        good_till_time:
           type: string
           description: The time at which this order shall expire if the time in force
             is set as good till time.
           format: date-time
-        immediatelyExecutableLimit:
+        immediately_executable_limit:
           type: boolean
           description: "A flag that if set indicates that the price of a limit order\
             \ shall be set to the price at the top of the book on the opposing side\
             \ as this order, thus able to immediately match."
-        manualOrderIndicator:
+        manual_order_indicator:
           $ref: '#/components/schemas/v1beta1ManualOrderIndicator'
-        minQty:
+        min_qty:
           type: string
           description: Desired minimum quantity for the replaced order (optional for
             IOC time in force).
           format: int64
-        orderId:
+        order_id:
           type: string
           description: Exchange assigned ID for the order to be replaced (required).
-        orderQty:
+        order_qty:
           type: string
           description: Desired order quantity for the replaced order.
           format: int64
-        participateDontInitiate:
+        participate_dont_initiate:
           type: boolean
           description: A flag that if set indicates that immediate match is not desired.
         price:
@@ -1213,22 +1213,22 @@ components:
           description: Desired limit price for the replaced order (required for limit
             and stop limit orders).
           format: int64
-        stopPrice:
+        stop_price:
           type: string
           description: Desired stop price for the replaced order (required for stop
             and stop limit orders).
           format: int64
-        strictLimit:
+        strict_limit:
           type: boolean
           description: A flag that if set indicates this particular order must be
             filled at the exact limit price specified without price improvement.
         symbol:
           type: string
           description: Desired instrument's symbol (required).
-        symbolSubType:
+        symbol_sub_type:
           type: string
           description: The sub type of the instrument symbol.
-        timeInForce:
+        time_in_force:
           $ref: '#/components/schemas/v1beta1TimeInForce'
       description: Request to update an existing order with the given details.
     connamaraep3v1beta1Execution:
@@ -1238,13 +1238,13 @@ components:
           title: "if a fill, true if this execution belongs to aggressor order, false\
             \ if belongs to passive order"
           type: boolean
-        commissionNotionalCollected:
+        commission_notional_collected:
           type: string
           description: "The notional value of commissions collected as part of the\
             \ execution, it is unscaled so one must apply the parent instrument price\
             \ and fractional quantity scales to get the exact decimal value."
           format: int64
-        commissionSpreadPx:
+        commission_spread_px:
           type: string
           description: "The price at which a commission spread order filled at from\
             \ the viewpoint of the firm that placed the order. For all other orders,\
@@ -1253,13 +1253,13 @@ components:
         id:
           title: Exchange assigned ID for this execution
           type: string
-        lastPx:
+        last_px:
           type: string
           format: int64
-        lastShares:
+        last_shares:
           type: string
           format: int64
-        legPrices:
+        leg_prices:
           title: "if a fill on a multi leg instrument, contains the derived leg prices\
             \ at the time of execution"
           type: array
@@ -1267,48 +1267,48 @@ components:
             $ref: '#/components/schemas/v1beta1LegPrice'
         order:
           $ref: '#/components/schemas/connamaraep3v1beta1Order'
-        orderRejectReason:
+        order_reject_reason:
           $ref: '#/components/schemas/v1beta1OrdRejectReason'
         text:
           title: Free format text
           type: string
-        traceId:
+        trace_id:
           title: "if present, contains the exchange trace identifier that resulted\
             \ in this execution"
           type: string
-        tradeId:
+        trade_id:
           title: "if a fill, the trade id for this transaction"
           type: string
-        transactTime:
+        transact_time:
           type: string
           format: date-time
-        transactTradeDate:
+        transact_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
         type:
           $ref: '#/components/schemas/v1beta1ExecutionType'
-        unsolicitedCancelReason:
+        unsolicited_cancel_reason:
           $ref: '#/components/schemas/v1beta1UnsolicitedCxlReason'
       description: Execution denotes a state change for an order in the exchange.
     connamaraep3v1beta1InsertOrderCrossRequest:
       type: object
       properties:
-        blockTradeIndicator:
+        block_trade_indicator:
           type: boolean
           description: A flag that if set indicates that this cross represents a block
             trade.
-        crossId:
+        cross_id:
           type: string
           description: Client assigned free-form ID for the cross (required).
-        crossPrioritizedSide:
+        cross_prioritized_side:
           $ref: '#/components/schemas/v1beta1Side'
-        crossType:
+        cross_type:
           $ref: '#/components/schemas/v1beta1CrossType'
         requests:
           type: array
           description: A list of orders to insert (Only supports 2 orders at a time).
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1InsertOrderRequest'
-        transactionBookedTime:
+        transaction_booked_time:
           type: string
           description: The time at which the order was booked.
           format: date-time
@@ -1319,69 +1319,69 @@ components:
         account:
           type: string
           description: The trading account for this order.
-        allOrNone:
+        all_or_none:
           type: boolean
           description: "A flag that if set indicates that either all of the order\
             \ quantity should be filled, or none of it (partial fills will not be\
             \ allowed)."
-        bestLimit:
+        best_limit:
           type: boolean
           description: A flag that if set indicates that the price of a limit order
             shall be set to the price at the top of the book on the same side as this
             order.
-        cashOrderQty:
+        cash_order_qty:
           type: string
           description: |-
             Fixed point decimal representation of the total cash order qty.
             (One of order_qty and cash_order_qty must be set. If set, must be > 0 and order_type must be MARKET_TO_LIMIT).
           format: int64
-        clientAccountId:
+        client_account_id:
           type: string
           description: Client assigned free-form account ID for the order.
-        clientParticipantId:
+        client_participant_id:
           type: string
           description: Client assigned free-form participant ID for the order.
-        clordId:
+        clord_id:
           type: string
           description: Client assigned ID for the order.
-        commissionOverrideBasisPoints:
+        commission_override_basis_points:
           type: string
           description: "If present and an eligible singular commission with allow_order_entry_override\
             \ is present for the order, assigns basis points to this value."
-        commissionOverrideFlatFee:
+        commission_override_flat_fee:
           type: string
           description: "If present and an eligible singular commission with allow_order_entry_override\
             \ is present for the order, assigns flat fee to this value."
-        goodTillTime:
+        good_till_time:
           type: string
           description: "The time at which this order shall expire (required for time_in_force\
             \ of GOOD_TILL_TIME, ignored otherwise)."
           format: date-time
-        ignorePriceValidityChecks:
+        ignore_price_validity_checks:
           type: boolean
           description: "A flag that if set indicates that this order is exempt from\
             \ instrument level price, order, and total notional limits. Only allowed\
             \ in case of market sell orders to support liquidation."
-        immediatelyExecutableLimit:
+        immediately_executable_limit:
           type: boolean
           description: "A flag that if set indicates that the price of a limit order\
             \ shall be set to the price at the top of the book on the opposing side\
             \ as this order, thus able to immediately match."
-        manualOrderIndicator:
+        manual_order_indicator:
           $ref: '#/components/schemas/v1beta1ManualOrderIndicator'
-        minQty:
+        min_qty:
           type: string
           description: Minimum order quantity to fill at once. Matches for fills under
             this amount will not be made (optional for IOC time in force).
           format: int64
-        orderCapacity:
+        order_capacity:
           $ref: '#/components/schemas/v1beta1OrderCapacity'
-        orderQty:
+        order_qty:
           type: string
           description: "The quantity to be ordered (One of order_qty and cash_order_qty\
             \ must be set. If set, must be > 0)."
           format: int64
-        participateDontInitiate:
+        participate_dont_initiate:
           type: boolean
           description: A flag that if set indicates that immediate match is not desired.
         price:
@@ -1392,24 +1392,24 @@ components:
         quote:
           type: string
           description: "If set, the quote to accept."
-        selfMatchPreventionId:
+        self_match_prevention_id:
           type: string
           description: Client assigned Self Match Prevention ID (required to use the
             optional Self Match Prevention functionality).
-        selfMatchPreventionInstruction:
+        self_match_prevention_instruction:
           $ref: '#/components/schemas/v1beta1SelfMatchPreventionInstruction'
-        sessionId:
+        session_id:
           type: string
           description: Client assigned Session ID (required to use the optional Cancel
             on Disconnect functionality).
         side:
           $ref: '#/components/schemas/v1beta1Side'
-        stopPrice:
+        stop_price:
           type: string
           description: Integer representation of stop price (required for stop and
             stop limit orders).
           format: int64
-        strictLimit:
+        strict_limit:
           type: boolean
           description: A flag that if set indicates this particular order must be
             filled at the exact limit price specified without price improvement.
@@ -1417,12 +1417,12 @@ components:
           type: string
           description: The symbol of the instrument to be ordered (required for all
             orders).
-        symbolSubType:
+        symbol_sub_type:
           type: string
           description: The sub type of the instrument symbol.
-        timeInForce:
+        time_in_force:
           $ref: '#/components/schemas/v1beta1TimeInForce'
-        triggerMethod:
+        trigger_method:
           $ref: '#/components/schemas/v1beta1ConditionTriggerMethod'
         type:
           $ref: '#/components/schemas/v1beta1OrderType'
@@ -1434,144 +1434,144 @@ components:
     connamaraep3v1beta1Instrument:
       type: object
       properties:
-        baseCurrency:
+        base_currency:
           type: string
-        basisSwapAttributes:
+        basis_swap_attributes:
           $ref: '#/components/schemas/v1beta1BasisSwapAttributes'
-        blockTradeThreshold:
+        block_trade_threshold:
           $ref: '#/components/schemas/v1beta1BlockTradeThreshold'
-        clearingHouse:
+        clearing_house:
           title: name of the clearing house that clears the instrument
           type: string
-        createTime:
+        create_time:
           title: The creation timestamp of the Instrument
           type: string
           format: date-time
-        crossOrderRestingDuration:
+        cross_order_resting_duration:
           title: Amount of time an order from a cross should rest in the book before
             matching
           type: string
-        customAttributes:
+        custom_attributes:
           $ref: '#/components/schemas/protobufAny'
-        deleteTime:
+        delete_time:
           title: The deletion timestamp of the Instrument
           type: string
           format: date-time
         description:
           title: description of the instrument
           type: string
-        eventAttributes:
+        event_attributes:
           $ref: '#/components/schemas/v1beta1EventAttributes'
-        expirationDate:
+        expiration_date:
           $ref: '#/components/schemas/v1beta1Date'
-        expirationTime:
+        expiration_time:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
-        forexAttributes:
+        forex_attributes:
           $ref: '#/components/schemas/v1beta1ForexAttributes'
-        forwardRateAgreementSwapAttributes:
+        forward_rate_agreement_swap_attributes:
           $ref: '#/components/schemas/v1beta1ForwardRateAgreementSwapAttributes'
-        forwardStartingInterestRateSwapAttributes:
+        forward_starting_interest_rate_swap_attributes:
           $ref: '#/components/schemas/v1beta1ForwardStartingInterestRateSwapAttributes'
-        fractionalQtyScale:
+        fractional_qty_scale:
           title: The scale applied to an instruments quantity in order to represent
             fractional shares
           type: string
           format: int64
-        futureAttributes:
+        future_attributes:
           $ref: '#/components/schemas/v1beta1FutureAttributes'
-        holidayCalendars:
+        holiday_calendars:
           title: holiday calendars assigned to the instrument
           type: array
           items:
             type: string
-        interestRateSwapAttributes:
+        interest_rate_swap_attributes:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributes'
-        jsonAttributes:
+        json_attributes:
           type: string
-        lastTradeDate:
+        last_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
-        lastTradeTime:
+        last_trade_time:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
         metadata:
           title: Miscellaneous metadata to be stored with the instrument
           type: object
           additionalProperties:
             type: string
-        minimumTradeQty:
+        minimum_trade_qty:
           type: string
           format: int64
-        minimumUnaffiliatedFirms:
+        minimum_unaffiliated_firms:
           title: minimum number of unaffiliated firms required when submitting request
             for quotes
           type: string
           format: int64
-        multilegAttributes:
+        multileg_attributes:
           $ref: '#/components/schemas/v1beta1MultilegAttributes'
         multiplier:
           type: number
           format: double
-        nonDeliverableForwardAttributes:
+        non_deliverable_forward_attributes:
           $ref: '#/components/schemas/v1beta1NonDeliverableForwardAttributes'
-        nonTradable:
+        non_tradable:
           title: "Set if the instrument should be non-tradable, as in the case of\
             \ an index"
           type: boolean
-        optionAttributes:
+        option_attributes:
           $ref: '#/components/schemas/v1beta1OptionAttributes'
-        orderSizeLimit:
+        order_size_limit:
           $ref: '#/components/schemas/v1beta1OrderSizeLimit'
-        overnightIndexSwapAttributes:
+        overnight_index_swap_attributes:
           $ref: '#/components/schemas/v1beta1OvernightIndexSwapAttributes'
-        positionLimit:
+        position_limit:
           type: string
           format: int64
-        priceLimit:
+        price_limit:
           $ref: '#/components/schemas/v1beta1PriceLimit'
-        priceScale:
+        price_scale:
           title: The scale applied to an instruments price in order to represent prices
             as fixed point decimals
           type: string
           format: int64
-        productId:
+        product_id:
           title: Product ID for this instrument
           type: string
-        singlePeriodSwapAttributes:
+        single_period_swap_attributes:
           $ref: '#/components/schemas/v1beta1SinglePeriodSwapAttributes'
-        startDate:
+        start_date:
           $ref: '#/components/schemas/v1beta1Date'
-        startTime:
+        start_time:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
         state:
           $ref: '#/components/schemas/connamaraep3v1beta1InstrumentState'
         symbol:
           title: unique identifier for this instrument
           type: string
-        terminationDate:
+        termination_date:
           $ref: '#/components/schemas/v1beta1Date'
-        tickSize:
+        tick_size:
           type: number
           format: double
-        tradeDayRollConvention:
+        trade_day_roll_convention:
           $ref: '#/components/schemas/v1beta1TradeDayRollConvention'
-        tradeDayRollSchedule:
+        trade_day_roll_schedule:
           type: array
           description: "If set, contains the rules that define when trade days roll\
             \ to the next trade day."
           items:
             $ref: '#/components/schemas/v1beta1TradeDayRoll'
-        tradeSettlementPeriod:
+        trade_settlement_period:
           title: number of days required to settle a trade of this instrument
           type: string
           format: int64
-        tradingSchedule:
+        trading_schedule:
           type: array
           items:
             $ref: '#/components/schemas/v1beta1TradingHours'
-        updateTime:
+        update_time:
           title: The update timestamp of the Instrument
           type: string
           format: date-time
-        zeroCouponInflationSwapAttributes:
+        zero_coupon_inflation_swap_attributes:
           $ref: '#/components/schemas/v1beta1ZeroCouponInflationSwapAttributes'
       description: Instrument is an asset that can be trading on the exchange platform.
     connamaraep3v1beta1InstrumentState:
@@ -1593,182 +1593,182 @@ components:
         account:
           title: Account is the trading account for this order
           type: string
-        allOrNone:
+        all_or_none:
           title: Set if all or none of the order qty should be filled
           type: boolean
-        avgPx:
+        avg_px:
           title: Average fill price
           type: string
           format: int64
-        bestLimit:
+        best_limit:
           type: boolean
           description: A flag that if set indicates that the price of a limit order
             shall be set to the price at the top of the book on the same side as this
             order.
-        blockTradeIndicator:
+        block_trade_indicator:
           type: boolean
           description: A flag that if set indicates that this order is part of a block
             trade.
-        cashOrderQty:
+        cash_order_qty:
           title: Fixed point decimal representation of the total cash order qty
           type: string
           format: int64
-        clientAccountId:
+        client_account_id:
           title: Client assigned free-form account ID for the order
           type: string
-        clientParticipantId:
+        client_participant_id:
           title: Client assigned free-form participant ID for the order
           type: string
-        clordId:
+        clord_id:
           title: Client assigned ID for the order
           type: string
-        collateralMemo:
+        collateral_memo:
           title: The risk status given by the position risk check
           type: string
-        commissionNotionalTotalCollected:
+        commission_notional_total_collected:
           type: string
           description: "The total notional value of all commissions collected on the\
             \ order so far, it is unscaled so one must apply the parent instrument\
             \ price and fractional quantity scales to get the exact decimal value."
           format: int64
-        commissionsBasisPoints:
+        commissions_basis_points:
           title: The total basis points associated with all commissions on this order
           type: string
         context:
           $ref: '#/components/schemas/v1beta1OrderContext'
-        createTime:
+        create_time:
           title: The time this order was created
           type: string
           format: date-time
-        crossId:
+        cross_id:
           title: Client assigned Order Cross ID
           type: string
-        cumQty:
+        cum_qty:
           title: Cumulative filled order qty
           type: string
           format: int64
-        fractionalQuantityScale:
+        fractional_quantity_scale:
           type: string
           description: The fractional quantity scale of the order assigned from the
             associated instrument for convenience in scaling display values.
           format: int64
-        goodTillTime:
+        good_till_time:
           title: The time at which this order shall expire if the time in force is
             set as good till time
           type: string
           format: date-time
-        hostCrossId:
+        host_cross_id:
           title: Exchange generated Host Cross ID
           type: string
         id:
           title: Exchange assigned ID for the order
           type: string
-        ignorePriceValidityChecks:
+        ignore_price_validity_checks:
           type: boolean
           description: "A flag that if set indicates that this order is exempt from\
             \ instrument level price, order, and total notional limits. Only allowed\
             \ in case of market sell orders to support liquidation."
-        immediatelyExecutableLimit:
+        immediately_executable_limit:
           type: boolean
           description: "A flag that if set indicates that the price of a limit order\
             \ shall be set to the price at the top of the book on the opposing side\
             \ as this order, thus able to immediately match."
-        insertTime:
+        insert_time:
           title: The time this order was inserted into the book or the time the order
             was replaced in the book
           type: string
           format: date-time
-        lastTradeId:
+        last_trade_id:
           title: "Set to the last, most recent trade ID that this order was party\
             \ to"
           type: string
-        lastTransactTime:
+        last_transact_time:
           type: string
           description: The most recent time this order was updated in any capacity.
           format: date-time
-        leavesQty:
+        leaves_qty:
           title: Remaining working qty
           type: string
           format: int64
-        makerCommissionsBasisPoints:
+        maker_commissions_basis_points:
           type: string
           description: The total basis points associated with all commissions on this
             order if it executes on the passive side of a trade.
-        manualOrderIndicator:
+        manual_order_indicator:
           $ref: '#/components/schemas/v1beta1ManualOrderIndicator'
-        minQty:
+        min_qty:
           title: Minimum quantity (optional for IOC time in force)
           type: string
           format: int64
-        orderCapacity:
+        order_capacity:
           $ref: '#/components/schemas/v1beta1OrderCapacity'
-        orderQty:
+        order_qty:
           type: string
           format: int64
-        parentOrderId:
+        parent_order_id:
           title: The parent order this order is the child of
           type: string
         participant:
           title: Participant that placed this order
           type: string
-        participateDontInitiate:
+        participate_dont_initiate:
           title: Set if immediate match is not desired
           type: boolean
         price:
           title: "Integer price representation (for limit, stop limit)"
           type: string
           format: int64
-        priceScale:
+        price_scale:
           type: string
           description: The price scale of the order assigned from the associated instrument
             for convenience in scaling display values.
           format: int64
-        priceToQuantityFilled:
+        price_to_quantity_filled:
           title: Denotes the quantity filled at each price point over the life of
             the order
           type: object
           additionalProperties:
             type: string
             format: int64
-        priorityWeight:
+        priority_weight:
           title: Relative priority among the same price level
           type: string
           format: int64
-        riskCheckTime:
+        risk_check_time:
           title: The time at which this order was risk checked
           type: string
           format: date-time
-        selfMatchPreventionInstruction:
+        self_match_prevention_instruction:
           $ref: '#/components/schemas/v1beta1SelfMatchPreventionInstruction'
         side:
           $ref: '#/components/schemas/v1beta1Side'
         state:
           $ref: '#/components/schemas/v1beta1OrderState'
-        stopPrice:
+        stop_price:
           title: "Integer stop price representation (for stop, stop limit)"
           type: string
           format: int64
-        strictLimit:
+        strict_limit:
           title: Set if this particular order must be filled at the exact limit price
             specified without price improvement
           type: boolean
-        submittingParticipant:
+        submitting_participant:
           title: "If this order is being submitted on behalf of another entity, set\
             \ to the agent submitter"
           type: string
         symbol:
           type: string
-        symbolSubType:
+        symbol_sub_type:
           title: The sub type of the instrument symbol
           type: string
-        timeInForce:
+        time_in_force:
           $ref: '#/components/schemas/v1beta1TimeInForce'
-        transactionBookedTime:
+        transaction_booked_time:
           type: string
           description: "In the context of an order cross, the time at which the order\
             \ was booked."
           format: date-time
-        triggerMethod:
+        trigger_method:
           $ref: '#/components/schemas/v1beta1ConditionTriggerMethod'
         type:
           $ref: '#/components/schemas/v1beta1OrderType'
@@ -1779,13 +1779,13 @@ components:
         account:
           title: Account is the trading account for this quote
           type: string
-        clientId:
+        client_id:
           title: Client assigned ID for this quote
           type: string
-        clordId:
+        clord_id:
           title: Client assigned ID for the order
           type: string
-        expirationTime:
+        expiration_time:
           title: Timestamp at which this quote will expire
           type: string
           format: date-time
@@ -1795,34 +1795,34 @@ components:
         id:
           title: Exchange assigned ID for this quote
           type: string
-        insertTime:
+        insert_time:
           title: The time this quote was inserted into the exchange
           type: string
           format: date-time
         name:
           title: Exchange assigned resource name for this quote
           type: string
-        orderQty:
+        order_qty:
           type: string
           format: int64
         price:
           title: Desired price for the quote in integer representation
           type: string
           format: int64
-        quoteRequestId:
+        quote_request_id:
           title: Exchange assigned ID for the quote request that this quote references
           type: string
         side:
           $ref: '#/components/schemas/v1beta1Side'
         status:
           $ref: '#/components/schemas/v1beta1QuoteStatus'
-        submittingUser:
+        submitting_user:
           title: The agent participant that created this quote on behalf of the designated
             user
           type: string
         symbol:
           type: string
-        symbolSubType:
+        symbol_sub_type:
           title: The sub type of the instrument symbol
           type: string
         user:
@@ -1852,15 +1852,15 @@ components:
       properties:
         quote:
           $ref: '#/components/schemas/connamaraep3v1beta1Quote'
-        quoteAccept:
+        quote_accept:
           $ref: '#/components/schemas/v1beta1QuoteAccept'
-        quoteCancel:
+        quote_cancel:
           $ref: '#/components/schemas/connamaraep3v1beta1QuoteCancel'
-        quotePass:
+        quote_pass:
           $ref: '#/components/schemas/connamaraep3v1beta1QuotePass'
-        rejectReason:
+        reject_reason:
           $ref: '#/components/schemas/v1beta1QuoteRejectReason'
-        requestForQuote:
+        request_for_quote:
           $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
         symbol:
           type: string
@@ -1873,10 +1873,10 @@ components:
         account:
           title: Account is the trading account for this quote request
           type: string
-        clientId:
+        client_id:
           title: Client assigned ID for this quote request
           type: string
-        expirationTime:
+        expiration_time:
           title: Timestamp at which this quote will expire
           type: string
           format: date-time
@@ -1891,27 +1891,27 @@ components:
         id:
           title: Exchange assigned ID for the quote request
           type: string
-        insertTime:
+        insert_time:
           title: The time this request was inserted into the exchange
           type: string
           format: date-time
         name:
           title: Exchange assigned resource name for the quote request
           type: string
-        orderQty:
+        order_qty:
           type: string
           format: int64
         side:
           $ref: '#/components/schemas/v1beta1Side'
         status:
           $ref: '#/components/schemas/v1beta1QuoteStatus'
-        submittingUser:
+        submitting_user:
           title: The agent participant that created this quote request on behalf of
             the designated user
           type: string
         symbol:
           type: string
-        symbolSubType:
+        symbol_sub_type:
           title: The sub type of the instrument symbol
           type: string
         user:
@@ -1933,7 +1933,7 @@ components:
           description: Metadata attached to this trade.
         passive:
           $ref: '#/components/schemas/connamaraep3v1beta1Execution'
-        reportingCounterparty:
+        reporting_counterparty:
           $ref: '#/components/schemas/v1beta1Side'
         state:
           $ref: '#/components/schemas/v1beta1TradeState'
@@ -1941,11 +1941,11 @@ components:
           type: string
           description: Additional detail regarding the status of the trade. May be
             empty.
-        tradeLinkId:
+        trade_link_id:
           type: string
           description: Exchange assigned ID for a group of trades that all executed
             within the same underlying transactional event in the platform.
-        tradeType:
+        trade_type:
           $ref: '#/components/schemas/v1beta1TradeType'
       description: Trade is an execution grouping reflecting a trade between two orders
         in the system.
@@ -2113,158 +2113,158 @@ components:
     v1beta1BasisSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        effectiveDateOffset:
+        effective_date_offset:
           type: integer
           format: int32
-        floatFirstUnadjustedEffectiveDate:
+        float_first_unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        leg1FirstFloatFixingDate:
+        leg1_first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg1FirstFloatResetDate:
+        leg1_first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg1FloatBusinessDayConvention:
+        leg1_float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg1FloatCompoundingMethod:
+        leg1_float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        leg1FloatDayCountConvention:
+        leg1_float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        leg1FloatFirstUnadjustedPaymentDate:
+        leg1_float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg1FloatFixingDateBusinessDayConvention:
+        leg1_float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg1FloatFixingDateHolidayCalendars:
+        leg1_float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        leg1FloatFixingDatesDayType:
+        leg1_float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        leg1FloatFixingDatesOffset:
+        leg1_float_fixing_dates_offset:
           type: integer
           format: int32
-        leg1FloatPaymentDateOffset:
+        leg1_float_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        leg1FloatPaymentDateRelativeTo:
+        leg1_float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        leg1FloatPaymentFrequency:
+        leg1_float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        leg1FloatRateResetFrequency:
+        leg1_float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        leg1FloatResetDateBusinessDayConvention:
+        leg1_float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg1FloatResetDateRelativeTo:
+        leg1_float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        leg1FloatRollConvention:
+        leg1_float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        leg1FloatingRateIndex:
+        leg1_floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        leg1FloatingRateIndexTenor:
+        leg1_floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        leg1IndexTenorOmit:
+        leg1_index_tenor_omit:
           title: Flag that determines if the indexTenor fields will be omitted from
             certain adapter code
           type: boolean
-        leg2FirstFloatFixingDate:
+        leg2_first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg2FirstFloatResetDate:
+        leg2_first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg2FloatBusinessDayConvention:
+        leg2_float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg2FloatCompoundingMethod:
+        leg2_float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        leg2FloatDayCountConvention:
+        leg2_float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        leg2FloatFirstUnadjustedPaymentDate:
+        leg2_float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        leg2FloatFixingDateBusinessDayConvention:
+        leg2_float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg2FloatFixingDateHolidayCalendars:
+        leg2_float_fixing_date_holiday_calendars:
           type: array
           items:
             type: string
-        leg2FloatFixingDatesDayType:
+        leg2_float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        leg2FloatFixingDatesOffset:
+        leg2_float_fixing_dates_offset:
           type: integer
           format: int32
-        leg2FloatPaymentDateOffset:
+        leg2_float_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        leg2FloatPaymentDateRelativeTo:
+        leg2_float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        leg2FloatPaymentFrequency:
+        leg2_float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        leg2FloatRateResetFrequency:
+        leg2_float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        leg2FloatResetDateBusinessDayConvention:
+        leg2_float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        leg2FloatResetDateRelativeTo:
+        leg2_float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        leg2FloatRollConvention:
+        leg2_float_roll_convention:
           type: string
-        leg2FloatingRateIndex:
+        leg2_floating_rate_index:
           type: string
-        leg2FloatingRateIndexTenor:
+        leg2_floating_rate_index_tenor:
           type: string
-        leg2IndexTenorOmit:
+        leg2_index_tenor_omit:
           title: Flag that determines if the indexTenor fields will be omitted from
             certain adapter code
           type: boolean
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        paymentDateDayType:
+        payment_date_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: BasisSwapAttributes are attributes that define an Basis Swap tradable
         instrument.
     v1beta1BlockTradeThreshold:
       type: object
       properties:
-        minimumNotional:
+        minimum_notional:
           type: string
           description: "The minimum notional that must be provided for an order cross\
             \ to be marked as a block trade in units of the price_scale multiplied\
@@ -2275,7 +2275,7 @@ components:
             \ this threshold or the minimum quantity criteria must be met for a valid\
             \ block trade."
           format: int64
-        minimumQuantity:
+        minimum_quantity:
           type: string
           description: The minimum quantity that must be provided for an order cross
             to be marked as a block trade in units of fractional_qty_scale. Either
@@ -2321,16 +2321,16 @@ components:
     v1beta1CancelOrderRequest:
       type: object
       properties:
-        clordId:
+        clord_id:
           type: string
           description: Client assigned ID for the order cancel.
-        orderId:
+        order_id:
           type: string
           description: Exchange assigned ID for the order to be cancelled (required).
         symbol:
           type: string
           description: The instrument symbol for the order (required).
-        symbolSubType:
+        symbol_sub_type:
           type: string
           description: The sub type of the instrument symbol.
       description: Request to cancel an existing order with the given details.
@@ -2374,7 +2374,7 @@ components:
         depth:
           type: integer
           format: int32
-        snapshotOnly:
+        snapshot_only:
           type: boolean
         symbols:
           type: array
@@ -2396,7 +2396,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CreateMarketDataSubscriptionResponseBookEntry'
-        bookHidden:
+        book_hidden:
           type: boolean
         offers:
           type: array
@@ -2408,7 +2408,7 @@ components:
           $ref: '#/components/schemas/v1beta1InstrumentStats'
         symbol:
           type: string
-        transactTime:
+        transact_time:
           type: string
           format: date-time
       description: Update is streamed on a market data update.
@@ -2422,7 +2422,7 @@ components:
             This field is optional.
           items:
             type: string
-        snapshotOnly:
+        snapshot_only:
           type: boolean
           description: "If true, only return the current set of snapshots for working\
             \ orders and do not keep an open subscription."
@@ -2440,12 +2440,12 @@ components:
       properties:
         heartbeat:
           $ref: '#/components/schemas/v1beta1Heartbeat'
-        processedSentTime:
+        processed_sent_time:
           type: string
           description: "The time at which this message was processed and sent by the\
             \ gateway, useful for calculating real world networking latency."
           format: date-time
-        sessionId:
+        session_id:
           type: string
           description: ID of the session this subscription belongs to.
         snapshot:
@@ -2464,7 +2464,7 @@ components:
     v1beta1CreateOrderSubscriptionResponseUpdate:
       type: object
       properties:
-        cancelReject:
+        cancel_reject:
           $ref: '#/components/schemas/connamaraep3v1beta1CancelReject'
         executions:
           type: array
@@ -2548,7 +2548,7 @@ components:
           description: List of quotes contained in the snapshot.
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1Quote'
-        requestForQuotes:
+        request_for_quotes:
           type: array
           description: List of RFQs contained in the snapshot.
           items:
@@ -2568,7 +2568,7 @@ components:
           description: List of quote rejects contained in the update.
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1QuoteReject'
-        requestForQuotes:
+        request_for_quotes:
           type: array
           description: List of RFQs contained in the update.
           items:
@@ -2578,7 +2578,7 @@ components:
     v1beta1CreateRequestForQuoteRequest:
       type: object
       properties:
-        requestForQuote:
+        request_for_quote:
           $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
       description: Request to insert a request for quote into the exchange.
     v1beta1CreateRequestForQuoteResponse:
@@ -2668,11 +2668,11 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        endTime:
+        end_time:
           type: string
           description: End time for the executions to be fetched.
           format: date-time
-        startTime:
+        start_time:
           type: string
           description: Start time for the executions to be fetched.
           format: date-time
@@ -2693,11 +2693,11 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        endTime:
+        end_time:
           type: string
           description: End time for the orders to be fetched.
           format: date-time
-        startTime:
+        start_time:
           type: string
           description: Start time for the orders to be fetched.
           format: date-time
@@ -2718,11 +2718,11 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        endTime:
+        end_time:
           type: string
           description: End time for the trades to be fetched.
           format: date-time
-        startTime:
+        start_time:
           type: string
           description: Start time for the trades to be fetched.
           format: date-time
@@ -2737,48 +2737,48 @@ components:
     v1beta1EventAttributes:
       type: object
       properties:
-        calculationMethod:
+        calculation_method:
           $ref: '#/components/schemas/v1beta1CalculationMethod'
-        evaluationType:
+        evaluation_type:
           type: string
           description: Type of evaluation to be used when interpreting strike_value.
-        eventDisplayName:
+        event_display_name:
           type: string
           description: The common/shared display name across EP3 event instruments
             that describes the underlying market conditions for an event.
-        eventId:
+        event_id:
           type: string
           description: The common/shared ID across EP3 event instruments that describes
             the underlying market conditions for an event.
-        expectedPayoutDate:
+        expected_payout_date:
           $ref: '#/components/schemas/v1beta1Date'
-        expectedPayoutTime:
+        expected_payout_time:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
-        frequencyType:
+        frequency_type:
           type: string
           description: "The frequency type of the product (\"W\", \"M\", \"Q\")."
-        payoutLowerBound:
+        payout_lower_bound:
           type: string
           description: The lower limit of the payout if the event instrument is continuous.
           format: int64
-        payoutType:
+        payout_type:
           $ref: '#/components/schemas/v1beta1PayoutType'
-        payoutUpperBound:
+        payout_upper_bound:
           type: string
           description: The upper limit of the payout if the event instrument is continuous.
           format: int64
-        payoutValue:
+        payout_value:
           type: string
           description: The value of the payout.
           format: int64
-        positionAccountabilityValue:
+        position_accountability_value:
           type: string
           description: Soft maximum number of contracts an account can have open interest
             in for a given Product before exchange personnel should begin reviewing
-            the account’s positions. Used for alerting only. EP3 will not reject orders
+            the account's positions. Used for alerting only. EP3 will not reject orders
             that would cause the Position Accountability Value to be exceeded.
           format: int64
-        positionLimit:
+        position_limit:
           type: string
           description: Hard maximum number of contracts an account can have open interest
             in for a given Product. Used for alerting only. EP3 will not reject orders
@@ -2789,38 +2789,38 @@ components:
             \ outcome of the event. Example: Will the May 2022 CPI be greater than\
             \ 1.5%?"
           type: string
-        sourceAgency:
+        source_agency:
           type: string
           description: Source of the resulting outcome.
-        sourceAgencyUrl:
+        source_agency_url:
           type: string
           description: The website of the Source Agency.
-        strikeEvaluationLowerLimit:
+        strike_evaluation_lower_limit:
           type: string
           description: The lower limit of values to consider valid for evaluation
             in comparison to the strike value.
-        strikeEvaluationUpperLimit:
+        strike_evaluation_upper_limit:
           type: string
           description: The upper limit of values to consider valid for evaluation
             in comparison to the strike value.
-        strikeUnit:
+        strike_unit:
           type: string
           description: |-
             Describes what the strike_value (which is a string in the proto) represents in a business sense. Likely to be "string", "integer", "decimal", or "percentage".
             For example a strike_value of "1.5" and a strike_unit of "percentage" means that the strike is 1.5%.
-        strikeValue:
+        strike_value:
           type: string
           description: Determines the threshold by which an event is said to have
             happened.
-        subTypes:
+        sub_types:
           type: array
           description: sub_types describe the instrument sub type price adjustment
             models.
           items:
             $ref: '#/components/schemas/v1beta1HedgeMarket'
-        timeSpecifier:
+        time_specifier:
           $ref: '#/components/schemas/v1beta1Date'
-        underlyingEventSpecification:
+        underlying_event_specification:
           type: string
           description: The legal language describing how the market outcome and expiration
             is determined.
@@ -2841,27 +2841,27 @@ components:
     v1beta1FIXOrderContext:
       type: object
       properties:
-        beginString:
+        begin_string:
           type: string
-        onBehalfOfCompId:
+        on_behalf_of_comp_id:
           type: string
-        onBehalfOfSubId:
+        on_behalf_of_sub_id:
           type: string
-        origClordId:
+        orig_clord_id:
           type: string
-        securityType:
+        security_type:
           type: string
-        senderCompId:
+        sender_comp_id:
           type: string
-        senderLocationId:
+        sender_location_id:
           type: string
-        senderSubId:
+        sender_sub_id:
           type: string
-        targetCompId:
+        target_comp_id:
           type: string
-        targetLocationId:
+        target_location_id:
           type: string
-        targetSubId:
+        target_sub_id:
           type: string
       description: FIXOrderContext is the context set for orders sent via the FIX
         API.
@@ -2879,7 +2879,7 @@ components:
     v1beta1ForexAttributes:
       type: object
       properties:
-        baseCurrency:
+        base_currency:
           type: string
           description: |-
             The first currency in a currency pair. For example, the base_currency of GBP/USD is GBP.
@@ -2890,7 +2890,7 @@ components:
             Rather, it simply represents the currency in which trading is "based on".
             For example, for an Equity instrument where prices are quoted in USD, the InstrumentAttributes base_currency would simply be USD.
             To avoid confusion, in the EP3 Admin UI, the InstrumentAttributes base_currency is simply displayed as "Currency".
-        quoteCurrency:
+        quote_currency:
           type: string
           description: |-
             The second currency in a currency pair. For example, the quote_currency of GBP/USD is USD.
@@ -2904,197 +2904,197 @@ components:
     v1beta1ForwardRateAgreementSwapAttributes:
       type: object
       properties:
-        calculationPeriodNumberOfDays:
+        calculation_period_number_of_days:
           type: integer
           format: int32
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedBusinessDayConvention:
+        fixed_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFixingDateHolidayCalendars:
+        fixed_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatBusinessDayConvention:
+        float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFixingDate:
+        float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatFixingDateBusinessDayConvention:
+        float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatFixingDateHolidayCalendars:
+        float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatFixingDatesDayType:
+        float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        floatFixingDatesOffset:
+        float_fixing_dates_offset:
           type: integer
           format: int32
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        floatingRateIndexTenor:
+        floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: ForwardRateAgreementSwapAttributes are attributes that define an
         Forward Rate Agreement Swap tradable instrument.
     v1beta1ForwardStartingInterestRateSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        effectiveDateOffset:
+        effective_date_offset:
           type: integer
           format: int32
-        firstFloatFixingDate:
+        first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        firstFloatResetDate:
+        first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedBusinessDayConvention:
+        fixed_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedCompoundingMethod:
+        fixed_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFirstUnadjustedPaymentDate:
+        fixed_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedPaymentDateRelativeTo:
+        fixed_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        fixedPaymentFrequency:
+        fixed_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedRollConvention:
+        fixed_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatBusinessDayConvention:
+        float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatCompoundingMethod:
+        float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFirstUnadjustedPaymentDate:
+        float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatFixingDateBusinessDayConvention:
+        float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatFixingDateHolidayCalendars:
+        float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatFixingDatesDayType:
+        float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        floatFixingDatesOffset:
+        float_fixing_dates_offset:
           type: integer
           format: int32
-        floatHolidayCalendars:
+        float_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatPaymentDateRelativeTo:
+        float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatPaymentFrequency:
+        float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatRateResetFrequency:
+        float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatResetDateBusinessDayConvention:
+        float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatResetDateRelativeTo:
+        float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatRollConvention:
+        float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        floatingRateIndexTenor:
+        floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: ForwardStartingInterestRateSwapAttributes are attributes that define
         a Forward Starting Interest Rate Swap tradable instrument.
     v1beta1FutureAttributes:
       type: object
       properties:
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: FutureAttributes are attributes that define a Future tradable instrument.
     v1beta1GetAccountBalanceRequest:
@@ -3112,33 +3112,33 @@ components:
     v1beta1GetAccountBalanceResponse:
       type: object
       properties:
-        alternateCapitalRequirement:
+        alternate_capital_requirement:
           type: string
           description: The fixed amount of capital requirement in the alternate capital
             requirement currency.
-        alternateCapitalRequirementCurrency:
+        alternate_capital_requirement_currency:
           type: string
           description: "If exists, the alternate currency used for capital requirement."
         balance:
           type: string
           description: "Fixed point decimal fiat currency balance, not including any\
             \ security values."
-        buyingPower:
+        buying_power:
           type: string
           description: "Amount of unencumbered capital available for trading, factoring\
             \ in all security valuations as well as any open orders."
-        capitalRequirement:
+        capital_requirement:
           type: string
           description: Required amount of fiat currency balance that must be held
             in an account and cannot be used for trading.
-        excessCapital:
+        excess_capital:
           type: string
           description: "Amount of excess capital in the balance beyond the requirement,\
             \ factoring in all security valuations."
-        marginRequirement:
+        margin_requirement:
           type: string
           description: Aggregate margin requirement for each Event Instrument.
-        openOrders:
+        open_orders:
           type: string
           description: Aggregate total notional value of open orders.
         securities:
@@ -3147,13 +3147,13 @@ components:
             $ref: '#/components/schemas/GetAccountBalanceResponseSecurityEntry'
           description: Map of securities mapped by ID to their detailed valuation
             with respect to the market price and adjustments applied.
-        totalSecurityAvailableValue:
+        total_security_available_value:
           type: string
           description: Aggregate available collateral value of all securities.
-        totalSecurityNotionalValue:
+        total_security_notional_value:
           type: string
           description: Aggregate notional value of all securities.
-        unsettledFunds:
+        unsettled_funds:
           type: string
           description: Aggregate total notional value of unsettled funds not yet available
             to trade.
@@ -3199,17 +3199,17 @@ components:
           type: integer
           description: Number of individual bars to include for the given time window.
           format: int32
-        endTime:
+        end_time:
           type: string
           description: End time for the trade data time window.
           format: date-time
-        endTradeDate:
+        end_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
-        startTime:
+        start_time:
           type: string
           description: Start time for the trade data time window.
           format: date-time
-        startTradeDate:
+        start_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
         symbol:
           type: string
@@ -3217,14 +3217,14 @@ components:
     v1beta1GetTradeStatsResponse:
       type: object
       properties:
-        barEndTime:
+        bar_end_time:
           type: array
           description: The end of the time window corresponding to the same index
             as the `bars` array.
           items:
             type: string
             format: date-time
-        barStartTime:
+        bar_start_time:
           type: array
           description: The start of the time window corresponding to the same index
             as the `bars` array.
@@ -3253,16 +3253,16 @@ components:
           type: string
           description: "Fully qualified resource name for the firm associated with\
             \ the user (ie: \"firms/[firmid]\")."
-        firmDisplayName:
+        firm_display_name:
           type: string
           description: Display name for the firm associated with the user.
-        firmType:
+        firm_type:
           $ref: '#/components/schemas/v1beta1FirmType'
         user:
           type: string
           description: "Fully qualified resource name for the user (ie: \"firms/[firmid]/users/[userid]\"\
             )."
-        userDisplayName:
+        user_display_name:
           type: string
           description: Display name for the user.
     v1beta1Heartbeat:
@@ -3272,41 +3272,41 @@ components:
     v1beta1HedgeMarket:
       type: object
       properties:
-        buyPriceIncrement:
+        buy_price_increment:
           type: string
           description: "If an incoming order is a buy, then increment the price in\
             \ ticks by this value for the hedge."
           format: int64
-        buyQuantityRatio:
+        buy_quantity_ratio:
           type: string
           description: "If an incoming order is a buy, then multiply the quantity\
             \ by this value for the hedge. If zero, then not applied."
           format: int64
-        buyScale:
+        buy_scale:
           type: string
           description: "If an incoming order is a buy, then multiply the price scale\
             \ by this value for the hedge. If zero, then no scale applied."
           format: int64
-        opposingSide:
+        opposing_side:
           type: boolean
           description: "If set, orders submitted against the parent symbol shall appear\
             \ on the opposite side in the hedge market."
-        sellPriceIncrement:
+        sell_price_increment:
           type: string
           description: "If an incoming order is a sell, then increment the price in\
             \ ticks by this value for the hedge."
           format: int64
-        sellQuantityRatio:
+        sell_quantity_ratio:
           type: string
           description: "If an incoming order is a buy, then multiply the quantity\
             \ by this value for the hedge. If zero, then not applied."
           format: int64
-        sellScale:
+        sell_scale:
           type: string
           description: "If an incoming order is a sell, then multiply the price scale\
             \ by this value for the hedge. If zero, then no scale applied."
           format: int64
-        strictLimit:
+        strict_limit:
           type: boolean
           description: "If set, orders submitted against the parent symbol shall be\
             \ mandated as strict limit orders in the hedge market."
@@ -3344,82 +3344,82 @@ components:
     v1beta1InsertOrderResponse:
       type: object
       properties:
-        orderId:
+        order_id:
           type: string
           description: The exchange assigned ID for the order.
     v1beta1InstrumentStats:
       type: object
       properties:
-        closePx:
+        close_px:
           type: string
           format: int64
-        closeSetTime:
+        close_set_time:
           type: string
           format: date-time
-        highPx:
+        high_px:
           type: string
           format: int64
-        highSetTime:
+        high_set_time:
           type: string
           format: date-time
-        indicativeOpenPx:
+        indicative_open_px:
           type: string
           format: int64
-        indicativeOpenSetTime:
+        indicative_open_set_time:
           type: string
           format: date-time
-        lastTradePx:
+        last_trade_px:
           type: string
           format: int64
-        lastTradeQty:
+        last_trade_qty:
           type: string
           format: int64
-        lastTradeSetTime:
+        last_trade_set_time:
           type: string
           format: date-time
-        lowPx:
+        low_px:
           type: string
           format: int64
-        lowSetTime:
+        low_set_time:
           type: string
           format: date-time
-        notionalSetTime:
+        notional_set_time:
           type: string
           format: date-time
-        notionalTraded:
+        notional_traded:
           type: string
           format: int64
-        openInterest:
+        open_interest:
           type: string
           format: int64
-        openInterestSetTime:
+        open_interest_set_time:
           type: string
           format: date-time
-        openPx:
+        open_px:
           type: string
           format: int64
-        openSetTime:
+        open_set_time:
           type: string
           format: date-time
-        settlementPreliminaryFlag:
+        settlement_preliminary_flag:
           type: boolean
-        settlementPriceCalculationMethod:
+        settlement_price_calculation_method:
           $ref: '#/components/schemas/v1beta1SettlementPriceCalculationMethod'
-        settlementPx:
+        settlement_px:
           type: string
           format: int64
-        settlementSetTime:
+        settlement_set_time:
           type: string
           format: date-time
-        sharesTraded:
+        shares_traded:
           type: string
           format: int64
-        tradingReferencePx:
+        trading_reference_px:
           type: string
           description: Optional trading reference price to be used instead of settlement
             price as the basis for relative price limits.
           format: int64
-        tradingReferenceSetTime:
+        trading_reference_set_time:
           type: string
           description: Time at which the trading reference price was set.
           format: date-time
@@ -3466,107 +3466,107 @@ components:
     v1beta1InterestRateSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        effectiveDateOffset:
+        effective_date_offset:
           type: integer
           format: int32
-        firstFloatFixingDate:
+        first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        firstFloatResetDate:
+        first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedBusinessDayConvention:
+        fixed_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedCompoundingMethod:
+        fixed_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFirstUnadjustedPaymentDate:
+        fixed_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedPaymentDateRelativeTo:
+        fixed_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        fixedPaymentFrequency:
+        fixed_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedRollConvention:
+        fixed_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatBusinessDayConvention:
+        float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatCompoundingMethod:
+        float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFirstUnadjustedPaymentDate:
+        float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatFixingDateBusinessDayConvention:
+        float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatFixingDateHolidayCalendars:
+        float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatFixingDatesDayType:
+        float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        floatFixingDatesOffset:
+        float_fixing_dates_offset:
           type: integer
           format: int32
-        floatHolidayCalendars:
+        float_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatPaymentDateRelativeTo:
+        float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatPaymentFrequency:
+        float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatRateResetFrequency:
+        float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatResetDateBusinessDayConvention:
+        float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatResetDateRelativeTo:
+        float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatRollConvention:
+        float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        floatingRateIndexTenor:
+        floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: InterestRateSwapAttributes are attributes that define an Interest
         Rate Swap tradable instrument.
@@ -3698,7 +3698,7 @@ components:
     v1beta1LegAttributes:
       type: object
       properties:
-        opposingSide:
+        opposing_side:
           type: boolean
           description: opposing_side describes if this leg should have a side opposite
             the other legs.
@@ -3726,7 +3726,7 @@ components:
           title: The quantity of the leg
           type: string
           format: int64
-        referencePx:
+        reference_px:
           title: The reference price of the leg used in the calculation of the derived
             price
           type: string
@@ -3768,7 +3768,7 @@ components:
     v1beta1ListAccountPositionsResponse:
       type: object
       properties:
-        availablePosition:
+        available_position:
           type: array
           description: "Actual available position that can be used to trade for the\
             \ corresponding index, factoring in any open orders and otherwise encumbered\
@@ -3799,7 +3799,7 @@ components:
             \ (ie: \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        displayNames:
+        display_names:
           type: array
           description: List of display names for the accounts found.
           items:
@@ -3811,7 +3811,7 @@ components:
     v1beta1ListDealersResponse:
       type: object
       properties:
-        displayNames:
+        display_names:
           type: array
           description: List of display names for the whitelisted firms.
           items:
@@ -3825,19 +3825,19 @@ components:
     v1beta1ListInstrumentsRequest:
       type: object
       properties:
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of Instruments to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `ListInstruments`
             that indicates where this listing should continue from.
             This field is optional.
-        productId:
+        product_id:
           title: "If set, filter returned instruments belonging to product"
           type: string
         states:
@@ -3852,7 +3852,7 @@ components:
             This field is optional.
           items:
             type: string
-        tradableFilter:
+        tradable_filter:
           $ref: '#/components/schemas/v1beta1TradableFilter'
         type:
           $ref: '#/components/schemas/v1beta1InstrumentType'
@@ -3867,7 +3867,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1Instrument'
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `ListInstruments`
@@ -3880,7 +3880,7 @@ components:
     v1beta1ListRequestersResponse:
       type: object
       properties:
-        displayNames:
+        display_names:
           type: array
           description: List of display names for the whitelisted firms.
           items:
@@ -3906,7 +3906,7 @@ components:
     v1beta1ListUsersResponse:
       type: object
       properties:
-        displayNames:
+        display_names:
           type: array
           description: List of display names for the users found.
           items:
@@ -3917,7 +3917,7 @@ components:
             \ with the users found (ie: \"firms/[firmid]\")."
           items:
             type: string
-        firmsDisplayNames:
+        firms_display_names:
           type: array
           description: List of display names for the firms associated with the users
             found.
@@ -3966,85 +3966,85 @@ components:
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        currencyInstrumentName:
+        currency_instrument_name:
           title: Name used in the lookup of the currency rate price instrument
           type: string
-        exchangeRateCurrency1:
+        exchange_rate_currency1:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        exchangeRateCurrency2:
+        exchange_rate_currency2:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        exchangeRateQuoteBasis:
+        exchange_rate_quote_basis:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesExchangeRateQuoteBasis'
-        exchangedCurrency1:
+        exchanged_currency1:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        exchangedCurrency2:
+        exchanged_currency2:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        fixingCurrency1:
+        fixing_currency1:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        fixingCurrency2:
+        fixing_currency2:
           title: AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD |
             IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK
             | SGD | TWD | ZAR
           type: string
-        fixingDate:
+        fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixingDateBusinessDayConvention:
+        fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixingDateOffset:
+        fixing_date_offset:
           type: integer
           description: |-
             Number of Calendar days the valuation date is offset from the fixing date
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        fixingHolidayCalendars:
+        fixing_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        fixingQuoteBasis:
+        fixing_quote_basis:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesExchangeRateQuoteBasis'
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        settlementCurrency:
+        settlement_currency:
           title: USD
           type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedFixingDate:
+        unadjusted_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedValuationDate:
+        unadjusted_valuation_date:
           $ref: '#/components/schemas/v1beta1Date'
-        valuationDate:
+        valuation_date:
           $ref: '#/components/schemas/v1beta1Date'
-        valuationDateBusinessDayConvention:
+        valuation_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        valuationHolidayCalendars:
+        valuation_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
@@ -4054,11 +4054,11 @@ components:
     v1beta1OptionAttributes:
       type: object
       properties:
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        putOrCall:
+        put_or_call:
           $ref: '#/components/schemas/v1beta1PutOrCall'
-        strikePrice:
+        strike_price:
           title: Integer strike price representation
           type: string
           format: int64
@@ -4100,15 +4100,15 @@ components:
     v1beta1OrderContext:
       type: object
       properties:
-        anyContext:
+        any_context:
           $ref: '#/components/schemas/protobufAny'
-        fixContext:
+        fix_context:
           $ref: '#/components/schemas/v1beta1FIXOrderContext'
-        serviceName:
+        service_name:
           type: string
           description: ServiceName is an optional string that contains the name of
             the service through which this order was submitted.
-        validationContexts:
+        validation_contexts:
           type: array
           description: ValidationContexts are an optional collection of free-form
             contexts that shall be checked upon order insertion or modification.
@@ -4121,22 +4121,22 @@ components:
         high:
           type: string
           format: int64
-        highSet:
+        high_set:
           type: boolean
         low:
           type: string
           format: int64
-        lowSet:
+        low_set:
           type: boolean
-        totalNotionalHigh:
+        total_notional_high:
           type: string
           format: int64
-        totalNotionalHighSet:
+        total_notional_high_set:
           type: boolean
-        totalNotionalLow:
+        total_notional_low:
           type: string
           format: int64
-        totalNotionalLowSet:
+        total_notional_low_set:
           type: boolean
       description: OrderSizeLimit describes optional order size limits on an instrument.
     v1beta1OrderState:
@@ -4199,127 +4199,127 @@ components:
     v1beta1OvernightIndexSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        effectiveDateOffset:
+        effective_date_offset:
           type: integer
           format: int32
-        firstFloatFixingDate:
+        first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        firstFloatResetDate:
+        first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedBusinessDayConvention:
+        fixed_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedCompoundingMethod:
+        fixed_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFirstUnadjustedPaymentDate:
+        fixed_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedHolidayCalendars:
+        fixed_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        fixedPaymentDateOffset:
+        fixed_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        fixedPaymentDateRelativeTo:
+        fixed_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        fixedPaymentFrequency:
+        fixed_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedRollConvention:
+        fixed_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatBusinessDayConvention:
+        float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatCompoundingMethod:
+        float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFirstUnadjustedPaymentDate:
+        float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatFixingDateBusinessDayConvention:
+        float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatFixingDateHolidayCalendars:
+        float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatFixingDatesDayType:
+        float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        floatFixingDatesOffset:
+        float_fixing_dates_offset:
           type: integer
           format: int32
-        floatHolidayCalendars:
+        float_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatPaymentDateOffset:
+        float_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        floatPaymentDateRelativeTo:
+        float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatPaymentFrequency:
+        float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatRateResetFrequency:
+        float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatResetDateBusinessDayConvention:
+        float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatResetDateRelativeTo:
+        float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatRollConvention:
+        float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        floatingRateIndexTenor:
+        floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        paymentDateDayType:
+        payment_date_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: OvernightIndexSwapAttributes are attributes that define an Overnight
         Index Swap tradable instrument.
@@ -4348,7 +4348,7 @@ components:
       properties:
         account:
           type: string
-        bodPosition:
+        bod_position:
           type: string
           format: int64
         cost:
@@ -4356,13 +4356,13 @@ components:
           format: int64
         expired:
           type: boolean
-        netPosition:
+        net_position:
           type: string
           format: int64
-        qtyBought:
+        qty_bought:
           type: string
           format: int64
-        qtySold:
+        qty_sold:
           type: string
           format: int64
         realized:
@@ -4370,7 +4370,7 @@ components:
           format: int64
         symbol:
           type: string
-        symbolSubType:
+        symbol_sub_type:
           type: string
       description: Position represents a position for a given account and symbol.
     v1beta1PreviewOrderRequest:
@@ -4381,7 +4381,7 @@ components:
     v1beta1PreviewOrderResponse:
       type: object
       properties:
-        previewOrder:
+        preview_order:
           $ref: '#/components/schemas/connamaraep3v1beta1Order'
     v1beta1PriceLimit:
       type: object
@@ -4389,22 +4389,22 @@ components:
         high:
           type: string
           format: int64
-        highSet:
+        high_set:
           type: boolean
         low:
           type: string
           format: int64
-        lowSet:
+        low_set:
           type: boolean
-        relativeHigh:
+        relative_high:
           type: number
           format: double
-        relativeHighSet:
+        relative_high_set:
           type: boolean
-        relativeLow:
+        relative_low:
           type: number
           format: double
-        relativeLowSet:
+        relative_low_set:
           type: boolean
       description: PriceLimit describes optional price limits on an instrument.
     v1beta1PutOrCall:
@@ -4423,7 +4423,7 @@ components:
     v1beta1QuoteAccept:
       type: object
       properties:
-        clordId:
+        clord_id:
           title: Client assigned ID for the order
           type: string
         name:
@@ -4481,58 +4481,58 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        clientAccountId:
+        client_account_id:
           type: string
           description: Client account ID to filter upon.
-        clientParticipantId:
+        client_participant_id:
           type: string
           description: Client participant ID to filter upon.
-        clordId:
+        clord_id:
           type: string
           description: Client assigned order ID to filter upon.
-        endTime:
+        end_time:
           type: string
           description: End time for the orders to be fetched.
           format: date-time
-        endTransactTradeDate:
+        end_transact_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
-        execIds:
+        exec_ids:
           type: array
           description: Execution IDs to filter upon.
           items:
             type: string
-        newestFirst:
+        newest_first:
           type: boolean
           description: A flag that if set indicates that executions found should be
             sorted from most recent to oldest.
-        orderId:
+        order_id:
           type: string
           description: Exchange assigned order ID of the order to filter upon.
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of fills to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchExecutionsRequest`.
             that indicates where this listing should continue from.
             This field is optional.
-        parentOrderId:
+        parent_order_id:
           type: string
           description: Parent order ID to filter upon.
-        startTime:
+        start_time:
           type: string
           description: Start time for the orders to be fetched.
           format: date-time
-        startTransactTradeDate:
+        start_transact_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
         symbol:
           type: string
           description: Instrument symbol to filter upon.
-        symbolSubType:
+        symbol_sub_type:
           type: string
           description: Symbol sub type to filter upon.
         types:
@@ -4553,7 +4553,7 @@ components:
           description: List of executions found.
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1Execution'
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchExecutions`.
@@ -4568,64 +4568,64 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        clientAccountId:
+        client_account_id:
           type: string
           description: Client account ID to filter upon.
-        clientParticipantId:
+        client_participant_id:
           type: string
           description: Client participant ID to filter upon.
-        clordId:
+        clord_id:
           type: string
           description: Client assigned order ID to filter upon.
-        crossId:
+        cross_id:
           type: string
           description: Client assigned Order Cross ID.
-        endTime:
+        end_time:
           type: string
           description: End time for the orders to be fetched.
           format: date-time
-        endTransactTradeDate:
+        end_transact_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
-        hostCrossId:
+        host_cross_id:
           type: string
           description: Exchange generated Host Cross ID.
-        orderId:
+        order_id:
           type: string
           description: Exchange assigned order ID of the order to filter upon.
-        orderStateFilter:
+        order_state_filter:
           $ref: '#/components/schemas/v1beta1OrderStateFilter'
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of orders to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchOrdersRequest`.
             that indicates where this listing should continue from.
             This field is optional.
-        parentOrderId:
+        parent_order_id:
           type: string
           description: Parent order ID to filter upon.
         side:
           $ref: '#/components/schemas/v1beta1Side'
-        startTime:
+        start_time:
           type: string
           description: Start time for the orders to be fetched.
           format: date-time
-        startTransactTradeDate:
+        start_transact_trade_date:
           $ref: '#/components/schemas/v1beta1Date'
         symbol:
           type: string
           description: Instrument symbol to filter upon.
-        symbolSubType:
+        symbol_sub_type:
           type: string
           description: Symbol sub type to filter upon.
         type:
           $ref: '#/components/schemas/v1beta1OrderType'
-        withLastExecution:
+        with_last_execution:
           type: boolean
           description: When true indicates that the response should also return the
             last execution created that is associated with the matched orders.
@@ -4633,13 +4633,13 @@ components:
     v1beta1SearchOrdersResponse:
       type: object
       properties:
-        lastExecutions:
+        last_executions:
           type: array
           description: The list of last executions associated with the returned orders.
             Will be empty unless with_last_execution is set to true in the request.
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1Execution'
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchOrders`.
@@ -4655,31 +4655,31 @@ components:
       properties:
         account:
           type: string
-        clientId:
+        client_id:
           type: string
-        endTime:
+        end_time:
           title: End time for the objects to be fetched
           type: string
           format: date-time
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of objects to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call
             that indicates where this listing should continue from.
             This field is optional.
-        quoteId:
+        quote_id:
           type: string
-        quoteRequestId:
+        quote_request_id:
           type: string
         side:
           $ref: '#/components/schemas/v1beta1Side'
-        startTime:
+        start_time:
           title: Start time for the objects to be fetched
           type: string
           format: date-time
@@ -4694,7 +4694,7 @@ components:
       properties:
         eof:
           type: boolean
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call
@@ -4709,29 +4709,29 @@ components:
       properties:
         account:
           type: string
-        clientId:
+        client_id:
           type: string
-        endTime:
+        end_time:
           title: End time for the objects to be fetched
           type: string
           format: date-time
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of objects to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call
             that indicates where this listing should continue from.
             This field is optional.
-        quoteRequestId:
+        quote_request_id:
           type: string
         side:
           $ref: '#/components/schemas/v1beta1Side'
-        startTime:
+        start_time:
           title: Start time for the objects to be fetched
           type: string
           format: date-time
@@ -4746,13 +4746,13 @@ components:
       properties:
         eof:
           type: boolean
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call
             that indicates from where listing should continue.
             This field is optional.
-        requestForQuotes:
+        request_for_quotes:
           type: array
           items:
             $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
@@ -4765,29 +4765,29 @@ components:
             \ \"firms/[firmid]/accounts/[accountid]\")."
           items:
             type: string
-        endTime:
+        end_time:
           type: string
           description: End time for the orders to be fetched.
           format: date-time
-        execId:
+        exec_id:
           type: string
           description: Exchange assigned execution ID to filter upon.
-        orderId:
+        order_id:
           type: string
           description: Exchange assigned order ID of the order to filter upon.
-        pageSize:
+        page_size:
           type: integer
           description: |-
             The maximum number of orders to return in a response.
             This field is optional.
           format: int32
-        pageToken:
+        page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchTradesRequest`.
             that indicates where this listing should continue from.
             This field is optional.
-        startTime:
+        start_time:
           type: string
           description: Start time for the orders to be fetched.
           format: date-time
@@ -4799,17 +4799,17 @@ components:
         symbol:
           type: string
           description: Instrument symbol to filter upon.
-        tradeId:
+        trade_id:
           type: string
           description: Exchange assigned trade ID to filter upon.
-        tradeLinkId:
+        trade_link_id:
           title: Trade Link ID to filter upon
           type: string
       description: Request to search for trades filtered using the given details.
     v1beta1SearchTradesResponse:
       type: object
       properties:
-        nextPageToken:
+        next_page_token:
           type: string
           description: |-
             A pagination token returned from a previous call to `SearchTrades`.
@@ -4883,124 +4883,124 @@ components:
     v1beta1SinglePeriodSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        firstFloatFixingDate:
+        first_float_fixing_date:
           $ref: '#/components/schemas/v1beta1Date'
-        firstFloatResetDate:
+        first_float_reset_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedBusinessDayConvention:
+        fixed_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedCalculationPeriodFrequency:
+        fixed_calculation_period_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedCompoundingMethod:
+        fixed_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFirstUnadjustedPaymentDate:
+        fixed_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedPaymentDateOffset:
+        fixed_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        fixedPaymentDateRelativeTo:
+        fixed_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        fixedPaymentFrequency:
+        fixed_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedRollConvention:
+        fixed_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatBusinessDayConvention:
+        float_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatCompoundingMethod:
+        float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFirstUnadjustedPaymentDate:
+        float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatFixingDateBusinessDayConvention:
+        float_fixing_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatFixingDateHolidayCalendars:
+        float_fixing_date_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatFixingDatesDayType:
+        float_fixing_dates_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        floatFixingDatesOffset:
+        float_fixing_dates_offset:
           type: integer
           format: int32
-        floatHolidayCalendars:
+        float_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatPaymentDateOffset:
+        float_payment_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        floatPaymentDateRelativeTo:
+        float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatPaymentFrequency:
+        float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatRateResetFrequency:
+        float_rate_reset_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatResetDateBusinessDayConvention:
+        float_reset_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatResetDateRelativeTo:
+        float_reset_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatRollConvention:
+        float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        floatingRateIndexTenor:
+        floating_rate_index_tenor:
           type: string
           description: 1M | 3M | 6M | 1Y | etc...
-        leg2IndexTenorOmit:
+        leg2_index_tenor_omit:
           title: Flag that determines if the indexTenor fields will be omitted from
             certain adapter code
           type: boolean
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        paymentDateDayType:
+        payment_date_day_type:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayType'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: SinglePeriodSwapAttributes are attributes that define an Single
         Period Swap tradable instrument.
@@ -5058,12 +5058,12 @@ components:
     v1beta1TradeDayRoll:
       type: object
       properties:
-        daysOfWeek:
+        days_of_week:
           type: array
           description: The days of the week for which this trade day roll is active.
           items:
             $ref: '#/components/schemas/v1beta1DayOfWeek'
-        timeOfDay:
+        time_of_day:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
       description: TradeDayRoll is an abstraction for describing an Instrument trade
         day roll schedule.
@@ -5107,17 +5107,17 @@ components:
     v1beta1TradeStats:
       type: object
       properties:
-        clearedNotional:
+        cleared_notional:
           title: "Total notional traded in this time that has been cleared, one can\
             \ divide this value by the volume field to get cleared volume weighted\
             \ average price"
           type: string
           format: int64
-        clearedTradeCount:
+        cleared_trade_count:
           title: The number of cleared trades
           type: string
           format: int64
-        clearedVolume:
+        cleared_volume:
           title: Volume (total shares traded) that has been cleared
           type: string
           format: int64
@@ -5142,7 +5142,7 @@ components:
             \ the volume field to get volume weighted average price"
           type: string
           format: int64
-        totalTradeCount:
+        total_trade_count:
           title: Total number of trades
           type: string
           format: int64
@@ -5164,7 +5164,7 @@ components:
     v1beta1TradingHours:
       type: object
       properties:
-        daysOfWeek:
+        days_of_week:
           type: array
           description: The days of the week for which this trading hours segment is
             active.
@@ -5174,17 +5174,17 @@ components:
           type: string
           description: The duration of time that this trading hours segment is to
             be applied.
-        expireAllOrders:
+        expire_all_orders:
           type: boolean
           description: Set if the instrument should expire all orders during this
             stage.
-        hideMarketData:
+        hide_market_data:
           type: boolean
           description: Set if the instrument should hide upstream market data information
             during this stage.
         state:
           $ref: '#/components/schemas/ep3instrumentsv1beta1InstrumentState'
-        timeOfDay:
+        time_of_day:
           $ref: '#/components/schemas/v1beta1TimeOfDay'
       description: TradingHours is an abstraction for describing an Instrument trading
         schedule.
@@ -5202,141 +5202,141 @@ components:
     v1beta1ZeroCouponInflationSwapAttributes:
       type: object
       properties:
-        effectiveDateBusinessDayConvention:
+        effective_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        effectiveDateOffset:
+        effective_date_offset:
           type: integer
           description: |-
             Number of Calendar days the payment is offset
             -2 | -1 | 0 | 1 | 2 | etc...
           format: int32
-        fallbackBondApplicable:
+        fallback_bond_applicable:
           title: "The applicability of a fallback bond as defined in the 2006 ISDA\
             \ Inflation Derivatives Definitions, sections 1.3 and 1.8"
           type: boolean
-        fixedCalculationPeriodDayConvention:
+        fixed_calculation_period_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedCalculationPeriodFrequency:
+        fixed_calculation_period_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedCalculationPeriodFrequencyMultiplier:
+        fixed_calculation_period_frequency_multiplier:
           title: Multiplier for the frequency field
           type: integer
           format: int32
-        fixedCompoundingMethod:
+        fixed_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        fixedDayCountConvention:
+        fixed_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        fixedFirstUnadjustedPaymentDate:
+        fixed_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        fixedHolidayCalendars:
+        fixed_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        fixedPaymentDateRelativeTo:
+        fixed_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        fixedPaymentDayConvention:
+        fixed_payment_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        fixedPaymentFrequency:
+        fixed_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        fixedPaymentFrequencyMultiplier:
+        fixed_payment_frequency_multiplier:
           title: Multiplier for the frequency field
           type: integer
           format: int32
-        fixedRollConvention:
+        fixed_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatCalculationPeriodDayConvention:
+        float_calculation_period_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatCalculationPeriodFrequency:
+        float_calculation_period_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatCalculationPeriodFrequencyMultiplier:
+        float_calculation_period_frequency_multiplier:
           title: Multiplier for the frequency field
           type: integer
           format: int32
-        floatCompoundingMethod:
+        float_compounding_method:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod'
-        floatDayCountConvention:
+        float_day_count_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention'
-        floatFirstUnadjustedPaymentDate:
+        float_first_unadjusted_payment_date:
           $ref: '#/components/schemas/v1beta1Date'
-        floatHolidayCalendars:
+        float_holiday_calendars:
           title: London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        floatPaymentDateRelativeTo:
+        float_payment_date_relative_to:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo'
-        floatPaymentDayConvention:
+        float_payment_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        floatPaymentFrequency:
+        float_payment_frequency:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesFrequency'
-        floatPaymentFrequencyMultiplier:
+        float_payment_frequency_multiplier:
           title: Multiplier for the frequency field
           type: integer
           format: int32
-        floatRollConvention:
+        float_roll_convention:
           title: |-
             EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
             11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |
             MON | TUE | WED | THU | FRI | SAT | SUN
           type: string
-        floatingRateIndex:
+        floating_rate_index:
           title: |-
             1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |
             3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2
           type: string
-        forwardStartingPeriod:
+        forward_starting_period:
           title: in units given by forward starting period time period
           type: integer
           format: int32
-        forwardStartingPeriodTimePeriod:
+        forward_starting_period_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        indexSource:
+        index_source:
           title: |-
             The reference source such as Reuters or Bloomberg
             UKRPI | CPTFEMU | FRCPXTOB
           type: string
-        inflationInstrumentName:
+        inflation_instrument_name:
           title: Name used in the lookup of the inflation price instrument
           type: string
-        inflationLag:
+        inflation_lag:
           type: string
           description: |-
             An offsetting period from the payment date which determines the reference period for which the inflation index is observed.
             1M | 3M | 6M | 1Y | etc...
-        interpolationMethod:
+        interpolation_method:
           type: string
           description: The method used when calculating the Inflation Index Level
             from multiple points - the most common is Linear.
-        maturityDate:
+        maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
-        maturityDateBusinessDayConvention:
+        maturity_date_business_day_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention'
-        rollAndPaymentDateHolidayCalendars:
+        roll_and_payment_date_holiday_calendars:
           title: |-
             usually only 1 calendar but can be 2.
             New York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark
           type: array
           items:
             type: string
-        sideConvention:
+        side_convention:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention'
-        swapEffectiveDate:
+        swap_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
         tenor:
           title: tenor is the duration of the contract in units given by the tenor
             time period
           type: integer
           format: int32
-        tenorTimePeriod:
+        tenor_time_period:
           $ref: '#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod'
-        unadjustedEffectiveDate:
+        unadjusted_effective_date:
           $ref: '#/components/schemas/v1beta1Date'
-        unadjustedMaturityDate:
+        unadjusted_maturity_date:
           $ref: '#/components/schemas/v1beta1Date'
       description: ZeroCouponInflationSwapAttributes are attributes that define a
         spot or forward starting Zero Coupon Inflation Swap tradable instrument.

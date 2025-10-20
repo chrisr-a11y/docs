@@ -86,6 +86,10 @@
       "dark": "/logo/favicon.png",
       "light": "/logo/favicon.png"
    },
+  "logo": {
+    "light": "/logo/logo-light.svg",
+    "dark": "/logo/logo-dark.svg"
+  },
    "navbar": {
     "links": [
       {
