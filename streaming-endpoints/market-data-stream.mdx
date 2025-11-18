@@ -112,6 +112,8 @@ Each price level in the order book contains:
 **Price Representation:**
 All prices are `int64` values scaled by **1000**.
 
+Prices are always between **$0.001 and $0.999 USD**.
+
 **Example:**
 - Raw value: `500`
 - Decimal price: `500 / 1000 = .5USD`
