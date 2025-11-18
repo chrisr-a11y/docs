@@ -1,0 +1,131 @@
+---
+title: "VPC Connection"
+---
+
+## Overview
+
+Connect to Polymarket Exchange's Trading API using AWS PrivateLink for secure, private network connectivity. This guide walks you through setting up a VPC Endpoint connection for both pre-production and production environments.
+
+<Note>
+Your AWS account must be whitelisted before you can establish a VPC connection. Contact Polymarket support to whitelist your account.
+</Note>
+
+## Prerequisites
+
+- An AWS account whitelisted by Polymarket
+- Appropriate permissions to create VPC Endpoints in AWS
+- Subnets in the required Availability Zones (see below)
+
+## 1. Account and Environment Setup
+
+We recommend using separate AWS accounts for pre-production and production environments to maintain clear isolation.
+
+- **By default**, your whitelisted AWS account has access to **Preprod only**
+- When ready for production, provide Polymarket with your production AWS Account ID for whitelisting
+
+## 2. Create VPC Endpoint
+
+Navigate to the AWS Console and create a new VPC Endpoint using the appropriate VPC Service Name:
+
+| Environment | VPC Service Name |
+|-------------|------------------|
+| **Preprod** | `com.amazonaws.vpce.us-east-1.vpce-svc-0ab4dc57271d74d3e` |
+| **Prod** | `com.amazonaws.vpce.us-east-1.vpce-svc-0cb1220f882b3879e` |
+
+### Availability Zone Requirements
+
+Ensure at least one of your subnets is located in the following Availability Zone IDs:
+
+**Production:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az6`
+
+**Pre-Production:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az4`
+
+<Warning>
+AWS randomly maps Availability Zones to physical Zone IDs per account. Verify that the Zone IDs match your account's mapping. Learn more in the [AWS Availability Zones documentation](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones).
+</Warning>
+
+### Connection Approval
+
+After creating the VPC Endpoint, a connection request is sent to Polymarket's DevOps team. They will review and accept the request, then notify you once approved.
+
+<Note>
+You cannot proceed with DNS configuration or API connection until Polymarket accepts the connection request.
+</Note>
+
+## 3. PrivateLink DNS Configuration
+
+After the connection is accepted, we recommend enabling Private DNS for the endpoint (optional but encouraged).
+
+When Private DNS is enabled, the following DNS names resolve to private IP addresses assigned to your VPC Endpoint, routing all traffic over the private AWS network:
+
+| Environment | Private DNS Name |
+|-------------|------------------|
+| **Preprod** | `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
+| **Prod** | `traderapi.us-east-1.privatelink.prod.polymarketexchange.com` |
+
+## 4. Making API Calls
+
+### HTTP REST API
+
+Send REST API requests to the Private DNS name with the Host header override:
+
+<Note>
+**You must set the Host header** or you will receive errors when making REST requests.
+</Note>
+
+| Environment | Host Header |
+|-------------|-------------|
+| **Preprod** | `rest.preprod.polymarketexchange.com` |
+| **Prod** | `rest.prod.polymarketexchange.com` |
+
+**Example (Preprod):**
+
+```bash
+curl -X POST "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/api/v1beta1/get_who_am_i" \
+  -H "Host: rest.preprod.polymarketexchange.com" \
+  -H "accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d "{}"
+```
+
+### gRPC API
+
+When making gRPC calls, set the `:authority` header (gRPC equivalent of the Host header). This ensures continuity if the VPC Endpoint's private DNS name changes due to redeployment or regional expansion.
+
+| Environment | Authority Header |
+|-------------|------------------|
+| **Preprod** | `traderapi.preprod.polymarketexchange.com` |
+| **Prod** | `traderapi.prod.polymarketexchange.com` |
+
+**Example (Preprod):**
+
+```bash
+grpcurl -authority traderapi.preprod.polymarketexchange.com \
+  traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
+```
+
+### Alternative: CNAME Aliases
+
+Instead of using Host and `:authority` headers, your infrastructure team can create CNAME aliases for the hostnames via a Route53 Private Hosted Zone. This approach simplifies client configuration and eliminates the need for header overrides.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Connection request not accepted">
+    If your connection request hasn't been accepted after 24 hours, contact Polymarket support with your VPC Endpoint ID.
+  </Accordion>
+
+  <Accordion title="DNS resolution fails">
+    Verify that Private DNS is enabled for your VPC Endpoint and that your subnets are in the correct Availability Zones.
+  </Accordion>
+
+  <Accordion title="API calls timing out">
+    Ensure your security groups and network ACLs allow outbound HTTPS (443) traffic to the VPC Endpoint.
+  </Accordion>
+</AccordionGroup>

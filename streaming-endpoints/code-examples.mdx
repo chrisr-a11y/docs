@@ -1,0 +1,727 @@
+---
+title: "Code Examples"
+sidebarTitle: "Code Examples"
+description: "Complete working Python examples from the ep3-python-examples repository"
+---
+
+# Complete Python Code Examples
+
+Production-ready examples for gRPC streaming using Python, directly from the [ep3-python-examples repository](https://github.com/connamara/ep3-python-examples).
+
+## Installation
+
+```bash
+pip install grpcio grpcio-tools protobuf requests
+```
+
+## Generate Proto Files
+
+```bash
+python -m grpc_tools.protoc \
+  --python_out=. \
+  --grpc_python_out=. \
+  --proto_path=protos \
+  protos/connamara/ep3/v1beta1/market_data.proto \
+  protos/connamara/ep3/v1beta1/order_entry.proto \
+  protos/connamara/ep3/orders/v1beta1/orders.proto \
+  protos/connamara/ep3/instruments/v1beta1/instruments.proto \
+  protos/connamara/ep3/type/v1beta1/common.proto
+```
+
+---
+
+## Market Data Streamer
+
+Complete implementation from `stream.py`:
+
+```python
+import grpc
+import requests
+from datetime import datetime
+from typing import Optional
+
+from connamara.ep3.v1beta1 import market_data_pb2
+from connamara.ep3.v1beta1 import market_data_pb2_grpc
+
+
+class PolymarketStreamer:
+    def __init__(self, base_url: str = "https://rest.staging.polymarket.us",
+                 grpc_server: str = "traderapi.staging.polymarket.us:443"):
+        self.base_url = base_url
+        self.grpc_server = grpc_server
+        self.access_token: Optional[str] = None
+        self.refresh_token: Optional[str] = None
+        self.access_expiration: Optional[datetime] = None
+
+    def login(self, username: str, password: str) -> dict:
+        """Authenticate with the Polymarket API and store tokens."""
+        url = f"{self.base_url}/auth/v1beta1/login"
+        headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "username": username,
+            "password": password
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
+
+        token_data = response.json()
+        self.access_token = token_data["access_token"]
+        self.refresh_token = token_data["refresh_token"]
+        self.access_expiration = datetime.fromisoformat(
+            token_data["access_expiration_time"].replace("Z", "+00:00")
+        )
+
+        return token_data
+
+    def stream_market_data(self, symbols: list, unaggregated: bool = False,
+                          depth: int = 10, snapshot_only: bool = False):
+        """Stream market data for the given symbols using gRPC."""
+        if not self.access_token:
+            raise ValueError("Not authenticated. Please login first.")
+
+        # Create credentials
+        credentials = grpc.ssl_channel_credentials()
+
+        # Create channel
+        channel = grpc.secure_channel(self.grpc_server, credentials)
+
+        # Create stub
+        stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+
+        # Create request
+        request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+            symbols=symbols,
+            unaggregated=unaggregated,
+            depth=depth,
+            snapshot_only=snapshot_only
+        )
+
+        # Set up metadata with authorization
+        metadata = [
+            ('authorization', self.access_token)
+        ]
+
+        try:
+            print(f"Starting market data stream for symbols: {symbols}")
+            print(f"Parameters: unaggregated={unaggregated}, depth={depth}, snapshot_only={snapshot_only}")
+            print("-" * 60)
+
+            # Start streaming
+            response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
+
+            for response in response_stream:
+                self._process_market_data_response(response)
+
+        except grpc.RpcError as e:
+            print(f"gRPC error: {e.code()} - {e.details()}")
+            raise
+        except KeyboardInterrupt:
+            print("\nStream interrupted by user")
+        finally:
+            channel.close()
+
+    def _process_market_data_response(self, response):
+        """Process and display market data response."""
+        if response.HasField('heartbeat'):
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Heartbeat received")
+
+        elif response.HasField('update'):
+            update = response.update
+            print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Market Update for {update.symbol}")
+
+            # Display instrument state
+            state_name = market_data_pb2.InstrumentState.Name(update.state)
+            print(f"  State: {state_name}")
+
+            # Display order book
+            if update.bids:
+                print("  Bids:")
+                for i, bid in enumerate(update.bids[:5]):  # Show top 5 bids
+                    px = bid.px / 10000  # Convert from price representation
+                    qty = bid.qty
+                    print(f"    [{i+1}] ${px:.4f} x {qty}")
+
+            if update.offers:
+                print("  Offers:")
+                for i, offer in enumerate(update.offers[:5]):  # Show top 5 offers
+                    px = offer.px / 10000  # Convert from price representation
+                    qty = offer.qty
+                    print(f"    [{i+1}] ${px:.4f} x {qty}")
+
+            # Display stats if available
+            if update.HasField('stats'):
+                stats = update.stats
+                print("  Stats:")
+                if stats.HasField('last_trade_px'):
+                    last_px = stats.last_trade_px / 10000
+                    print(f"    Last Trade: ${last_px:.4f}")
+                if stats.HasField('open_px'):
+                    open_px = stats.open_px / 10000
+                    print(f"    Open: ${open_px:.4f}")
+                if stats.HasField('high_px'):
+                    high_px = stats.high_px / 10000
+                    print(f"    High: ${high_px:.4f}")
+                if stats.HasField('low_px'):
+                    low_px = stats.low_px / 10000
+                    print(f"    Low: ${low_px:.4f}")
+                if stats.HasField('shares_traded'):
+                    print(f"    Shares Traded: {stats.shares_traded}")
+                if stats.HasField('open_interest'):
+                    print(f"    Open Interest: {stats.open_interest}")
+
+            print("-" * 60)
+
+
+# Usage
+if __name__ == "__main__":
+    streamer = PolymarketStreamer()
+
+    # Login
+    streamer.login("your_username", "your_password")
+
+    # Stream market data
+    streamer.stream_market_data(
+        symbols=["mlb-ari-sf-2025-09-08"],
+        depth=10
+    )
+```
+
+---
+
+## Order Execution Streamer
+
+Complete implementation from `order_stream.py`:
+
+```python
+import grpc
+import requests
+from datetime import datetime
+from typing import Optional
+
+from connamara.ep3.v1beta1 import order_entry_pb2
+from connamara.ep3.v1beta1 import order_entry_pb2_grpc
+from connamara.ep3.orders.v1beta1 import orders_pb2
+
+
+class PolymarketOrderStreamer:
+    def __init__(self, base_url: str = "https://rest.staging.polymarket.us",
+                 grpc_server: str = "traderapi.staging.polymarket.us:443"):
+        self.base_url = base_url
+        self.grpc_server = grpc_server
+        self.access_token: Optional[str] = None
+        self.refresh_token: Optional[str] = None
+        self.access_expiration: Optional[datetime] = None
+        self.session_id: Optional[str] = None
+
+    def login(self, username: str, password: str) -> dict:
+        """Authenticate with the Polymarket API and store tokens."""
+        url = f"{self.base_url}/auth/v1beta1/login"
+        headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "username": username,
+            "password": password
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
+
+        token_data = response.json()
+        self.access_token = token_data["access_token"]
+        self.refresh_token = token_data["refresh_token"]
+        self.access_expiration = datetime.fromisoformat(
+            token_data["access_expiration_time"].replace("Z", "+00:00")
+        )
+
+        return token_data
+
+    def stream_orders(self, symbols: list = None, accounts: list = None,
+                     snapshot_only: bool = False):
+        """Stream order updates using gRPC."""
+        if not self.access_token:
+            raise ValueError("Not authenticated. Please login first.")
+
+        # Create credentials
+        credentials = grpc.ssl_channel_credentials()
+
+        # Create channel
+        channel = grpc.secure_channel(self.grpc_server, credentials)
+
+        # Create stub
+        stub = order_entry_pb2_grpc.OrderEntryAPIStub(channel)
+
+        # Create request
+        request = order_entry_pb2.CreateOrderSubscriptionRequest(
+            symbols=symbols or [],
+            accounts=accounts or [],
+            snapshot_only=snapshot_only
+        )
+
+        # Set up metadata with authorization
+        metadata = [
+            ('authorization', self.access_token)
+        ]
+
+        try:
+            print(f"Starting order stream")
+            print(f"Symbols: {symbols or 'ALL'}")
+            print(f"Accounts: {accounts or 'ALL'}")
+            print(f"Snapshot only: {snapshot_only}")
+            print("-" * 60)
+
+            # Start streaming
+            response_stream = stub.CreateOrderSubscription(request, metadata=metadata)
+
+            for response in response_stream:
+                self._process_order_response(response)
+
+        except grpc.RpcError as e:
+            print(f"gRPC error: {e.code()} - {e.details()}")
+            raise
+        except KeyboardInterrupt:
+            print("\nStream interrupted by user")
+        finally:
+            channel.close()
+
+    def _process_order_response(self, response):
+        """Process and display order response."""
+        # Capture session ID on first message
+        if response.session_id and not self.session_id:
+            self.session_id = response.session_id
+            print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Session established")
+            print(f"  Session ID: {self.session_id}")
+            print("-" * 60)
+
+        if response.HasField('heartbeat'):
+            print(f"[{datetime.now().strftime('%H:%M:%S')}] Heartbeat received")
+
+        elif response.HasField('snapshot'):
+            snapshot = response.snapshot
+            print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Order Snapshot")
+            print(f"  Total orders: {len(snapshot.orders)}")
+
+            for order in snapshot.orders:
+                self._display_order(order)
+
+            print("-" * 60)
+
+        elif response.HasField('update'):
+            update = response.update
+            print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Order Update")
+
+            # Display executions
+            if update.executions:
+                print(f"  Executions: {len(update.executions)}")
+                for execution in update.executions:
+                    self._display_execution(execution)
+
+            # Display cancel rejects
+            if update.HasField('cancel_reject'):
+                self._display_cancel_reject(update.cancel_reject)
+
+            print("-" * 60)
+
+    def _display_order(self, order):
+        """Display order details."""
+        print(f"  Order ID: {order.id}")
+        print(f"    Client Order ID: {order.clord_id}")
+        print(f"    Symbol: {order.symbol}")
+        print(f"    Side: {orders_pb2.Side.Name(order.side)}")
+        print(f"    Type: {orders_pb2.OrderType.Name(order.type)}")
+        print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
+
+        if order.price > 0:
+            price = order.price / 10000  # Convert from price representation
+            print(f"    Price: ${price:.4f}")
+
+        print(f"    Order Qty: {order.order_qty}")
+        print(f"    Filled Qty: {order.cum_qty}")
+        print(f"    Remaining Qty: {order.leaves_qty}")
+
+        if order.avg_px > 0:
+            avg_px = order.avg_px / 10000
+            print(f"    Avg Price: ${avg_px:.4f}")
+
+        if order.account:
+            print(f"    Account: {order.account}")
+
+        print()
+
+    def _display_execution(self, execution):
+        """Display execution details."""
+        print(f"  Execution ID: {execution.id}")
+        print(f"    Type: {orders_pb2.ExecutionType.Name(execution.type)}")
+
+        if execution.HasField('order'):
+            order = execution.order
+            print(f"    Order ID: {order.id}")
+            print(f"    Symbol: {order.symbol}")
+            print(f"    Side: {orders_pb2.Side.Name(order.side)}")
+            print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
+
+        if execution.last_shares > 0:
+            print(f"    Last Shares: {execution.last_shares}")
+
+        if execution.last_px > 0:
+            last_px = execution.last_px / 10000
+            print(f"    Last Price: ${last_px:.4f}")
+
+        if execution.trade_id:
+            print(f"    Trade ID: {execution.trade_id}")
+
+        if execution.text:
+            print(f"    Text: {execution.text}")
+
+        if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
+            print(f"    Reject Reason: {orders_pb2.OrdRejectReason.Name(execution.order_reject_reason)}")
+
+        print()
+
+    def _display_cancel_reject(self, cancel_reject):
+        """Display cancel reject details."""
+        print(f"  Cancel Reject:")
+        print(f"    ID: {cancel_reject.id}")
+        print(f"    Client Order ID: {cancel_reject.clord_id}")
+        print(f"    Original Client Order ID: {cancel_reject.orig_clord_id}")
+        print(f"    Response To: {orders_pb2.CxlRejResponseTo.Name(cancel_reject.response_to)}")
+        print(f"    Reject Reason: {orders_pb2.CxlRejReason.Name(cancel_reject.reject_reason)}")
+        if cancel_reject.text:
+            print(f"    Text: {cancel_reject.text}")
+        print()
+
+
+# Usage
+if __name__ == "__main__":
+    streamer = PolymarketOrderStreamer()
+
+    # Login
+    streamer.login("your_username", "your_password")
+
+    # Stream orders
+    streamer.stream_orders(
+        symbols=["mlb-ari-sf-2025-09-08"],
+        accounts=[]
+    )
+```
+
+---
+
+## REST API Client
+
+For placing orders and managing positions via REST (from `polymarket_client.py`):
+
+```python
+import requests
+from datetime import datetime
+from typing import Optional, Dict, Any
+import uuid
+
+
+class PolymarketClient:
+    def __init__(self, base_url: str = "https://rest.staging.polymarket.us"):
+        self.base_url = base_url
+        self.access_token: Optional[str] = None
+        self.user_account: Optional[str] = None
+        self.trading_account: Optional[str] = None
+
+    def login(self, username: str, password: str) -> Dict[str, Any]:
+        """Authenticate with the API and store tokens."""
+        url = f"{self.base_url}/auth/v1beta1/login"
+        headers = {
+            "accept": "application/json",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "username": username,
+            "password": password
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()
+
+        token_data = response.json()
+        self.access_token = token_data["access_token"]
+
+        return token_data
+
+    def get_headers(self) -> Dict[str, str]:
+        """Get headers with authorization token."""
+        if not self.access_token:
+            raise ValueError("Not authenticated. Please login first.")
+
+        return {
+            "accept": "application/json",
+            "Authorization": self.access_token,
+            "Content-Type": "application/json"
+        }
+
+    def get_who_am_i(self) -> Dict[str, Any]:
+        """Get current user information."""
+        url = f"{self.base_url}/api/v1beta1/get_who_am_i"
+        response = requests.post(url, headers=self.get_headers(), json={})
+        response.raise_for_status()
+        user_data = response.json()
+        self.user_account = user_data.get("user")
+        return user_data
+
+    def list_accounts(self) -> Dict[str, Any]:
+        """List trading accounts for the current user."""
+        url = f"{self.base_url}/api/v1beta1/list_accounts"
+        data = {"user": self.user_account}
+        response = requests.post(url, headers=self.get_headers(), json=data)
+        response.raise_for_status()
+        accounts_data = response.json()
+
+        if accounts_data.get("accounts"):
+            self.trading_account = accounts_data["accounts"][0]
+
+        return accounts_data
+
+    def place_order(self, order_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Place a trading order."""
+        url = f"{self.base_url}/api/v1beta1/insert_order"
+        response = requests.post(url, headers=self.get_headers(), json=order_data)
+
+        if not response.ok:
+            error_msg = f"HTTP {response.status_code}: {response.reason}"
+            try:
+                error_data = response.json()
+                if 'message' in error_data:
+                    error_msg += f" - {error_data['message']}"
+            except:
+                error_msg += f" - Response: {response.text}"
+
+            raise requests.exceptions.HTTPError(error_msg, response=response)
+
+        return response.json()
+
+    def get_open_orders(self) -> Dict[str, Any]:
+        """Get open orders."""
+        url = f"{self.base_url}/api/v1beta1/get_open_orders"
+        response = requests.post(url, headers=self.get_headers(), json={})
+        response.raise_for_status()
+        return response.json()
+
+    def cancel_order(self, order_id: str, symbol: str) -> bool:
+        """Cancel an open order."""
+        url = f"{self.base_url}/api/v1beta1/cancel_order"
+        data = {
+            "orderId": order_id,
+            "symbol": symbol
+        }
+
+        response = requests.post(url, headers=self.get_headers(), json=data)
+        return response.status_code == 200
+
+
+# Usage
+if __name__ == "__main__":
+    client = PolymarketClient()
+
+    # Login
+    client.login("your_username", "your_password")
+
+    # Get user info
+    client.get_who_am_i()
+    client.list_accounts()
+
+    # Place order
+    order_data = {
+        "type": "ORDER_TYPE_LIMIT",
+        "side": "SIDE_BUY",
+        "order_qty": 100,
+        "symbol": "mlb-ari-sf-2025-09-08",
+        "price": 52.50,
+        "time_in_force": "TIME_IN_FORCE_GOOD_TILL_CANCEL",
+        "clord_id": str(uuid.uuid4()),
+        "account": client.trading_account
+    }
+
+    result = client.place_order(order_data)
+    print(f"Order placed: {result}")
+
+    # Get open orders
+    open_orders = client.get_open_orders()
+    print(f"Open orders: {len(open_orders.get('orders', []))}")
+```
+
+---
+
+## Complete Trading Bot Example
+
+Combining REST and gRPC for a complete trading application:
+
+```python
+import grpc
+import requests
+from datetime import datetime
+from typing import Optional
+import uuid
+
+from connamara.ep3.v1beta1 import market_data_pb2
+from connamara.ep3.v1beta1 import market_data_pb2_grpc
+
+
+class TradingBot:
+    def __init__(self, base_url: str, grpc_server: str):
+        self.base_url = base_url
+        self.grpc_server = grpc_server
+        self.access_token: Optional[str] = None
+        self.trading_account: Optional[str] = None
+
+    def login(self, username: str, password: str):
+        """Login and setup account."""
+        # Authenticate
+        url = f"{self.base_url}/auth/v1beta1/login"
+        response = requests.post(url, json={
+            "username": username,
+            "password": password
+        })
+        response.raise_for_status()
+
+        token_data = response.json()
+        self.access_token = token_data["access_token"]
+
+        # Get account info
+        headers = {"Authorization": self.access_token}
+        user_info = requests.post(
+            f"{self.base_url}/api/v1beta1/get_who_am_i",
+            headers=headers,
+            json={}
+        ).json()
+
+        accounts = requests.post(
+            f"{self.base_url}/api/v1beta1/list_accounts",
+            headers=headers,
+            json={"user": user_info["user"]}
+        ).json()
+
+        self.trading_account = accounts["accounts"][0]
+
+    def place_order(self, symbol: str, side: str, qty: int, price: float):
+        """Place order via REST."""
+        url = f"{self.base_url}/api/v1beta1/insert_order"
+        headers = {"Authorization": self.access_token}
+
+        order_data = {
+            "type": "ORDER_TYPE_LIMIT",
+            "side": side,
+            "order_qty": qty,
+            "symbol": symbol,
+            "price": price,
+            "time_in_force": "TIME_IN_FORCE_GOOD_TILL_CANCEL",
+            "clord_id": str(uuid.uuid4()),
+            "account": self.trading_account
+        }
+
+        response = requests.post(url, headers=headers, json=order_data)
+        response.raise_for_status()
+        return response.json()
+
+    def stream_and_trade(self, symbol: str):
+        """Stream market data and execute trading logic."""
+        credentials = grpc.ssl_channel_credentials()
+        channel = grpc.secure_channel(self.grpc_server, credentials)
+        stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+
+        request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+            symbols=[symbol],
+            depth=10
+        )
+
+        metadata = [('authorization', self.access_token)]
+
+        print(f"Streaming market data for {symbol}...")
+
+        try:
+            response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
+
+            for response in response_stream:
+                if response.HasField('update'):
+                    update = response.update
+
+                    # Simple trading logic: place order if spread is wide
+                    if update.bids and update.offers:
+                        best_bid = update.bids[0].px / 10000
+                        best_ask = update.offers[0].px / 10000
+                        spread = best_ask - best_bid
+
+                        if spread > 1.0:  # If spread > $1.00
+                            print(f"Wide spread detected: ${spread:.2f}")
+                            # Place buy order at mid-price
+                            mid_price = (best_bid + best_ask) / 2
+                            print(f"Placing buy order at ${mid_price:.2f}")
+
+                            self.place_order(
+                                symbol=symbol,
+                                side="SIDE_BUY",
+                                qty=10,
+                                price=mid_price
+                            )
+
+        finally:
+            channel.close()
+
+
+# Usage
+if __name__ == "__main__":
+    bot = TradingBot(
+        base_url="https://rest.staging.polymarket.us",
+        grpc_server="traderapi.staging.polymarket.us:443"
+    )
+
+    bot.login("your_username", "your_password")
+    bot.stream_and_trade("mlb-ari-sf-2025-09-08")
+```
+
+---
+
+## Key Takeaways
+
+### Authentication
+- Always login via REST API first to get JWT token
+- Attach token to gRPC metadata: `[('authorization', access_token)]`
+- Monitor token expiration and refresh as needed
+
+### Price Handling
+- All prices are `int64` scaled by 10000
+- Convert to decimal: `decimal_price = int64_price / 10000`
+- Example: `5000` → `$0.5`
+
+### Field Checking
+- Use `HasField()` to check optional protobuf fields
+- Example: `if update.HasField('stats'):`
+
+### Error Handling
+- Catch `grpc.RpcError` for gRPC errors
+- Check error code: `e.code() == grpc.StatusCode.UNAUTHENTICATED`
+- Implement exponential backoff for reconnections
+
+### Channel Management
+- Always close channels in `finally` blocks
+- Use secure channels with TLS: `grpc.ssl_channel_credentials()`
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/streaming-endpoints/authentication">
+    Learn about authentication details
+  </Card>
+  <Card title="Market Data Stream" icon="chart-line" href="/streaming-endpoints/market-data-stream">
+    Deep dive into market data
+  </Card>
+  <Card title="Order Stream" icon="file-invoice" href="/streaming-endpoints/order-stream">
+    Deep dive into order streaming
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
+    Handle errors and reconnections
+  </Card>
+</CardGroup>

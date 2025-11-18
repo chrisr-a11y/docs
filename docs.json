@@ -27,7 +27,10 @@
             "pages": [
               "getting-started/getting-access",
               "getting-started/rate-limits",
-              "getting-started/connection-options"            
+              "getting-started/connection-options",
+              "getting-started/vpc-connection",
+              "getting-started/common-pitfalls"            
+
             ]
           }
         ]
@@ -51,6 +54,36 @@
             }
         ]
       },
+
+      {
+        "tab": "gRPC Streaming",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "streaming-endpoints/grpc-overview",
+              "streaming-endpoints/getting-started",
+              "streaming-endpoints/authentication"
+            ]
+          },
+          {
+            "group": "Streaming Services",
+            "pages": [
+              "streaming-endpoints/market-data-stream",
+              "streaming-endpoints/order-stream"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "streaming-endpoints/proto-reference",
+              "streaming-endpoints/error-handling",
+              "streaming-endpoints/code-examples"
+            ]
+          }
+        ]
+      },
+
          {
         "tab": "FIX API",
         "pages": [
@@ -60,7 +93,7 @@
           "/api-reference/fix-api/ep3-fix-order-entry-and-matching",
           "/api-reference/fix-api/ep3-fix-market-data",
           "/api-reference/fix-api/ep3-fix-api-reference-data",
-          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"    
+          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"
         ]
       },
             {
