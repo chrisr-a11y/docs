@@ -432,13 +432,15 @@ if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
 <Warning>
 **All prices are `int64` values scaled by 10000.**
 
+Prices are always between **$0.001 and $0.999 USD**.
+
 ```python
 # Proto → Decimal
 decimal_price = int64_price / 10000
 
 # Example
-proto_price = 52500
-decimal_price = 52500 / 10000  # = 5.25
+proto_price = 5250
+decimal_price = 5250 / 10000  # = $0.5250
 ```
 </Warning>
 

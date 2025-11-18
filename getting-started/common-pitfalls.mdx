@@ -9,12 +9,6 @@ description: "Troubleshooting guide for common issues when integrating with Poly
 
 **Important**: A returned order ID with HTTP 200 does **not** guarantee the order was successfully processed. Failed orders don't generate user-visible errors unless a required field is missing.
 
-To troubleshoot order issues:
-
-1. Log into the Admin UI panel
-2. Filter by the `order_id`
-3. Review the rejection reason
-
 **Common failure reasons:**
 - Invalid Account
 - Expired Instrument
@@ -29,6 +23,12 @@ When receiving a 464 error in prod or pre-prod environments, verify that the `Ho
 ```bash
 Host: rest.preprod.polymarketexchange.com
 ```
+**OR**
+```bash
+Host: rest.prod.polymarketexchange.com
+```
+
+
 
 Without this header, requests are routed to gRPC by default instead of REST.
 

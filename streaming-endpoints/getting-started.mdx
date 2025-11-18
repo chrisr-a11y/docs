@@ -14,7 +14,7 @@ Before you begin, ensure you have:
 
 - **API Credentials**: Username and password for the Polymarket Exchange
 - **Python 3.7+**: Python development environment
-- **Network Access**: Ability to connect to `traderapi.staging.polymarket.us:443`
+- **Network Access**: Ability to connect to `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443`
 
 ## Step 1: Install Python gRPC Libraries
 
@@ -26,7 +26,7 @@ pip install grpcio grpcio-tools protobuf requests
 - `grpcio`: gRPC runtime library
 - `grpcio-tools`: Tools for generating Python code from proto files
 - `protobuf`: Protocol buffer runtime
-- `requests`: For REST API authentication
+- `requests`/`httpx`: For REST API authentication
 
 ## Step 2: Obtain Protocol Buffer Definitions
 
@@ -75,27 +75,10 @@ This generates:
 
 ## Step 4: Authenticate via REST API
 
-Obtain a JWT token from the REST API:
+Obtain a JWT token from the REST API(curl example):
 
-```python
-import requests
-
-# Login via REST API
-url = "https://rest.staging.polymarket.us/auth/v1beta1/login"
-headers = {
-    "accept": "application/json",
-    "Content-Type": "application/json"
-}
-data = {
-    "username": "your_username",
-    "password": "your_password"
-}
-
-response = requests.post(url, headers=headers, json=data)
-token_data = response.json()
-
-access_token = token_data["access_token"]
-print(f"Access Token: {access_token}")
+```bash
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
 ```
 
 <Warning>
@@ -165,81 +148,6 @@ for response in response_stream:
 Example: `52500` → `52500 / 10000 = 5.25`
 </Note>
 
-## Complete Working Example
-
-Here's a complete script combining all steps:
-
-```python
-import grpc
-import requests
-from datetime import datetime
-from connamara.ep3.v1beta1 import market_data_pb2
-from connamara.ep3.v1beta1 import market_data_pb2_grpc
-
-def login(username, password):
-    """Authenticate and return access token."""
-    url = "https://rest.staging.polymarket.us/auth/v1beta1/login"
-    response = requests.post(url, json={
-        "username": username,
-        "password": password
-    })
-    response.raise_for_status()
-    return response.json()["access_token"]
-
-def stream_market_data(access_token, symbols):
-    """Stream market data for specified symbols."""
-    # Create secure channel
-    credentials = grpc.ssl_channel_credentials()
-    channel = grpc.secure_channel('traderapi.staging.polymarket.us:443', credentials)
-
-    # Create stub
-    stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
-
-    # Create request
-    request = market_data_pb2.CreateMarketDataSubscriptionRequest(
-        symbols=symbols,
-        depth=10
-    )
-
-    # Set up metadata
-    metadata = [('authorization', access_token)]
-
-    try:
-        print(f"Streaming market data for: {symbols}")
-        print("-" * 60)
-
-        # Start streaming
-        response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
-
-        for response in response_stream:
-            if response.HasField('heartbeat'):
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] Heartbeat")
-
-            elif response.HasField('update'):
-                update = response.update
-                print(f"\n[{datetime.now().strftime('%H:%M:%S')}] {update.symbol}")
-
-                if update.bids and update.offers:
-                    bid_px = update.bids[0].px / 10000
-                    ask_px = update.offers[0].px / 10000
-                    spread = ask_px - bid_px
-                    print(f"  Bid: ${bid_px:.4f} | Ask: ${ask_px:.4f} | Spread: ${spread:.4f}")
-
-    except grpc.RpcError as e:
-        print(f"gRPC error: {e.code()} - {e.details()}")
-    except KeyboardInterrupt:
-        print("\nStream interrupted by user")
-    finally:
-        channel.close()
-
-if __name__ == "__main__":
-    # Login
-    access_token = login("your_username", "your_password")
-    print("Logged in successfully\n")
-
-    # Stream market data
-    stream_market_data(access_token, ["mlb-ari-sf-2025-09-08"])
-```
 
 ## Common Setup Issues
 
@@ -256,13 +164,6 @@ if __name__ == "__main__":
 - **Solution**: Ensure proto files are generated in the correct directory, or add to `PYTHONPATH`:
   ```bash
   export PYTHONPATH="${PYTHONPATH}:."
-  ```
-
-### TLS/SSL Errors
-- **Cause**: Missing CA certificates
-- **Solution**: Update system CA certificates:
-  ```bash
-  pip install --upgrade certifi
   ```
 
 ### Module Not Found: connamara

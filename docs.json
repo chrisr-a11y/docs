@@ -77,8 +77,7 @@
             "group": "Reference",
             "pages": [
               "streaming-endpoints/proto-reference",
-              "streaming-endpoints/error-handling",
-              "streaming-endpoints/code-examples"
+              "streaming-endpoints/error-handling"
             ]
           }
         ]

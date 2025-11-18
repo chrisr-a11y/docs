@@ -136,7 +136,8 @@ if response.HasField('update'):
 <Warning>
 **Price Fields:**
 - `price`, `avg_px`, `stop_price` are `int64` scaled by **10000**
-- Example: `52500` → `52500 / 10000 = $5.25`
+- Prices are always between **$0.001 and $0.999 USD**
+- Example: `5250` → `5250 / 10000 = $0.5250`
 
 ```python
 if order.price > 0:
@@ -471,7 +472,7 @@ Snapshot only: False
     Side: SIDE_BUY
     Type: ORDER_TYPE_LIMIT
     State: ORDER_STATE_NEW
-    Price: $52.5000
+    Price: $0.5250
     Order Qty: 1000
     Filled Qty: 0
     Remaining Qty: 1000
@@ -489,7 +490,7 @@ Snapshot only: False
     Side: SIDE_BUY
     State: ORDER_STATE_PARTIALLY_FILLED
     Last Shares: 300
-    Last Price: $52.5000
+    Last Price: $0.5250
     Trade ID: trade_xyz
 
 ------------------------------------------------------------
@@ -520,120 +521,6 @@ Snapshot only: False
 1. REJECTED → Order rejected immediately
 ```
 
-## Use Cases
-
-### 1. Order Monitoring Dashboard
-
-```python
-class OrderDashboard:
-    def __init__(self):
-        self.open_orders = {}
-        self.filled_orders = []
-
-    def handle_execution(self, execution):
-        """Update dashboard based on execution."""
-        if not execution.HasField('order'):
-            return
-
-        order = execution.order
-        order_id = order.id
-
-        if execution.type == orders_pb2.EXECUTION_TYPE_NEW:
-            self.open_orders[order_id] = order
-            print(f"📝 New Order: {order_id} - {order.symbol}")
-
-        elif execution.type in [orders_pb2.EXECUTION_TYPE_PARTIAL_FILL,
-                                orders_pb2.EXECUTION_TYPE_TRADE]:
-            self.open_orders[order_id] = order
-            fill_px = execution.last_px / 10000
-            print(f"💰 Fill: {execution.last_shares} @ ${fill_px:.4f}")
-
-        elif execution.type == orders_pb2.EXECUTION_TYPE_FILL:
-            self.filled_orders.append(order)
-            self.open_orders.pop(order_id, None)
-            print(f"✅ Filled: {order_id}")
-
-        elif execution.type == orders_pb2.EXECUTION_TYPE_CANCELED:
-            self.open_orders.pop(order_id, None)
-            print(f"❌ Canceled: {order_id}")
-```
-
-### 2. Position Tracking
-
-```python
-from collections import defaultdict
-
-class PositionTracker:
-    def __init__(self):
-        self.positions = defaultdict(int)  # symbol -> net position
-
-    def handle_fill(self, execution):
-        """Update position from fill execution."""
-        if execution.last_shares == 0:
-            return
-
-        if not execution.HasField('order'):
-            return
-
-        order = execution.order
-        symbol = order.symbol
-        qty = execution.last_shares
-
-        # Buy adds to position, sell subtracts
-        if order.side == orders_pb2.SIDE_BUY:
-            self.positions[symbol] += qty
-        elif order.side == orders_pb2.SIDE_SELL:
-            self.positions[symbol] -= qty
-
-        print(f"Position {symbol}: {self.positions[symbol]}")
-
-    def get_position(self, symbol):
-        """Get current position for symbol."""
-        return self.positions.get(symbol, 0)
-```
-
-## Best Practices
-
-### 1. Track Session ID
-
-Store and log the session ID for debugging:
-
-```python
-if response.session_id:
-    print(f"Session ID: {response.session_id}")
-    # Log to file for support requests
-```
-
-### 2. Handle All Execution Types
-
-Process all execution types, not just fills:
-
-```python
-# Handle all execution types
-if execution.type == orders_pb2.EXECUTION_TYPE_NEW:
-    # Order confirmed
-    pass
-elif execution.type in [orders_pb2.EXECUTION_TYPE_PARTIAL_FILL,
-                         orders_pb2.EXECUTION_TYPE_TRADE,
-                         orders_pb2.EXECUTION_TYPE_FILL]:
-    # Process fill
-    pass
-elif execution.type == orders_pb2.EXECUTION_TYPE_REJECTED:
-    # Handle reject
-    pass
-```
-
-### 3. Reconcile with Snapshot
-
-Use snapshot to initialize state:
-
-```python
-# On snapshot, rebuild order state
-if response.HasField('snapshot'):
-    self.open_orders.clear()
-    for order in response.snapshot.orders:
-        self.open_orders[order.id] = order
-```
 
 ## Next Steps
 
