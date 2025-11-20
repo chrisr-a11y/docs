@@ -110,17 +110,17 @@ Each price level in the order book contains:
 
 <Warning>
 **Price Representation:**
-All prices are `int64` values scaled by **1000**.
+All prices are `int64` values scaled by **10000**.
 
-Prices are always between **$0.001 and $0.999 USD**.
+Prices are always between **$0.0001 and $0.9999 USD**.
 
 **Example:**
-- Raw value: `500`
-- Decimal price: `500 / 1000 = .5USD`
+- Raw value: `5000`
+- Decimal price: `5000 / 10000 = 0.5 USD`
 - Display as: `$0.50`
 
 ```python
-px = bid.px / 1000  # Convert from price representation
+px = bid.px / 10000  # Convert from price representation
 print(f"${px:.4f}")  # Display as $0.50
 ```
 </Warning>
