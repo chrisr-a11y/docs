@@ -9,6 +9,9 @@ description: "Troubleshooting guide for common issues when integrating with Poly
 
 **Important**: A returned order ID with HTTP 200 does **not** guarantee the order was successfully processed. Failed orders don't generate user-visible errors unless a required field is missing.
 
+<Note>
+To ensure your order was successfully processed, always verify its status via the order stream. Do not rely solely on HTTP 200 responses or returned order IDs.
+</Note>
 **Common failure reasons:**
 - Invalid Account
 - Expired Instrument
