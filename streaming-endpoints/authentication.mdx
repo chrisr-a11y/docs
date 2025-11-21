@@ -1,0 +1,112 @@
+---
+title: "gRPC Authentication"
+sidebarTitle: "Authentication"
+description: "How to authenticate gRPC streaming connections with Python"
+---
+
+# Authentication for gRPC Streaming
+
+gRPC streaming connections use **JWT (JSON Web Token)** authentication obtained from the REST API. This guide explains the complete authentication flow using Python.
+
+## Authentication Architecture
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant REST API
+    participant gRPC Server
+
+    Client->>REST API: POST /auth/v1beta1/login
+    REST API->>Client: JWT Token + Expiration
+    Client->>gRPC Server: Connect with token in metadata
+    gRPC Server->>Client: Stream data
+    Note over Client,gRPC Server: Token expires after configured duration
+    Client->>REST API: Re-login for new token
+    REST API->>Client: New JWT Token
+```
+
+## Step 1: Obtain JWT Token from REST API
+
+Before establishing any gRPC streaming connection, you must first authenticate via the REST API.
+
+### Login Request
+
+```curl
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
+```
+
+### Login Response
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "access_expiration_time": "2025-01-18T12:00:00Z",
+  "refresh_expiration_time": "2025-01-19T12:00:00Z"
+}
+```
+
+<Info>
+**Token Fields:**
+- `access_token`: Use this for gRPC authentication
+- `refresh_token`: Use this to obtain a new access token before expiration
+- `access_expiration_time`: When the access token expires
+- `refresh_expiration_time`: When the refresh token expires
+</Info>
+
+## Step 2: Attach Token to gRPC Metadata
+
+Once you have the access token, include it in the **gRPC metadata** for every streaming connection.
+
+```python
+import grpc
+from connamara.ep3.v1beta1 import market_data_pb2_grpc
+
+# Create secure channel
+credentials = grpc.ssl_channel_credentials()
+channel = grpc.secure_channel('traderapi.staging.polymarket.us:443', credentials)
+
+# Create stub
+stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+
+# Create metadata with authorization token
+metadata = [
+    ('authorization', access_token)
+]
+
+# Make streaming call with metadata
+response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
+```
+
+<Warning>
+The metadata key **must** be `authorization` (lowercase). The value is the raw JWT token string.
+</Warning>
+
+
+## Handling Authentication Errors
+
+### Common Authentication Errors
+
+| Error Code | Description | Solution |
+|------------|-------------|----------|
+| `UNAUTHENTICATED` | Token is invalid or missing | Verify token in metadata, re-login if expired |
+| `PERMISSION_DENIED` | Token is valid but lacks permissions | Check user permissions with support |
+| `UNAVAILABLE` | Cannot reach authentication service | Check network connectivity, retry with backoff |
+
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Market Data Streaming" icon="chart-line" href="/streaming-endpoints/market-data-stream">
+    Learn how to stream market data
+  </Card>
+  <Card title="Order Streaming" icon="file-invoice" href="/streaming-endpoints/order-stream">
+    Subscribe to order updates
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
+    Handle errors and implement reconnection
+  </Card>
+  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
+    See complete working examples
+  </Card>
+</CardGroup>

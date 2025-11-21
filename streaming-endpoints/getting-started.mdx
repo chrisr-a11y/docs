@@ -1,0 +1,198 @@
+---
+title: "Getting Started with gRPC Streaming"
+sidebarTitle: "Getting Started"
+description: "Quick start guide for setting up gRPC streaming with Python"
+---
+
+# Getting Started
+
+This guide will help you set up gRPC streaming with Python and connect to your first data stream in minutes.
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+- **API Credentials**: Username and password for the Polymarket Exchange
+- **Python 3.7+**: Python development environment
+- **Network Access**: Ability to connect to `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443`
+
+## Step 1: Install Python gRPC Libraries
+
+```bash
+pip install grpcio grpcio-tools protobuf requests
+```
+
+**Required packages:**
+- `grpcio`: gRPC runtime library
+- `grpcio-tools`: Tools for generating Python code from proto files
+- `protobuf`: Protocol buffer runtime
+- `requests`/`httpx`: For REST API authentication
+
+## Step 2: Obtain Protocol Buffer Definitions
+
+Proto files define the gRPC service interfaces and message structures. You can obtain them in two ways:
+
+### Option A: Request from Support
+
+Contact [support@qcex.com](mailto:support@qcex.com) to receive the complete proto file package.
+
+### Option B: Use Server Reflection
+
+<Info>
+Server reflection allows you to discover service definitions at runtime without proto files. This is useful for dynamic clients and debugging.
+</Info>
+
+```bash
+# Install reflection client
+pip install grpcio-reflection
+
+# Use grpcurl to explore services
+grpcurl -plaintext traderapi.staging.polymarket.us:443 list
+
+# Describe a service
+grpcurl traderapi.staging.polymarket.us:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
+```
+
+## Step 3: Generate Python Client Code
+
+Once you have the proto files, generate Python client code:
+
+```bash
+python -m grpc_tools.protoc \
+  --python_out=. \
+  --grpc_python_out=. \
+  --proto_path=protos \
+  protos/connamara/ep3/v1beta1/market_data.proto \
+  protos/connamara/ep3/v1beta1/order_entry.proto \
+  protos/connamara/ep3/orders/v1beta1/orders.proto \
+  protos/connamara/ep3/instruments/v1beta1/instruments.proto \
+  protos/connamara/ep3/type/v1beta1/common.proto
+```
+
+This generates:
+- `*_pb2.py` files: Message definitions
+- `*_pb2_grpc.py` files: Service stubs
+
+## Step 4: Authenticate via REST API
+
+Obtain a JWT token from the REST API (curl example):
+
+```bash
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
+```
+
+<Warning>
+Store your access token securely. It will be used to authenticate all gRPC streaming connections.
+</Warning>
+
+## Step 5: Connect to Market Data Stream
+
+Create your first streaming connection:
+
+```python
+import grpc
+from datetime import datetime
+from connamara.ep3.v1beta1 import market_data_pb2
+from connamara.ep3.v1beta1 import market_data_pb2_grpc
+
+# Create secure channel
+credentials = grpc.ssl_channel_credentials()
+channel = grpc.secure_channel('traderapi.staging.polymarket.us:443', credentials)
+
+# Create stub
+stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+
+# Create request
+request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+    symbols=["mlb-ari-sf-2025-09-08"],
+    unaggregated=False,
+    depth=10,
+    snapshot_only=False
+)
+
+# Set up metadata with authorization
+metadata = [
+    ('authorization', access_token)
+]
+
+# Start streaming
+print("Starting market data stream...")
+response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
+
+for response in response_stream:
+    if response.HasField('heartbeat'):
+        timestamp = datetime.now().strftime('%H:%M:%S')
+        print(f"[{timestamp}] Heartbeat received")
+
+    elif response.HasField('update'):
+        update = response.update
+        timestamp = datetime.now().strftime('%H:%M:%S')
+        print(f"\n[{timestamp}] Market Update for {update.symbol}")
+        print(f"  Bids: {len(update.bids)}")
+        print(f"  Offers: {len(update.offers)}")
+
+        if update.bids:
+            # Display top bid
+            top_bid_px = update.bids[0].px / 10000
+            print(f"  Top Bid: ${top_bid_px:.4f} x {update.bids[0].qty}")
+
+        if update.offers:
+            # Display top offer
+            top_offer_px = update.offers[0].px / 10000
+            print(f"  Top Offer: ${top_offer_px:.4f} x {update.offers[0].qty}")
+```
+
+<Note>
+**Price Representation**: All prices are represented as `int64` values. Divide by `10000` to get the decimal price.
+
+Prices are always between **$0.001 and $0.999 USD**.
+
+Example: `5250` → `5250 / 10000 = $0.5250`
+</Note>
+
+
+## Common Setup Issues
+
+### Connection Refused
+- **Cause**: Firewall blocking outbound gRPC connections
+- **Solution**: Ensure port 443 is open for outbound connections
+
+### Authentication Failed
+- **Cause**: Invalid or expired access token
+- **Solution**: Verify token from REST login, check expiration time
+
+### Import Errors
+- **Cause**: Generated proto files not in Python path
+- **Solution**: Ensure proto files are generated in the correct directory, or add to `PYTHONPATH`:
+  ```bash
+  export PYTHONPATH="${PYTHONPATH}:."
+  ```
+
+### Module Not Found: connamara
+- **Cause**: Proto files not generated or in wrong location
+- **Solution**: Re-run the `protoc` command from step 3, ensure you're in the correct directory
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication Guide" icon="key" href="/streaming-endpoints/authentication">
+    Deep dive into authentication and token management
+  </Card>
+  <Card title="Market Data Streaming" icon="chart-line" href="/streaming-endpoints/market-data-stream">
+    Learn about all market data streaming features
+  </Card>
+  <Card title="Order Streaming" icon="file-invoice" href="/streaming-endpoints/order-stream">
+    Subscribe to order execution updates
+  </Card>
+  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
+    See complete working Python examples
+  </Card>
+</CardGroup>
+
+## Need Help?
+
+If you encounter issues during setup:
+
+1. Check the [Error Handling Guide](/streaming-endpoints/error-handling)
+2. Review [Code Examples](/streaming-endpoints/code-examples) for complete implementations
+3. Contact [support@qcex.com](mailto:support@qcex.com) for assistance
