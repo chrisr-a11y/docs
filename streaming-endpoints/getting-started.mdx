@@ -47,10 +47,10 @@ Server reflection allows you to discover service definitions at runtime without 
 pip install grpcio-reflection
 
 # Use grpcurl to explore services
-grpcurl -plaintext traderapi.staging.polymarket.us:443 list
+grpcurl -plaintext traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
 
 # Describe a service
-grpcurl traderapi.staging.polymarket.us:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
 ```
 
 ## Step 3: Generate Python Client Code
@@ -97,7 +97,7 @@ from connamara.ep3.v1beta1 import market_data_pb2_grpc
 
 # Create secure channel
 credentials = grpc.ssl_channel_credentials()
-channel = grpc.secure_channel('traderapi.staging.polymarket.us:443', credentials)
+channel = grpc.secure_channel('traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443', credentials)
 
 # Create stub
 stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)

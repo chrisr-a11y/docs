@@ -182,8 +182,8 @@ from connamara.ep3.v1beta1 import market_data_pb2_grpc
 
 
 class PolymarketStreamer:
-    def __init__(self, base_url: str = "https://rest.staging.polymarket.us",
-                 grpc_server: str = "traderapi.staging.polymarket.us:443"):
+    def __init__(self, base_url: str = "https://rest.preprod.polymarketexchange.com",
+                 grpc_server: str = "traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443"):
         self.base_url = base_url
         self.grpc_server = grpc_server
         self.access_token: Optional[str] = None
