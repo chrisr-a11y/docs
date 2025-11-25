@@ -6,20 +6,20 @@
     "primary": "#2E5CFF",
     "dark": "#2E5CFF",
     "light": "#2E5CFF"
-    },
-    "appearance": {
-      "default": "light",  
-      "strict": false 
-    },
+  },
+  "appearance": {
+    "default": "light",
+    "strict": false
+  },
   "navigation": {
     "tabs": [
       {
         "tab": "Welcome",
         "pages": [
-          "index"            
+          "index"
         ]
       },
-            {
+      {
         "tab": "Getting Started",
         "groups": [
           {
@@ -29,13 +29,11 @@
               "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/vpc-connection",
-              "getting-started/common-pitfalls"            
-
+              "getting-started/common-pitfalls"
             ]
           }
         ]
       },
-
       {
         "tab": "REST API",
         "groups": [
@@ -45,16 +43,15 @@
               "api-reference/auth"
             ]
           },
-           {
-      "group": "Trading Endpoints",
-      "openapi": {
-        "source": "/api-reference/oapi-schemas/openapi.json",
-        "directory": "api-reference"
-                  }
+          {
+            "group": "Trading Endpoints",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/openapi.json",
+              "directory": "api-reference"
             }
+          }
         ]
       },
-
       {
         "tab": "gRPC Streaming",
         "groups": [
@@ -82,8 +79,7 @@
           }
         ]
       },
-
-         {
+      {
         "tab": "FIX API",
         "pages": [
           "/api-reference/fix-api/ep3-fix-overview",
@@ -95,51 +91,44 @@
           "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"
         ]
       },
-            {
+      {
         "tab": "Changelog",
-            "pages": [
-              "changelog"            
-            ]
-        
+        "pages": [
+          "changelog"
+        ]
       }
-
-      
-
-
-
     ],
-    "global": {
-    }
+    "global": {}
   },
-  "banner":{
+  "banner": {
     "content": "This documentation for the Polymarket Exchange is available in DRAFT form for comment. All aspects subject to change."
   },
-   "favicon": {
-      "dark": "/logo/favicon.png",
-      "light": "/logo/favicon.png"
-   },
-  "logo": {
-    "light": "/logo/logo-light.svg",
-    "dark": "/logo/logo-dark.svg"
+  "favicon": {
+    "dark": "/logo/favicon.png",
+    "light": "/logo/favicon.png"
   },
-   "navbar": {
+  "logo": {
+    "light": "/logo/logo-black-US.png",
+    "dark": "/logo/logo-white-US.png"
+  },
+  "navbar": {
     "links": [
       {
         "label": "Support",
         "href": "mailto:support@qcex.com"
       }
     ]
-    },
+  },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   }
 }
