@@ -6,20 +6,20 @@
     "primary": "#2E5CFF",
     "dark": "#2E5CFF",
     "light": "#2E5CFF"
-    },
-    "appearance": {
-      "default": "light",  
-      "strict": false 
-    },
+  },
+  "appearance": {
+    "default": "light",
+    "strict": false
+  },
   "navigation": {
     "tabs": [
       {
         "tab": "Welcome",
         "pages": [
-          "index"            
+          "index"
         ]
       },
-            {
+      {
         "tab": "Getting Started",
         "groups": [
           {
@@ -27,12 +27,13 @@
             "pages": [
               "getting-started/getting-access",
               "getting-started/rate-limits",
-              "getting-started/connection-options"            
+              "getting-started/connection-options",
+              "getting-started/vpc-connection",
+              "getting-started/common-pitfalls"
             ]
           }
         ]
       },
-
       {
         "tab": "REST API",
         "groups": [
@@ -42,16 +43,43 @@
               "api-reference/auth"
             ]
           },
-           {
-      "group": "Trading Endpoints",
-      "openapi": {
-        "source": "/api-reference/oapi-schemas/openapi.json",
-        "directory": "api-reference"
-                  }
+          {
+            "group": "Trading Endpoints",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/openapi.json",
+              "directory": "api-reference"
             }
+          }
         ]
       },
-         {
+      {
+        "tab": "gRPC Streaming",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "streaming-endpoints/grpc-overview",
+              "streaming-endpoints/getting-started",
+              "streaming-endpoints/authentication"
+            ]
+          },
+          {
+            "group": "Streaming Services",
+            "pages": [
+              "streaming-endpoints/market-data-stream",
+              "streaming-endpoints/order-stream"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "streaming-endpoints/proto-reference",
+              "streaming-endpoints/error-handling"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "FIX API",
         "pages": [
           "/api-reference/fix-api/ep3-fix-overview",
@@ -60,54 +88,47 @@
           "/api-reference/fix-api/ep3-fix-order-entry-and-matching",
           "/api-reference/fix-api/ep3-fix-market-data",
           "/api-reference/fix-api/ep3-fix-api-reference-data",
-          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"    
+          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"
         ]
       },
-            {
+      {
         "tab": "Changelog",
-            "pages": [
-              "changelog"            
-            ]
-        
+        "pages": [
+          "changelog"
+        ]
       }
-
-      
-
-
-
     ],
-    "global": {
-    }
+    "global": {}
   },
-  "banner":{
+  "banner": {
     "content": "This documentation for the Polymarket Exchange is available in DRAFT form for comment. All aspects subject to change."
   },
-   "favicon": {
-      "dark": "/logo/favicon.png",
-      "light": "/logo/favicon.png"
-   },
-  "logo": {
-    "light": "/logo/logo-light.svg",
-    "dark": "/logo/logo-dark.svg"
+  "favicon": {
+    "dark": "/logo/favicon.png",
+    "light": "/logo/favicon.png"
   },
-   "navbar": {
+  "logo": {
+    "light": "/logo/logo-black-US.png",
+    "dark": "/logo/logo-white-US.png"
+  },
+  "navbar": {
     "links": [
       {
         "label": "Support",
         "href": "mailto:support@qcex.com"
       }
     ]
-    },
+  },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   }
 }

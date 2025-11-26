@@ -1,0 +1,159 @@
+---
+title: "gRPC Streaming Overview"
+sidebarTitle: "Overview"
+description: "Introduction to real-time data streaming on Polymarket Exchange"
+---
+
+# gRPC Streaming API
+
+The Polymarket Exchange provides **gRPC streaming services** for real-time market data and order execution updates. This enables low-latency, efficient data delivery for applications that need continuous updates.
+
+## Why Use gRPC Streaming?
+
+gRPC streaming offers several advantages:
+
+- **Bidirectional Communication**: Server can push updates without client polling
+- **Type Safety**: Strongly-typed messages defined in Protocol Buffers
+- **Real-time Updates**: Receive market data and order updates as they happen
+
+## REST + gRPC Hybrid Approach
+
+<Note>
+Most participants use **REST for requests** and **gRPC for streaming**. This hybrid approach combines the simplicity of REST with the efficiency of gRPC streaming.
+</Note>
+
+### Typical Integration Pattern
+
+1. **REST API** - Used for:
+   - Authentication (`/auth/v1beta1/login`)
+   - Placing orders (`/api/v1beta1/insert_order`)
+   - Canceling orders (`/api/v1beta1/cancel_order`)
+   - Querying account information
+   - One-time data requests
+
+2. **gRPC Streaming** - Used for:
+   - Real-time market data updates
+   - Live order execution reports
+   - Continuous position monitoring
+   - Order book changes
+
+## Available Streaming Services
+
+### Market Data Streaming
+
+Subscribe to real-time market data updates including:
+- Order book (bids and offers)
+- Instrument state changes
+- Trade statistics (last price, OHLC, volume)
+- Open interest
+
+**Service:** `MarketDataSubscriptionAPI.CreateMarketDataSubscription`
+
+[Learn more about Market Data Streaming →](/streaming-endpoints/market-data-stream)
+
+### Order Execution Streaming
+
+Subscribe to real-time order and execution updates:
+- New order confirmations
+- Partial and complete fills
+- Order cancellations and rejections
+- Execution reports with trade details
+
+**Service:** `OrderEntryAPI.CreateOrderSubscription`
+
+[Learn more about Order Streaming →](/streaming-endpoints/order-stream)
+
+## Server Endpoints
+
+
+### Pre-Production Environment
+```
+traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443
+```
+
+### Production Environment
+```
+traderapi.us-east-1.privatelink.prod.polymarketexchange.com:443
+```
+
+<Info>
+Both endpoints use **TLS/SSL** for secure communication. All connections must be encrypted.
+</Info>
+
+## Protocol Buffer Definitions
+
+The exchange uses **Protocol Buffers (proto3)** to define message structures. Proto files are available:
+
+- **Upon request**: Contact [support@qcex.com](mailto:support@qcex.com)
+- **Via server reflection**: Use gRPC reflection to discover services at runtime
+
+### Package Structure
+
+```
+connamara.ep3.v1beta1           # Core services
+├── MarketDataSubscriptionAPI   # Market data streaming
+├── OrderEntryAPI               # Order streaming and entry
+connamara.ep3.orders.v1beta1    # Order message types
+connamara.ep3.instruments.v1beta1  # Instrument definitions
+```
+
+## Quick Start
+
+Ready to get started? Follow our [Getting Started Guide](/streaming-endpoints/getting-started) to:
+
+1. Install Python gRPC libraries
+2. Obtain and compile proto files
+3. Authenticate and connect
+4. Subscribe to your first data stream
+
+## Architecture Overview
+
+```mermaid
+graph LR
+    A[Python Client] -->|REST| B[REST API]
+    A -->|gRPC Stream| C[gRPC Server]
+    B -->|Login| D[JWT Token]
+    D -->|Metadata| C
+    C -->|Market Data| A
+    C -->|Order Updates| A
+```
+
+### Authentication Flow
+
+1. **Obtain JWT Token**: Login via REST API endpoint
+2. **Attach Token**: Include token in gRPC metadata as `authorization` header
+3. **Stream Data**: Receive continuous updates over persistent connection
+
+[Learn more about Authentication →](/streaming-endpoints/authentication)
+
+
+## Key Concepts
+
+### Heartbeats
+Periodic keep-alive messages ensure connection health. If heartbeats stop, the connection may be stale.
+
+### Snapshots
+Initial state of data (e.g., all open orders) sent when subscription starts.
+
+### Updates
+Incremental changes streamed continuously after the snapshot.
+
+### Session IDs
+Unique identifiers for each streaming session, useful for logging and debugging.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Getting Started" icon="rocket" href="/streaming-endpoints/getting-started">
+    Set up your first gRPC stream
+  </Card>
+  <Card title="Authentication" icon="key" href="/streaming-endpoints/authentication">
+    Learn how to authenticate gRPC connections
+  </Card>
+  <Card title="Market Data" icon="chart-line" href="/streaming-endpoints/market-data-stream">
+    Stream real-time market data
+  </Card>
+  <Card title="Order Updates" icon="file-invoice" href="/streaming-endpoints/order-stream">
+    Subscribe to order execution updates
+  </Card>
+</CardGroup>

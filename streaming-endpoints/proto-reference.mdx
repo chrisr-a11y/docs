@@ -1,0 +1,485 @@
+---
+title: "Protocol Buffer Reference"
+sidebarTitle: "Proto Reference"
+description: "Complete reference for gRPC message definitions and Python code generation"
+---
+
+# Protocol Buffer Reference
+
+Complete reference documentation for all Protocol Buffer messages, fields, and enumerations used in the gRPC streaming API with Python.
+
+## Package Structure
+
+```
+connamara.ep3.v1beta1              # Core API services
+├── MarketDataSubscriptionAPI      # Market data streaming
+├── OrderEntryAPI                  # Order streaming and entry
+└── common.proto                   # Common message types
+
+connamara.ep3.orders.v1beta1       # Order-specific types
+└── orders.proto                   # Order enums and messages
+
+connamara.ep3.instruments.v1beta1  # Instrument types
+└── instruments.proto              # Instrument statistics
+```
+
+## Obtaining Proto Files
+
+Proto files are available:
+1. Contact support to obtain the `ep3-py-client` and its associated files
+2. **Via server reflection**: Use gRPC reflection to discover services at runtime
+
+```bash
+# List all services using grpcurl
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
+
+# Describe a specific service
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe \
+  connamara.ep3.v1beta1.MarketDataSubscriptionAPI
+```
+
+## Generating Python Client Code
+
+Once you have the proto files, generate Python code:
+
+```bash
+python -m grpc_tools.protoc \
+  --python_out=. \
+  --grpc_python_out=. \
+  --proto_path=protos \
+  protos/connamara/ep3/v1beta1/market_data.proto \
+  protos/connamara/ep3/v1beta1/order_entry.proto \
+  protos/connamara/ep3/orders/v1beta1/orders.proto \
+  protos/connamara/ep3/instruments/v1beta1/instruments.proto \
+  protos/connamara/ep3/type/v1beta1/common.proto
+```
+
+This generates:
+- `*_pb2.py` - Message and enum definitions
+- `*_pb2_grpc.py` - Service stubs
+
+---
+
+## Market Data Proto Reference
+
+### MarketDataSubscriptionAPI Service
+
+```protobuf
+service MarketDataSubscriptionAPI {
+    rpc CreateMarketDataSubscription(CreateMarketDataSubscriptionRequest)
+        returns (stream CreateMarketDataSubscriptionResponse);
+}
+```
+
+### Python Usage
+
+```python
+from connamara.ep3.v1beta1 import market_data_pb2
+from connamara.ep3.v1beta1 import market_data_pb2_grpc
+
+# Create request
+request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+    symbols=["mlb-ari-sf-2025-09-08"],
+    depth=10
+)
+
+# Use stub
+stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
+```
+
+### CreateMarketDataSubscriptionRequest
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `symbols` | `list[str]` | List of symbols to subscribe to. Empty = all symbols. |
+| `unaggregated` | `bool` | If true, receive raw orders. If false, receive aggregated book. |
+| `depth` | `int` | Number of price levels to include. Default: 10 |
+| `snapshot_only` | `bool` | If true, receive snapshot then close. Default: false |
+
+### CreateMarketDataSubscriptionResponse
+
+```python
+# Check event type
+if response.HasField('heartbeat'):
+    # Heartbeat message
+    pass
+elif response.HasField('update'):
+    # Market data update
+    update = response.update
+```
+
+#### Update Message
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `symbol` | `str` | Instrument symbol |
+| `bids` | `list[BookEntry]` | Bid side of order book |
+| `offers` | `list[BookEntry]` | Offer/ask side of order book |
+| `state` | `InstrumentState` | Current instrument state |
+| `stats` | `InstrumentStats` | Market statistics |
+| `transact_time` | `Timestamp` | Server timestamp of update |
+| `book_hidden` | `bool` | If true, order book is hidden |
+
+#### BookEntry Message
+
+```python
+# Access book entry fields
+px = bid.px / 10000  # Convert price
+qty = bid.qty
+symbol_sub_type = bid.symbol_sub_type
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `px` | `int64` | **Price** (divide by 10000 for decimal value) |
+| `qty` | `int64` | Aggregate quantity at this price level |
+| `symbol_sub_type` | `str` | Symbol subtype (if applicable) |
+
+#### InstrumentState Enum
+
+```python
+from connamara.ep3.v1beta1 import market_data_pb2
+
+# Get state name
+state_name = market_data_pb2.InstrumentState.Name(update.state)
+
+# Check if open
+if update.state == market_data_pb2.INSTRUMENT_STATE_OPEN:
+    print("Market is open for trading")
+```
+
+| Name | Value | Description |
+|------|-------|-------------|
+| `INSTRUMENT_STATE_CLOSED` | 0 | Market closed, no trading |
+| `INSTRUMENT_STATE_OPEN` | 1 | Active trading, continuous matching |
+| `INSTRUMENT_STATE_PREOPEN` | 2 | Pre-opening auction, no matching |
+| `INSTRUMENT_STATE_SUSPENDED` | 3 | Trading suspended, cancel-only |
+| `INSTRUMENT_STATE_EXPIRED` | 4 | Instrument expired |
+| `INSTRUMENT_STATE_TERMINATED` | 5 | Instrument terminated |
+| `INSTRUMENT_STATE_HALTED` | 6 | Trading halted |
+| `INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION` | 7 | Closing auction |
+
+### InstrumentStats Message
+
+```python
+# Check if stats field exists
+if update.HasField('stats'):
+    stats = update.stats
+
+    # Check individual stat fields
+    if stats.HasField('last_trade_px'):
+        last_px = stats.last_trade_px / 10000
+        print(f"Last Trade: ${last_px:.4f}")
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `open_px` | `int64` | Opening price (÷ 10000) |
+| `close_px` | `int64` | Closing price (÷ 10000) |
+| `low_px` | `int64` | Session low price (÷ 10000) |
+| `high_px` | `int64` | Session high price (÷ 10000) |
+| `last_trade_px` | `int64` | Last trade price (÷ 10000) |
+| `shares_traded` | `int64` | Total shares/contracts traded |
+| `open_interest` | `int64` | Current open interest |
+| `notional_traded` | `int64` | Total notional value traded |
+
+<Info>
+Stats fields use protobuf `oneof`, so they may not always be present. Always check with `HasField()`.
+</Info>
+
+---
+
+## Order Entry Proto Reference
+
+### OrderEntryAPI Service
+
+```protobuf
+service OrderEntryAPI {
+    rpc CreateOrderSubscription(CreateOrderSubscriptionRequest)
+        returns (stream CreateOrderSubscriptionResponse);
+}
+```
+
+### Python Usage
+
+```python
+from connamara.ep3.v1beta1 import order_entry_pb2
+from connamara.ep3.v1beta1 import order_entry_pb2_grpc
+from connamara.ep3.orders.v1beta1 import orders_pb2
+
+# Create request
+request = order_entry_pb2.CreateOrderSubscriptionRequest(
+    symbols=["mlb-ari-sf-2025-09-08"],
+    accounts=[],
+    snapshot_only=False
+)
+
+# Use stub
+stub = order_entry_pb2_grpc.OrderEntryAPIStub(channel)
+response_stream = stub.CreateOrderSubscription(request, metadata=metadata)
+```
+
+### CreateOrderSubscriptionRequest
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `symbols` | `list[str]` | Filter by symbols. Empty = all symbols. |
+| `accounts` | `list[str]` | Filter by accounts. Empty = all user's accounts. |
+| `snapshot_only` | `bool` | If true, snapshot only. Default: false |
+
+### CreateOrderSubscriptionResponse
+
+```python
+# Check event type
+if response.HasField('heartbeat'):
+    pass
+elif response.HasField('snapshot'):
+    snapshot = response.snapshot
+    for order in snapshot.orders:
+        # Process order
+        pass
+elif response.HasField('update'):
+    update = response.update
+    for execution in update.executions:
+        # Process execution
+        pass
+
+# Access session ID
+session_id = response.session_id
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `event` | `oneof` | One of: `heartbeat`, `snapshot`, or `update` |
+| `session_id` | `str` | Unique session identifier |
+| `processed_sent_time` | `Timestamp` | Server processing timestamp |
+
+### Order Message
+
+```python
+# Access order fields
+print(f"Order ID: {order.id}")
+print(f"Symbol: {order.symbol}")
+print(f"Side: {orders_pb2.Side.Name(order.side)}")
+print(f"State: {orders_pb2.OrderState.Name(order.state)}")
+
+if order.price > 0:
+    price = order.price / 10000
+    print(f"Price: ${price:.4f}")
+```
+
+Key fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `str` | Exchange-assigned order ID |
+| `clord_id` | `str` | Client-assigned order ID |
+| `symbol` | `str` | Trading symbol |
+| `type` | `OrderType` | Order type |
+| `side` | `Side` | BUY or SELL |
+| `order_qty` | `int64` | Original order quantity |
+| `price` | `int64` | **Limit price** (÷ 10000) |
+| `time_in_force` | `TimeInForce` | DAY, GTC, IOC, FOK, GTT |
+| `account` | `str` | Trading account identifier |
+| `cum_qty` | `int64` | Cumulative filled quantity |
+| `avg_px` | `int64` | **Average fill price** (÷ 10000) |
+| `leaves_qty` | `int64` | Remaining unfilled quantity |
+| `state` | `OrderState` | Current order state |
+| `insert_time` | `Timestamp` | When order was inserted |
+
+### Execution Message
+
+```python
+# Process execution
+exec_type = orders_pb2.ExecutionType.Name(execution.type)
+print(f"Execution Type: {exec_type}")
+
+if execution.last_shares > 0:
+    fill_px = execution.last_px / 10000
+    print(f"Fill: {execution.last_shares} @ ${fill_px:.4f}")
+
+if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
+    reject_reason = orders_pb2.OrdRejectReason.Name(execution.order_reject_reason)
+    print(f"Rejected: {reject_reason}")
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `str` | Unique execution ID |
+| `type` | `ExecutionType` | Execution type |
+| `order` | `Order` | Current order state |
+| `last_shares` | `int64` | Quantity filled in this execution |
+| `last_px` | `int64` | **Fill price** (÷ 10000) |
+| `text` | `str` | Free-form text message |
+| `order_reject_reason` | `OrdRejectReason` | Rejection reason (if rejected) |
+| `transact_time` | `Timestamp` | Transaction timestamp |
+| `trade_id` | `str` | Trade identifier |
+| `aggressor` | `bool` | True if you were the aggressor |
+
+---
+
+## Order Enumerations
+
+### OrderType
+
+```python
+from connamara.ep3.orders.v1beta1 import orders_pb2
+
+# Get type name
+type_name = orders_pb2.OrderType.Name(order.type)
+```
+
+| Name | Value |
+|------|-------|
+| `ORDER_TYPE_LIMIT` | 2 |
+| `ORDER_TYPE_MARKET_TO_LIMIT` | 1 |
+| `ORDER_TYPE_STOP` | 3 |
+| `ORDER_TYPE_STOP_LIMIT` | 4 |
+
+### Side
+
+```python
+# Get side name
+side_name = orders_pb2.Side.Name(order.side)
+
+# Check side
+if order.side == orders_pb2.SIDE_BUY:
+    print("Buy order")
+```
+
+| Name | Value |
+|------|-------|
+| `SIDE_BUY` | 1 |
+| `SIDE_SELL` | 2 |
+
+### TimeInForce
+
+```python
+tif_name = orders_pb2.TimeInForce.Name(order.time_in_force)
+```
+
+| Name | Value | Description |
+|------|-------|-------------|
+| `TIME_IN_FORCE_DAY` | 1 | Day order (expires at end of day) |
+| `TIME_IN_FORCE_GTC` | 2 | Good-till-canceled |
+| `TIME_IN_FORCE_IOC` | 3 | Immediate-or-cancel |
+| `TIME_IN_FORCE_FOK` | 4 | Fill-or-kill |
+| `TIME_IN_FORCE_GTT` | 5 | Good-till-time |
+
+### OrderState
+
+```python
+state_name = orders_pb2.OrderState.Name(order.state)
+
+if order.state == orders_pb2.ORDER_STATE_FILLED:
+    print("Order completely filled")
+```
+
+| Name | Value | Description |
+|------|-------|-------------|
+| `ORDER_STATE_NEW` | 1 | Order accepted and resting |
+| `ORDER_STATE_PARTIALLY_FILLED` | 2 | Partially executed |
+| `ORDER_STATE_FILLED` | 3 | Completely filled |
+| `ORDER_STATE_CANCELED` | 4 | Canceled |
+| `ORDER_STATE_REJECTED` | 7 | Rejected by exchange |
+| `ORDER_STATE_EXPIRED` | 9 | Expired |
+
+### ExecutionType
+
+```python
+exec_type = orders_pb2.ExecutionType.Name(execution.type)
+
+if execution.type == orders_pb2.EXECUTION_TYPE_FILL:
+    print("Order completely filled")
+```
+
+| Name | Value | Description |
+|------|-------|-------------|
+| `EXECUTION_TYPE_NEW` | 1 | Order confirmation |
+| `EXECUTION_TYPE_PARTIAL_FILL` | 2 | Partial fill |
+| `EXECUTION_TYPE_FILL` | 3 | Complete fill |
+| `EXECUTION_TYPE_TRADE` | 9 | Trade execution |
+| `EXECUTION_TYPE_CANCELED` | 4 | Cancellation confirmation |
+| `EXECUTION_TYPE_REJECTED` | 7 | Order rejection |
+| `EXECUTION_TYPE_EXPIRED` | 10 | Order expired |
+
+### OrdRejectReason
+
+```python
+if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
+    reason = orders_pb2.OrdRejectReason.Name(execution.order_reject_reason)
+    print(f"Reject Reason: {reason}")
+```
+
+| Name | Value | Description |
+|------|-------|-------------|
+| `ORD_REJECT_REASON_UNKNOWN_SYMBOL` | 1 | Symbol not found |
+| `ORD_REJECT_REASON_EXCHANGE_CLOSED` | 2 | Market is closed |
+| `ORD_REJECT_REASON_ORDER_EXCEEDS_LIMIT` | 3 | Exceeds risk limits |
+| `ORD_REJECT_REASON_DUPLICATE_ORDER` | 4 | Duplicate clord_id |
+| `ORD_REJECT_REASON_UNKNOWN_ACCOUNT` | 5 | Account not found |
+| `ORD_REJECT_REASON_INCORRECT_QUANTITY` | 6 | Invalid quantity |
+| `ORD_REJECT_REASON_INVALID_PRICE` | 7 | Invalid price |
+| `ORD_REJECT_REASON_OTHER` | 99 | Other reason |
+
+---
+
+## Common Data Types
+
+### Price Representation
+
+<Warning>
+**All prices are `int64` values scaled by 10000.**
+
+Prices are always between **$0.001 and $0.999 USD**.
+
+```python
+# Proto → Decimal
+decimal_price = int64_price / 10000
+
+# Example
+proto_price = 5250
+decimal_price = 5250 / 10000  # = $0.5250
+```
+</Warning>
+
+### Timestamp Handling
+
+```python
+from datetime import datetime
+
+# Check if field is set
+if order.HasField('insert_time'):
+    # Convert to Python datetime
+    insert_dt = datetime.fromtimestamp(order.insert_time.seconds)
+    print(f"Inserted at: {insert_dt}")
+```
+
+### Checking Optional Fields
+
+```python
+# Use HasField() for optional fields
+if update.HasField('stats'):
+    if update.stats.HasField('last_trade_px'):
+        last_px = update.stats.last_trade_px / 10000
+```
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Market Data Stream" icon="chart-line" href="/streaming-endpoints/market-data-stream">
+    Learn about market data streaming
+  </Card>
+  <Card title="Order Stream" icon="file-invoice" href="/streaming-endpoints/order-stream">
+    Learn about order streaming
+  </Card>
+  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
+    See complete working Python examples
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
+    Handle errors and reconnections
+  </Card>
+</CardGroup>

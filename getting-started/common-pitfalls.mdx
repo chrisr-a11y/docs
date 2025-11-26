@@ -1,0 +1,100 @@
+---
+title: "Common Pitfalls"
+description: "Troubleshooting guide for common issues when integrating with Polymarket Exchange"
+---
+
+## Order Issues
+
+### Failed Orders
+
+**Important**: A returned order ID with HTTP 200 does **not** guarantee the order was successfully processed. Failed orders don't generate user-visible errors unless a required field is missing.
+
+<Note>
+To ensure your order was successfully processed, always verify its status via the order stream. Do not rely solely on HTTP 200 responses or returned order IDs.
+</Note>
+**Common failure reasons:**
+- Invalid Account
+- Expired Instrument
+- Insufficient Balance
+
+## Connection Issues
+
+### Error 464
+
+When receiving a 464 error in prod or pre-prod environments, verify that the `Host` header is set correctly:
+
+```bash
+Host: rest.preprod.polymarketexchange.com
+```
+**OR**
+```bash
+Host: rest.prod.polymarketexchange.com
+```
+
+
+
+Without this header, requests are routed to gRPC by default instead of REST.
+
+### Timeout / No Response
+
+If curl commands hang without returning a response:
+
+**Step 1: Verify DNS Configuration**
+
+Use the complete service name endpoint to test connectivity:
+
+```bash
+https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/register
+```
+
+If this URL works but your DNS/CNAME doesn't, the issue is with your DNS configuration.
+
+**Step 2: Check Security Group Settings**
+
+If the full endpoint also times out, review your VPC security group settings:
+
+- Set inbound rules to `0.0.0.0/0` for all traffic
+- Set outbound rules to `0.0.0.0/0` for all traffic
+These settings are suggested for testing only and not recommended for production Security Groups
+
+### Curl Command Drops to Blinking Cursor
+
+If your curl command drops to a new line with a blinking cursor (`>_`), this indicates a formatting issue with the command itself—not a connection problem.
+
+**Common causes:**
+- Missing quotation marks
+- Missing escape characters
+- Malformed command syntax
+
+## Platform-Specific Issues
+
+### Windows & Python HTTP/2
+
+Windows instances and Python applications may encounter HTTP/2 compatibility issues:
+
+- **Windows**: Ensure HTTP/2 is enabled
+- **Python**: Use the `httpx` library instead of `requests`
+
+## AWS Connectivity
+
+### Can't Connect to Service
+
+If your AWS instance cannot find the service, verify your subnets match our availability zones.
+
+<Warning>
+Availability zone letter indicators (e.g., `us-east-1a`) can be mapped differently across AWS accounts. At least **one** availability zone ID must match.
+</Warning>
+
+**Production Availability Zones:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az6`
+
+**Pre-Production Availability Zones:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az4`
+
+<Note>
+Subnet matching only applies when connecting from **within AWS us-east-1**. Connections from other regions are mapped automatically.
+</Note>
