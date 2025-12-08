@@ -10,7 +10,6 @@ tags:
 - name: OrderAPI
 - name: OrderEntryAPI
 - name: PositionAPI
-- name: QuoteEntryAPI
 security:
   - bearerAuth: [] # use the same name as above
 paths:
@@ -215,121 +214,6 @@ paths:
                     $ref: '#/components/schemas/rpcStatus'
                   result:
                     $ref: '#/components/schemas/v1beta1CreatePositionSubscriptionResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/create_quote:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: Create Quote
-      operationId: QuoteEntryAPI_CreateQuote
-      requestBody:
-        description: Request to insert a quote into the exchange.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1CreateQuoteRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1CreateQuoteResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/create_quote_subscription:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: Create Quote Subscription
-      operationId: QuoteEntryAPI_CreateQuoteSubscription
-      requestBody:
-        description: Request to start a quote subscription to get snapshots and updates
-          for this session.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1CreateQuoteSubscriptionRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.(streaming responses)
-          content:
-            application/json:
-              schema:
-                title: Stream result of v1beta1CreateQuoteSubscriptionResponse
-                type: object
-                properties:
-                  error:
-                    $ref: '#/components/schemas/rpcStatus'
-                  result:
-                    $ref: '#/components/schemas/v1beta1CreateQuoteSubscriptionResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/create_request_for_quote:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: Create RFQ
-      operationId: QuoteEntryAPI_CreateRequestForQuote
-      requestBody:
-        description: Request to insert a request for quote into the exchange.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1CreateRequestForQuoteRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1CreateRequestForQuoteResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/delete_quote:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: Delete Quote
-      operationId: QuoteEntryAPI_DeleteQuote
-      requestBody:
-        description: Request to delete a quote from the exchange.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1DeleteQuoteRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1DeleteQuoteResponse'
         default:
           description: An unexpected error response.
           content:
@@ -689,36 +573,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/rpcStatus'
       x-codegen-request-body-name: body
-  /v1beta1/list_dealers:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: List Dealers
-      description: Returns a list of whitelisted firms that are able to receive a request
-        for quote that I send.
-      operationId: QuoteEntryAPI_ListDealers
-      requestBody:
-        description: Request to get the whitelist of firms that are able to receive
-          a request for quote that I send.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1ListDealersRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1ListDealersResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
   /v1beta1/list_instruments:
     post:
       tags:
@@ -746,35 +600,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/rpcStatus'
       x-codegen-request-body-name: body
-  /v1beta1/list_requesters:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: List Requesters
-      description: Returns the whitelist of firms that are able to send a request for quote to my firm.
-      operationId: QuoteEntryAPI_ListRequesters
-      requestBody:
-        description: Request to get the whitelist of firms that are able to send a
-          request for quote to my firm.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1ListRequestersRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1ListRequestersResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
   /v1beta1/list_symbols:
     post:
       tags:
@@ -795,33 +620,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/v1beta1ListSymbolsResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/pass_quote:
-    post:
-      tags:
-      - QuoteEntryAPI
-      summary: PassQuote passes on a quote from the exchange.
-      operationId: QuoteEntryAPI_PassQuote
-      requestBody:
-        description: Request to pass on a quote from the exchange.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1PassQuoteRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1PassQuoteResponse'
         default:
           description: An unexpected error response.
           content:
@@ -2363,74 +2161,6 @@ components:
             $ref: '#/components/schemas/v1beta1Position'
       description: Update is the current state of positions in the system that is
         streamed once a position updates.
-    v1beta1CreateQuoteRequest:
-      type: object
-      properties:
-        parent:
-          type: string
-          description: Exchange assigned ID for the parent quote request that this
-            quote references (required).
-        quote:
-          $ref: '#/components/schemas/connamaraep3v1beta1Quote'
-      description: Request to insert a quote into the exchange.
-    v1beta1CreateQuoteResponse:
-      type: object
-    v1beta1CreateQuoteSubscriptionRequest:
-      type: object
-      description: Request to start a quote subscription to get snapshots and updates
-        for this session.
-    v1beta1CreateQuoteSubscriptionResponse:
-      type: object
-      properties:
-        heartbeat:
-          $ref: '#/components/schemas/v1beta1Heartbeat'
-        snapshot:
-          $ref: '#/components/schemas/v1beta1CreateQuoteSubscriptionResponseSnapshot'
-        update:
-          $ref: '#/components/schemas/v1beta1CreateQuoteSubscriptionResponseUpdate'
-    v1beta1CreateQuoteSubscriptionResponseSnapshot:
-      type: object
-      properties:
-        quotes:
-          type: array
-          description: List of quotes contained in the snapshot.
-          items:
-            $ref: '#/components/schemas/connamaraep3v1beta1Quote'
-        request_for_quotes:
-          type: array
-          description: List of RFQs contained in the snapshot.
-          items:
-            $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
-      description: Snapshot is the current state of quotes and requests in the system
-        that is returned on the initial subscription request.
-    v1beta1CreateQuoteSubscriptionResponseUpdate:
-      type: object
-      properties:
-        quotes:
-          type: array
-          description: List of quotes contained in the update.
-          items:
-            $ref: '#/components/schemas/connamaraep3v1beta1Quote'
-        rejects:
-          type: array
-          description: List of quote rejects contained in the update.
-          items:
-            $ref: '#/components/schemas/connamaraep3v1beta1QuoteReject'
-        request_for_quotes:
-          type: array
-          description: List of RFQs contained in the update.
-          items:
-            $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
-      description: Update(s) are the creation of new or modification of existing quotes
-        and requests after subscription.
-    v1beta1CreateRequestForQuoteRequest:
-      type: object
-      properties:
-        request_for_quote:
-          $ref: '#/components/schemas/connamaraep3v1beta1RequestForQuote'
-      description: Request to insert a request for quote into the exchange.
-    v1beta1CreateRequestForQuoteResponse:
-      type: object
     v1beta1CrossType:
       type: string
       description: |-
@@ -2498,15 +2228,6 @@ components:
       - DAY_OF_WEEK_FRIDAY
       - DAY_OF_WEEK_SATURDAY
       - DAY_OF_WEEK_SUNDAY
-    v1beta1DeleteQuoteRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Exchange assigned ID for the quote to be deleted.
-      description: Request to delete a quote from the exchange.
-    v1beta1DeleteQuoteResponse:
-      type: object
     v1beta1DownloadExecutionsRequest:
       type: object
       properties:
@@ -3592,24 +3313,6 @@ components:
           description: List of positions within the given account.
           items:
             $ref: '#/components/schemas/v1beta1Position'
-    v1beta1ListDealersRequest:
-      type: object
-      description: Request to get the whitelist of firms that are able to receive
-        a request for quote that I send.
-    v1beta1ListDealersResponse:
-      type: object
-      properties:
-        display_names:
-          type: array
-          description: List of display names for the whitelisted firms.
-          items:
-            type: string
-        firms:
-          type: array
-          description: "Fully qualified resource names for the whitelisted firms (ie:\
-            \ \"firms/[firmid]\")."
-          items:
-            type: string
     v1beta1ListInstrumentsRequest:
       type: object
       properties:
@@ -3661,24 +3364,6 @@ components:
             A pagination token returned from a previous call to `ListInstruments`
             that indicates from where listing should continue.
             This field is optional.
-    v1beta1ListRequestersRequest:
-      type: object
-      description: Request to get the whitelist of firms that are able to send a request
-        for quote to my firm.
-    v1beta1ListRequestersResponse:
-      type: object
-      properties:
-        display_names:
-          type: array
-          description: List of display names for the whitelisted firms.
-          items:
-            type: string
-        firms:
-          type: array
-          description: "Fully qualified resource names for the whitelisted firms (ie:\
-            \ \"firms/[firmid]\")."
-          items:
-            type: string
     v1beta1ListSymbolsRequest:
       type: object
     v1beta1ListSymbolsResponse:
@@ -4082,15 +3767,6 @@ components:
           $ref: '#/components/schemas/v1beta1Date'
       description: OvernightIndexSwapAttributes are attributes that define an Overnight
         Index Swap tradable instrument.
-    v1beta1PassQuoteRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Exchange assigned ID for the quote to pass on.
-      description: Request to pass on a quote from the exchange.
-    v1beta1PassQuoteResponse:
-      type: object
     v1beta1PayoutType:
       type: string
       description: |-
