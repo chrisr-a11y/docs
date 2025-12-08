@@ -1,0 +1,78 @@
+{
+  "openapi": "3.0.1",
+  "info": { "title": "Market Data API", "version": "v0.6.1" },
+  "servers": [{ "url": "http://api.polymarketexchange.com" }],
+  "tags": [
+    { "name": "MarketDataAPI" },
+    { "name": "MarketDataSubscriptionAPI" }
+  ],
+  "paths": {
+    "/v1beta1/get_instrument_metadata": {
+      "post": {
+        "tags": ["MarketDataAPI"],
+        "summary": "Get Instrument Metadata",
+        "description": "Returns miscellaneous instrument metadata.",
+        "operationId": "MarketDataAPI_GetInstrumentMetadata",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1GetInstrumentMetadataRequest" } } }, "required": true },
+        "responses": {
+          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1GetInstrumentMetadataResponse" } } } },
+          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
+        }
+      }
+    },
+    "/v1beta1/list_instruments": {
+      "post": {
+        "tags": ["MarketDataAPI"],
+        "summary": "List Instruments",
+        "description": "Returns a list of instruments matching the request.",
+        "operationId": "MarketDataAPI_ListInstruments",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListInstrumentsRequest" } } }, "required": true },
+        "responses": {
+          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListInstrumentsResponse" } } } },
+          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
+        }
+      }
+    },
+    "/v1beta1/list_symbols": {
+      "post": {
+        "tags": ["MarketDataAPI"],
+        "summary": "List Symbols",
+        "description": "Returns a list of symbols on the exchange.",
+        "operationId": "MarketDataAPI_ListSymbols",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListSymbolsRequest" } } }, "required": true },
+        "responses": {
+          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListSymbolsResponse" } } } },
+          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
+        }
+      }
+    },
+    "/v1beta1/create_market_data_subscription": {
+      "post": {
+        "tags": ["MarketDataSubscriptionAPI"],
+        "summary": "Create Market Data Subscription",
+        "description": "Creates a subscription for market data.",
+        "operationId": "MarketDataSubscriptionAPI_CreateMarketDataSubscription",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateMarketDataSubscriptionRequest" } } }, "required": true },
+        "responses": {
+          "200": { "description": "A successful response (streaming).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateMarketDataSubscriptionResponse" } } } },
+          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "protobufAny": { "type": "object", "properties": { "@type": { "type": "string" } }, "additionalProperties": {} },
+      "rpcStatus": { "type": "object", "properties": { "code": { "type": "integer", "format": "int32" }, "details": { "type": "array", "items": { "$ref": "#/components/schemas/protobufAny" } }, "message": { "type": "string" } } },
+      "v1beta1GetInstrumentMetadataRequest": { "type": "object", "properties": { "symbol": { "type": "string" } } },
+      "v1beta1GetInstrumentMetadataResponse": { "type": "object", "properties": { "metadata": { "type": "object" } } },
+      "v1beta1ListInstrumentsRequest": { "type": "object", "properties": { "page_size": { "type": "integer", "format": "int32" }, "page_token": { "type": "string" }, "symbols": { "type": "array", "items": { "type": "string" } }, "states": { "type": "array", "items": { "type": "string" } } } },
+      "v1beta1ListInstrumentsResponse": { "type": "object", "properties": { "instruments": { "type": "array", "items": { "type": "object" } }, "next_page_token": { "type": "string" }, "eof": { "type": "boolean" } } },
+      "v1beta1ListSymbolsRequest": { "type": "object", "properties": { "page_size": { "type": "integer", "format": "int32" }, "page_token": { "type": "string" } } },
+      "v1beta1ListSymbolsResponse": { "type": "object", "properties": { "symbols": { "type": "array", "items": { "type": "string" } }, "next_page_token": { "type": "string" } } },
+      "v1beta1CreateMarketDataSubscriptionRequest": { "type": "object", "properties": { "symbols": { "type": "array", "items": { "type": "string" } }, "depth": { "type": "integer", "format": "int32" }, "snapshot_only": { "type": "boolean" } } },
+      "v1beta1CreateMarketDataSubscriptionResponse": { "type": "object", "properties": { "heartbeat": { "type": "object" }, "snapshot": { "type": "object" }, "update": { "type": "object" } } }
+    }
+  }
+}
+
