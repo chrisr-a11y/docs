@@ -57,13 +57,6 @@
             }
           },
           {
-            "group": "Quotes",
-            "openapi": {
-              "source": "/api-reference/oapi-schemas/quotes-schema.json",
-              "directory": "api-reference"
-            }
-          },
-          {
             "group": "Positions",
             "openapi": {
               "source": "/api-reference/oapi-schemas/positions-schema.json",
