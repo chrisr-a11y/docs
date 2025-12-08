@@ -226,7 +226,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/create_quote:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: Create Quote
@@ -254,7 +253,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/create_quote_subscription:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: Create Quote Subscription
@@ -289,7 +287,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/create_request_for_quote:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: Create RFQ
@@ -317,7 +314,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/delete_quote:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: Delete Quote
@@ -556,7 +552,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/get_who_am_i:
     post:
-      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: Get Who Am I
@@ -726,7 +721,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_accounts:
     post:
-      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: List Accounts
@@ -755,7 +749,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_dealers:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: List Dealers
@@ -813,7 +806,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_requesters:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: List Requesters
@@ -870,7 +862,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/list_users:
     post:
-      "x-excluded": true,
       tags:
       - AccountsAPI
       summary: List Users
@@ -899,7 +890,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/pass_quote:
     post:
-      "x-excluded": true,
       tags:
       - QuoteEntryAPI
       summary: PassQuote passes on a quote from the exchange.
@@ -1013,7 +1003,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/search_quotes:
     post:
-      "x-excluded": true,
       tags:
       - QuoteAPI
       summary: Search Quotes
@@ -1041,7 +1030,6 @@ paths:
       x-codegen-request-body-name: body
   /v1beta1/search_request_for_quotes:
     post:
-      "x-excluded": true,
       tags:
       - QuoteAPI
       summary: Search Request For Quotes
