@@ -1,0 +1,481 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Drop Copy API",
+    "version": "v0.7.5"
+  },
+  "servers": [
+    {
+      "url": "http://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "DropCopyAPI"
+    }
+  ],
+  "paths": {
+    "/v1beta1/create_drop_copy_subscription": {
+      "post": {
+        "tags": ["DropCopyAPI"],
+        "summary": "Create Drop Copy Subscription",
+        "description": "Subscribes to the exchange execution feed.",
+        "operationId": "DropCopyAPI_CreateDropCopySubscription",
+        "requestBody": {
+          "description": "Request to start an execution subscription from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateDropCopySubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateDropCopySubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/create_firms_notification_subscription": {
+      "post": {
+        "tags": ["DropCopyAPI"],
+        "summary": "Create Firms Notification Subscription",
+        "description": "Subscribes to the exchange participant/account/firm update feed.",
+        "operationId": "DropCopyAPI_CreateFirmsNotificationSubscription",
+        "requestBody": {
+          "description": "Request to start a participant/account/firm hierarchy update subscription from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateFirmsNotificationSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateFirmsNotificationSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/create_instrument_state_change_subscription": {
+      "post": {
+        "tags": ["DropCopyAPI"],
+        "summary": "Create Instrument State Change Subscription",
+        "description": "Subscribes to the exchange's instrument state changes.",
+        "operationId": "DropCopyAPI_CreateInstrumentStateChangeSubscription",
+        "requestBody": {
+          "description": "Request to start an instrument state change subscription from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateInstrumentStateChangeSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateInstrumentStateChangeSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/create_position_change_subscription": {
+      "post": {
+        "tags": ["DropCopyAPI"],
+        "summary": "Create Position Change Subscription",
+        "description": "Subscribes to the exchange position update feed.",
+        "operationId": "DropCopyAPI_CreatePositionChangeSubscription",
+        "requestBody": {
+          "description": "Request to start a position update subscription from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreatePositionChangeSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreatePositionChangeSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/create_trade_capture_report_subscription": {
+      "post": {
+        "tags": ["DropCopyAPI"],
+        "summary": "Create Trade Capture Report Subscription",
+        "description": "Subscribes to the exchange trade capture report feed.",
+        "operationId": "DropCopyAPI_CreateTradeCaptureReportSubscription",
+        "requestBody": {
+          "description": "Request to start a trade capture report subscription from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateTradeCaptureReportSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateTradeCaptureReportSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {}
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/protobufAny"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "v1beta1CreateDropCopySubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start an execution subscription from the exchange.",
+        "properties": {
+          "firms": {
+            "type": "array",
+            "description": "A list of firms by fully qualified resource name to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "symbols": {
+            "type": "array",
+            "description": "A list of symbols to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "Bookmark to resume the subscription if the stream must be restarted."
+          },
+          "resume_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from which to resume the subscription if the stream must be restarted."
+          }
+        }
+      },
+      "v1beta1CreateDropCopySubscriptionResponse": {
+        "type": "object",
+        "description": "Subscription response containing executions.",
+        "properties": {
+          "executions": {
+            "type": "array",
+            "description": "Executions found.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "A resume token that can be used to resume the stream upon a new connection."
+          }
+        }
+      },
+      "v1beta1CreateFirmsNotificationSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start a participant/account/firm hierarchy update subscription.",
+        "properties": {
+          "firms": {
+            "type": "array",
+            "description": "A list of firms by fully qualified resource name to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "Bookmark to resume the subscription if the stream must be restarted."
+          },
+          "resume_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from which to resume the subscription if the stream must be restarted."
+          }
+        }
+      },
+      "v1beta1CreateFirmsNotificationSubscriptionResponse": {
+        "type": "object",
+        "description": "Subscription response containing firm notifications.",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "description": "Participant/account/firm hierarchy updates found.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "A resume token that can be used to resume the stream upon a new connection."
+          }
+        }
+      },
+      "v1beta1CreateInstrumentStateChangeSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start an instrument state change subscription.",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "description": "A list of symbols to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "Bookmark to resume the subscription if the stream must be restarted."
+          },
+          "resume_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from which to resume the subscription if the stream must be restarted."
+          }
+        }
+      },
+      "v1beta1CreateInstrumentStateChangeSubscriptionResponse": {
+        "type": "object",
+        "description": "Subscription response containing instrument state changes.",
+        "properties": {
+          "instruments": {
+            "type": "array",
+            "description": "Instrument state changes.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "A resume token that can be used to resume the stream upon a new connection."
+          }
+        }
+      },
+      "v1beta1CreatePositionChangeSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start a position update subscription.",
+        "properties": {
+          "firms": {
+            "type": "array",
+            "description": "A list of firms by fully qualified resource name to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "symbols": {
+            "type": "array",
+            "description": "A list of symbols to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "Bookmark to resume the subscription if the stream must be restarted."
+          },
+          "resume_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from which to resume the subscription if the stream must be restarted."
+          }
+        }
+      },
+      "v1beta1CreatePositionChangeSubscriptionResponse": {
+        "type": "object",
+        "description": "Subscription response containing position changes.",
+        "properties": {
+          "position_changes": {
+            "type": "array",
+            "description": "Position change events found.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "A resume token that can be used to resume the stream upon a new connection."
+          }
+        }
+      },
+      "v1beta1CreateTradeCaptureReportSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start a trade capture report subscription.",
+        "properties": {
+          "firms": {
+            "type": "array",
+            "description": "A list of firms by fully qualified resource name to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "symbols": {
+            "type": "array",
+            "description": "A list of symbols to filter upon. Optional.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "Bookmark to resume the subscription if the stream must be restarted."
+          },
+          "resume_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Timestamp from which to resume the subscription if the stream must be restarted."
+          }
+        }
+      },
+      "v1beta1CreateTradeCaptureReportSubscriptionResponse": {
+        "type": "object",
+        "description": "Subscription response containing trade capture reports.",
+        "properties": {
+          "trade_capture_reports": {
+            "type": "array",
+            "description": "Trade capture reports found.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "resume_token": {
+            "type": "string",
+            "format": "byte",
+            "description": "A resume token that can be used to resume the stream upon a new connection."
+          }
+        }
+      }
+    }
+  }
+}
