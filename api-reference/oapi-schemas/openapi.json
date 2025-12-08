@@ -5,7 +5,6 @@ info:
 servers:
 - url: http://api.polymarketexchange.com
 tags:
-- name: AccountsAPI
 - name: MarketDataAPI
 - name: MarketDataSubscriptionAPI
 - name: OrderAPI
@@ -550,34 +549,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/rpcStatus'
       x-codegen-request-body-name: body
-  /v1beta1/get_who_am_i:
-    post:
-      tags:
-      - AccountsAPI
-      summary: Get Who Am I
-      description: Returns the user information of the caller.
-      operationId: AccountsAPI_GetWhoAmI
-      requestBody:
-        description: Request to get the user information of the caller.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1GetWhoAmIRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1GetWhoAmIResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
   /v1beta1/insert_order:
     post:
       tags:
@@ -719,34 +690,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/rpcStatus'
       x-codegen-request-body-name: body
-  /v1beta1/list_accounts:
-    post:
-      tags:
-      - AccountsAPI
-      summary: List Accounts
-      description: Returns the accounts that the user may use to trade.
-      operationId: AccountsAPI_ListAccounts
-      requestBody:
-        description: Request to list the accounts belonging to the specified user.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1ListAccountsRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1ListAccountsResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
   /v1beta1/list_dealers:
     post:
       tags:
@@ -853,34 +796,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/v1beta1ListSymbolsResponse'
-        default:
-          description: An unexpected error response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/rpcStatus'
-      x-codegen-request-body-name: body
-  /v1beta1/list_users:
-    post:
-      tags:
-      - AccountsAPI
-      summary: List Users
-      description: Returns the users that the user may trade on behalf of.
-      operationId: AccountsAPI_ListUsers
-      requestBody:
-        description: Request to list the users that the user may trade on behalf of.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/v1beta1ListUsersRequest'
-        required: true
-      responses:
-        "200":
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/v1beta1ListUsersResponse'
         default:
           description: An unexpected error response.
           content:
@@ -2853,17 +2768,6 @@ components:
           type: string
       description: FIXOrderContext is the context set for orders sent via the FIX
         API.
-    v1beta1FirmType:
-      type: string
-      description: FirmType of the exchange firm.
-      default: FIRM_TYPE_UNDEFINED
-      enum:
-      - FIRM_TYPE_UNDEFINED
-      - FIRM_TYPE_PARTICIPANT
-      - FIRM_TYPE_SUPERVISOR
-      - FIRM_TYPE_CLEARING_MEMBER
-      - FIRM_TYPE_CLEARING_HOUSE
-      - FIRM_TYPE_AGENT
     v1beta1ForexAttributes:
       type: object
       properties:
@@ -3227,32 +3131,6 @@ components:
             $ref: '#/components/schemas/v1beta1TradeStats'
         stats:
           $ref: '#/components/schemas/v1beta1TradeStats'
-    v1beta1GetWhoAmIRequest:
-      type: object
-      description: Request to get the user information of the caller.
-    v1beta1GetWhoAmIResponse:
-      type: object
-      properties:
-        audience:
-          type: string
-          description: The claim string for the user to verify whether the user is
-            entitled to perform audience specific requests.
-        firm:
-          type: string
-          description: "Fully qualified resource name for the firm associated with\
-            \ the user (ie: \"firms/[firmid]\")."
-        firm_display_name:
-          type: string
-          description: Display name for the firm associated with the user.
-        firm_type:
-          $ref: '#/components/schemas/v1beta1FirmType'
-        user:
-          type: string
-          description: "Fully qualified resource name for the user (ie: \"firms/[firmid]/users/[userid]\"\
-            )."
-        user_display_name:
-          type: string
-          description: Display name for the user.
     v1beta1Heartbeat:
       type: object
       description: Heartbeat can be sent on a streaming RPC call to keep the line
@@ -3769,29 +3647,6 @@ components:
           description: List of positions within the given account.
           items:
             $ref: '#/components/schemas/v1beta1Position'
-    v1beta1ListAccountsRequest:
-      type: object
-      properties:
-        user:
-          type: string
-          description: |-
-            Fully qualified resource name for the user whos accounts to list (ie: "firms/[firmid]/users/[userid]").
-            If left empty, lists all accounts.
-      description: Request to list the accounts belonging to the specified user.
-    v1beta1ListAccountsResponse:
-      type: object
-      properties:
-        accounts:
-          type: array
-          description: "List of fully qualified resource names for the accounts found\
-            \ (ie: \"firms/[firmid]/accounts/[accountid]\")."
-          items:
-            type: string
-        display_names:
-          type: array
-          description: List of display names for the accounts found.
-          items:
-            type: string
     v1beta1ListDealersRequest:
       type: object
       description: Request to get the whitelist of firms that are able to receive
@@ -3886,35 +3741,6 @@ components:
       properties:
         symbols:
           type: array
-          items:
-            type: string
-    v1beta1ListUsersRequest:
-      type: object
-      description: Request to list the users that the user may trade on behalf of.
-    v1beta1ListUsersResponse:
-      type: object
-      properties:
-        display_names:
-          type: array
-          description: List of display names for the users found.
-          items:
-            type: string
-        firms:
-          type: array
-          description: "List of fully qualified resource names for the firms associated\
-            \ with the users found (ie: \"firms/[firmid]\")."
-          items:
-            type: string
-        firms_display_names:
-          type: array
-          description: List of display names for the firms associated with the users
-            found.
-          items:
-            type: string
-        users:
-          type: array
-          description: "List of fully qualified resource names for users found (ie:\
-            \ \"firms/[firmid]/users/[userid]\")."
           items:
             type: string
     v1beta1ManualOrderIndicator:
