@@ -4,189 +4,1011 @@
     "title": "Quotes API",
     "version": "v0.6.1"
   },
-  "servers": [{ "url": "http://api.polymarketexchange.com" }],
+  "servers": [
+    {
+      "url": "http://api.polymarketexchange.com"
+    }
+  ],
   "tags": [
-    { "name": "QuoteAPI" },
-    { "name": "QuoteEntryAPI" }
+    {
+      "name": "QuoteAPI"
+    },
+    {
+      "name": "QuoteEntryAPI"
+    }
   ],
   "paths": {
     "/v1beta1/search_quotes": {
       "post": {
-        "tags": ["QuoteAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteAPI"
+        ],
         "summary": "Search Quotes",
         "description": "Lists all quotes matching the request.",
         "operationId": "QuoteAPI_SearchQuotes",
         "requestBody": {
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1SearchQuotesRequest" } } },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1SearchQuotesRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1SearchQuotesResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1SearchQuotesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/search_request_for_quotes": {
       "post": {
-        "tags": ["QuoteAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteAPI"
+        ],
         "summary": "Search Request For Quotes",
         "description": "Lists all request for quotes matching the request.",
         "operationId": "QuoteAPI_SearchRequestForQuotes",
         "requestBody": {
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1SearchRequestForQuotesRequest" } } },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1SearchRequestForQuotesRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1SearchRequestForQuotesResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1SearchRequestForQuotesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/create_quote": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "Create Quote",
-        "description": "Inserts a quote into the exchange.",
         "operationId": "QuoteEntryAPI_CreateQuote",
         "requestBody": {
           "description": "Request to insert a quote into the exchange.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateQuoteRequest" } } },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateQuoteRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateQuoteResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateQuoteResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/create_quote_subscription": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "Create Quote Subscription",
-        "description": "Creates a subscription to get snapshots and updates for quotes and RFQs.",
         "operationId": "QuoteEntryAPI_CreateQuoteSubscription",
         "requestBody": {
-          "description": "Request to start a quote subscription.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionRequest" } } },
+          "description": "Request to start a quote subscription to get snapshots and updates for this session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response (streaming).", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Stream result of v1beta1CreateQuoteSubscriptionResponse",
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "$ref": "#/components/schemas/rpcStatus"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/create_request_for_quote": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "Create RFQ",
-        "description": "Inserts a request for quote into the exchange.",
         "operationId": "QuoteEntryAPI_CreateRequestForQuote",
         "requestBody": {
           "description": "Request to insert a request for quote into the exchange.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateRequestForQuoteRequest" } } },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateRequestForQuoteRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1CreateRequestForQuoteResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateRequestForQuoteResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/delete_quote": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "Delete Quote",
-        "description": "Deletes a quote from the exchange.",
         "operationId": "QuoteEntryAPI_DeleteQuote",
         "requestBody": {
           "description": "Request to delete a quote from the exchange.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1DeleteQuoteRequest" } } },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1DeleteQuoteRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1DeleteQuoteResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1DeleteQuoteResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/list_dealers": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "List Dealers",
         "description": "Returns a list of whitelisted firms that are able to receive a request for quote that I send.",
         "operationId": "QuoteEntryAPI_ListDealers",
         "requestBody": {
-          "description": "Request to get the whitelist of firms.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListDealersRequest" } } },
+          "description": "Request to get the whitelist of firms that are able to receive a request for quote that I send.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListDealersRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListDealersResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListDealersResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/list_requesters": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
         "summary": "List Requesters",
         "description": "Returns the whitelist of firms that are able to send a request for quote to my firm.",
         "operationId": "QuoteEntryAPI_ListRequesters",
         "requestBody": {
-          "description": "Request to get the whitelist of firms.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListRequestersRequest" } } },
+          "description": "Request to get the whitelist of firms that are able to send a request for quote to my firm.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListRequestersRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1ListRequestersResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListRequestersResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     },
     "/v1beta1/pass_quote": {
       "post": {
-        "tags": ["QuoteEntryAPI"],
-        "summary": "Pass Quote",
-        "description": "Passes on a quote from the exchange.",
+        "x-excluded": "true,",
+        "tags": [
+          "QuoteEntryAPI"
+        ],
+        "summary": "PassQuote passes on a quote from the exchange.",
         "operationId": "QuoteEntryAPI_PassQuote",
         "requestBody": {
-          "description": "Request to pass on a quote.",
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1PassQuoteRequest" } } },
+          "description": "Request to pass on a quote from the exchange.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1PassQuoteRequest"
+              }
+            }
+          },
           "required": true
         },
         "responses": {
-          "200": { "description": "A successful response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/v1beta1PassQuoteResponse" } } } },
-          "default": { "description": "An unexpected error response.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/rpcStatus" } } } }
-        }
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1PassQuoteResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
       }
     }
   },
   "components": {
     "schemas": {
-      "protobufAny": { "type": "object", "properties": { "@type": { "type": "string" } }, "additionalProperties": {} },
-      "rpcStatus": { "type": "object", "properties": { "code": { "type": "integer", "format": "int32" }, "details": { "type": "array", "items": { "$ref": "#/components/schemas/protobufAny" } }, "message": { "type": "string" } } },
-      "v1beta1Side": { "type": "string", "default": "SIDE_UNDEFINED", "enum": ["SIDE_UNDEFINED", "SIDE_BUY", "SIDE_SELL"] },
-      "v1beta1QuoteStatus": { "type": "string", "default": "QUOTE_STATUS_UNDEFINED", "enum": ["QUOTE_STATUS_UNDEFINED", "QUOTE_STATUS_PENDING", "QUOTE_STATUS_ACTIVE", "QUOTE_STATUS_ACCEPTED", "QUOTE_STATUS_REJECTED", "QUOTE_STATUS_CANCELED", "QUOTE_STATUS_EXPIRED", "QUOTE_STATUS_PASSED"] },
-      "v1beta1SearchQuotesRequest": { "type": "object", "properties": { "account": { "type": "string" }, "client_id": { "type": "string" }, "end_time": { "type": "string", "format": "date-time" }, "page_size": { "type": "integer", "format": "int32" }, "page_token": { "type": "string" }, "quote_id": { "type": "string" }, "quote_request_id": { "type": "string" }, "side": { "$ref": "#/components/schemas/v1beta1Side" }, "start_time": { "type": "string", "format": "date-time" }, "statuses": { "type": "array", "items": { "$ref": "#/components/schemas/v1beta1QuoteStatus" } }, "symbol": { "type": "string" } } },
-      "v1beta1SearchQuotesResponse": { "type": "object", "properties": { "eof": { "type": "boolean" }, "next_page_token": { "type": "string" }, "quotes": { "type": "array", "items": { "type": "object" } } } },
-      "v1beta1SearchRequestForQuotesRequest": { "type": "object", "properties": { "account": { "type": "string" }, "client_id": { "type": "string" }, "end_time": { "type": "string", "format": "date-time" }, "page_size": { "type": "integer", "format": "int32" }, "page_token": { "type": "string" }, "quote_request_id": { "type": "string" }, "side": { "$ref": "#/components/schemas/v1beta1Side" }, "start_time": { "type": "string", "format": "date-time" }, "statuses": { "type": "array", "items": { "$ref": "#/components/schemas/v1beta1QuoteStatus" } }, "symbol": { "type": "string" } } },
-      "v1beta1SearchRequestForQuotesResponse": { "type": "object", "properties": { "eof": { "type": "boolean" }, "next_page_token": { "type": "string" }, "request_for_quotes": { "type": "array", "items": { "type": "object" } } } },
-      "v1beta1CreateQuoteRequest": { "type": "object", "properties": { "parent": { "type": "string" }, "quote": { "type": "object" } } },
-      "v1beta1CreateQuoteResponse": { "type": "object" },
-      "v1beta1CreateQuoteSubscriptionRequest": { "type": "object" },
-      "v1beta1CreateQuoteSubscriptionResponse": { "type": "object", "properties": { "heartbeat": { "type": "object" }, "snapshot": { "type": "object" }, "update": { "type": "object" } } },
-      "v1beta1CreateRequestForQuoteRequest": { "type": "object", "properties": { "request_for_quote": { "type": "object" } } },
-      "v1beta1CreateRequestForQuoteResponse": { "type": "object" },
-      "v1beta1DeleteQuoteRequest": { "type": "object", "properties": { "name": { "type": "string" } } },
-      "v1beta1DeleteQuoteResponse": { "type": "object" },
-      "v1beta1ListDealersRequest": { "type": "object" },
-      "v1beta1ListDealersResponse": { "type": "object", "properties": { "display_names": { "type": "array", "items": { "type": "string" } }, "firms": { "type": "array", "items": { "type": "string" } } } },
-      "v1beta1ListRequestersRequest": { "type": "object" },
-      "v1beta1ListRequestersResponse": { "type": "object", "properties": { "display_names": { "type": "array", "items": { "type": "string" } }, "firms": { "type": "array", "items": { "type": "string" } } } },
-      "v1beta1PassQuoteRequest": { "type": "object", "properties": { "name": { "type": "string" } } },
-      "v1beta1PassQuoteResponse": { "type": "object" }
+      "v1beta1SearchQuotesRequest": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "end_time": {
+            "title": "End time for the objects to be fetched",
+            "type": "string",
+            "format": "date-time"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "The maximum number of objects to return in a response.\nThis field is optional.",
+            "format": "int32"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "A pagination token returned from a previous call\nthat indicates where this listing should continue from.\nThis field is optional."
+          },
+          "quote_id": {
+            "type": "string"
+          },
+          "quote_request_id": {
+            "type": "string"
+          },
+          "side": {
+            "$ref": "#/components/schemas/v1beta1Side"
+          },
+          "start_time": {
+            "title": "Start time for the objects to be fetched",
+            "type": "string",
+            "format": "date-time"
+          },
+          "statuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/v1beta1QuoteStatus"
+            }
+          },
+          "symbol": {
+            "type": "string"
+          }
+        }
+      },
+      "v1beta1Side": {
+        "type": "string",
+        "description": "Side indicates the side of an Order.",
+        "default": "SIDE_UNDEFINED",
+        "enum": [
+          "SIDE_UNDEFINED",
+          "SIDE_BUY",
+          "SIDE_SELL"
+        ]
+      },
+      "v1beta1QuoteStatus": {
+        "type": "string",
+        "description": "QuoteStatus indicates the status of a quote.\n\n - QUOTE_STATUS_UNDEFINED: Default undefined state.\n - QUOTE_STATUS_PENDING: Quote is pending and awaiting a decision by the RFQ sender to choose which quote they want to take.\n - QUOTE_STATUS_ACCEPTED: Quote is accepted. A quote is accepted when the RFQ sender chooses this quote to fulfill its request.\n - QUOTE_STATUS_DELETED: Quote is deleted. When the party that has sent the original quote cancels it, the quote becomes deleted.\n - QUOTE_STATUS_EXPIRED: Quote is expired. A quote that has passed its expiration time becomes expired.\n - QUOTE_STATUS_PASSED: Quote is passed. A quote is passed when the user chose not to accept this quote.\n - QUOTE_STATUS_DONE_AWAY: Quote is done away. A quote is done away when another quote has been accepted instead of this one.\n - QUOTE_STATUS_PENDING_RISK: quote is pending risk approval\n - QUOTE_STATUS_REJECTED: quote is rejected by the exchange",
+        "default": "QUOTE_STATUS_UNDEFINED",
+        "enum": [
+          "QUOTE_STATUS_UNDEFINED",
+          "QUOTE_STATUS_PENDING",
+          "QUOTE_STATUS_ACCEPTED",
+          "QUOTE_STATUS_DELETED",
+          "QUOTE_STATUS_EXPIRED",
+          "QUOTE_STATUS_PASSED",
+          "QUOTE_STATUS_DONE_AWAY",
+          "QUOTE_STATUS_PENDING_RISK",
+          "QUOTE_STATUS_REJECTED"
+        ]
+      },
+      "v1beta1SearchQuotesResponse": {
+        "type": "object",
+        "properties": {
+          "eof": {
+            "type": "boolean"
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "A pagination token returned from a previous call\nthat indicates from where listing should continue.\nThis field is optional."
+          },
+          "quotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1Quote"
+            }
+          }
+        }
+      },
+      "connamaraep3v1beta1Quote": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "title": "Account is the trading account for this quote",
+            "type": "string"
+          },
+          "client_id": {
+            "title": "Client assigned ID for this quote",
+            "type": "string"
+          },
+          "clord_id": {
+            "title": "Client assigned ID for the order",
+            "type": "string"
+          },
+          "expiration_time": {
+            "title": "Timestamp at which this quote will expire",
+            "type": "string",
+            "format": "date-time"
+          },
+          "firm": {
+            "title": "The firm that created this quote",
+            "type": "string"
+          },
+          "id": {
+            "title": "Exchange assigned ID for this quote",
+            "type": "string"
+          },
+          "insert_time": {
+            "title": "The time this quote was inserted into the exchange",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "title": "Exchange assigned resource name for this quote",
+            "type": "string"
+          },
+          "order_qty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "price": {
+            "title": "Desired price for the quote in integer representation",
+            "type": "string",
+            "format": "int64"
+          },
+          "quote_request_id": {
+            "title": "Exchange assigned ID for the quote request that this quote references",
+            "type": "string"
+          },
+          "side": {
+            "$ref": "#/components/schemas/v1beta1Side"
+          },
+          "status": {
+            "$ref": "#/components/schemas/v1beta1QuoteStatus"
+          },
+          "submitting_user": {
+            "title": "The agent participant that created this quote on behalf of the designated user",
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "symbol_sub_type": {
+            "title": "The sub type of the instrument symbol",
+            "type": "string"
+          },
+          "user": {
+            "title": "The market participant that created this quote",
+            "type": "string"
+          }
+        },
+        "description": "Quote is a quote sent to and from the RFQ Exchange."
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/protobufAny"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string",
+            "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          }
+        },
+        "additionalProperties": {
+          "type": "object"
+        },
+        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      },
+      "v1beta1SearchRequestForQuotesRequest": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "client_id": {
+            "type": "string"
+          },
+          "end_time": {
+            "title": "End time for the objects to be fetched",
+            "type": "string",
+            "format": "date-time"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "The maximum number of objects to return in a response.\nThis field is optional.",
+            "format": "int32"
+          },
+          "page_token": {
+            "type": "string",
+            "description": "A pagination token returned from a previous call\nthat indicates where this listing should continue from.\nThis field is optional."
+          },
+          "quote_request_id": {
+            "type": "string"
+          },
+          "side": {
+            "$ref": "#/components/schemas/v1beta1Side"
+          },
+          "start_time": {
+            "title": "Start time for the objects to be fetched",
+            "type": "string",
+            "format": "date-time"
+          },
+          "statuses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/v1beta1QuoteStatus"
+            }
+          },
+          "symbol": {
+            "type": "string"
+          }
+        }
+      },
+      "v1beta1SearchRequestForQuotesResponse": {
+        "type": "object",
+        "properties": {
+          "eof": {
+            "type": "boolean"
+          },
+          "next_page_token": {
+            "type": "string",
+            "description": "A pagination token returned from a previous call\nthat indicates from where listing should continue.\nThis field is optional."
+          },
+          "request_for_quotes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1RequestForQuote"
+            }
+          }
+        }
+      },
+      "connamaraep3v1beta1RequestForQuote": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "title": "Account is the trading account for this quote request",
+            "type": "string"
+          },
+          "client_id": {
+            "title": "Client assigned ID for this quote request",
+            "type": "string"
+          },
+          "expiration_time": {
+            "title": "Timestamp at which this quote will expire",
+            "type": "string",
+            "format": "date-time"
+          },
+          "firm": {
+            "title": "The firm that created this quote request",
+            "type": "string"
+          },
+          "firms": {
+            "title": "Whitelist of targeted firms that this quote request will target",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "title": "Exchange assigned ID for the quote request",
+            "type": "string"
+          },
+          "insert_time": {
+            "title": "The time this request was inserted into the exchange",
+            "type": "string",
+            "format": "date-time"
+          },
+          "name": {
+            "title": "Exchange assigned resource name for the quote request",
+            "type": "string"
+          },
+          "order_qty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "side": {
+            "$ref": "#/components/schemas/v1beta1Side"
+          },
+          "status": {
+            "$ref": "#/components/schemas/v1beta1QuoteStatus"
+          },
+          "submitting_user": {
+            "title": "The agent participant that created this quote request on behalf of the designated user",
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "symbol_sub_type": {
+            "title": "The sub type of the instrument symbol",
+            "type": "string"
+          },
+          "user": {
+            "title": "The market participant that created this quote request",
+            "type": "string"
+          }
+        },
+        "description": "RequestForQuote is a quote request into the RFQ Exchange."
+      },
+      "v1beta1CreateQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "parent": {
+            "type": "string",
+            "description": "Exchange assigned ID for the parent quote request that this quote references (required)."
+          },
+          "quote": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1Quote"
+          }
+        },
+        "description": "Request to insert a quote into the exchange."
+      },
+      "v1beta1CreateQuoteResponse": {
+        "type": "object"
+      },
+      "v1beta1CreateQuoteSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start a quote subscription to get snapshots and updates for this session."
+      },
+      "v1beta1CreateQuoteSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "heartbeat": {
+            "$ref": "#/components/schemas/v1beta1Heartbeat"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionResponseSnapshot"
+          },
+          "update": {
+            "$ref": "#/components/schemas/v1beta1CreateQuoteSubscriptionResponseUpdate"
+          }
+        }
+      },
+      "v1beta1Heartbeat": {
+        "type": "object",
+        "description": "Heartbeat can be sent on a streaming RPC call to keep the line open."
+      },
+      "v1beta1CreateQuoteSubscriptionResponseSnapshot": {
+        "type": "object",
+        "properties": {
+          "quotes": {
+            "type": "array",
+            "description": "List of quotes contained in the snapshot.",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1Quote"
+            }
+          },
+          "request_for_quotes": {
+            "type": "array",
+            "description": "List of RFQs contained in the snapshot.",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1RequestForQuote"
+            }
+          }
+        },
+        "description": "Snapshot is the current state of quotes and requests in the system that is returned on the initial subscription request."
+      },
+      "v1beta1CreateQuoteSubscriptionResponseUpdate": {
+        "type": "object",
+        "properties": {
+          "quotes": {
+            "type": "array",
+            "description": "List of quotes contained in the update.",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1Quote"
+            }
+          },
+          "rejects": {
+            "type": "array",
+            "description": "List of quote rejects contained in the update.",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1QuoteReject"
+            }
+          },
+          "request_for_quotes": {
+            "type": "array",
+            "description": "List of RFQs contained in the update.",
+            "items": {
+              "$ref": "#/components/schemas/connamaraep3v1beta1RequestForQuote"
+            }
+          }
+        },
+        "description": "Update(s) are the creation of new or modification of existing quotes and requests after subscription."
+      },
+      "connamaraep3v1beta1QuoteReject": {
+        "type": "object",
+        "properties": {
+          "quote": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1Quote"
+          },
+          "quote_accept": {
+            "$ref": "#/components/schemas/v1beta1QuoteAccept"
+          },
+          "quote_cancel": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1QuoteCancel"
+          },
+          "quote_pass": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1QuotePass"
+          },
+          "reject_reason": {
+            "$ref": "#/components/schemas/v1beta1QuoteRejectReason"
+          },
+          "request_for_quote": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1RequestForQuote"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "description": "QuoteReject is a reject for a message sent to the RFQ Exchange."
+      },
+      "v1beta1QuoteAccept": {
+        "type": "object",
+        "properties": {
+          "clord_id": {
+            "title": "Client assigned ID for the order",
+            "type": "string"
+          },
+          "name": {
+            "title": "Exchange assigned resource name for the quote to accept",
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          }
+        },
+        "description": "QuoteAccept is a request to accept a quote in the RFQ Exchange."
+      },
+      "connamaraep3v1beta1QuoteCancel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Exchange assigned resource name for the quote to cancel",
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          }
+        },
+        "description": "QuoteCancel is a request to cancel a quote in the RFQ Exchange."
+      },
+      "connamaraep3v1beta1QuotePass": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Exchange assigned resource name for the quote to pass",
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          }
+        },
+        "description": "QuotePass is a request to pass on a quote in the RFQ Exchange."
+      },
+      "v1beta1QuoteRejectReason": {
+        "type": "string",
+        "description": "QuoteRejectReason indicates the reason behind a quote or request reject.\n\n - QUOTE_REJECT_REASON_UNDEFINED: Default undefined state.\n - QUOTE_REJECT_REASON_OTHER: Quote reject reason is due to an action different than the other specific enum values in this definition.\n - QUOTE_REJECT_REASON_UNKNOWN_SYMBOL: Quote was rejected due to an unknown exchange symbol.\n - QUOTE_REJECT_REASON_EXCHANGE_CLOSED: Quote was rejected due to the exchange being closed.",
+        "default": "QUOTE_REJECT_REASON_UNDEFINED",
+        "enum": [
+          "QUOTE_REJECT_REASON_UNDEFINED",
+          "QUOTE_REJECT_REASON_OTHER",
+          "QUOTE_REJECT_REASON_UNKNOWN_SYMBOL",
+          "QUOTE_REJECT_REASON_EXCHANGE_CLOSED"
+        ]
+      },
+      "v1beta1CreateRequestForQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "request_for_quote": {
+            "$ref": "#/components/schemas/connamaraep3v1beta1RequestForQuote"
+          }
+        },
+        "description": "Request to insert a request for quote into the exchange."
+      },
+      "v1beta1CreateRequestForQuoteResponse": {
+        "type": "object"
+      },
+      "v1beta1DeleteQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Exchange assigned ID for the quote to be deleted."
+          }
+        },
+        "description": "Request to delete a quote from the exchange."
+      },
+      "v1beta1DeleteQuoteResponse": {
+        "type": "object"
+      },
+      "v1beta1ListDealersRequest": {
+        "type": "object",
+        "description": "Request to get the whitelist of firms that are able to receive a request for quote that I send."
+      },
+      "v1beta1ListDealersResponse": {
+        "type": "object",
+        "properties": {
+          "display_names": {
+            "type": "array",
+            "description": "List of display names for the whitelisted firms.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "firms": {
+            "type": "array",
+            "description": "Fully qualified resource names for the whitelisted firms (ie: \"firms/[firmid]\").",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "v1beta1ListRequestersRequest": {
+        "type": "object",
+        "description": "Request to get the whitelist of firms that are able to send a request for quote to my firm."
+      },
+      "v1beta1ListRequestersResponse": {
+        "type": "object",
+        "properties": {
+          "display_names": {
+            "type": "array",
+            "description": "List of display names for the whitelisted firms.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "firms": {
+            "type": "array",
+            "description": "Fully qualified resource names for the whitelisted firms (ie: \"firms/[firmid]\").",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "v1beta1PassQuoteRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Exchange assigned ID for the quote to pass on."
+          }
+        },
+        "description": "Request to pass on a quote from the exchange."
+      },
+      "v1beta1PassQuoteResponse": {
+        "type": "object"
+      }
     }
   }
 }
-
