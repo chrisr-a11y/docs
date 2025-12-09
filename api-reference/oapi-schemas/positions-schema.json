@@ -1,0 +1,489 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Positions API",
+    "version": "v0.6.1"
+  },
+  "servers": [
+    {
+      "url": "http://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "PositionAPI"
+    }
+  ],
+  "paths": {
+    "/v1beta1/create_position_subscription": {
+      "post": {
+        "tags": [
+          "PositionAPI"
+        ],
+        "summary": "Create Position Subscription",
+        "operationId": "PositionAPI_CreatePositionSubscription",
+        "requestBody": {
+          "description": "Request to start a position subscription to get snapshots and updates for this session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Stream result of v1beta1CreatePositionSubscriptionResponse",
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "$ref": "#/components/schemas/rpcStatus"
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1beta1/get_account_balance": {
+      "post": {
+        "tags": [
+          "PositionAPI"
+        ],
+        "summary": "Get Account Balance",
+        "operationId": "PositionAPI_GetAccountBalance",
+        "requestBody": {
+          "description": "Request to get the balance of the given account in the given currency.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1GetAccountBalanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1GetAccountBalanceResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1beta1/list_account_balances": {
+      "post": {
+        "tags": [
+          "PositionAPI"
+        ],
+        "summary": "List Account Balances",
+        "description": "Lists the currency balances in an account.",
+        "operationId": "PositionAPI_ListAccountBalances",
+        "requestBody": {
+          "description": "Request to list the balances of a given account for all currencies.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListAccountBalancesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListAccountBalancesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/v1beta1/list_account_positions": {
+      "post": {
+        "tags": [
+          "PositionAPI"
+        ],
+        "summary": "List Account Positions",
+        "description": "Lists the positions within an account.",
+        "operationId": "PositionAPI_ListAccountPositions",
+        "requestBody": {
+          "description": "Request to list the positions of a given account.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListAccountPositionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListAccountPositionsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "v1beta1CreatePositionSubscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": {
+            "type": "array",
+            "description": "A set of fully qualified resource names of the accounts to filter upon in the subscription (ie: \"firms/[firmid]/accounts/[accountid]\") (optional).",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Request to start a position subscription to get snapshots and updates for this session."
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/protobufAny"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string",
+            "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          }
+        },
+        "additionalProperties": {
+          "type": "object"
+        },
+        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+      },
+      "v1beta1CreatePositionSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "heartbeat": {
+            "$ref": "#/components/schemas/v1beta1Heartbeat"
+          },
+          "snapshot": {
+            "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionResponseSnapshot"
+          },
+          "update": {
+            "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionResponseUpdate"
+          }
+        }
+      },
+      "v1beta1Heartbeat": {
+        "type": "object",
+        "description": "Heartbeat can be sent on a streaming RPC call to keep the line open."
+      },
+      "v1beta1CreatePositionSubscriptionResponseSnapshot": {
+        "type": "object",
+        "properties": {
+          "positions": {
+            "type": "array",
+            "description": "A list of positions contained in the snapshot.",
+            "items": {
+              "$ref": "#/components/schemas/v1beta1Position"
+            }
+          }
+        },
+        "description": "Snapshot is the current state of positions in the system that is returned after the initial subscription request."
+      },
+      "v1beta1Position": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string"
+          },
+          "bod_position": {
+            "type": "string",
+            "format": "int64"
+          },
+          "cost": {
+            "type": "string",
+            "format": "int64"
+          },
+          "expired": {
+            "type": "boolean"
+          },
+          "net_position": {
+            "type": "string",
+            "format": "int64"
+          },
+          "qty_bought": {
+            "type": "string",
+            "format": "int64"
+          },
+          "qty_sold": {
+            "type": "string",
+            "format": "int64"
+          },
+          "realized": {
+            "type": "string",
+            "format": "int64"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "symbol_sub_type": {
+            "type": "string"
+          }
+        },
+        "description": "Position represents a position for a given account and symbol."
+      },
+      "v1beta1CreatePositionSubscriptionResponseUpdate": {
+        "type": "object",
+        "properties": {
+          "positions": {
+            "type": "array",
+            "description": "A list of positions contained in the Update message.",
+            "items": {
+              "$ref": "#/components/schemas/v1beta1Position"
+            }
+          }
+        },
+        "description": "Update is the current state of positions in the system that is streamed once a position updates."
+      },
+      "v1beta1GetAccountBalanceRequest": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "ISO currency code of the fiat currency for which to get the balance (ie: \"USD\") (required)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Fully qualified resource name of the account to get the balance for (ie: \"firms/[firmid]/accounts/[accountid]\") (required)."
+          }
+        },
+        "description": "Request to get the balance of the given account in the given currency."
+      },
+      "v1beta1GetAccountBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "alternate_capital_requirement": {
+            "type": "string",
+            "description": "The fixed amount of capital requirement in the alternate capital requirement currency."
+          },
+          "alternate_capital_requirement_currency": {
+            "type": "string",
+            "description": "If exists, the alternate currency used for capital requirement."
+          },
+          "balance": {
+            "type": "string",
+            "description": "Fixed point decimal fiat currency balance, not including any security values."
+          },
+          "buying_power": {
+            "type": "string",
+            "description": "Amount of unencumbered capital available for trading, factoring in all security valuations as well as any open orders."
+          },
+          "capital_requirement": {
+            "type": "string",
+            "description": "Required amount of fiat currency balance that must be held in an account and cannot be used for trading."
+          },
+          "excess_capital": {
+            "type": "string",
+            "description": "Amount of excess capital in the balance beyond the requirement, factoring in all security valuations."
+          },
+          "margin_requirement": {
+            "type": "string",
+            "description": "Aggregate margin requirement for each Event Instrument."
+          },
+          "open_orders": {
+            "type": "string",
+            "description": "Aggregate total notional value of open orders."
+          },
+          "securities": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/GetAccountBalanceResponseSecurityEntry"
+            },
+            "description": "Map of securities mapped by ID to their detailed valuation with respect to the market price and adjustments applied."
+          },
+          "total_security_available_value": {
+            "type": "string",
+            "description": "Aggregate available collateral value of all securities."
+          },
+          "total_security_notional_value": {
+            "type": "string",
+            "description": "Aggregate notional value of all securities."
+          },
+          "unsettled_funds": {
+            "type": "string",
+            "description": "Aggregate total notional value of unsettled funds not yet available to trade."
+          }
+        }
+      },
+      "GetAccountBalanceResponseSecurityEntry": {
+        "type": "object",
+        "properties": {
+          "available_value": {
+            "type": "string",
+            "description": "Represents the available collateral value of the security, which is the balance multiplied by the market value less the haircut percentage."
+          },
+          "balance": {
+            "type": "string",
+            "description": "Amount of the security held in the account."
+          },
+          "haircut": {
+            "type": "string",
+            "description": "The haircut value of a single unit of the security ID in units of basis points (100 basis points is 1%).",
+            "format": "int64"
+          },
+          "market_value": {
+            "type": "string",
+            "description": "The actual mark to market value of the security."
+          },
+          "notional_value": {
+            "type": "string",
+            "description": "Represents the notional value of the security, which is the balance multiplied by the market value."
+          }
+        },
+        "description": "SecurityEntry describes the detailed valuation of a security with respect to the market price and adjustments applied to augment a base currency's collateral."
+      },
+      "v1beta1ListAccountBalancesRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Fully qualified resource name of the account to get the balances for (ie: \"firms/[firmid]/accounts/[accountid]\") (required)."
+          }
+        },
+        "description": "Request to list the balances of a given account for all currencies."
+      },
+      "v1beta1ListAccountBalancesResponse": {
+        "type": "object",
+        "properties": {
+          "balances": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/v1beta1GetAccountBalanceResponse"
+            },
+            "description": "Map of account balances with the currency of the balance as the key."
+          }
+        }
+      },
+      "v1beta1ListAccountPositionsRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Fully qualified resource name of the account to get the positions for (ie: \"firms/[firmid]/accounts/[accountid]\") (required)."
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Symbol to filter against within the account (optional)."
+          }
+        },
+        "description": "Request to list the positions of a given account."
+      },
+      "v1beta1ListAccountPositionsResponse": {
+        "type": "object",
+        "properties": {
+          "available_position": {
+            "type": "array",
+            "description": "Actual available position that can be used to trade for the corresponding index, factoring in any open orders and otherwise encumbered positions.",
+            "items": {
+              "type": "string",
+              "format": "int64"
+            }
+          },
+          "positions": {
+            "type": "array",
+            "description": "List of positions within the given account.",
+            "items": {
+              "$ref": "#/components/schemas/v1beta1Position"
+            }
+          }
+        }
+      }
+    }
+  }
+}

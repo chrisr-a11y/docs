@@ -15,9 +15,7 @@
     "tabs": [
       {
         "tab": "Welcome",
-        "pages": [
-          "index"
-        ]
+        "pages": ["index"]
       },
       {
         "tab": "Getting Started",
@@ -38,15 +36,44 @@
         "tab": "REST API",
         "groups": [
           {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/auth"
-            ]
+            "group": "Authentication",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/auth-schema.json",
+              "directory": "api-reference"
+            }
           },
           {
-            "group": "Trading Endpoints",
+            "group": "Accounts",
             "openapi": {
-              "source": "/api-reference/oapi-schemas/openapi.json",
+              "source": "/api-reference/oapi-schemas/accounts-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Orders",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/orders-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Positions",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/positions-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Market Data",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/marketdata-merged-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
+            "group": "Drop Copy",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/dropcopy-schema.json",
               "directory": "api-reference"
             }
           }
@@ -93,9 +120,7 @@
       },
       {
         "tab": "Changelog",
-        "pages": [
-          "changelog"
-        ]
+        "pages": ["changelog"]
       }
     ],
     "global": {}
