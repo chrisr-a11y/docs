@@ -1,0 +1,332 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Position API",
+    "version": "v0.6.1"
+  },
+  "servers": [
+    {
+      "url": "http://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "PositionAPI"
+    }
+  ],
+  "paths": {
+    "/v1beta1/create_position_subscription": {
+      "post": {
+        "tags": ["PositionAPI"],
+        "summary": "Create Position Subscription",
+        "description": "Creates a subscription for positions.",
+        "operationId": "PositionAPI_CreatePositionSubscription",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreatePositionSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/get_account_balance": {
+      "post": {
+        "tags": ["PositionAPI"],
+        "summary": "Get Account Balance",
+        "description": "Gets the balance for currency in an account.",
+        "operationId": "PositionAPI_GetAccountBalance",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1GetAccountBalanceRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1GetAccountBalanceResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/list_account_balances": {
+      "post": {
+        "tags": ["PositionAPI"],
+        "summary": "List Account Balances",
+        "description": "Lists the currency balances in an account.",
+        "operationId": "PositionAPI_ListAccountBalances",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListAccountBalancesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListAccountBalancesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/list_account_positions": {
+      "post": {
+        "tags": ["PositionAPI"],
+        "summary": "List Account Positions",
+        "description": "Lists the positions within an account.",
+        "operationId": "PositionAPI_ListAccountPositions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1ListAccountPositionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1ListAccountPositionsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": {}
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "details": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/protobufAny"
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "v1beta1CreatePositionSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to create a position subscription.",
+        "properties": {
+          "accounts": {
+            "type": "array",
+            "description": "Accounts to filter upon.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "snapshot_only": {
+            "type": "boolean",
+            "description": "If true, only return snapshot without streaming updates."
+          },
+          "symbols": {
+            "type": "array",
+            "description": "Symbols to filter upon.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "v1beta1CreatePositionSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "heartbeat": {
+            "type": "object"
+          },
+          "snapshot": {
+            "type": "object",
+            "properties": {
+              "balances": {
+                "type": "array",
+                "items": { "type": "object" }
+              },
+              "positions": {
+                "type": "array",
+                "items": { "type": "object" }
+              }
+            }
+          },
+          "update": {
+            "type": "object"
+          }
+        }
+      },
+      "v1beta1GetAccountBalanceRequest": {
+        "type": "object",
+        "description": "Request to get account balance.",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Fully qualified resource name for the account."
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency to get balance for."
+          }
+        }
+      },
+      "v1beta1GetAccountBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "balance": {
+            "type": "object"
+          }
+        }
+      },
+      "v1beta1ListAccountBalancesRequest": {
+        "type": "object",
+        "description": "Request to list account balances.",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Fully qualified resource name for the account."
+          }
+        }
+      },
+      "v1beta1ListAccountBalancesResponse": {
+        "type": "object",
+        "properties": {
+          "balances": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "v1beta1ListAccountPositionsRequest": {
+        "type": "object",
+        "description": "Request to list account positions.",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Fully qualified resource name for the account."
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page_token": {
+            "type": "string"
+          }
+        }
+      },
+      "v1beta1ListAccountPositionsResponse": {
+        "type": "object",
+        "properties": {
+          "positions": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "next_page_token": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

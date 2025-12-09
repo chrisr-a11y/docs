@@ -1,0 +1,967 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Orders API",
+    "version": "v0.6.1"
+  },
+  "servers": [
+    {
+      "url": "http://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    { "name": "OrderEntryAPI" },
+    { "name": "OrderAPI" }
+  ],
+  "paths": {
+    "/v1beta1/cancel_order": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Cancel Order",
+        "description": "Requests cancellation of a working order.",
+        "operationId": "OrderEntryAPI_CancelOrder",
+        "requestBody": {
+          "description": "Request to cancel an existing order with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CancelOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CancelOrderResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/cancel_order_list": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Cancel Order (List)",
+        "description": "Requests cancellation of a list of working orders.",
+        "operationId": "OrderEntryAPI_CancelOrderList",
+        "requestBody": {
+          "description": "Request to cancel multiple existing orders with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CancelOrderListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CancelOrderListResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/cancel_replace_order": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Cancel or Replace Order",
+        "description": "Requests modification of a working order.",
+        "operationId": "OrderEntryAPI_CancelReplaceOrder",
+        "requestBody": {
+          "description": "Request to update an existing order with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CancelReplaceOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CancelReplaceOrderResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/cancel_replace_order_list": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Cancel or Replace Orders (List)",
+        "description": "Requests modification of a list of working orders.",
+        "operationId": "OrderEntryAPI_CancelReplaceOrderList",
+        "requestBody": {
+          "description": "Request to update multiple existing orders with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CancelReplaceOrderListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CancelReplaceOrderListResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/create_order_subscription": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Create Order Subscription",
+        "description": "Creates a subscription for working orders and updates.",
+        "operationId": "OrderEntryAPI_CreateOrderSubscription",
+        "requestBody": {
+          "description": "Request to start an order subscription to get snapshots and updates for this session.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/get_open_orders": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Get Open Orders",
+        "description": "Returns a snapshot of working orders.",
+        "operationId": "OrderEntryAPI_GetOpenOrders",
+        "requestBody": {
+          "description": "Request to get open orders.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1GetOpenOrdersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1GetOpenOrdersResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/insert_order": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Insert Order",
+        "description": "Inserts a new order into the exchange and returns the assigned order ID.",
+        "operationId": "OrderEntryAPI_InsertOrder",
+        "requestBody": {
+          "description": "Request to insert an order with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1InsertOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1InsertOrderResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/insert_order_cross": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Insert Order Cross",
+        "description": "Creates a new order cross and returns the exchange assigned order IDs.",
+        "operationId": "OrderEntryAPI_InsertOrderCross",
+        "requestBody": {
+          "description": "Request to insert orders for a cross with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1InsertOrderCrossRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1InsertOrderCrossResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/insert_order_list": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Insert Order (List)",
+        "description": "Inserts a list of orders into the exchange and returns the exchange assigned order IDs.",
+        "operationId": "OrderEntryAPI_InsertOrderList",
+        "requestBody": {
+          "description": "Request to insert multiple orders with the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1InsertOrderListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1InsertOrderListResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/preview_order": {
+      "post": {
+        "tags": ["OrderEntryAPI"],
+        "summary": "Preview Order",
+        "description": "Creates an order and assigns attributes but does not insert the order into the exchange.",
+        "operationId": "OrderEntryAPI_PreviewOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1PreviewOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1PreviewOrderResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/download_executions": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Download Executions",
+        "description": "Searches for exchange executions and returns results as a CSV file stream.",
+        "operationId": "OrderAPI_DownloadExecutions",
+        "requestBody": {
+          "description": "Request to download executions filtered using the given details as a csv.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1DownloadExecutionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1DownloadExecutionsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/download_orders": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Download Orders",
+        "description": "Searches for exchange orders and returns results as a CSV file stream.",
+        "operationId": "OrderAPI_DownloadOrders",
+        "requestBody": {
+          "description": "Request to download orders filtered using the given details as a csv.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1DownloadOrdersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1DownloadOrdersResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/download_trades": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Download Trades",
+        "description": "Searches for exchange trades and returns results as a CSV file stream.",
+        "operationId": "OrderAPI_DownloadTrades",
+        "requestBody": {
+          "description": "Request to download trades filtered using the given details as a csv.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1DownloadTradesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1DownloadTradesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/get_trade_stats": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Get Trade Stats",
+        "description": "Gets aggregated trade data for a given period of time.",
+        "operationId": "OrderAPI_GetTradeStats",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1GetTradeStatsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1GetTradeStatsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/search_executions": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Search Executions",
+        "description": "Searches for exchange executions using the given details to filter and returns a list of the found executions.",
+        "operationId": "OrderAPI_SearchExecutions",
+        "requestBody": {
+          "description": "Request to search for executions filtered using the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1SearchExecutionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1SearchExecutionsResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/search_orders": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Search Orders",
+        "description": "Searches for exchange orders using the given details to filter and returns a list of the found orders.",
+        "operationId": "OrderAPI_SearchOrders",
+        "requestBody": {
+          "description": "Request to search for orders filtered using the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1SearchOrdersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1SearchOrdersResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1beta1/search_trades": {
+      "post": {
+        "tags": ["OrderAPI"],
+        "summary": "Search Trades",
+        "description": "Searches for exchange trades using the given details to filter and returns a list of the found trades.",
+        "operationId": "OrderAPI_SearchTrades",
+        "requestBody": {
+          "description": "Request to search for trades filtered using the given details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/v1beta1SearchTradesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/v1beta1SearchTradesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rpcStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "protobufAny": {
+        "type": "object",
+        "properties": {
+          "@type": { "type": "string" }
+        },
+        "additionalProperties": {}
+      },
+      "rpcStatus": {
+        "type": "object",
+        "properties": {
+          "code": { "type": "integer", "format": "int32" },
+          "details": { "type": "array", "items": { "$ref": "#/components/schemas/protobufAny" } },
+          "message": { "type": "string" }
+        }
+      },
+      "v1beta1CancelOrderRequest": {
+        "type": "object",
+        "description": "Request to cancel an existing order.",
+        "properties": {
+          "clord_id": { "type": "string", "description": "Client-assigned ID for the cancel request." },
+          "id": { "type": "string", "description": "Exchange-assigned order ID to cancel." },
+          "orig_clord_id": { "type": "string", "description": "Original client order ID." }
+        }
+      },
+      "v1beta1CancelOrderResponse": { "type": "object" },
+      "v1beta1CancelOrderListRequest": {
+        "type": "object",
+        "description": "Request to cancel multiple existing orders.",
+        "properties": {
+          "requests": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1CancelOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1CancelReplaceOrderRequest": {
+        "type": "object",
+        "description": "Request to update an existing order.",
+        "properties": {
+          "order": { "type": "object", "description": "The order with updated fields." }
+        }
+      },
+      "v1beta1CancelReplaceOrderResponse": { "type": "object" },
+      "v1beta1CancelReplaceOrderListRequest": {
+        "type": "object",
+        "description": "Request to update multiple existing orders.",
+        "properties": {
+          "requests": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1CancelReplaceOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1CreateOrderSubscriptionRequest": {
+        "type": "object",
+        "description": "Request to start an order subscription.",
+        "properties": {
+          "accounts": { "type": "array", "description": "Accounts to filter upon.", "items": { "type": "string" } },
+          "snapshot_only": { "type": "boolean", "description": "If true, only return snapshot without streaming updates." },
+          "symbols": { "type": "array", "description": "Symbols to filter upon.", "items": { "type": "string" } }
+        }
+      },
+      "v1beta1CreateOrderSubscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "heartbeat": { "type": "object" },
+          "snapshot": { "type": "object" },
+          "update": { "type": "object" }
+        }
+      },
+      "v1beta1GetOpenOrdersRequest": {
+        "type": "object",
+        "description": "Request to get open orders.",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "symbols": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "v1beta1GetOpenOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "orders": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1InsertOrderRequest": {
+        "type": "object",
+        "description": "Request to insert an order.",
+        "properties": {
+          "order": { "type": "object", "description": "The order to insert." }
+        }
+      },
+      "v1beta1InsertOrderResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Exchange-assigned order ID." }
+        }
+      },
+      "v1beta1InsertOrderCrossRequest": {
+        "type": "object",
+        "description": "Request to insert orders for a cross.",
+        "properties": {
+          "orders": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1InsertOrderCrossResponse": {
+        "type": "object",
+        "properties": {
+          "ids": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "v1beta1InsertOrderListRequest": {
+        "type": "object",
+        "description": "Request to insert multiple orders.",
+        "properties": {
+          "requests": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1InsertOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "v1beta1PreviewOrderRequest": {
+        "type": "object",
+        "description": "Request to preview an order.",
+        "properties": {
+          "order": { "type": "object" }
+        }
+      },
+      "v1beta1PreviewOrderResponse": {
+        "type": "object",
+        "properties": {
+          "order": { "type": "object" }
+        }
+      },
+      "v1beta1DownloadExecutionsRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" }
+        }
+      },
+      "v1beta1DownloadExecutionsResponse": {
+        "type": "object",
+        "properties": {
+          "chunk": { "type": "string", "format": "byte" }
+        }
+      },
+      "v1beta1DownloadOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" }
+        }
+      },
+      "v1beta1DownloadOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "chunk": { "type": "string", "format": "byte" }
+        }
+      },
+      "v1beta1DownloadTradesRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" }
+        }
+      },
+      "v1beta1DownloadTradesResponse": {
+        "type": "object",
+        "properties": {
+          "chunk": { "type": "string", "format": "byte" }
+        }
+      },
+      "v1beta1GetTradeStatsRequest": {
+        "type": "object",
+        "properties": {
+          "symbols": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" }
+        }
+      },
+      "v1beta1GetTradeStatsResponse": {
+        "type": "object",
+        "properties": {
+          "stats": { "type": "object" }
+        }
+      },
+      "v1beta1SearchExecutionsRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" },
+          "page_size": { "type": "integer", "format": "int32" },
+          "page_token": { "type": "string" }
+        }
+      },
+      "v1beta1SearchExecutionsResponse": {
+        "type": "object",
+        "properties": {
+          "executions": { "type": "array", "items": { "type": "object" } },
+          "next_page_token": { "type": "string" }
+        }
+      },
+      "v1beta1SearchOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" },
+          "page_size": { "type": "integer", "format": "int32" },
+          "page_token": { "type": "string" }
+        }
+      },
+      "v1beta1SearchOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "orders": { "type": "array", "items": { "type": "object" } },
+          "next_page_token": { "type": "string" }
+        }
+      },
+      "v1beta1SearchTradesRequest": {
+        "type": "object",
+        "properties": {
+          "accounts": { "type": "array", "items": { "type": "string" } },
+          "start_time": { "type": "string", "format": "date-time" },
+          "end_time": { "type": "string", "format": "date-time" },
+          "page_size": { "type": "integer", "format": "int32" },
+          "page_token": { "type": "string" }
+        }
+      },
+      "v1beta1SearchTradesResponse": {
+        "type": "object",
+        "properties": {
+          "trades": { "type": "array", "items": { "type": "object" } },
+          "next_page_token": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+
