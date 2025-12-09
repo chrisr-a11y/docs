@@ -25,7 +25,6 @@
         "description": "Returns the user information of the caller.",
         "operationId": "AccountsAPI_GetWhoAmI",
         "requestBody": {
-          "description": "Request to get the user information of the caller.",
           "content": {
             "application/json": {
               "schema": {
@@ -70,7 +69,6 @@
         "description": "Returns the accounts that the user may use to trade.",
         "operationId": "AccountsAPI_ListAccounts",
         "requestBody": {
-          "description": "Request to list the accounts belonging to the specified user.",
           "content": {
             "application/json": {
               "schema": {
@@ -115,7 +113,6 @@
         "description": "Returns the users that the user may trade on behalf of.",
         "operationId": "AccountsAPI_ListUsers",
         "requestBody": {
-          "description": "Request to list the users that the user may trade on behalf of.",
           "content": {
             "application/json": {
               "schema": {
