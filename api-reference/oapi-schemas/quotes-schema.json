@@ -115,7 +115,6 @@
         "summary": "Create Quote",
         "operationId": "QuoteEntryAPI_CreateQuote",
         "requestBody": {
-          "description": "Request to insert a quote into the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -159,7 +158,6 @@
         "summary": "Create Quote Subscription",
         "operationId": "QuoteEntryAPI_CreateQuoteSubscription",
         "requestBody": {
-          "description": "Request to start a quote subscription to get snapshots and updates for this session.",
           "content": {
             "application/json": {
               "schema": {
@@ -212,7 +210,6 @@
         "summary": "Create RFQ",
         "operationId": "QuoteEntryAPI_CreateRequestForQuote",
         "requestBody": {
-          "description": "Request to insert a request for quote into the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -256,7 +253,6 @@
         "summary": "Delete Quote",
         "operationId": "QuoteEntryAPI_DeleteQuote",
         "requestBody": {
-          "description": "Request to delete a quote from the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -301,7 +297,6 @@
         "description": "Returns a list of whitelisted firms that are able to receive a request for quote that I send.",
         "operationId": "QuoteEntryAPI_ListDealers",
         "requestBody": {
-          "description": "Request to get the whitelist of firms that are able to receive a request for quote that I send.",
           "content": {
             "application/json": {
               "schema": {
@@ -346,7 +341,6 @@
         "description": "Returns the whitelist of firms that are able to send a request for quote to my firm.",
         "operationId": "QuoteEntryAPI_ListRequesters",
         "requestBody": {
-          "description": "Request to get the whitelist of firms that are able to send a request for quote to my firm.",
           "content": {
             "application/json": {
               "schema": {
@@ -390,7 +384,6 @@
         "summary": "PassQuote passes on a quote from the exchange.",
         "operationId": "QuoteEntryAPI_PassQuote",
         "requestBody": {
-          "description": "Request to pass on a quote from the exchange.",
           "content": {
             "application/json": {
               "schema": {

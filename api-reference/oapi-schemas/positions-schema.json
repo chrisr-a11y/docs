@@ -23,7 +23,6 @@
         "summary": "Create Position Subscription",
         "operationId": "PositionAPI_CreatePositionSubscription",
         "requestBody": {
-          "description": "Request to start a position subscription to get snapshots and updates for this session.",
           "content": {
             "application/json": {
               "schema": {
@@ -75,7 +74,6 @@
         "summary": "Get Account Balance",
         "operationId": "PositionAPI_GetAccountBalance",
         "requestBody": {
-          "description": "Request to get the balance of the given account in the given currency.",
           "content": {
             "application/json": {
               "schema": {
@@ -119,7 +117,6 @@
         "description": "Lists the currency balances in an account.",
         "operationId": "PositionAPI_ListAccountBalances",
         "requestBody": {
-          "description": "Request to list the balances of a given account for all currencies.",
           "content": {
             "application/json": {
               "schema": {
@@ -163,7 +160,6 @@
         "description": "Lists the positions within an account.",
         "operationId": "PositionAPI_ListAccountPositions",
         "requestBody": {
-          "description": "Request to list the positions of a given account.",
           "content": {
             "application/json": {
               "schema": {
