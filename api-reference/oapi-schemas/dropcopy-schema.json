@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com"
+      "url": "http://api.polymarketexchange.com/api"
     }
   ],
   "tags": [
@@ -22,7 +22,6 @@
         "description": "Subscribes to the exchange execution feed.",
         "operationId": "DropCopyAPI_CreateDropCopySubscription",
         "requestBody": {
-          "description": "Request to start an execution subscription from the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -63,7 +62,6 @@
         "description": "Subscribes to the exchange participant/account/firm update feed.",
         "operationId": "DropCopyAPI_CreateFirmsNotificationSubscription",
         "requestBody": {
-          "description": "Request to start a participant/account/firm hierarchy update subscription from the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -104,7 +102,6 @@
         "description": "Subscribes to the exchange's instrument state changes.",
         "operationId": "DropCopyAPI_CreateInstrumentStateChangeSubscription",
         "requestBody": {
-          "description": "Request to start an instrument state change subscription from the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -145,7 +142,6 @@
         "description": "Subscribes to the exchange position update feed.",
         "operationId": "DropCopyAPI_CreatePositionChangeSubscription",
         "requestBody": {
-          "description": "Request to start a position update subscription from the exchange.",
           "content": {
             "application/json": {
               "schema": {
@@ -186,7 +182,6 @@
         "description": "Subscribes to the exchange trade capture report feed.",
         "operationId": "DropCopyAPI_CreateTradeCaptureReportSubscription",
         "requestBody": {
-          "description": "Request to start a trade capture report subscription from the exchange.",
           "content": {
             "application/json": {
               "schema": {

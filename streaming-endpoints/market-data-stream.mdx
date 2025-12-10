@@ -104,25 +104,25 @@ Each price level in the order book contains:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `px` | `int64` | **Price as integer** (divide by 10000 for decimal) |
+| `px` | `int64` | **Price as integer** (divide by 1000 for decimal) |
 | `qty` | `int64` | Aggregate quantity at this price level |
 | `symbol_sub_type` | `str` | Symbol subtype (if applicable) |
 
 <Warning>
 **Price Representation:**
-All prices are `int64` values scaled by **10000**.
+All prices are `int64` values scaled by **1000**.
 
 **Example:**
-- Raw value: `5000`
-- Decimal price: `5000 / 10000 = 0.5 USD`
+- Raw value: `500`
+- Decimal price: `500 / 1000 = 0.5 USD`
 - Display as: `$0.50`
 
 ```python
-px = bid.px / 10000  # Convert from price representation
+px = bid.px / 1000  # Convert from price representation
 print(f"${px:.4f}")  # Display as $0.50
 ```
 
-Prices are always between **\$0.001 and \$0.999 USD** so the last digit in `px` will always be `0` (e.g. $0.342 => 3420).
+Prices are always between **\$0.001 and \$0.999 USD**.
 </Warning>
 
 ### InstrumentStats Structure
@@ -131,11 +131,11 @@ Market statistics include:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `last_trade_px` | `int64` | Last trade price (÷ 10000) |
-| `open_px` | `int64` | Opening price (÷ 10000) |
-| `high_px` | `int64` | High price of session (÷ 10000) |
-| `low_px` | `int64` | Low price of session (÷ 10000) |
-| `close_px` | `int64` | Closing price (÷ 10000) |
+| `last_trade_px` | `int64` | Last trade price (÷ 1000) |
+| `open_px` | `int64` | Opening price (÷ 1000) |
+| `high_px` | `int64` | High price of session (÷ 1000) |
+| `low_px` | `int64` | Low price of session (÷ 1000) |
+| `close_px` | `int64` | Closing price (÷ 1000) |
 | `shares_traded` | `int64` | Total volume traded |
 | `open_interest` | `int64` | Current open interest |
 | `notional_traded` | `int64` | Total notional value traded |
@@ -145,7 +145,7 @@ Stats fields use protobuf `oneof`, so they may not always be present. Always che
 
 ```python
 if update.HasField('stats') and update.stats.HasField('last_trade_px'):
-    last_px = update.stats.last_trade_px / 10000
+    last_px = update.stats.last_trade_px / 1000
 ```
 </Note>
 
@@ -278,14 +278,14 @@ class PolymarketStreamer:
             if update.bids:
                 print("  Bids:")
                 for i, bid in enumerate(update.bids[:5]):  # Show top 5 bids
-                    px = bid.px / 10000  # Convert from price representation
+                    px = bid.px / 1000  # Convert from price representation
                     qty = bid.qty
                     print(f"    [{i+1}] ${px:.4f} x {qty}")
 
             if update.offers:
                 print("  Offers:")
                 for i, offer in enumerate(update.offers[:5]):  # Show top 5 offers
-                    px = offer.px / 10000  # Convert from price representation
+                    px = offer.px / 1000  # Convert from price representation
                     qty = offer.qty
                     print(f"    [{i+1}] ${px:.4f} x {qty}")
 
@@ -294,16 +294,16 @@ class PolymarketStreamer:
                 stats = update.stats
                 print("  Stats:")
                 if stats.HasField('last_trade_px'):
-                    last_px = stats.last_trade_px / 10000
+                    last_px = stats.last_trade_px / 1000
                     print(f"    Last Trade: ${last_px:.4f}")
                 if stats.HasField('open_px'):
-                    open_px = stats.open_px / 10000
+                    open_px = stats.open_px / 1000
                     print(f"    Open: ${open_px:.4f}")
                 if stats.HasField('high_px'):
-                    high_px = stats.high_px / 10000
+                    high_px = stats.high_px / 1000
                     print(f"    High: ${high_px:.4f}")
                 if stats.HasField('low_px'):
-                    low_px = stats.low_px / 10000
+                    low_px = stats.low_px / 1000
                     print(f"    Low: ${low_px:.4f}")
                 if stats.HasField('shares_traded'):
                     print(f"    Shares Traded: {stats.shares_traded}")

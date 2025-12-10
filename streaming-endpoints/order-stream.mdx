@@ -126,25 +126,25 @@ if response.HasField('update'):
 | `state` | `OrderState` | Current order state |
 | `account` | `str` | Trading account |
 | `order_qty` | `int` | Original order quantity |
-| `price` | `int` | **Order price** (÷ 10000 for decimal) |
+| `price` | `int` | **Order price** (÷ 1000 for decimal) |
 | `cum_qty` | `int` | Cumulative filled quantity |
 | `leaves_qty` | `int` | Remaining unfilled quantity |
-| `avg_px` | `int` | **Average fill price** (÷ 10000) |
+| `avg_px` | `int` | **Average fill price** (÷ 1000) |
 | `insert_time` | `Timestamp` | When order was accepted |
 | `create_time` | `Timestamp` | When order was created |
 
 <Warning>
 **Price Fields:**
-- `price`, `avg_px`, `stop_price` are `int64` scaled by **10000**
+- `price`, `avg_px`, `stop_price` are `int64` scaled by **1000**
 - Prices are always between **\$0.001 and \$0.999 USD**
-- Example: `5250` → `5250 / 10000 = $0.5250`
+- Example: `525` → `525 / 1000 = $0.525`
 
 ```python
-price = order.price / 10000  # Convert from price representation
+price = order.price / 1000  # Convert from price representation
 print(f"Price: ${price:.4f}")
 ```
 
-Prices are always between **\$0.001 and \$0.999 USD** so the last digit will always be `0` (e.g. $0.342 => 3420).
+Prices are always between **\$0.001 and \$0.999 USD**.
 </Warning>
 
 ### Order States
@@ -202,7 +202,7 @@ Executions represent order lifecycle events (new, fill, cancel, reject).
 | `type` | `ExecutionType` | Type of execution event |
 | `order` | `Order` | Current order state after this execution |
 | `last_shares` | `int` | Quantity filled in this execution (for fills) |
-| `last_px` | `int` | **Price of this fill** (÷ 10000) |
+| `last_px` | `int` | **Price of this fill** (÷ 1000) |
 | `trade_id` | `str` | Trade ID (for fills) |
 | `aggressor` | `bool` | True if you were the aggressor in the trade |
 | `transact_time` | `Timestamp` | When execution occurred |
@@ -378,7 +378,7 @@ class PolymarketOrderStreamer:
         print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
 
         if order.price > 0:
-            price = order.price / 10000  # Convert from price representation
+            price = order.price / 1000  # Convert from price representation
             print(f"    Price: ${price:.4f}")
 
         print(f"    Order Qty: {order.order_qty}")
@@ -386,7 +386,7 @@ class PolymarketOrderStreamer:
         print(f"    Remaining Qty: {order.leaves_qty}")
 
         if order.avg_px > 0:
-            avg_px = order.avg_px / 10000
+            avg_px = order.avg_px / 1000
             print(f"    Avg Price: ${avg_px:.4f}")
 
         if order.account:
@@ -410,7 +410,7 @@ class PolymarketOrderStreamer:
             print(f"    Last Shares: {execution.last_shares}")
 
         if execution.last_px > 0:
-            last_px = execution.last_px / 10000
+            last_px = execution.last_px / 1000
             print(f"    Last Price: ${last_px:.4f}")
 
         if execution.trade_id:
@@ -473,7 +473,7 @@ Snapshot only: False
     Side: SIDE_BUY
     Type: ORDER_TYPE_LIMIT
     State: ORDER_STATE_NEW
-    Price: $0.5250
+    Price: $0.525
     Order Qty: 1000
     Filled Qty: 0
     Remaining Qty: 1000
@@ -491,7 +491,7 @@ Snapshot only: False
     Side: SIDE_BUY
     State: ORDER_STATE_PARTIALLY_FILLED
     Last Shares: 300
-    Last Price: $0.5250
+    Last Price: $0.525
     Trade ID: trade_xyz
 
 ------------------------------------------------------------

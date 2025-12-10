@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com"
+      "url": "http://api.polymarketexchange.com/api"
     }
   ],
   "tags": [
@@ -17,7 +17,6 @@
   "paths": {
     "/v1beta1/get_who_am_i": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
@@ -25,7 +24,6 @@
         "description": "Returns the user information of the caller.",
         "operationId": "AccountsAPI_GetWhoAmI",
         "requestBody": {
-          "description": "Request to get the user information of the caller.",
           "content": {
             "application/json": {
               "schema": {
@@ -62,7 +60,6 @@
     },
     "/v1beta1/list_accounts": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
@@ -70,7 +67,6 @@
         "description": "Returns the accounts that the user may use to trade.",
         "operationId": "AccountsAPI_ListAccounts",
         "requestBody": {
-          "description": "Request to list the accounts belonging to the specified user.",
           "content": {
             "application/json": {
               "schema": {
@@ -107,7 +103,6 @@
     },
     "/v1beta1/list_users": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
@@ -115,7 +110,6 @@
         "description": "Returns the users that the user may trade on behalf of.",
         "operationId": "AccountsAPI_ListUsers",
         "requestBody": {
-          "description": "Request to list the users that the user may trade on behalf of.",
           "content": {
             "application/json": {
               "schema": {

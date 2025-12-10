@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com"
+      "url": "http://api.polymarketexchange.com/api"
     }
   ],
   "tags": [
@@ -26,7 +26,6 @@
         "summary": "Cancel Order",
         "operationId": "OrderEntryAPI_CancelOrder",
         "requestBody": {
-          "description": "Request to cancel an existing order with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -69,7 +68,6 @@
         "summary": "Cancel Order (List)",
         "operationId": "OrderEntryAPI_CancelOrderList",
         "requestBody": {
-          "description": "Request to cancel multiple existing orders with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -112,7 +110,6 @@
         "summary": "Cancel or Replace Order",
         "operationId": "OrderEntryAPI_CancelReplaceOrder",
         "requestBody": {
-          "description": "Request to update an existing order with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -155,7 +152,6 @@
         "summary": "Cancel or Replace Orders (List)",
         "operationId": "OrderEntryAPI_CancelReplaceOrderList",
         "requestBody": {
-          "description": "Request to update multiple existing orders with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -198,7 +194,6 @@
         "summary": "Create Order Subscription",
         "operationId": "OrderEntryAPI_CreateOrderSubscription",
         "requestBody": {
-          "description": "Request to start an order subscription to get snapshots and updates for this session.",
           "content": {
             "application/json": {
               "schema": {
@@ -251,7 +246,6 @@
         "description": "Returns a snapshot of working orders.",
         "operationId": "OrderEntryAPI_GetOpenOrders",
         "requestBody": {
-          "description": "Request to get open orders.",
           "content": {
             "application/json": {
               "schema": {
@@ -295,7 +289,6 @@
         "description": "Inserts a new order into the exchange and returns the assigned order ID.",
         "operationId": "OrderEntryAPI_InsertOrder",
         "requestBody": {
-          "description": "Request to insert an order with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -339,7 +332,6 @@
         "description": "Creates a new order cross and returns the exchange assigned order IDs.",
         "operationId": "OrderEntryAPI_InsertOrderCross",
         "requestBody": {
-          "description": "Request to insert orders for a cross with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -383,7 +375,6 @@
         "description": "Inserts a list of orders into the exchange and returns the exchange assigned order IDs.",
         "operationId": "OrderEntryAPI_InsertOrderList",
         "requestBody": {
-          "description": "Request to insert multiple orders with the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -469,7 +460,6 @@
         "summary": "Download Executions",
         "operationId": "OrderAPI_DownloadExecutions",
         "requestBody": {
-          "description": "Request to download executions filtered using the given details as a csv.",
           "content": {
             "application/json": {
               "schema": {
@@ -521,7 +511,6 @@
         "summary": "Download Orders",
         "operationId": "OrderAPI_DownloadOrders",
         "requestBody": {
-          "description": "Request to download orders filtered using the given details as a csv.",
           "content": {
             "application/json": {
               "schema": {
@@ -573,7 +562,6 @@
         "summary": "Download Trades",
         "operationId": "OrderAPI_DownloadTrades",
         "requestBody": {
-          "description": "Request to download trades filtered using the given details as a csv.",
           "content": {
             "application/json": {
               "schema": {
@@ -669,7 +657,6 @@
         "description": "Searches for exchange executions using the given details to filter and returns a list of the found executions.",
         "operationId": "OrderAPI_SearchExecutions",
         "requestBody": {
-          "description": "Request to search for executions filtered using the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -713,7 +700,6 @@
         "description": "Searches for exchange orders using the given details to filter and returns a list of the found orders.",
         "operationId": "OrderAPI_SearchOrders",
         "requestBody": {
-          "description": "Request to search for orders filtered using the given details.",
           "content": {
             "application/json": {
               "schema": {
@@ -757,7 +743,6 @@
         "description": "Searches for exchange trades using the given details to filter and returns a list of the found trades.",
         "operationId": "OrderAPI_SearchTrades",
         "requestBody": {
-          "description": "Request to search for trades filtered using the given details.",
           "content": {
             "application/json": {
               "schema": {
