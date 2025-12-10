@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com"
+      "url": "http://api.polymarketexchange.com/api"
     }
   ],
   "tags": [
@@ -17,7 +17,6 @@
   "paths": {
     "/v1beta1/get_who_am_i": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
@@ -61,7 +60,6 @@
     },
     "/v1beta1/list_accounts": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
@@ -105,7 +103,6 @@
     },
     "/v1beta1/list_users": {
       "post": {
-        "x-excluded": "true,",
         "tags": [
           "AccountsAPI"
         ],
