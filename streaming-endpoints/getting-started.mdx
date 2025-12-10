@@ -133,21 +133,21 @@ for response in response_stream:
 
         if update.bids:
             # Display top bid
-            top_bid_px = update.bids[0].px / 10000
+            top_bid_px = update.bids[0].px / 1000
             print(f"  Top Bid: ${top_bid_px:.4f} x {update.bids[0].qty}")
 
         if update.offers:
             # Display top offer
-            top_offer_px = update.offers[0].px / 10000
+            top_offer_px = update.offers[0].px / 1000
             print(f"  Top Offer: ${top_offer_px:.4f} x {update.offers[0].qty}")
 ```
 
 <Note>
-**Price Representation**: All prices are represented as `int64` values. Divide by `10000` to get the decimal price.
+**Price Representation**: All prices are represented as `int64` values. Divide by `1000` to get the decimal price.
 
 Prices are always between **$0.001 and $0.999 USD**.
 
-Example: `5250` → `5250 / 10000 = $0.5250`
+Example: `525` → `525 / 1000 = $0.525`
 </Note>
 
 

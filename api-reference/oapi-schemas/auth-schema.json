@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com"
+      "url": "http://api.polymarketexchange.com/auth"
     }
   ],
   "tags": [

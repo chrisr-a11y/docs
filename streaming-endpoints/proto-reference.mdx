@@ -125,14 +125,14 @@ elif response.HasField('update'):
 
 ```python
 # Access book entry fields
-px = bid.px / 10000  # Convert price
+px = bid.px / 1000  # Convert price
 qty = bid.qty
 symbol_sub_type = bid.symbol_sub_type
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `px` | `int64` | **Price** (divide by 10000 for decimal value) |
+| `px` | `int64` | **Price** (divide by 1000 for decimal value) |
 | `qty` | `int64` | Aggregate quantity at this price level |
 | `symbol_sub_type` | `str` | Symbol subtype (if applicable) |
 
@@ -169,17 +169,17 @@ if update.HasField('stats'):
 
     # Check individual stat fields
     if stats.HasField('last_trade_px'):
-        last_px = stats.last_trade_px / 10000
+        last_px = stats.last_trade_px / 1000
         print(f"Last Trade: ${last_px:.4f}")
 ```
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `open_px` | `int64` | Opening price (÷ 10000) |
-| `close_px` | `int64` | Closing price (÷ 10000) |
-| `low_px` | `int64` | Session low price (÷ 10000) |
-| `high_px` | `int64` | Session high price (÷ 10000) |
-| `last_trade_px` | `int64` | Last trade price (÷ 10000) |
+| `open_px` | `int64` | Opening price (÷ 1000) |
+| `close_px` | `int64` | Closing price (÷ 1000) |
+| `low_px` | `int64` | Session low price (÷ 1000) |
+| `high_px` | `int64` | Session high price (÷ 1000) |
+| `last_trade_px` | `int64` | Last trade price (÷ 1000) |
 | `shares_traded` | `int64` | Total shares/contracts traded |
 | `open_interest` | `int64` | Current open interest |
 | `notional_traded` | `int64` | Total notional value traded |
@@ -265,7 +265,7 @@ print(f"Side: {orders_pb2.Side.Name(order.side)}")
 print(f"State: {orders_pb2.OrderState.Name(order.state)}")
 
 if order.price > 0:
-    price = order.price / 10000
+    price = order.price / 1000
     print(f"Price: ${price:.4f}")
 ```
 
@@ -279,11 +279,11 @@ Key fields:
 | `type` | `OrderType` | Order type |
 | `side` | `Side` | BUY or SELL |
 | `order_qty` | `int64` | Original order quantity |
-| `price` | `int64` | **Limit price** (÷ 10000) |
+| `price` | `int64` | **Limit price** (÷ 1000) |
 | `time_in_force` | `TimeInForce` | DAY, GTC, IOC, FOK, GTT |
 | `account` | `str` | Trading account identifier |
 | `cum_qty` | `int64` | Cumulative filled quantity |
-| `avg_px` | `int64` | **Average fill price** (÷ 10000) |
+| `avg_px` | `int64` | **Average fill price** (÷ 1000) |
 | `leaves_qty` | `int64` | Remaining unfilled quantity |
 | `state` | `OrderState` | Current order state |
 | `insert_time` | `Timestamp` | When order was inserted |
@@ -296,7 +296,7 @@ exec_type = orders_pb2.ExecutionType.Name(execution.type)
 print(f"Execution Type: {exec_type}")
 
 if execution.last_shares > 0:
-    fill_px = execution.last_px / 10000
+    fill_px = execution.last_px / 1000
     print(f"Fill: {execution.last_shares} @ ${fill_px:.4f}")
 
 if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
@@ -310,7 +310,7 @@ if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
 | `type` | `ExecutionType` | Execution type |
 | `order` | `Order` | Current order state |
 | `last_shares` | `int64` | Quantity filled in this execution |
-| `last_px` | `int64` | **Fill price** (÷ 10000) |
+| `last_px` | `int64` | **Fill price** (÷ 1000) |
 | `text` | `str` | Free-form text message |
 | `order_reject_reason` | `OrdRejectReason` | Rejection reason (if rejected) |
 | `transact_time` | `Timestamp` | Transaction timestamp |
@@ -430,17 +430,17 @@ if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
 ### Price Representation
 
 <Warning>
-**All prices are `int64` values scaled by 10000.**
+**All prices are `int64` values scaled by 1000.**
 
 Prices are always between **$0.001 and $0.999 USD**.
 
 ```python
 # Proto → Decimal
-decimal_price = int64_price / 10000
+decimal_price = int64_price / 1000
 
 # Example
-proto_price = 5250
-decimal_price = 5250 / 10000  # = $0.5250
+proto_price = 525
+decimal_price = 525 / 1000  # = $0.525
 ```
 </Warning>
 
@@ -462,7 +462,7 @@ if order.HasField('insert_time'):
 # Use HasField() for optional fields
 if update.HasField('stats'):
     if update.stats.HasField('last_trade_px'):
-        last_px = update.stats.last_trade_px / 10000
+        last_px = update.stats.last_trade_px / 1000
 ```
 
 ---
