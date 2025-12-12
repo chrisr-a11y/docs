@@ -126,25 +126,23 @@ if response.HasField('update'):
 | `state` | `OrderState` | Current order state |
 | `account` | `str` | Trading account |
 | `order_qty` | `int` | Original order quantity |
-| `price` | `int` | **Order price** (÷ 1000 for decimal) |
+| `price` | `int` | **Order price** (÷ price_scale for decimal) |
 | `cum_qty` | `int` | Cumulative filled quantity |
 | `leaves_qty` | `int` | Remaining unfilled quantity |
-| `avg_px` | `int` | **Average fill price** (÷ 1000) |
+| `avg_px` | `int` | **Average fill price** (÷ price_scale) |
 | `insert_time` | `Timestamp` | When order was accepted |
 | `create_time` | `Timestamp` | When order was created |
 
 <Warning>
-**Price Fields:**
-- `price`, `avg_px`, `stop_price` are `int64` scaled by **1000**
-- Prices are always between **\$0.001 and \$0.999 USD**
-- Example: `525` → `525 / 1000 = $0.525`
+    **Price Fields:**
+    - `price`, `avg_px`, `stop_price` are `int64` values
+    - Divide by the instrument's `price_scale` to get decimal prices
+    - `price_scale` is included in order responses for convenience
 
-```python
-price = order.price / 1000  # Convert from price representation
-print(f"Price: ${price:.4f}")
-```
-
-Prices are always between **\$0.001 and \$0.999 USD**.
+    ```python
+    price = order.price / order.price_scale
+    print(f"Price: ${price:.4f}")
+    ```
 </Warning>
 
 ### Order States
@@ -202,7 +200,7 @@ Executions represent order lifecycle events (new, fill, cancel, reject).
 | `type` | `ExecutionType` | Type of execution event |
 | `order` | `Order` | Current order state after this execution |
 | `last_shares` | `int` | Quantity filled in this execution (for fills) |
-| `last_px` | `int` | **Price of this fill** (÷ 1000) |
+| `last_px` | `int` | **Price of this fill** (÷ price_scale) |
 | `trade_id` | `str` | Trade ID (for fills) |
 | `aggressor` | `bool` | True if you were the aggressor in the trade |
 | `transact_time` | `Timestamp` | When execution occurred |
@@ -378,7 +376,7 @@ class PolymarketOrderStreamer:
         print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
 
         if order.price > 0:
-            price = order.price / 1000  # Convert from price representation
+            price = order.price / order.price_scale
             print(f"    Price: ${price:.4f}")
 
         print(f"    Order Qty: {order.order_qty}")
@@ -386,7 +384,7 @@ class PolymarketOrderStreamer:
         print(f"    Remaining Qty: {order.leaves_qty}")
 
         if order.avg_px > 0:
-            avg_px = order.avg_px / 1000
+            avg_px = order.avg_px / order.price_scale
             print(f"    Avg Price: ${avg_px:.4f}")
 
         if order.account:
@@ -410,7 +408,7 @@ class PolymarketOrderStreamer:
             print(f"    Last Shares: {execution.last_shares}")
 
         if execution.last_px > 0:
-            last_px = execution.last_px / 1000
+            last_px = execution.last_px / execution.order.price_scale
             print(f"    Last Price: ${last_px:.4f}")
 
         if execution.trade_id:

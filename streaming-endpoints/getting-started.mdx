@@ -111,8 +111,9 @@ request = market_data_pb2.CreateMarketDataSubscriptionRequest(
 )
 
 # Set up metadata with authorization
+# access_token obtained from REST API login (see Step 4)
 metadata = [
-    ('authorization', access_token)
+    ('authorization', access_token)  # from login response
 ]
 
 # Start streaming
@@ -131,23 +132,30 @@ for response in response_stream:
         print(f"  Bids: {len(update.bids)}")
         print(f"  Offers: {len(update.offers)}")
 
+        # Get price_scale from instrument metadata (via list_instruments API)
+        # You must implement this function to fetch from your instrument cache
+        price_scale = get_instrument_price_scale(update.symbol)  # implement this
+
         if update.bids:
-            # Display top bid
-            top_bid_px = update.bids[0].px / 1000
+            top_bid_px = update.bids[0].px / price_scale
             print(f"  Top Bid: ${top_bid_px:.4f} x {update.bids[0].qty}")
 
         if update.offers:
-            # Display top offer
-            top_offer_px = update.offers[0].px / 1000
+            top_offer_px = update.offers[0].px / price_scale
             print(f"  Top Offer: ${top_offer_px:.4f} x {update.offers[0].qty}")
 ```
 
 <Note>
-**Price Representation**: All prices are represented as `int64` values. Divide by `1000` to get the decimal price.
+  **Price Representation**: All prices are `int64` values. Divide by the instrument's `price_scale` to get the decimal price.
 
-Prices are always between **$0.001 and $0.999 USD**.
+  `price_scale` varies by instrument. Get it from:
+  - Instrument metadata via `list_instruments` or `get_instrument_metadata`
+  - The `price_scale` field in order responses
 
-Example: `525` → `525 / 1000 = $0.525`
+  ```python
+  price_scale = get_instrument_price_scale(symbol)
+  decimal_price = raw_price / price_scale
+  ```
 </Note>
 
 
@@ -174,7 +182,7 @@ Example: `525` → `525 / 1000 = $0.525`
 
 ## Next Steps
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Authentication Guide" icon="key" href="/streaming-endpoints/authentication">
     Deep dive into authentication and token management
   </Card>
@@ -184,9 +192,6 @@ Example: `525` → `525 / 1000 = $0.525`
   <Card title="Order Streaming" icon="file-invoice" href="/streaming-endpoints/order-stream">
     Subscribe to order execution updates
   </Card>
-  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
-    See complete working Python examples
-  </Card>
 </CardGroup>
 
 ## Need Help?
@@ -194,5 +199,5 @@ Example: `525` → `525 / 1000 = $0.525`
 If you encounter issues during setup:
 
 1. Check the [Error Handling Guide](/streaming-endpoints/error-handling)
-2. Review [Code Examples](/streaming-endpoints/code-examples) for complete implementations
+2. Review the [Market Data Stream](/streaming-endpoints/market-data-stream) or [Order Stream](/streaming-endpoints/order-stream) pages for complete implementations
 3. Contact [support@qcex.com](mailto:support@qcex.com) for assistance
