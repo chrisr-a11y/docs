@@ -104,25 +104,20 @@ Each price level in the order book contains:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `px` | `int64` | **Price as integer** (divide by 1000 for decimal) |
+| `px` | `int64` | **Price as integer** (divide by price_scale) |
 | `qty` | `int64` | Aggregate quantity at this price level |
 | `symbol_sub_type` | `str` | Symbol subtype (if applicable) |
 
 <Warning>
-**Price Representation:**
-All prices are `int64` values scaled by **1000**.
+    **Price Representation:**
+    All prices are `int64` values. Divide by the instrument's `price_scale` to get the decimal value.
 
-**Example:**
-- Raw value: `500`
-- Decimal price: `500 / 1000 = 0.5 USD`
-- Display as: `$0.50`
+    `price_scale` varies by instrument. Query instrument metadata to get the correct value.
 
-```python
-px = bid.px / 1000  # Convert from price representation
-print(f"${px:.4f}")  # Display as $0.50
-```
-
-Prices are always between **\$0.001 and \$0.999 USD**.
+    ```python
+    px = bid.px / price_scale # Convert from price representation
+    print(f"${px:.4f}")
+    ```
 </Warning>
 
 ### InstrumentStats Structure
@@ -131,11 +126,11 @@ Market statistics include:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `last_trade_px` | `int64` | Last trade price (÷ 1000) |
-| `open_px` | `int64` | Opening price (÷ 1000) |
-| `high_px` | `int64` | High price of session (÷ 1000) |
-| `low_px` | `int64` | Low price of session (÷ 1000) |
-| `close_px` | `int64` | Closing price (÷ 1000) |
+| `last_trade_px` | `int64` | Last trade price (÷ price_scale) |
+| `open_px` | `int64` | Opening price (÷ price_scale) |
+| `high_px` | `int64` | High price of session (÷ price_scale) |
+| `low_px` | `int64` | Low price of session (÷ price_scale) |
+| `close_px` | `int64` | Closing price (÷ price_scale) |
 | `shares_traded` | `int64` | Total volume traded |
 | `open_interest` | `int64` | Current open interest |
 | `notional_traded` | `int64` | Total notional value traded |
@@ -145,7 +140,7 @@ Stats fields use protobuf `oneof`, so they may not always be present. Always che
 
 ```python
 if update.HasField('stats') and update.stats.HasField('last_trade_px'):
-    last_px = update.stats.last_trade_px / 1000
+    last_px = update.stats.last_trade_px / price_scale
 ```
 </Note>
 
@@ -189,6 +184,12 @@ class PolymarketStreamer:
         self.access_token: Optional[str] = None
         self.refresh_token: Optional[str] = None
         self.access_expiration: Optional[datetime] = None
+        self.price_scales: dict = {}  # symbol -> price_scale cache
+
+    def get_price_scale(self, symbol: str) -> int:
+        """Get price_scale for symbol from cache. Populate via list_instruments API."""
+        # WARNING: Replace this with actual API lookup. Do not rely on default.
+        return self.price_scales.get(symbol, 1000)
 
     def login(self, username: str, password: str) -> dict:
         """Authenticate with the Polymarket API and store tokens."""
@@ -274,18 +275,21 @@ class PolymarketStreamer:
             state_name = market_data_pb2.InstrumentState.Name(update.state)
             print(f"  State: {state_name}")
 
+            # Get price_scale from instrument metadata (via list_instruments API)
+            price_scale = self.get_price_scale(update.symbol)
+
             # Display order book
             if update.bids:
                 print("  Bids:")
                 for i, bid in enumerate(update.bids[:5]):  # Show top 5 bids
-                    px = bid.px / 1000  # Convert from price representation
+                    px = bid.px / price_scale  # Convert from price representation
                     qty = bid.qty
                     print(f"    [{i+1}] ${px:.4f} x {qty}")
 
             if update.offers:
                 print("  Offers:")
                 for i, offer in enumerate(update.offers[:5]):  # Show top 5 offers
-                    px = offer.px / 1000  # Convert from price representation
+                    px = offer.px / price_scale # Convert from price representation
                     qty = offer.qty
                     print(f"    [{i+1}] ${px:.4f} x {qty}")
 
@@ -294,16 +298,16 @@ class PolymarketStreamer:
                 stats = update.stats
                 print("  Stats:")
                 if stats.HasField('last_trade_px'):
-                    last_px = stats.last_trade_px / 1000
+                    last_px = stats.last_trade_px / price_scale
                     print(f"    Last Trade: ${last_px:.4f}")
                 if stats.HasField('open_px'):
-                    open_px = stats.open_px / 1000
+                    open_px = stats.open_px / price_scale
                     print(f"    Open: ${open_px:.4f}")
                 if stats.HasField('high_px'):
-                    high_px = stats.high_px / 1000
+                    high_px = stats.high_px / price_scale
                     print(f"    High: ${high_px:.4f}")
                 if stats.HasField('low_px'):
-                    low_px = stats.low_px / 1000
+                    low_px = stats.low_px / price_scale
                     print(f"    Low: ${low_px:.4f}")
                 if stats.HasField('shares_traded'):
                     print(f"    Shares Traded: {stats.shares_traded}")
@@ -329,7 +333,7 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Order Streaming" icon="file-invoice" href="/streaming-endpoints/order-stream">
     Subscribe to order execution updates
   </Card>
@@ -338,8 +342,5 @@ if __name__ == "__main__":
   </Card>
   <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
     Handle errors and reconnections
-  </Card>
-  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
-    Complete Python examples
   </Card>
 </CardGroup>
