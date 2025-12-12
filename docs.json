@@ -125,9 +125,6 @@
     ],
     "global": {}
   },
-  "banner": {
-    "content": "This documentation for the Polymarket Exchange is available in DRAFT form for comment. All aspects subject to change."
-  },
   "favicon": {
     "dark": "/logo/favicon.png",
     "light": "/logo/favicon.png"
