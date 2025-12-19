@@ -1,0 +1,332 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/kyc.proto
+  version: version not set
+tags:
+  - name: KYCAPI
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/kyc/prefill:
+    post:
+      operationId: KYCAPI_StartKYCPrefill
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1StartKYCPrefillResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1StartKYCPrefillRequest'
+      tags:
+        - KYCAPI
+  /v1/kyc/prefill/otp:
+    post:
+      operationId: KYCAPI_SubmitKYCPrefillOTP
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1SubmitKYCPrefillOTPResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1SubmitKYCPrefillOTPRequest'
+      tags:
+        - KYCAPI
+  /v1/kyc/referral-codes:
+    get:
+      operationId: KYCAPI_GetReferralCodes
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetReferralCodesResponse'
+      parameters:
+        - name: userId
+          in: query
+          required: false
+          type: string
+        - name: category
+          in: query
+          required: false
+          type: string
+        - name: code
+          in: query
+          required: false
+          type: string
+        - name: cursor
+          in: query
+          required: false
+          type: string
+        - name: limit
+          in: query
+          required: false
+          type: integer
+          format: int32
+      tags:
+        - KYCAPI
+    post:
+      operationId: KYCAPI_CreateISVReferralCode
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateISVReferralCodeResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateISVReferralCodeRequest'
+      tags:
+        - KYCAPI
+  /v1/kyc/referral-codes/{referralCode}:
+    get:
+      operationId: KYCAPI_CheckReferralCode
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CheckReferralCodeResponse'
+      parameters:
+        - name: referralCode
+          in: path
+          required: true
+          type: string
+      tags:
+        - KYCAPI
+  /v1/kyc/start:
+    post:
+      summary: Start KYC verification
+      description: Smart inquiry creation or resumption
+      operationId: KYCAPI_StartKYCVerification
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1StartKYCVerificationResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1StartKYCVerificationRequest'
+      tags:
+        - KYC
+  /v1/kyc/status:
+    get:
+      summary: Get KYC status
+      description: Get the current status of the KYC verification process
+      operationId: KYCAPI_GetKYCStatus
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetKYCStatusResponse'
+      parameters:
+        - name: externalId
+          in: query
+          required: false
+          type: string
+      tags:
+        - KYC
+definitions:
+  v1CheckReferralCodeResponse:
+    type: object
+    properties:
+      isValid:
+        type: boolean
+      userId:
+        type: string
+        x-nullable: true
+      amount:
+        $ref: '#/definitions/v1ReferralAmount'
+  v1CreateISVReferralCodeRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      referralCode:
+        type: string
+      category:
+        type: string
+        x-nullable: true
+  v1CreateISVReferralCodeResponse:
+    type: object
+  v1GetKYCStatusResponse:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/v1KYCStatus'
+  v1GetReferralCodesResponse:
+    type: object
+    properties:
+      referralCodes:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1ReferralCode'
+      nextCursor:
+        type: string
+      eof:
+        type: boolean
+  v1KYCAddress:
+    type: object
+    properties:
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      postalCode:
+        type: string
+      country:
+        type: string
+  v1KYCDocv:
+    type: object
+    properties:
+      docvTransactionToken:
+        type: string
+      eventId:
+        type: string
+      qrCode:
+        type: string
+      url:
+        type: string
+  v1KYCStatus:
+    type: object
+    properties:
+      decision:
+        type: string
+      status:
+        type: string
+      subStatus:
+        type: string
+      externalId:
+        type: string
+  v1ReferralAmount:
+    type: object
+    properties:
+      value:
+        type: string
+      currency:
+        type: string
+  v1ReferralCode:
+    type: object
+    properties:
+      referralCode:
+        type: string
+      userId:
+        type: string
+      isvId:
+        type: string
+      usedCount:
+        type: string
+        format: int64
+      category:
+        type: string
+        x-nullable: true
+  v1StartKYCPrefillRequest:
+    type: object
+    properties:
+      dateOfBirth:
+        type: string
+      phoneNumber:
+        type: string
+      sessionToken:
+        type: string
+      userId:
+        type: string
+      ipAddress:
+        type: string
+  v1StartKYCPrefillResponse:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/v1KYCStatus'
+      externalId:
+        type: string
+  v1StartKYCVerificationRequest:
+    type: object
+    properties:
+      ssn:
+        type: string
+      address:
+        $ref: '#/definitions/v1KYCAddress'
+      dateOfBirth:
+        type: string
+      phoneNumber:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      middleName:
+        type: string
+      lastName:
+        type: string
+      sessionToken:
+        type: string
+      userId:
+        type: string
+      agreementTime:
+        type: string
+        format: date-time
+      referralCode:
+        type: string
+        x-nullable: true
+      ipAddress:
+        type: string
+  v1StartKYCVerificationResponse:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/v1KYCStatus'
+      docv:
+        $ref: '#/definitions/v1KYCDocv'
+  v1SubmitKYCPrefillOTPRequest:
+    type: object
+    properties:
+      otp:
+        type: string
+      externalId:
+        type: string
+  v1SubmitKYCPrefillOTPResponse:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/v1KYCStatus'
+      address:
+        $ref: '#/definitions/v1KYCAddress'
+      ssn:
+        type: string
+        x-nullable: true
+      dateOfBirth:
+        type: string
+        x-nullable: true
+      phoneNumber:
+        type: string
+        x-nullable: true
+      email:
+        type: string
+        x-nullable: true
+      firstName:
+        type: string
+        x-nullable: true
+      middleName:
+        type: string
+        x-nullable: true
+      lastName:
+        type: string
+        x-nullable: true

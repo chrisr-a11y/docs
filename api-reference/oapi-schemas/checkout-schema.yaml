@@ -1,0 +1,269 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/checkout.proto
+  version: version not set
+tags:
+  - name: CheckoutAPI
+basePath: /rest/api/
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/checkout/deposits:
+    post:
+      operationId: CheckoutAPI_CreateCheckoutDeposit
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateCheckoutDepositResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateCheckoutDepositRequest'
+      tags:
+        - CheckoutAPI
+  /v1/checkout/instruments:
+    post:
+      operationId: CheckoutAPI_CreateTokenInstrument
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateTokenInstrumentResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateTokenInstrumentRequest'
+      tags:
+        - CheckoutAPI
+  /v1/checkout/payment-sessions:
+    post:
+      operationId: CheckoutAPI_RequestPaymentSession
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1RequestPaymentSessionResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1RequestPaymentSessionRequest'
+      tags:
+        - CheckoutAPI
+  /v1/checkout/withdrawals:
+    post:
+      operationId: CheckoutAPI_CreateCheckoutWithdrawal
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateCheckoutWithdrawalResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateCheckoutWithdrawalRequest'
+      tags:
+        - CheckoutAPI
+definitions:
+  v1ApplePayHeaders:
+    type: object
+    properties:
+      ephemeralPublicKey:
+        type: string
+      wrappedKey:
+        type: string
+      publicKeyHash:
+        type: string
+      transactionId:
+        type: string
+  v1ApplePayPaymentDetails:
+    type: object
+    properties:
+      version:
+        type: string
+      data:
+        type: string
+      signature:
+        type: string
+      headers:
+        $ref: '#/definitions/v1ApplePayHeaders'
+      displayName:
+        type: string
+  v1CheckoutAccountHolder:
+    type: object
+    properties:
+      type:
+        $ref: '#/definitions/v1CheckoutAccountHolderType'
+      firstName:
+        type: string
+      lastName:
+        type: string
+      companyName:
+        type: string
+      billingAddress:
+        $ref: '#/definitions/v1CheckoutAddress'
+      email:
+        type: string
+      dob:
+        type: string
+      phoneNumber:
+        type: string
+  v1CheckoutAccountHolderType:
+    type: string
+    enum:
+      - CHECKOUT_ACCOUNT_HOLDER_TYPE_INDIVIDUAL
+      - CHECKOUT_ACCOUNT_HOLDER_TYPE_CORPORATE
+      - CHECKOUT_ACCOUNT_HOLDER_TYPE_GOVERNMENT
+  v1CheckoutAddress:
+    type: object
+    properties:
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      zip:
+        type: string
+      country:
+        type: string
+  v1CheckoutError:
+    type: object
+    properties:
+      statusCode:
+        type: integer
+        format: int32
+      status:
+        type: string
+      requestId:
+        type: string
+      errorType:
+        type: string
+      errorCodes:
+        type: array
+        items:
+          type: string
+  v1CheckoutLink:
+    type: object
+    properties:
+      href:
+        type: string
+      title:
+        type: string
+  v1CreateCheckoutDepositRequest:
+    type: object
+    properties:
+      fundingAccountId:
+        type: string
+      amount:
+        type: string
+        format: int64
+      currency:
+        type: string
+      description:
+        type: string
+      accountHolder:
+        $ref: '#/definitions/v1CheckoutAccountHolder'
+      instrumentPaymentSource:
+        $ref: '#/definitions/v1InstrumentPaymentDetails'
+      applePayPaymentSource:
+        $ref: '#/definitions/v1ApplePayPaymentDetails'
+  v1CreateCheckoutDepositResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      checkoutTransactionId:
+        type: string
+      error:
+        $ref: '#/definitions/v1CheckoutError'
+  v1CreateCheckoutWithdrawalRequest:
+    type: object
+    properties:
+      fundingAccountId:
+        type: string
+      amount:
+        type: string
+        format: int64
+      currency:
+        type: string
+      description:
+        type: string
+      accountHolder:
+        $ref: '#/definitions/v1CheckoutAccountHolder'
+      instrumentPaymentDestination:
+        $ref: '#/definitions/v1InstrumentPaymentDetails'
+      applePayPaymentDestination:
+        $ref: '#/definitions/v1ApplePayPaymentDetails'
+  v1CreateCheckoutWithdrawalResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      checkoutTransactionId:
+        type: string
+      error:
+        $ref: '#/definitions/v1CheckoutError'
+  v1CreateTokenInstrumentRequest:
+    type: object
+    properties:
+      fundingAccountId:
+        type: string
+      token:
+        type: string
+      accountHolder:
+        $ref: '#/definitions/v1CheckoutAccountHolder'
+  v1CreateTokenInstrumentResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      error:
+        $ref: '#/definitions/v1CheckoutError'
+  v1InstrumentPaymentDetails:
+    type: object
+    properties:
+      instrumentId:
+        type: string
+  v1RequestPaymentSessionRequest:
+    type: object
+    properties:
+      fundingAccountId:
+        type: string
+      currency:
+        type: string
+      countryCode:
+        type: string
+      email:
+        type: string
+      phoneNumber:
+        type: string
+  v1RequestPaymentSessionResponse:
+    type: object
+    properties:
+      id:
+        type: string
+      paymentSessionToken:
+        type: string
+      paymentSessionSecret:
+        type: string
+      links:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/v1CheckoutLink'
+      error:
+        $ref: '#/definitions/v1CheckoutError'

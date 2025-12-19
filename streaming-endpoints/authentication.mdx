@@ -1,38 +1,49 @@
 ---
-title: "gRPC Authentication"
+title: "Authentication"
 sidebarTitle: "Authentication"
-description: "How to authenticate gRPC streaming connections with Python"
+description: "How to authenticate with the Polymarket Exchange API"
 ---
 
-# Authentication for gRPC Streaming
+# Authentication
 
-gRPC streaming connections use **JWT (JSON Web Token)** authentication obtained from the REST API. This guide explains the complete authentication flow using Python.
+The Polymarket Exchange API uses **JWT (JSON Web Token)** authentication. Tokens are obtained through Auth0 and then exchanged for EP3 session tokens.
 
 ## Authentication Architecture
 
 ```mermaid
 sequenceDiagram
     participant Client
+    participant Auth0
     participant REST API
     participant gRPC Server
 
-    Client->>REST API: POST /auth/v1beta1/login
-    REST API->>Client: JWT Token + Expiration
+    Client->>Auth0: Authenticate (OAuth2)
+    Auth0->>Client: Auth0 JWT Token
+    Client->>REST API: POST /auth/v1beta1/login (with Auth0 token)
+    REST API->>Client: EP3 Access Token + Expiration
     Client->>gRPC Server: Connect with token in metadata
     gRPC Server->>Client: Stream data
     Note over Client,gRPC Server: Token expires after configured duration
-    Client->>REST API: Re-login for new token
-    REST API->>Client: New JWT Token
+    Client->>REST API: Refresh token
+    REST API->>Client: New Access Token
 ```
 
-## Step 1: Obtain JWT Token from REST API
+## Step 1: Obtain Auth0 Token
 
-Before establishing any gRPC streaming connection, you must first authenticate via the REST API.
+First, authenticate with Auth0 to obtain an initial JWT token. Contact support for your Auth0 credentials and configuration.
+
+## Step 2: Exchange for EP3 Token
+
+Exchange your Auth0 token for an EP3 session token via the REST API.
 
 ### Login Request
 
 ```curl
-curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" \
+  -H "Host: rest.preprod.polymarketexchange.com" \
+  -H "accept: application/json" \
+  -H "content-type: application/json" \
+  -H "Authorization: Bearer YOUR_AUTH0_TOKEN"
 ```
 
 ### Login Response
@@ -48,13 +59,13 @@ curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/aut
 
 <Info>
 **Token Fields:**
-- `access_token`: Use this for gRPC authentication
+- `access_token`: Use this for API authentication
 - `refresh_token`: Use this to obtain a new access token before expiration
 - `access_expiration_time`: When the access token expires
 - `refresh_expiration_time`: When the refresh token expires
 </Info>
 
-## Step 2: Attach Token to gRPC Metadata
+## Step 3: Attach Token to gRPC Metadata
 
 Once you have the access token, include it in the **gRPC metadata** for every streaming connection.
 

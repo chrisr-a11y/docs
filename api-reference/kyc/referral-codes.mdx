@@ -1,0 +1,182 @@
+---
+title: 'Referral Codes'
+description: 'Create and manage ISV referral codes'
+---
+
+# Referral Codes
+
+Independent Software Vendors (ISVs) can create and manage referral codes for tracking user acquisitions and providing referral bonuses.
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/kyc/referral-codes` | Create a new referral code |
+| `GET` | `/v1/kyc/referral-codes` | List referral codes |
+| `GET` | `/v1/kyc/referral-codes/{code}` | Validate a specific code |
+
+## Create Referral Code
+
+Create a new referral code for tracking.
+
+### Request
+
+```bash
+POST /v1/kyc/referral-codes
+```
+
+```json
+{
+  "userId": "isv_user_123",
+  "referralCode": "PARTNER2024",
+  "category": "isv_premium"
+}
+```
+
+### Request Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `userId` | string | Yes | ISV user ID creating the code |
+| `referralCode` | string | Yes | The referral code string |
+| `category` | string | No | Category for grouping codes |
+
+### Response
+
+```json
+{}
+```
+
+An empty response indicates successful creation.
+
+## List Referral Codes
+
+Retrieve referral codes with optional filtering.
+
+### Request
+
+```bash
+GET /v1/kyc/referral-codes?userId=isv_user_123&limit=20
+```
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `userId` | string | No | Filter by ISV user ID |
+| `category` | string | No | Filter by category |
+| `code` | string | No | Filter by specific code |
+| `cursor` | string | No | Pagination cursor |
+| `limit` | integer | No | Results per page (default: 20) |
+
+### Response
+
+```json
+{
+  "referralCodes": [
+    {
+      "referralCode": "PARTNER2024",
+      "userId": "isv_user_123",
+      "isvId": "isv_001",
+      "usedCount": "42",
+      "category": "isv_premium"
+    },
+    {
+      "referralCode": "SUMMER2024",
+      "userId": "isv_user_123",
+      "isvId": "isv_001",
+      "usedCount": "15",
+      "category": "seasonal"
+    }
+  ],
+  "nextCursor": "eyJsYXN0X2lkIjogMTAwfQ==",
+  "eof": false
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `referralCodes` | array | List of referral code objects |
+| `nextCursor` | string | Cursor for next page (if more results) |
+| `eof` | boolean | True if this is the last page |
+
+### Referral Code Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `referralCode` | string | The referral code |
+| `userId` | string | ISV user who created the code |
+| `isvId` | string | ISV organization ID |
+| `usedCount` | string | Number of times code has been used |
+| `category` | string | Code category (if set) |
+
+## Validate Referral Code
+
+Check if a referral code is valid and get associated information.
+
+### Request
+
+```bash
+GET /v1/kyc/referral-codes/PARTNER2024
+```
+
+### Response
+
+```json
+{
+  "isValid": true,
+  "userId": "isv_user_123",
+  "amount": {
+    "value": "50.00",
+    "currency": "USD"
+  }
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `isValid` | boolean | Whether the code is valid |
+| `userId` | string | ISV user who owns the code (if valid) |
+| `amount` | object | Referral bonus amount (if applicable) |
+
+### Invalid Code Response
+
+```json
+{
+  "isValid": false,
+  "userId": null,
+  "amount": null
+}
+```
+
+## Using Referral Codes in KYC
+
+Pass the referral code when starting KYC verification:
+
+```bash
+POST /v1/kyc/start
+```
+
+```json
+{
+  "userId": "new_user_456",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "referralCode": "PARTNER2024",
+  ...
+}
+```
+
+When the user's KYC is approved, the referral will be tracked and any associated bonuses will be processed.
+
+## Best Practices
+
+1. **Use descriptive codes** - Make codes easy to remember and associate with campaigns
+2. **Track usage** - Monitor `usedCount` to measure campaign effectiveness
+3. **Use categories** - Group codes by campaign, partner tier, or time period
+4. **Validate before display** - Check code validity before showing to users
+5. **Handle pagination** - Use `cursor` for large code lists

@@ -1,0 +1,305 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/aeropay.proto
+  version: version not set
+tags:
+  - name: AeropayAPI
+basePath: /rest/api/
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/aeropay/aggregator/credentials:
+    post:
+      operationId: AeropayAPI_GetAggregatorCredentials
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetAggregatorCredentialsResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1GetAggregatorCredentialsRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/aggregator/link:
+    post:
+      operationId: AeropayAPI_LinkAccountFromAggregator
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1LinkAccountFromAggregatorResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1LinkAccountFromAggregatorRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/deposits:
+    post:
+      operationId: AeropayAPI_CreateAeropayDeposit
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayDepositResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayDepositRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/funding-sources/enable:
+    post:
+      operationId: AeropayAPI_EnableAeropayFundingSource
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1EnableAeropayFundingSourceResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1EnableAeropayFundingSourceRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/users:
+    post:
+      operationId: AeropayAPI_CreateAeropayUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayUserResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayUserRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/users/confirm:
+    post:
+      operationId: AeropayAPI_ConfirmAeropayUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ConfirmAeropayUserResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ConfirmAeropayUserRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/withdrawals:
+    post:
+      operationId: AeropayAPI_CreateAeropayWithdrawal
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayWithdrawalResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayWithdrawalRequest'
+      tags:
+        - AeropayAPI
+definitions:
+  v1AeropayBankAccount:
+    type: object
+    properties:
+      bankAccountId:
+        type: string
+      userId:
+        type: string
+      bankName:
+        type: string
+      accountLast4:
+        type: string
+      name:
+        type: string
+      externalBankAccountId:
+        type: string
+      isSelected:
+        type: string
+      accountType:
+        type: string
+      status:
+        type: string
+      createdDate:
+        type: string
+  v1AeropayUser:
+    type: object
+    properties:
+      userId:
+        type: string
+      aeroPassUserUuid:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      type:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      bankAccounts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1AeropayBankAccount'
+      createdDate:
+        type: string
+  v1ConfirmAeropayUserRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      code:
+        type: string
+      fundingAccountId:
+        type: string
+  v1ConfirmAeropayUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1AeropayUser'
+      fundingSourceIds:
+        type: array
+        items:
+          type: string
+  v1CreateAeropayDepositRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      bankAccountId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      fundingAccountId:
+        type: string
+      fundingSourceId:
+        type: string
+  v1CreateAeropayDepositResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      aeropayUuid:
+        type: string
+  v1CreateAeropayUserRequest:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+      email:
+        type: string
+      fundingAccountId:
+        type: string
+  v1CreateAeropayUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1AeropayUser'
+      requiresConfirmation:
+        type: boolean
+      displayMessage:
+        type: string
+  v1CreateAeropayWithdrawalRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      bankAccountId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      fundingAccountId:
+        type: string
+      fundingSourceId:
+        type: string
+  v1CreateAeropayWithdrawalResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      aeropayUuid:
+        type: string
+  v1EnableAeropayFundingSourceRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      fundingSourceId:
+        type: string
+      fundingAccountId:
+        type: string
+  v1EnableAeropayFundingSourceResponse:
+    type: object
+  v1GetAggregatorCredentialsRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      fundingAccountId:
+        type: string
+  v1GetAggregatorCredentialsResponse:
+    type: object
+    properties:
+      fastLinkUrl:
+        type: string
+      username:
+        type: string
+      token:
+        type: string
+  v1LinkAccountFromAggregatorRequest:
+    type: object
+    properties:
+      aeropayUserId:
+        type: string
+      aggregatorUserId:
+        type: string
+      aggregatorUserPassword:
+        type: string
+      fundingAccountId:
+        type: string
+  v1LinkAccountFromAggregatorResponse:
+    type: object
+    properties:
+      userBankInfo:
+        $ref: '#/definitions/v1AeropayBankAccount'

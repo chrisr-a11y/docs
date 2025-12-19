@@ -1,0 +1,104 @@
+---
+title: 'Order Book API'
+description: 'Access L2 order book snapshots and best bid/offer (BBO) data'
+---
+
+# Order Book API
+
+The Order Book API provides real-time access to aggregated order book data for any trading instrument. This API is designed for applications that need quick snapshots of market depth without maintaining a streaming connection.
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/orderbook/{symbol}` | Get L2 order book snapshot |
+| `GET` | `/v1/orderbook/{symbol}/bbo` | Get best bid/offer |
+
+## L2 Order Book
+
+The L2 (Level 2) order book provides aggregated price levels showing the total quantity available at each price point. This is useful for:
+
+- Understanding market depth at different price levels
+- Analyzing liquidity distribution
+- Building trading strategies based on order book imbalance
+
+### Request Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `symbol` | string | Yes | Instrument symbol (e.g., "BTC-USD") |
+| `depth` | integer | No | Number of price levels to return (default: 3, max: 10) |
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `symbol` | string | Instrument symbol |
+| `bids` | array | Bid side of order book (sorted by price descending) |
+| `offers` | array | Offer/ask side of order book (sorted by price ascending) |
+| `state` | string | Current trading state of the instrument |
+| `stats` | object | Market statistics (last trade, OHLC, etc.) |
+| `transactTime` | datetime | Server timestamp of the data |
+
+### Book Entry Structure
+
+Each entry in the `bids` and `offers` arrays contains:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `px` | string | Price level |
+| `qty` | string | Total quantity at this price |
+| `symbolSubType` | string | Symbol sub-type identifier |
+
+## Best Bid/Offer (BBO)
+
+The BBO endpoint returns only the top of book - the best (highest) bid and best (lowest) offer. This is the most efficient way to get current market prices.
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `symbol` | string | Instrument symbol |
+| `bestBid` | object | Best bid (highest buy price) |
+| `bestOffer` | object | Best offer (lowest sell price) |
+| `spread` | string | Spread in price units (best_offer.px - best_bid.px) |
+| `midPrice` | string | Mid price ((best_bid.px + best_offer.px) / 2) |
+| `state` | string | Current trading state |
+| `transactTime` | datetime | Server timestamp |
+
+## Instrument States
+
+The `state` field indicates the current trading status:
+
+| State | Description |
+|-------|-------------|
+| `INSTRUMENT_STATE_OPEN` | Instrument is open for trading |
+| `INSTRUMENT_STATE_PREOPEN` | Instrument is in pre-open phase |
+| `INSTRUMENT_STATE_SUSPENDED` | Trading is temporarily suspended |
+| `INSTRUMENT_STATE_EXPIRED` | Instrument has expired |
+| `INSTRUMENT_STATE_TERMINATED` | Instrument has been terminated |
+| `INSTRUMENT_STATE_HALTED` | Trading is halted |
+| `INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION` | In closing auction phase |
+
+## Example Usage
+
+### Get L2 Order Book
+
+```bash
+curl -X GET "https://api.polymarketexchange.com/rest/api/v1/orderbook/BTC-USD?depth=5" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Get BBO
+
+```bash
+curl -X GET "https://api.polymarketexchange.com/rest/api/v1/orderbook/BTC-USD/bbo" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+## When to Use
+
+- **Order Book Snapshot**: Use when you need to see multiple price levels and understand market depth
+- **BBO**: Use when you only need the current best prices (more efficient, smaller payload)
+
+For real-time streaming order book updates, see the [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) documentation.
