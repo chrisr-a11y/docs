@@ -234,32 +234,115 @@ POST /v1/checkout/withdrawals
 
 ## Apple Pay Integration
 
-For Apple Pay transactions, use the Apple Pay payment details instead of instrument:
+For Apple Pay transactions, use the Apple Pay payment details instead of a saved instrument. Apple Pay provides encrypted payment data directly from the user's device.
+
+### Apple Pay Headers
+
+| Field | Description |
+|-------|-------------|
+| `version` | Always `"EC_v1"` for current Apple Pay |
+| `data` | Base64-encoded encrypted payment data |
+| `signature` | Base64-encoded signature |
+| `ephemeralPublicKey` | Public key for decryption |
+| `publicKeyHash` | Hash of the merchant's public key |
+| `transactionId` | Apple-generated transaction ID |
+| `displayName` | Card display name (e.g., "Visa 1234") |
 
 ### Deposit with Apple Pay
+
+```bash
+POST /v1/checkout/deposits
+```
 
 ```json
 {
   "fundingAccountId": "fa_123",
-  "amount": "10000",
+  "amount": 10000,
   "currency": "USD",
   "description": "Account funding via Apple Pay",
   "accountHolder": {
     "type": "CHECKOUT_ACCOUNT_HOLDER_TYPE_INDIVIDUAL",
     "firstName": "John",
-    "lastName": "Doe"
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "billingAddress": {
+      "addressLine1": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001",
+      "country": "US"
+    }
   },
   "applePayPaymentSource": {
     "version": "EC_v1",
-    "data": "encrypted_payment_data",
-    "signature": "signature_data",
+    "data": "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ...",
+    "signature": "MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglgh...",
     "headers": {
-      "ephemeralPublicKey": "key_data",
-      "publicKeyHash": "hash_data",
-      "transactionId": "apple_txn_id"
+      "ephemeralPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE...",
+      "publicKeyHash": "abc123def456...",
+      "transactionId": "apple_txn_abc123"
     },
     "displayName": "Visa 1234"
   }
+}
+```
+
+### Response
+
+```json
+{
+  "fundingTransactionId": "ft_deposit_789",
+  "checkoutTransactionId": "pay_abc123"
+}
+```
+
+### Withdrawal with Apple Pay
+
+Apple Pay can also be used for withdrawals (payouts) to the user's linked card.
+
+```bash
+POST /v1/checkout/withdrawals
+```
+
+```json
+{
+  "fundingAccountId": "fa_123",
+  "amount": 5000,
+  "currency": "USD",
+  "description": "Withdrawal via Apple Pay",
+  "accountHolder": {
+    "type": "CHECKOUT_ACCOUNT_HOLDER_TYPE_INDIVIDUAL",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "billingAddress": {
+      "addressLine1": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001",
+      "country": "US"
+    }
+  },
+  "applePayPaymentDestination": {
+    "version": "EC_v1",
+    "data": "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ...",
+    "signature": "MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglgh...",
+    "headers": {
+      "ephemeralPublicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE...",
+      "publicKeyHash": "abc123def456...",
+      "transactionId": "apple_txn_def456"
+    },
+    "displayName": "Visa 1234"
+  }
+}
+```
+
+### Response
+
+```json
+{
+  "fundingTransactionId": "ft_withdraw_321",
+  "checkoutTransactionId": "pay_def456"
 }
 ```
 

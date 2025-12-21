@@ -19,30 +19,41 @@ The Payments API provides multiple funding options for deposits and withdrawals.
 
 ### Aeropay API
 
-Bank account linking and ACH transfers:
-- Link bank accounts securely
-- Create ACH deposits
-- Create ACH withdrawals
+Bank account linking and ACH transfers.
+
+**Orchestrated Endpoints (Recommended):**
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/aeropay/initialize` | Start bank linking - handles user creation and MFA automatically |
+| `POST` | `/v1/aeropay/validate-mfa` | Submit MFA code if required |
+| `GET` | `/v1/aeropay/methods` | List payment methods with limits and FIFO rules |
+| `POST` | `/v1/aeropay/deposits` | Create ACH deposit |
+| `POST` | `/v1/aeropay/withdrawals` | Create ACH withdrawal |
 
 [Aeropay Integration Guide](/api-reference/payments/aeropay-guide)
 
 ### Checkout API
 
 Card payment processing:
-- Tokenize payment cards
-- Process card deposits
-- Process card withdrawals
-- Apple Pay support
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/checkout/payment-sessions` | Request payment session for card tokenization |
+| `POST` | `/v1/checkout/instruments` | Save tokenized card as instrument |
+| `POST` | `/v1/checkout/deposits` | Process card or Apple Pay deposit |
+| `POST` | `/v1/checkout/withdrawals` | Process card or Apple Pay withdrawal |
 
 [Checkout Integration Guide](/api-reference/payments/checkout-guide)
 
 ### Funding API
 
 Manage funding sources and transactions:
-- List funding sources
-- List funding accounts
-- View transaction history
-- Check transaction requirements
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/funding/sources` | List funding sources |
+| `GET` | `/v1/funding/accounts` | List funding accounts |
+| `PATCH` | `/v1/funding/accounts/{id}` | Update funding account |
+| `GET` | `/v1/funding/transactions` | View transaction history |
+| `GET` | `/v1/funding/transaction-requirements` | Check FIFO withdrawal requirements |
 
 [Funding Management](/api-reference/payments/funding-management)
 
@@ -55,28 +66,68 @@ graph TD
     A[User Completes KYC] --> B{Choose Payment Method}
     B -->|Bank Account| C[Aeropay Flow]
     B -->|Card| D[Checkout Flow]
-    C --> E[Link Bank Account]
-    E --> F[Create Deposit]
-    D --> G[Request Payment Session]
-    G --> H[Tokenize Card]
-    H --> I[Create Deposit]
-    F --> J[Funds Available]
-    I --> J
+    C --> E[POST /v1/aeropay/initialize]
+    E --> F{Response Type}
+    F -->|mfa_required| G[POST /v1/aeropay/validate-mfa]
+    F -->|sdk_credentials| H[Link Bank via SDK]
+    F -->|accounts_linked| I[Ready for Deposits]
+    G --> H
+    H --> I
+    D --> J[POST /v1/checkout/payment-sessions]
+    J --> K[Tokenize Card]
+    K --> L[POST /v1/checkout/instruments]
+    L --> M[Ready for Deposits]
+    I --> N[Create Deposit]
+    M --> N
+    N --> O[Funds Available]
 ```
 
 ### Deposit Flow
 
 1. **Select funding source** - User chooses linked bank/card
-2. **Enter amount** - Validate against limits
-3. **Confirm** - Process the deposit
-4. **Track status** - Monitor transaction completion
+2. **Check limits** - Validate amount against transaction limits
+3. **Enter amount** - Collect deposit amount
+4. **Confirm** - Process the deposit
+5. **Track status** - Monitor transaction completion
 
 ### Withdrawal Flow
 
-1. **Select destination** - User chooses where to send funds
-2. **Enter amount** - Validate against available balance
-3. **Confirm** - Process the withdrawal
-4. **Track status** - Monitor transaction completion
+1. **Check FIFO requirements** - Get withdrawal requirements from funding source
+2. **Select destination** - User chooses where to send funds (must follow FIFO)
+3. **Enter amount** - Validate against available balance and requirements
+4. **Confirm** - Process the withdrawal
+5. **Track status** - Monitor transaction completion
+
+## FIFO Withdrawal Requirements
+
+Withdrawals must follow **FIFO (First-In-First-Out) rules**. Funds must be returned to their original deposit source before they can be withdrawn elsewhere.
+
+### Example
+
+1. User deposits $1,000 from Bank A
+2. User deposits $500 from Bank B
+3. User wants to withdraw $1,200
+
+**Required withdrawal split:**
+- $500 to Bank B (most recent deposit)
+- $700 to Bank A (remaining amount)
+
+### Checking Requirements
+
+Use the `/v1/funding/transaction-requirements` endpoint or check the `withdrawalRequirements` field in Aeropay's `GetAeropayMethods` response.
+
+```json
+{
+  "withdrawalRequirements": [
+    {
+      "amount": "500.00",
+      "currency": "USD",
+      "fundingSourceId": "fs_bank_b",
+      "description": "Must withdraw to original deposit source"
+    }
+  ]
+}
+```
 
 ## Funding Source Types
 
@@ -113,8 +164,10 @@ The `FundingSourceType` enum identifies the payment method:
 
 ## Best Practices
 
-1. **Store funding source IDs** - Cache linked payment methods for faster checkout
-2. **Check limits before transactions** - Use the transaction requirements API
-3. **Handle all states** - Implement UI for pending, success, and failure
-4. **Implement webhooks** - Don't rely solely on polling for status updates
-5. **Validate amounts client-side** - Reduce failed API calls
+1. **Use orchestrated endpoints** - For Aeropay, use `/v1/aeropay/initialize` instead of primitive endpoints
+2. **Check limits before transactions** - Use the Aeropay methods or funding transaction requirements APIs
+3. **Respect FIFO rules** - Always check withdrawal requirements before processing
+4. **Handle all states** - Implement UI for pending, success, and failure
+5. **Implement webhooks** - Don't rely solely on polling for status updates
+6. **Validate amounts client-side** - Reduce failed API calls
+7. **Store payment method IDs** - Cache linked payment methods for faster checkout

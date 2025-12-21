@@ -201,13 +201,21 @@ GET /v1/funding/transactions?accountId=fa_123&transactionTypes=TRANSACTION_TYPE_
 
 ## Get Transaction Requirements
 
-Check requirements and limits before initiating transactions.
+Check requirements and limits before initiating transactions. This is especially important for **FIFO withdrawal requirements**.
 
 ### Request
 
 ```bash
 GET /v1/funding/transaction-requirements?accountIds=fa_123
 ```
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `pageSize` | integer | Results per page |
+| `pageToken` | string | Pagination token |
+| `accountIds` | array | Filter by account IDs |
 
 ### Response
 
@@ -217,18 +225,109 @@ GET /v1/funding/transaction-requirements?accountIds=fa_123
     {
       "id": "req_123",
       "accountId": "fa_123",
-      "transactionType": "TRANSACTION_TYPE_DEPOSIT",
-      "fundingSourceId": "fs_abc123",
+      "transactionType": "TRANSACTION_TYPE_WITHDRAWAL",
+      "fundingSourceId": "fs_bank_b",
+      "amount": "500.00",
+      "currency": "USD",
+      "description": "Must withdraw to original deposit source (FIFO)",
+      "triggers": ["fifo_requirement"]
+    },
+    {
+      "id": "req_124",
+      "accountId": "fa_123",
+      "transactionType": "TRANSACTION_TYPE_WITHDRAWAL",
+      "fundingSourceId": "fs_bank_a",
       "amount": "1000.00",
       "currency": "USD",
-      "description": "Minimum deposit required",
-      "triggers": ["account_activation"]
+      "description": "Must withdraw to original deposit source (FIFO)",
+      "triggers": ["fifo_requirement"]
     }
   ],
   "nextPageToken": "",
   "eof": true
 }
 ```
+
+---
+
+## FIFO Withdrawal Requirements
+
+Withdrawals must follow **FIFO (First-In-First-Out) rules**. This regulatory requirement ensures that funds are returned to their original deposit source before they can be withdrawn to a different destination.
+
+### Why FIFO?
+
+FIFO rules help prevent money laundering by ensuring funds flow back through the same channels they arrived. This is a standard requirement for regulated financial services.
+
+### How It Works
+
+When a user deposits funds from multiple sources, withdrawals must be returned in reverse order (most recent deposit first):
+
+**Example Scenario:**
+
+| Date | Action | Source | Amount |
+|------|--------|--------|--------|
+| Jan 1 | Deposit | Bank A | $1,000 |
+| Jan 5 | Deposit | Bank B | $500 |
+| Jan 10 | Deposit | Card C | $200 |
+
+**User wants to withdraw $1,200:**
+
+The system calculates requirements:
+1. $200 must go to Card C (most recent)
+2. $500 must go to Bank B
+3. $500 can go to Bank A
+
+### Checking Requirements Before Withdrawal
+
+**Option 1: Use Transaction Requirements API**
+
+```bash
+GET /v1/funding/transaction-requirements?accountIds=fa_123
+```
+
+Look for requirements with `transactionType: "TRANSACTION_TYPE_WITHDRAWAL"`.
+
+**Option 2: Use Aeropay Methods API** (for ACH)
+
+```bash
+GET /v1/aeropay/methods?fundingAccountId=fa_123
+```
+
+Each payment method includes `withdrawalRequirements`:
+
+```json
+{
+  "paymentMethods": [
+    {
+      "id": "pm_bank_b",
+      "bankName": "Chase Bank",
+      "withdrawalRequirements": [
+        {
+          "amount": "500.00",
+          "currency": "USD",
+          "fundingSourceId": "fs_bank_b",
+          "description": "Must withdraw to original deposit source (FIFO)"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Integration Best Practices
+
+1. **Always check requirements before showing withdrawal options**
+2. **Display clear explanations to users** about why they must withdraw to specific sources
+3. **Split withdrawals automatically** when the amount exceeds a single source requirement
+4. **Handle partial withdrawals** when user balance is less than total requirements
+
+### Related APIs
+
+- [Aeropay Integration](/api-reference/payments/aeropay-guide) - ACH deposits and withdrawals with FIFO tracking
+- [Checkout Integration](/api-reference/payments/checkout-guide) - Card deposits and withdrawals
+- [Payments Overview](/api-reference/payments/overview) - General funding flow
+
+---
 
 ## Update Funding Account
 
