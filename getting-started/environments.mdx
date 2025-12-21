@@ -1,0 +1,131 @@
+---
+title: "Environments"
+sidebarTitle: "Environments"
+description: "API endpoints for dev, preprod, and production environments"
+---
+
+# Environments
+
+The Polymarket Exchange API is available in three environments. Use the appropriate endpoints based on your integration stage.
+
+## Environment Summary
+
+| Environment | Purpose | Auth0 Domain |
+|-------------|---------|--------------|
+| **Dev** | Development and testing | `pmx-dev01.us.auth0.com` |
+| **Preprod** | Pre-production validation | `pmx-preprod.us.auth0.com` |
+| **Prod** | Production trading | `pmx-prod.us.auth0.com` |
+
+---
+
+## Dev Environment
+
+Development environment for initial integration and testing.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://api.dev01.polymarketexchange.com` |
+| **gRPC** | `dev01-exchange-gateway-grpc-alb-63872982.us-east-1.elb.amazonaws.com:443` |
+| **Auth0 Domain** | `pmx-dev01.us.auth0.com` |
+| **Auth0 Audience** | `https://api.dev01.polymarketexchange.com` |
+
+<Card title="Dev Health Check" icon="heart-pulse" href="https://api.dev01.polymarketexchange.com/v1/health">
+  Click to check dev environment health
+</Card>
+
+---
+
+## Preprod Environment
+
+Pre-production environment for final validation before going live.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
+| **gRPC** | `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443` |
+| **Auth0 Domain** | `pmx-preprod.us.auth0.com` |
+| **Auth0 Audience** | `https://api.preprod.polymarketexchange.com` |
+
+<Card title="Preprod Health Check" icon="heart-pulse" href="https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/v1/health">
+  Click to check preprod environment health
+</Card>
+
+---
+
+## Production Environment
+
+Live production environment for real trading.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://api.prod.polymarketexchange.com` |
+| **gRPC** | `traderapi.us-east-1.privatelink.prod.polymarketexchange.com:443` |
+| **Auth0 Domain** | `pmx-prod.us.auth0.com` |
+| **Auth0 Audience** | `https://api.prod.polymarketexchange.com` |
+
+<Card title="Production Health Check" icon="heart-pulse" href="https://api.prod.polymarketexchange.com/v1/health">
+  Click to check production environment health
+</Card>
+
+---
+
+## Health Check Endpoint
+
+All environments expose the same health check endpoint:
+
+```
+GET /v1/health
+```
+
+### Example Request
+
+```bash
+curl https://api.dev01.polymarketexchange.com/v1/health
+```
+
+### Example Response
+
+```json
+{
+  "status": "SERVING",
+  "version": "1.0.0"
+}
+```
+
+---
+
+## Quick Reference
+
+### REST API Base URLs
+
+| Environment | Base URL |
+|-------------|----------|
+| Dev | `https://api.dev01.polymarketexchange.com` |
+| Preprod | `https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
+| Prod | `https://api.prod.polymarketexchange.com` |
+
+### Auth0 Token Endpoints
+
+| Environment | Token URL |
+|-------------|-----------|
+| Dev | `https://pmx-dev01.us.auth0.com/oauth/token` |
+| Preprod | `https://pmx-preprod.us.auth0.com/oauth/token` |
+| Prod | `https://pmx-prod.us.auth0.com/oauth/token` |
+
+<Warning>
+**Tokens must be refreshed every 3 minutes** across all environments.
+</Warning>
+
+---
+
+## Environment Progression
+
+We recommend the following integration progression:
+
+1. **Dev** - Initial development and unit testing
+2. **Preprod** - Integration testing and pre-launch validation
+3. **Prod** - Live trading
+
+<Info>
+Contact [support@qcex.com](mailto:support@qcex.com) to request access credentials for each environment.
+</Info>

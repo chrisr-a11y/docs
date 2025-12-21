@@ -27,6 +27,7 @@
             "group": "Getting Started",
             "pages": [
               "getting-started/getting-access",
+              "getting-started/environments",
               "getting-started/auth0-onboarding",
               "getting-started/rate-limits",
               "getting-started/connection-options",
