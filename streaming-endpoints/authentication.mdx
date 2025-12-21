@@ -6,7 +6,7 @@ description: "How to authenticate with the Polymarket Exchange API"
 
 # Authentication
 
-The Polymarket Exchange API uses **JWT (JSON Web Token)** authentication. Tokens are obtained through Auth0 and then exchanged for EP3 session tokens.
+The Polymarket Exchange API uses **JWT (JSON Web Token)** authentication. Tokens are obtained through Auth0.
 
 ## Authentication Architecture
 
@@ -20,7 +20,7 @@ sequenceDiagram
     Client->>Auth0: Authenticate (OAuth2)
     Auth0->>Client: Auth0 JWT Token
     Client->>REST API: POST /auth/v1beta1/login (with Auth0 token)
-    REST API->>Client: EP3 Access Token + Expiration
+    REST API->>Client: Access Token + Expiration
     Client->>gRPC Server: Connect with token in metadata
     gRPC Server->>Client: Stream data
     Note over Client,gRPC Server: Token expires after configured duration
@@ -49,9 +49,9 @@ Contact support for your `client_id`, `client_secret`, and `audience` values.
 
 Authenticate with Auth0 to obtain an initial JWT token.
 
-## Step 2: Exchange for EP3 Token
+## Step 2: Exchange for Access Token
 
-Exchange your Auth0 token for an EP3 session token via the REST API.
+Exchange your Auth0 token for an API access token via the REST API.
 
 ### Login Request
 
