@@ -28,9 +28,26 @@ sequenceDiagram
     REST API->>Client: New Access Token
 ```
 
+## Auth0 Configuration
+
+<Warning>
+**CRITICAL: Tokens must be refreshed every 3 minutes.**
+
+Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
+</Warning>
+
+### Auth0 Tenants
+
+| Environment | Auth0 Domain |
+|-------------|--------------|
+| **Production** | `pmx-prod.us.auth0.com` |
+| **Preprod** | `pmx-preprod.us.auth0.com` |
+
+Contact support for your `client_id`, `client_secret`, and `audience` values.
+
 ## Step 1: Obtain Auth0 Token
 
-First, authenticate with Auth0 to obtain an initial JWT token. Contact support for your Auth0 credentials and configuration.
+Authenticate with Auth0 to obtain an initial JWT token.
 
 ## Step 2: Exchange for EP3 Token
 
@@ -116,8 +133,5 @@ The metadata key **must** be `authorization` (lowercase). The value is the raw J
   </Card>
   <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
     Handle errors and implement reconnection
-  </Card>
-  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
-    See complete working examples
   </Card>
 </CardGroup>

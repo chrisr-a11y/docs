@@ -46,8 +46,8 @@ Server reflection allows you to discover service definitions at runtime without 
 # Install reflection client
 pip install grpcio-reflection
 
-# Use grpcurl to explore services
-grpcurl -plaintext traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
+# Use grpcurl to explore services (TLS connection - no -plaintext flag)
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
 
 # Describe a service
 grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
@@ -75,11 +75,25 @@ This generates:
 
 ## Step 4: Authenticate via Auth0
 
+<Warning>
+**CRITICAL: Tokens must be refreshed every 3 minutes.**
+
+Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
+</Warning>
+
+### Auth0 Tenants
+
+| Environment | Auth0 Domain |
+|-------------|--------------|
+| **Production** | `pmx-prod.us.auth0.com` |
+| **Preprod** | `pmx-preprod.us.auth0.com` |
+
 Obtain a JWT token using the OAuth 2.0 Client Credentials flow:
 
 ```bash
+# For preprod environment
 curl --request POST \
-  --url "https://YOUR_AUTH0_DOMAIN/oauth/token" \
+  --url "https://pmx-preprod.us.auth0.com/oauth/token" \
   --header "content-type: application/json" \
   --data '{
     "client_id": "YOUR_CLIENT_ID",
