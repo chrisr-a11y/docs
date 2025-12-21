@@ -109,13 +109,13 @@ The response contains your `access_token`:
 {
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIs...",
   "token_type": "Bearer",
-  "expires_in": 86400
+  "expires_in": 180
 }
 ```
 
-<Warning>
-Store your access token securely. It will be used to authenticate all API and gRPC streaming connections.
-</Warning>
+<Info>
+The `expires_in` is 180 seconds (3 minutes). Implement automatic token refresh before expiration.
+</Info>
 
 <Info>
 See the [Auth0 Onboarding Guide](/getting-started/auth0-onboarding) for complete authentication details.
@@ -146,10 +146,9 @@ request = market_data_pb2.CreateMarketDataSubscriptionRequest(
     snapshot_only=False
 )
 
-# Set up metadata with authorization
-# access_token obtained from REST API login (see Step 4)
+# Set up metadata with authorization (JWT from Auth0)
 metadata = [
-    ('authorization', access_token)  # from login response
+    ('authorization', f'Bearer {access_token}')
 ]
 
 # Start streaming
@@ -203,7 +202,7 @@ for response in response_stream:
 
 ### Authentication Failed
 - **Cause**: Invalid or expired access token
-- **Solution**: Verify token from REST login, check expiration time
+- **Solution**: Verify JWT from Auth0, refresh token if expired (tokens expire every 3 minutes)
 
 ### Import Errors
 - **Cause**: Generated proto files not in Python path
