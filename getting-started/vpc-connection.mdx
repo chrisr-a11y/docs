@@ -87,11 +87,10 @@ Send REST API requests to the Private DNS name with the Host header override:
 **Example (Preprod):**
 
 ```bash
-curl -X POST "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/api/v1beta1/get_who_am_i" \
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/v1/accounts/whoami" \
   -H "Host: rest.preprod.polymarketexchange.com" \
-  -H "accept: application/json" \
-  -H "Content-Type: application/json" \
-  -d "{}"
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "accept: application/json"
 ```
 
 ### gRPC API

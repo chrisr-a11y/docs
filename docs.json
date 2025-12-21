@@ -33,7 +33,8 @@
               "getting-started/connection-options",
               "getting-started/vpc-connection",
               "getting-started/health-check",
-              "getting-started/common-pitfalls"
+              "getting-started/common-pitfalls",
+              "getting-started/backwards-compatibility"
             ]
           }
         ]

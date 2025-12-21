@@ -50,7 +50,7 @@ pip install grpcio-reflection
 grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
 
 # Describe a service
-grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe polymarket.v1.MarketDataSubscriptionAPI
 ```
 
 ## Step 3: Generate Python Client Code
@@ -62,11 +62,11 @@ python -m grpc_tools.protoc \
   --python_out=. \
   --grpc_python_out=. \
   --proto_path=protos \
-  protos/connamara/ep3/v1beta1/market_data.proto \
-  protos/connamara/ep3/v1beta1/order_entry.proto \
-  protos/connamara/ep3/orders/v1beta1/orders.proto \
-  protos/connamara/ep3/instruments/v1beta1/instruments.proto \
-  protos/connamara/ep3/type/v1beta1/common.proto
+  protos/polymarket/v1/market_data.proto \
+  protos/polymarket/v1/order_entry.proto \
+  protos/polymarket/v1/orders.proto \
+  protos/polymarket/v1/instruments.proto \
+  protos/polymarket/v1/common.proto
 ```
 
 This generates:
@@ -128,8 +128,8 @@ Create your first streaming connection:
 ```python
 import grpc
 from datetime import datetime
-from connamara.ep3.v1beta1 import market_data_pb2
-from connamara.ep3.v1beta1 import market_data_pb2_grpc
+from polymarket.v1 import market_data_pb2
+from polymarket.v1 import market_data_pb2_grpc
 
 # Create secure channel
 credentials = grpc.ssl_channel_credentials()

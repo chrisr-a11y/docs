@@ -10,7 +10,7 @@ Subscribe to real-time order updates, execution reports, fills, and cancellation
 
 ## Service Definition
 
-**Service:** `connamara.ep3.v1beta1.OrderEntryAPI`
+**Service:** `polymarket.v1.OrderEntryAPI`
 **RPC:** `CreateOrderSubscription`
 **Type:** Server-side streaming
 
@@ -34,7 +34,7 @@ service OrderEntryAPI {
 ### Example Request
 
 ```python
-from connamara.ep3.v1beta1 import order_entry_pb2
+from polymarket.v1 import order_entry_pb2
 
 # Subscribe to all orders for your accounts
 request = order_entry_pb2.CreateOrderSubscriptionRequest(
@@ -160,7 +160,7 @@ if response.HasField('update'):
 | `ORDER_STATE_EXPIRED` | 9 | Order expired (e.g., Day order at end of day) |
 
 ```python
-from connamara.ep3.orders.v1beta1 import orders_pb2
+from polymarket.v1 import orders_pb2
 
 # Get state name
 state_name = orders_pb2.OrderState.Name(order.state)
@@ -242,9 +242,9 @@ import grpc
 import requests
 from datetime import datetime, timedelta
 from typing import Optional
-from connamara.ep3.v1beta1 import order_entry_pb2
-from connamara.ep3.v1beta1 import order_entry_pb2_grpc
-from connamara.ep3.orders.v1beta1 import orders_pb2
+from polymarket.v1 import order_entry_pb2
+from polymarket.v1 import order_entry_pb2_grpc
+from polymarket.v1 import orders_pb2
 
 
 class PolymarketOrderStreamer:

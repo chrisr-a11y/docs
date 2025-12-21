@@ -1,0 +1,139 @@
+---
+title: "Backwards Compatibility"
+sidebarTitle: "Backwards Compatibility"
+description: "Legacy Connamara EP3 URL mappings and deprecation timeline"
+---
+
+# Backwards Compatibility
+
+The Polymarket Exchange API provides backwards compatibility with the legacy Connamara EP3 URL paths. This page documents the URL mappings and deprecation timeline.
+
+<Warning>
+**Deprecation Notice: March 31, 2025**
+
+All legacy `/v1beta1/` endpoints will be deprecated on **March 31, 2025**. After this date, only the new `/v1/` endpoints will be supported.
+
+Please migrate to the new URL paths before this date.
+</Warning>
+
+---
+
+## URL Mapping Reference
+
+### Trading & Order Entry
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `POST /v1/trading/orders` | `POST /v1beta1/insert_order` | Submit a new order |
+| `DELETE /v1/trading/orders/{order_id}` | `POST /v1beta1/cancel_order` | Cancel an order |
+| `POST /v1/orders/search` | `POST /v1beta1/search_orders` | Search orders |
+| `POST /v1/orders/trades/search` | `POST /v1beta1/search_trades` | Search trades |
+
+### Accounts
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/accounts/whoami` | `POST /v1beta1/get_who_am_i` | Get current user info |
+| `GET /v1/accounts` | `POST /v1beta1/list_accounts` | List accounts |
+| `GET /v1/accounts/users` | `POST /v1beta1/list_users` | List users |
+
+### Positions
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/positions/balance` | `POST /v1beta1/get_account_balance` | Get account balance |
+| `GET /v1/positions` | `POST /v1beta1/list_account_positions` | List positions |
+
+### Market Data
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/instruments` | `POST /v1beta1/list_instruments` | List instruments |
+| `GET /v1/symbols` | `POST /v1beta1/list_symbols` | List symbols |
+| `GET /v1/instruments/{symbol}` | `POST /v1beta1/get_instrument_metadata` | Get instrument metadata |
+
+### Order Book
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/orderbook/{symbol}` | `POST /v1beta1/get_order_book` | Get order book |
+| `GET /v1/orderbook/{symbol}/bbo` | `POST /v1beta1/get_bbo` | Get best bid/offer |
+
+### Drop Copy
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/dropcopy/executions` | `POST /v1beta1/search_executions` | Search executions |
+
+### Health
+
+| New Path (Recommended) | Legacy Path (Deprecated) | Description |
+|------------------------|--------------------------|-------------|
+| `GET /v1/health` | `POST /v1beta1/health` | Health check |
+
+---
+
+## Migration Guide
+
+### Step 1: Update Base URLs
+
+Replace all legacy endpoint paths with the new `/v1/` paths:
+
+```python
+# Before (deprecated)
+response = requests.post(
+    f"{base_url}/v1beta1/insert_order",
+    json=order_data,
+    headers=headers
+)
+
+# After (recommended)
+response = requests.post(
+    f"{base_url}/v1/trading/orders",
+    json=order_data,
+    headers=headers
+)
+```
+
+### Step 2: Update HTTP Methods
+
+Note that many endpoints now use appropriate REST verbs:
+
+| Operation | Legacy | New |
+|-----------|--------|-----|
+| Get data | `POST` | `GET` |
+| Create | `POST` | `POST` |
+| Delete | `POST` | `DELETE` |
+
+### Step 3: Test in Preprod
+
+Before migrating production traffic, test all endpoints in the preprod environment:
+
+```bash
+# Test new endpoint
+curl "https://api.preprod.polymarketexchange.com/v1/health"
+
+# Verify account access
+curl "https://api.preprod.polymarketexchange.com/v1/accounts/whoami" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+---
+
+## Deprecation Timeline
+
+| Date | Milestone |
+|------|-----------|
+| **Now** | Both legacy and new paths are supported |
+| **January 2025** | Deprecation warnings added to legacy endpoints |
+| **March 31, 2025** | Legacy `/v1beta1/` endpoints removed |
+
+<Info>
+After March 31, 2025, requests to legacy endpoints will return `404 Not Found`.
+</Info>
+
+---
+
+## Questions?
+
+Contact [support@qcex.com](mailto:support@qcex.com) if you need assistance with migration.

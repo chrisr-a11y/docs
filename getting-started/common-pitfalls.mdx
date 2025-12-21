@@ -44,7 +44,8 @@ If curl commands hang without returning a response:
 Use the complete service name endpoint to test connectivity:
 
 ```bash
-https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/register
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/v1/health" \
+  -H "Host: rest.preprod.polymarketexchange.com"
 ```
 
 If this URL works but your DNS/CNAME doesn't, the issue is with your DNS configuration.

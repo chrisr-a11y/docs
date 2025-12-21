@@ -10,7 +10,7 @@ Subscribe to real-time market data updates including order book depth, instrumen
 
 ## Service Definition
 
-**Service:** `connamara.ep3.v1beta1.MarketDataSubscriptionAPI`
+**Service:** `polymarket.v1.MarketDataSubscriptionAPI`
 
 **RPC:** `CreateMarketDataSubscription`
 
@@ -37,7 +37,7 @@ service MarketDataSubscriptionAPI {
 ### Example Request
 
 ```python
-from connamara.ep3.v1beta1 import market_data_pb2
+from polymarket.v1 import market_data_pb2
 
 # Subscribe to specific symbols
 request = market_data_pb2.CreateMarketDataSubscriptionRequest(
@@ -172,8 +172,8 @@ import grpc
 import requests
 from datetime import datetime, timedelta
 from typing import Optional
-from connamara.ep3.v1beta1 import market_data_pb2
-from connamara.ep3.v1beta1 import market_data_pb2_grpc
+from polymarket.v1 import market_data_pb2
+from polymarket.v1 import market_data_pb2_grpc
 
 
 class PolymarketStreamer:
