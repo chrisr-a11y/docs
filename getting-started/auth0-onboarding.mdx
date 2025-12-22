@@ -373,6 +373,65 @@ Common mistakes:
 - Expired JWT (exp in the past)
 - Reused `jti` (must be unique per request)
 
+---
+
+## API Scopes
+
+Your Auth0 application is granted specific **scopes** that control which API endpoints you can access. Scopes are included in your access token and validated by the API.
+
+### Available Scopes
+
+| Scope | Description |
+|-------|-------------|
+| `read:orders` | View orders and trade history |
+| `write:orders` | Create and cancel orders |
+| `read:positions` | View account positions and balances |
+| `read:marketdata` | Access BBO (best bid/offer) and streaming market data |
+| `read:l2marketdata` | Access L2 orderbook depth (premium) |
+| `instruments:read` | List instruments and metadata |
+| `read:funding` | View funding accounts and transactions |
+| `write:funding` | Create deposits and withdrawals |
+
+### Scope Requirements by Endpoint
+
+| Endpoint | Method | Required Scope |
+|----------|--------|----------------|
+| `/v1/trading/orders` | POST | `write:orders` |
+| `/v1/trading/orders/cancel` | POST | `write:orders` |
+| `/v1/orders/search` | POST | `read:orders` |
+| `/v1/positions` | GET | `read:positions` |
+| `/v1/positions/balances` | GET | `read:positions` |
+| `/v1/orderbook/{symbol}` | GET | `read:l2marketdata` |
+| `/v1/orderbook/{symbol}/bbo` | GET | `read:marketdata` |
+| `/v1/refdata/instruments` | GET | `instruments:read` |
+| `/v1/refdata/symbols` | GET | `instruments:read` |
+| `/v1/funding/accounts` | GET | `read:funding` |
+| `/v1/aeropay/deposits` | POST | `write:funding` |
+| `/v1/checkout/deposits` | POST | `write:funding` |
+| `/v1/health` | GET | *(no auth required)* |
+
+### Checking Your Scopes
+
+Your granted scopes are included in your access token. You can decode the token to see them:
+
+```python
+import base64
+import json
+
+# Decode the payload (middle part of JWT)
+payload = access_token.split('.')[1]
+payload += '=' * (4 - len(payload) % 4)  # Add padding
+claims = json.loads(base64.urlsafe_b64decode(payload))
+
+print("Granted scopes:", claims.get("scope", ""))
+```
+
+<Info>
+If you receive a `403 Forbidden` error, check that your application has been granted the required scope for that endpoint. Contact support to request additional scopes.
+</Info>
+
+---
+
 ## Auth0 Documentation
 
 For more details on Private Key JWT authentication:
