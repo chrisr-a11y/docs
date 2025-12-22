@@ -1,0 +1,58 @@
+---
+title: "PrivateLink Pitfalls"
+sidebarTitle: "PrivateLink Pitfalls"
+description: "Troubleshooting guide for AWS PrivateLink connectivity issues"
+---
+
+# PrivateLink Pitfalls
+
+This guide covers common issues when connecting via AWS PrivateLink.
+
+## Connection Issues
+
+### Timeout / No Response
+
+If curl commands hang without returning a response:
+
+**Step 1: Verify DNS Configuration**
+
+Use the complete service name endpoint to test connectivity:
+
+```bash
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/v1/health" \
+  -H "Host: rest.preprod.polymarketexchange.com"
+```
+
+If this URL works but your DNS/CNAME doesn't, the issue is with your DNS configuration.
+
+**Step 2: Check Security Group Settings**
+
+If the full endpoint also times out, review your VPC security group settings:
+
+- Set inbound rules to `0.0.0.0/0` for all traffic
+- Set outbound rules to `0.0.0.0/0` for all traffic
+These settings are suggested for testing only and not recommended for production Security Groups
+
+## AWS Connectivity
+
+### Can't Connect to Service
+
+If your AWS instance cannot find the service, verify your subnets match our availability zones.
+
+<Warning>
+Availability zone letter indicators (e.g., `us-east-1a`) can be mapped differently across AWS accounts. At least **one** availability zone ID must match.
+</Warning>
+
+**Production Availability Zones:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az6`
+
+**Pre-Production Availability Zones:**
+- `use1-az1`
+- `use1-az2`
+- `use1-az4`
+
+<Note>
+Subnet matching only applies when connecting from **within AWS us-east-1**. Connections from other regions are mapped automatically.
+</Note>
