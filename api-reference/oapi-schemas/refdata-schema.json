@@ -15,10 +15,10 @@
     }
   ],
   "paths": {
-    "/v1/marketdata/instruments": {
+    "/v1/refdata/instruments": {
       "post": {
         "tags": [
-          "MarketData"
+          "ReferenceData"
         ],
         "summary": "List instruments",
         "description": "Returns a list of instruments matching the request",
@@ -47,10 +47,10 @@
         }
       }
     },
-    "/v1/marketdata/metadata": {
+    "/v1/refdata/metadata": {
       "post": {
         "tags": [
-          "MarketData"
+          "ReferenceData"
         ],
         "summary": "Get instrument metadata",
         "description": "Returns miscellaneous instrument metadata",
@@ -79,10 +79,10 @@
         }
       }
     },
-    "/v1/marketdata/symbols": {
+    "/v1/refdata/symbols": {
       "post": {
         "tags": [
-          "MarketData"
+          "ReferenceData"
         ],
         "summary": "List symbols",
         "description": "Returns a list of symbols on the exchange",

@@ -44,13 +44,13 @@ Please migrate to the new URL paths before this date.
 | `POST /v1/positions/balance` | `POST /v1beta1/get_account_balance` | Get account balance |
 | `GET /v1/positions` | `POST /v1beta1/list_account_positions` | List positions |
 
-### Market Data
+### Reference Data
 
 | New Path (Recommended) | Legacy Path (Deprecated) | Description |
 |------------------------|--------------------------|-------------|
-| `POST /v1/marketdata/instruments` | `POST /v1beta1/list_instruments` | List instruments |
-| `POST /v1/marketdata/symbols` | `POST /v1beta1/list_symbols` | List symbols |
-| `POST /v1/marketdata/metadata` | `POST /v1beta1/get_instrument_metadata` | Get instrument metadata |
+| `POST /v1/refdata/instruments` | `POST /v1beta1/list_instruments` | List instruments |
+| `POST /v1/refdata/symbols` | `POST /v1beta1/list_symbols` | List symbols |
+| `POST /v1/refdata/metadata` | `POST /v1beta1/get_instrument_metadata` | Get instrument metadata |
 
 ### Order Book
 
@@ -103,7 +103,7 @@ The new `/v1/` paths use more descriptive, hierarchical URLs:
 |----------|---------------|-------------|
 | Trading | `/v1beta1/insert_order` | `/v1/trading/orders` |
 | Accounts | `/v1beta1/get_who_am_i` | `/v1/accounts/whoami` |
-| Market Data | `/v1beta1/list_instruments` | `/v1/marketdata/instruments` |
+| Reference Data | `/v1beta1/list_instruments` | `/v1/refdata/instruments` |
 | Order Book | `/v1beta1/get_order_book` | `/v1/orderbook/{symbol}` |
 
 ### Step 3: Test in Preprod
