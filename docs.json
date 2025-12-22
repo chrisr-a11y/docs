@@ -44,7 +44,7 @@
           {
             "group": "Health",
             "openapi": {
-              "source": "/api-reference/oapi-schemas/health-schema.yaml",
+              "source": "/api-reference/oapi-schemas/health-schema.json",
               "directory": "api-reference"
             }
           },
