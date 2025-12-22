@@ -5,14 +5,15 @@ description: 'Getting started with Auth0 authentication for ISVs, IBs, and FCMs'
 
 # Auth0 Onboarding
 
-The Polymarket Exchange API uses [Auth0](https://auth0.com/) for authentication. This guide explains how to obtain credentials and authenticate with the API.
+The Polymarket Exchange API uses [Auth0](https://auth0.com/) for authentication with **Private Key JWT** authentication. This is a more secure method than client secrets - you generate your own key pair and keep the private key secure.
 
 ## Overview
 
 Authentication follows a two-step flow:
 
-1. **Obtain Auth0 JWT** - Use your client credentials to get a JWT from Auth0
-2. **Call API with JWT** - The gateway validates your JWT and handles authorization
+1. **Create a signed JWT assertion** - Sign a JWT with your private key
+2. **Exchange for Auth0 access token** - Send the assertion to Auth0
+3. **Call API with access token** - The gateway validates your token and handles authorization
 
 ```mermaid
 sequenceDiagram
@@ -21,10 +22,12 @@ sequenceDiagram
     participant Gateway as Polymarket Gateway
     participant EP3 as Trading Engine
 
-    ISV->>Auth0: Client Credentials Grant
-    Auth0-->>ISV: Auth0 JWT Token
-    ISV->>Gateway: API Request + JWT
-    Gateway->>Gateway: Validate JWT
+    ISV->>ISV: Sign JWT with Private Key
+    ISV->>Auth0: Token Request + Signed JWT
+    Auth0->>Auth0: Verify with your Public Key
+    Auth0-->>ISV: Auth0 Access Token
+    ISV->>Gateway: API Request + Access Token
+    Gateway->>Gateway: Validate Token
     Gateway->>EP3: Execute Request
     EP3-->>Gateway: Response
     Gateway-->>ISV: API Response
@@ -32,40 +35,103 @@ sequenceDiagram
 
 ## Getting Your Credentials
 
-To access the Polymarket Exchange API, you'll need the following credentials from our onboarding team:
+To access the Polymarket Exchange API, you need to:
 
-| Credential | Description |
-|------------|-------------|
-| **Client ID** | Your unique application identifier |
-| **Client Secret** | Secret key for authentication (keep secure!) |
-| **Auth0 Domain** | Auth0 tenant URL (e.g., `your-tenant.us.auth0.com`) |
-| **API Audience** | The API identifier for token scoping |
+1. **Generate an RSA key pair** (you keep the private key secure)
+2. **Submit your public key to us** during onboarding
+3. **Receive your Client ID** (this is not a secret)
+
+| What You Provide | What We Provide |
+|-----------------|-----------------|
+| Your RSA Public Key | Client ID |
+| Company Information | Auth0 Domain |
+| IP Addresses | API Audience |
+
+<Info>
+**Private Key JWT is more secure than client secrets** because:
+- You control your private key - we never see it
+- No shared secrets to transmit or store
+- You can rotate keys independently
+- Compromised keys can be quickly revoked
+</Info>
+
+## Step 1: Generate Your Key Pair
+
+Run these commands to generate an RSA key pair:
+
+```bash
+# Generate a 2048-bit RSA private key
+openssl genrsa -out my_private_key.pem 2048
+
+# Extract the public key
+openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
+```
 
 <Warning>
-**Keep your Client Secret secure!** Never expose it in client-side code, public repositories, or logs. Treat it like a password.
+**Keep your private key secure!**
+- Store it in encrypted storage or a secrets manager
+- Never share it with anyone, including us
+- Never commit it to version control
+- Set restrictive file permissions: `chmod 600 my_private_key.pem`
 </Warning>
 
-### Requesting Access
+## Step 2: Submit Your Public Key
 
-1. Contact the Polymarket Exchange onboarding team
-2. Provide your company information and use case
-3. Provide the **IP addresses** that will access the API (required for allowlisting)
-4. Receive your credentials via secure channel
+Send us your **public key** (`my_public_key.pem` contents) along with:
 
-## Obtaining JWT Tokens
+- Company name and ISV identifier
+- Technical contact information
+- IP addresses for API access
+- Environment requested (dev, preprod, production)
 
-Use the **OAuth 2.0 Client Credentials Grant** to obtain JWT tokens from Auth0.
+Your public key looks like this:
+```
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+(several lines of base64 encoded data)
+...IDAQAB
+-----END PUBLIC KEY-----
+```
 
-### Token Request
+## Step 3: Authenticate with Private Key JWT
+
+Once onboarded, authenticate by creating a signed JWT assertion and exchanging it for an access token.
+
+### Create Client Assertion JWT
+
+Create a JWT with these claims, signed with your private key using RS256:
+
+```json
+{
+  "iss": "YOUR_CLIENT_ID",
+  "sub": "YOUR_CLIENT_ID",
+  "aud": "https://pmx-preprod.us.auth0.com/oauth/token",
+  "iat": 1703270400,
+  "exp": 1703270700,
+  "jti": "unique-random-uuid"
+}
+```
+
+| Claim | Description |
+|-------|-------------|
+| `iss` | Your client ID (issuer) |
+| `sub` | Your client ID (subject) |
+| `aud` | Auth0 token endpoint URL |
+| `iat` | Issued at time (Unix timestamp) |
+| `exp` | Expiration time (max 5 minutes from iat) |
+| `jti` | Unique token ID (prevents replay attacks) |
+
+### Request Access Token
 
 ```bash
 curl --request POST \
-  --url "https://YOUR_AUTH0_DOMAIN/oauth/token" \
+  --url "https://pmx-preprod.us.auth0.com/oauth/token" \
   --header "content-type: application/json" \
   --data '{
     "client_id": "YOUR_CLIENT_ID",
-    "client_secret": "YOUR_CLIENT_SECRET",
-    "audience": "YOUR_API_AUDIENCE",
+    "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    "client_assertion": "YOUR_SIGNED_JWT_ASSERTION",
+    "audience": "https://api.preprod.polymarketexchange.com",
     "grant_type": "client_credentials"
   }'
 ```
@@ -76,41 +142,64 @@ curl --request POST \
 {
   "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIs...",
   "token_type": "Bearer",
-  "expires_in": 86400
+  "expires_in": 180
 }
 ```
 
-| Field | Description |
-|-------|-------------|
-| `access_token` | The JWT to use for API calls |
-| `token_type` | Always "Bearer" |
-| `expires_in` | Token lifetime in seconds |
-
-### Python Example
+## Complete Python Example
 
 ```python
+import jwt
+import uuid
+import time
 import requests
-from datetime import datetime, timedelta
+from cryptography.hazmat.primitives import serialization
 
 class Auth0Client:
-    def __init__(self, domain: str, client_id: str, client_secret: str, audience: str):
+    def __init__(self, domain: str, client_id: str, audience: str, private_key_path: str):
         self.domain = domain
         self.client_id = client_id
-        self.client_secret = client_secret
         self.audience = audience
+        self.private_key_path = private_key_path
         self.token = None
         self.token_expiry = None
 
+    def _load_private_key(self):
+        """Load the RSA private key from file."""
+        with open(self.private_key_path, 'rb') as f:
+            return serialization.load_pem_private_key(f.read(), password=None)
+
+    def _create_client_assertion(self) -> str:
+        """Create a signed JWT for client authentication."""
+        private_key = self._load_private_key()
+        now = int(time.time())
+
+        claims = {
+            "iss": self.client_id,
+            "sub": self.client_id,
+            "aud": f"https://{self.domain}/oauth/token",
+            "iat": now,
+            "exp": now + 300,  # 5 minutes
+            "jti": str(uuid.uuid4()),
+        }
+
+        return jwt.encode(claims, private_key, algorithm="RS256")
+
     def get_token(self) -> str:
-        """Get a valid token, refreshing if necessary."""
+        """Get a valid access token, refreshing if necessary."""
         if self._is_token_valid():
             return self.token
 
+        # Create client assertion
+        assertion = self._create_client_assertion()
+
+        # Request access token
         response = requests.post(
             f"https://{self.domain}/oauth/token",
             json={
                 "client_id": self.client_id,
-                "client_secret": self.client_secret,
+                "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+                "client_assertion": assertion,
                 "audience": self.audience,
                 "grant_type": "client_credentials"
             },
@@ -120,8 +209,8 @@ class Auth0Client:
 
         data = response.json()
         self.token = data["access_token"]
-        # Set expiry with 5-minute buffer
-        self.token_expiry = datetime.now() + timedelta(seconds=data["expires_in"] - 300)
+        # Set expiry with 30-second buffer
+        self.token_expiry = time.time() + data["expires_in"] - 30
 
         return self.token
 
@@ -129,29 +218,92 @@ class Auth0Client:
         """Check if current token is still valid."""
         if not self.token or not self.token_expiry:
             return False
-        return datetime.now() < self.token_expiry
+        return time.time() < self.token_expiry
 
 
 # Usage
 auth0 = Auth0Client(
-    domain="your-tenant.us.auth0.com",
-    client_id="your_client_id",
-    client_secret="your_client_secret",
-    audience="https://api.polymarketexchange.com"
+    domain="pmx-preprod.us.auth0.com",
+    client_id="YOUR_CLIENT_ID",
+    audience="https://api.preprod.polymarketexchange.com",
+    private_key_path="/path/to/my_private_key.pem"
 )
 
 token = auth0.get_token()
 ```
 
-## Using the Token
+**Required packages:**
+```bash
+pip install PyJWT cryptography requests
+```
 
-Include the JWT in the `Authorization` header for all API requests:
+## Complete Go Example
+
+```go
+package main
+
+import (
+    "crypto/rsa"
+    "crypto/x509"
+    "encoding/json"
+    "encoding/pem"
+    "fmt"
+    "net/http"
+    "os"
+    "time"
+
+    "github.com/golang-jwt/jwt/v5"
+    "github.com/google/uuid"
+)
+
+func getAuth0Token(domain, clientID, audience, privateKeyPath string) (string, error) {
+    // Load private key
+    keyData, err := os.ReadFile(privateKeyPath)
+    if err != nil {
+        return "", fmt.Errorf("read key file: %w", err)
+    }
+
+    block, _ := pem.Decode(keyData)
+    privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+    if err != nil {
+        return "", fmt.Errorf("parse private key: %w", err)
+    }
+
+    // Create client assertion JWT
+    now := time.Now()
+    claims := jwt.MapClaims{
+        "iss": clientID,
+        "sub": clientID,
+        "aud": fmt.Sprintf("https://%s/oauth/token", domain),
+        "iat": now.Unix(),
+        "exp": now.Add(5 * time.Minute).Unix(),
+        "jti": uuid.New().String(),
+    }
+
+    token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+    assertion, err := token.SignedString(privateKey)
+    if err != nil {
+        return "", fmt.Errorf("sign assertion: %w", err)
+    }
+
+    // Request access token from Auth0
+    // (implement HTTP POST to token endpoint)
+    // ...
+
+    return accessToken, nil
+}
+```
+
+## Using the Access Token
+
+Include the access token in the `Authorization` header for all API requests:
 
 ### REST API
 
 ```bash
-curl -X GET "https://api.polymarketexchange.com/rest/api/v1/health" \
-  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/whoami" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "x-participant-id: firms/ISV-Participant-YourISV/users/your-user"
 ```
 
 ### gRPC
@@ -161,53 +313,33 @@ import grpc
 
 # Create metadata with token
 metadata = [
-    ('authorization', token)  # Note: lowercase 'authorization'
+    ('authorization', f'Bearer {access_token}')
 ]
 
 # Make gRPC call with metadata
 response = stub.SomeMethod(request, metadata=metadata)
 ```
 
-## Token Lifecycle
+## Key Rotation
 
-### Token Expiration
+You can rotate your keys at any time:
 
-Auth0 tokens have a configurable expiration (typically 24 hours). Your application should:
-
-1. **Cache the token** - Don't request a new token for every API call
-2. **Track expiration** - Store the `expires_in` value
-3. **Refresh proactively** - Get a new token before the current one expires (e.g., 5 minutes before)
-
-### Best Practices
-
-```python
-# Good: Reuse token until near expiration
-token = auth0.get_token()  # Returns cached token if valid
-response = api.call(token)
-
-# Bad: Request new token for every call
-token = auth0.request_new_token()  # Unnecessary Auth0 calls
-response = api.call(token)
-```
-
-## IP Allowlisting
-
-For security, all API access is restricted to pre-approved IP addresses.
-
-- Provide your IP addresses during onboarding
-- Both individual IPs and CIDR ranges are supported (e.g., `203.0.113.10` or `10.0.0.0/8`)
-- Requests from non-allowlisted IPs will be rejected at Auth0
-- Contact support to update your allowed IPs
+1. Generate a new key pair
+2. Submit the new public key to us
+3. We add the new key to your Auth0 app (both old and new will work)
+4. Update your systems to use the new private key
+5. Notify us to remove the old public key
 
 ## Environments
 
 | Environment | Auth0 Domain | API Base URL |
 |-------------|--------------|--------------|
-| Pre-production | Provided during onboarding | `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
-| Production | Provided during onboarding | `traderapi.us-east-1.privatelink.prod.polymarketexchange.com` |
+| Development | `pmx-dev01.us.auth0.com` | `api.dev01.polymarketexchange.com` |
+| Pre-production | `pmx-preprod.us.auth0.com` | `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
+| Production | `pmx-prod.us.auth0.com` | `traderapi.us-east-1.privatelink.prod.polymarketexchange.com` |
 
 <Info>
-Each environment has separate credentials. Your pre-production credentials will not work in production.
+Each environment requires separate onboarding. Your pre-production credentials will not work in production.
 </Info>
 
 ## Troubleshooting
@@ -216,45 +348,38 @@ Each environment has separate credentials. Your pre-production credentials will 
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| `401 Unauthorized` | Invalid or expired token | Request a new token |
+| `invalid_client` | JWT signature verification failed | Verify private key matches registered public key |
+| `invalid_client_assertion` | Malformed JWT or wrong claims | Check JWT claims (iss, sub, aud, exp) |
+| `401 Unauthorized` | Invalid or expired access token | Request a new access token |
 | `403 Forbidden` | IP not allowlisted | Contact support to add your IP |
-| `invalid_client` | Wrong client ID or secret | Verify your credentials |
-| `invalid_audience` | Wrong audience value | Use the audience provided during onboarding |
-
-### Token Validation Failed
-
-If you receive authentication errors, verify:
-
-1. **Token is not expired** - Check the `exp` claim
-2. **Correct audience** - The `aud` claim must match the API audience
-3. **Correct issuer** - The `iss` claim must match your Auth0 domain
-4. **IP is allowlisted** - Ensure your request originates from an approved IP
 
 ### Debugging JWT Claims
 
-You can decode your JWT at [jwt.io](https://jwt.io/) to inspect the claims (for debugging only - never paste production tokens in third-party tools).
-
-Expected claims in a valid token:
+If authentication fails, verify your client assertion JWT contains correct claims:
 
 ```json
 {
-  "iss": "https://your-tenant.us.auth0.com/",
-  "aud": "https://api.polymarketexchange.com",
-  "exp": 1704307200,
-  "iat": 1704220800,
-  "https://polymarket.us/firm_id": "your_firm_id",
-  "https://polymarket.us/org_name": "Your Company Name"
+  "iss": "YOUR_CLIENT_ID",
+  "sub": "YOUR_CLIENT_ID",
+  "aud": "https://pmx-preprod.us.auth0.com/oauth/token",
+  "iat": 1703270400,
+  "exp": 1703270700,
+  "jti": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
+Common mistakes:
+- Wrong `aud` (must be the Auth0 token endpoint, not the API)
+- Expired JWT (exp in the past)
+- Reused `jti` (must be unique per request)
+
 ## Auth0 Documentation
 
-For more details on OAuth 2.0 and the Client Credentials flow, see the official Auth0 documentation:
+For more details on Private Key JWT authentication:
 
-- [Client Credentials Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-credentials-flow)
-- [Call Your API Using the Client Credentials Flow](https://auth0.com/docs/get-started/authentication-and-authorization-flow/call-your-api-using-the-client-credentials-flow)
+- [Private Key JWT Client Authentication](https://auth0.com/docs/get-started/authentication-and-authorization-flow/authenticate-with-private-key-jwt)
 - [Machine-to-Machine Applications](https://auth0.com/docs/get-started/applications/application-types#machine-to-machine-applications)
-- [Access Tokens](https://auth0.com/docs/secure/tokens/access-tokens)
+- [RFC 7523 - JWT Profile for Client Authentication](https://datatracker.ietf.org/doc/html/rfc7523)
 
 ## Next Steps
 
