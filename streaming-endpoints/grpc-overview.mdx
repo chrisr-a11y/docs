@@ -25,9 +25,8 @@ Most participants use **REST for requests** and **gRPC for streaming**. This hyb
 ### Typical Integration Pattern
 
 1. **REST API** - Used for:
-   - Authentication (`/auth/v1beta1/login`)
-   - Placing orders (`/api/v1beta1/insert_order`)
-   - Canceling orders (`/api/v1beta1/cancel_order`)
+   - Placing orders (`/v1/trading/orders`)
+   - Canceling orders (`/v1/trading/orders/cancel`)
    - Querying account information
    - One-time data requests
 
@@ -68,12 +67,12 @@ Subscribe to real-time order and execution updates:
 
 ### Pre-Production Environment
 ```
-traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443
+grpc.api.preprod.polymarketexchange.com:443
 ```
 
 ### Production Environment
 ```
-traderapi.us-east-1.privatelink.prod.polymarketexchange.com:443
+grpc.api.polymarketexchange.com:443
 ```
 
 <Info>
