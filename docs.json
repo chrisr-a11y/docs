@@ -34,7 +34,7 @@
               "getting-started/vpc-connection",
               "getting-started/rate-limits",
               "getting-started/common-pitfalls",
-              "getting-started/privatelink-pitfalls",
+              "getting-started/connectivity-pitfalls",
               "getting-started/backwards-compatibility"
             ]
           }
