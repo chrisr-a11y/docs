@@ -1,78 +1,33 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Market Data API",
-    "version": "v0.6.1"
+    "title": "Marketdata API",
+    "version": "v1.0.0"
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com/api"
+      "url": "https://api.polymarketexchange.com"
     }
   ],
   "tags": [
     {
       "name": "MarketDataAPI"
-    },
-    {
-      "name": "MarketDataSubscriptionAPI"
     }
   ],
   "paths": {
-    "/v1beta1/get_instrument_metadata": {
+    "/v1/marketdata/instruments": {
       "post": {
         "tags": [
-          "MarketDataAPI"
+          "MarketData"
         ],
-        "summary": "Get Instrument Metadata",
-        "operationId": "MarketDataAPI_GetInstrumentMetadata",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1GetInstrumentMetadataRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1GetInstrumentMetadataResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/list_instruments": {
-      "post": {
-        "tags": [
-          "MarketDataAPI"
-        ],
-        "summary": "List Instruments",
-        "description": "Returns a list of instruments matching the request.",
+        "summary": "List instruments",
+        "description": "Returns a list of instruments matching the request",
         "operationId": "MarketDataAPI_ListInstruments",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1ListInstrumentsRequest"
+                "$ref": "#/components/schemas/ListInstrumentsRequest"
               }
             }
           },
@@ -84,38 +39,59 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/v1beta1ListInstrumentsResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  "$ref": "#/components/schemas/ListInstrumentsResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     },
-    "/v1beta1/list_symbols": {
+    "/v1/marketdata/metadata": {
       "post": {
         "tags": [
-          "MarketDataAPI"
+          "MarketData"
         ],
-        "summary": "List Symbols",
-        "description": "Returns a list of symbols on the exchange.",
+        "summary": "Get instrument metadata",
+        "description": "Returns miscellaneous instrument metadata",
+        "operationId": "MarketDataAPI_GetInstrumentMetadata",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetInstrumentMetadataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInstrumentMetadataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketdata/symbols": {
+      "post": {
+        "tags": [
+          "MarketData"
+        ],
+        "summary": "List symbols",
+        "description": "Returns a list of symbols on the exchange",
         "operationId": "MarketDataAPI_ListSymbols",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1ListSymbolsRequest"
+                "$ref": "#/components/schemas/ListSymbolsRequest"
               }
             }
           },
@@ -127,83 +103,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/v1beta1ListSymbolsResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  "$ref": "#/components/schemas/ListSymbolsResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/create_market_data_subscription": {
-      "post": {
-        "tags": [
-          "MarketDataSubscriptionAPI"
-        ],
-        "summary": "Create Market Data Subscription",
-        "operationId": "MarketDataSubscriptionAPI_CreateMarketDataSubscription",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1CreateMarketDataSubscriptionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Stream result of v1beta1CreateMarketDataSubscriptionResponse",
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "$ref": "#/components/schemas/rpcStatus"
-                    },
-                    "result": {
-                      "$ref": "#/components/schemas/v1beta1CreateMarketDataSubscriptionResponse"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "v1beta1GetInstrumentMetadataRequest": {
-        "type": "object"
+      "Date": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "day": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Date represents a calendar date."
       },
-      "v1beta1GetInstrumentMetadataResponse": {
+      "GetInstrumentMetadataRequest": {
+        "type": "object",
+        "description": "Request for getting instrument metadata."
+      },
+      "GetInstrumentMetadataResponse": {
         "type": "object",
         "properties": {
           "metadata": {
@@ -212,83 +145,103 @@
               "type": "string"
             }
           }
-        }
-      },
-      "rpcStatus": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "details": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/protobufAny"
-            }
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "protobufAny": {
-        "type": "object",
-        "properties": {
-          "@type": {
-            "type": "string",
-            "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
-          }
         },
-        "additionalProperties": {
-          "type": "object"
-        },
-        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+        "description": "Response with instrument metadata."
       },
-      "v1beta1ListInstrumentsRequest": {
+      "Instrument": {
         "type": "object",
         "properties": {
-          "page_size": {
-            "type": "integer",
-            "description": "The maximum number of Instruments to return in a response.\nThis field is optional.",
-            "format": "int32"
-          },
-          "page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `ListInstruments`\nthat indicates where this listing should continue from.\nThis field is optional."
-          },
-          "product_id": {
-            "title": "If set, filter returned instruments belonging to product",
+          "symbol": {
             "type": "string"
           },
-          "states": {
+          "tickSize": {
+            "type": "number",
+            "format": "double"
+          },
+          "baseCurrency": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimumTradeQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "terminationDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "tradingSchedule": {
             "type": "array",
-            "description": "The instrument states to filter upon.",
             "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1InstrumentState"
+              "type": "object",
+              "$ref": "#/components/schemas/TradingHours"
             }
           },
-          "symbols": {
-            "type": "array",
-            "description": "A list of symbols to filter upon and return in a response.\nThis field is optional.",
-            "items": {
-              "type": "string"
-            }
+          "description": {
+            "type": "string"
           },
-          "tradable_filter": {
-            "$ref": "#/components/schemas/v1beta1TradableFilter"
+          "clearingHouse": {
+            "type": "string"
           },
-          "type": {
-            "$ref": "#/components/schemas/v1beta1InstrumentType"
+          "minimumUnaffiliatedFirms": {
+            "type": "string",
+            "format": "int64"
+          },
+          "nonTradable": {
+            "type": "boolean",
+            "title": "type_attributes omitted - complex oneof with many swap types"
+          },
+          "jsonAttributes": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "priceLimit": {
+            "$ref": "#/components/schemas/PriceLimit"
+          },
+          "orderSizeLimit": {
+            "$ref": "#/components/schemas/OrderSizeLimit"
+          },
+          "expirationTime": {
+            "$ref": "#/components/schemas/TimeOfDay"
+          },
+          "tradeSettlementPeriod": {
+            "type": "string",
+            "format": "int64"
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstrumentState"
+          },
+          "priceScale": {
+            "type": "string",
+            "format": "int64"
+          },
+          "fractionalQtyScale": {
+            "type": "string",
+            "format": "int64"
+          },
+          "settlementCurrency": {
+            "type": "string"
+          },
+          "settlementPriceScale": {
+            "type": "string",
+            "format": "int64"
           }
-        }
+        },
+        "description": "Instrument represents a tradable instrument.\nWire-compatible with Connamara EP3 Instrument (core fields)."
       },
-      "connamaraep3v1beta1InstrumentState": {
+      "InstrumentState": {
         "type": "string",
-        "description": "InstrumentState denotes the current state of an instrument.",
-        "default": "INSTRUMENT_STATE_CLOSED",
         "enum": [
-          "INSTRUMENT_STATE_CLOSED",
           "INSTRUMENT_STATE_OPEN",
           "INSTRUMENT_STATE_PREOPEN",
           "INSTRUMENT_STATE_SUSPENDED",
@@ -296,24 +249,12 @@
           "INSTRUMENT_STATE_TERMINATED",
           "INSTRUMENT_STATE_HALTED",
           "INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION"
-        ]
+        ],
+        "description": "InstrumentState represents the state of an instrument."
       },
-      "v1beta1TradableFilter": {
+      "InstrumentType": {
         "type": "string",
-        "description": "TradableFilter.\n\n - TRADABLE_FILTER_UNSET: Filter is unset.\n - TRADABLE_FILTER_NON_TRADABLE: Filter is set to non-tradable.\n - TRADABLE_FILTER_TRADABLE: Filter is set to tradable.",
-        "default": "TRADABLE_FILTER_UNSET",
         "enum": [
-          "TRADABLE_FILTER_UNSET",
-          "TRADABLE_FILTER_NON_TRADABLE",
-          "TRADABLE_FILTER_TRADABLE"
-        ]
-      },
-      "v1beta1InstrumentType": {
-        "type": "string",
-        "description": "InstrumentType of the Instrument.\n\n - INSTRUMENT_TYPE_UNSET: Instrument type is unset.\n - INSTRUMENT_TYPE_DEFAULT: Instrument type is default and does not contain any special type attributes.\n - INSTRUMENT_TYPE_FUTURE: Instrument is a Future.\n - INSTRUMENT_TYPE_OPTION: Instrument is an Option.\n - INSTRUMENT_TYPE_MULTILEG: Instrument is a Multileg.\n - INSTRUMENT_TYPE_IRS: Instrument is an Interest Rate Swap.\n - INSTRUMENT_TYPE_FRA: Instrument is a Forward Rate Agreement Swap.\n - INSTRUMENT_TYPE_FSIRS: Instrument is a Forward Starting Interest Rate Swap.\n - INSTRUMENT_TYPE_BASIS: Instrument is a Basis Swap.\n - INSTRUMENT_TYPE_EVENT: Instrument is an Event Swap.\n - INSTRUMENT_TYPE_OIS: Instrument is an Overnight Index Swap.\n - INSTRUMENT_TYPE_SPS: Instrument is a Single Period Swap.\n - INSTRUMENT_TYPE_NDF: Instrument is a Non-Deliverable Forward.\n - INSTRUMENT_TYPE_FOREX: Instrument is a Foreign Exchange (Forex) Market.\n - INSTRUMENT_TYPE_ZCIS: Instrument is a Zero Coupon Inflation Swap.\n - INSTRUMENT_TYPE_XCCY: Instrument is a Cross Currency Basis Swap.",
-        "default": "INSTRUMENT_TYPE_UNSET",
-        "enum": [
-          "INSTRUMENT_TYPE_UNSET",
           "INSTRUMENT_TYPE_DEFAULT",
           "INSTRUMENT_TYPE_FUTURE",
           "INSTRUMENT_TYPE_OPTION",
@@ -329,2184 +270,199 @@
           "INSTRUMENT_TYPE_FOREX",
           "INSTRUMENT_TYPE_ZCIS",
           "INSTRUMENT_TYPE_XCCY"
-        ]
+        ],
+        "description": "InstrumentType represents the type of instrument."
       },
-      "v1beta1ListInstrumentsResponse": {
+      "ListInstrumentsRequest": {
         "type": "object",
         "properties": {
-          "eof": {
-            "title": "Eof is true if no more instruments given the filtering criteria are available at this time",
-            "type": "boolean"
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           },
+          "pageToken": {
+            "type": "string"
+          },
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productId": {
+            "type": "string"
+          },
+          "tradableFilter": {
+            "$ref": "#/components/schemas/TradableFilter"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstrumentState"
+            }
+          },
+          "type": {
+            "$ref": "#/components/schemas/InstrumentType"
+          }
+        },
+        "description": "Request for listing instruments."
+      },
+      "ListInstrumentsResponse": {
+        "type": "object",
+        "properties": {
           "instruments": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Instrument"
+              "type": "object",
+              "$ref": "#/components/schemas/Instrument"
             }
           },
-          "next_page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `ListInstruments`\nthat indicates from where listing should continue.\nThis field is optional."
-          }
-        }
-      },
-      "connamaraep3v1beta1Instrument": {
-        "type": "object",
-        "properties": {
-          "base_currency": {
+          "nextPageToken": {
             "type": "string"
           },
-          "basis_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1BasisSwapAttributes"
-          },
-          "block_trade_threshold": {
-            "$ref": "#/components/schemas/v1beta1BlockTradeThreshold"
-          },
-          "clearing_house": {
-            "title": "name of the clearing house that clears the instrument",
-            "type": "string"
-          },
-          "create_time": {
-            "title": "The creation timestamp of the Instrument",
-            "type": "string",
-            "format": "date-time"
-          },
-          "cross_order_resting_duration": {
-            "title": "Amount of time an order from a cross should rest in the book before matching",
-            "type": "string"
-          },
-          "custom_attributes": {
-            "$ref": "#/components/schemas/protobufAny"
-          },
-          "delete_time": {
-            "title": "The deletion timestamp of the Instrument",
-            "type": "string",
-            "format": "date-time"
-          },
-          "description": {
-            "title": "description of the instrument",
-            "type": "string"
-          },
-          "event_attributes": {
-            "$ref": "#/components/schemas/v1beta1EventAttributes"
-          },
-          "expiration_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "expiration_time": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          },
-          "forex_attributes": {
-            "$ref": "#/components/schemas/v1beta1ForexAttributes"
-          },
-          "forward_rate_agreement_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1ForwardRateAgreementSwapAttributes"
-          },
-          "forward_starting_interest_rate_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1ForwardStartingInterestRateSwapAttributes"
-          },
-          "fractional_qty_scale": {
-            "title": "The scale applied to an instruments quantity in order to represent fractional shares",
-            "type": "string",
-            "format": "int64"
-          },
-          "future_attributes": {
-            "$ref": "#/components/schemas/v1beta1FutureAttributes"
-          },
-          "holiday_calendars": {
-            "title": "holiday calendars assigned to the instrument",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "interest_rate_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributes"
-          },
-          "json_attributes": {
-            "type": "string"
-          },
-          "last_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "last_trade_time": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          },
-          "metadata": {
-            "title": "Miscellaneous metadata to be stored with the instrument",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
-          },
-          "minimum_trade_qty": {
-            "type": "string",
-            "format": "int64"
-          },
-          "minimum_unaffiliated_firms": {
-            "title": "minimum number of unaffiliated firms required when submitting request for quotes",
-            "type": "string",
-            "format": "int64"
-          },
-          "multileg_attributes": {
-            "$ref": "#/components/schemas/v1beta1MultilegAttributes"
-          },
-          "multiplier": {
-            "type": "number",
-            "format": "double"
-          },
-          "non_deliverable_forward_attributes": {
-            "$ref": "#/components/schemas/v1beta1NonDeliverableForwardAttributes"
-          },
-          "non_tradable": {
-            "title": "Set if the instrument should be non-tradable, as in the case of an index",
+          "eof": {
             "type": "boolean"
-          },
-          "option_attributes": {
-            "$ref": "#/components/schemas/v1beta1OptionAttributes"
-          },
-          "order_size_limit": {
-            "$ref": "#/components/schemas/v1beta1OrderSizeLimit"
-          },
-          "overnight_index_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1OvernightIndexSwapAttributes"
-          },
-          "position_limit": {
-            "type": "string",
-            "format": "int64"
-          },
-          "price_limit": {
-            "$ref": "#/components/schemas/v1beta1PriceLimit"
-          },
-          "price_scale": {
-            "title": "The scale applied to an instruments price in order to represent prices as fixed point decimals",
-            "type": "string",
-            "format": "int64"
-          },
-          "product_id": {
-            "title": "Product ID for this instrument",
-            "type": "string"
-          },
-          "single_period_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1SinglePeriodSwapAttributes"
-          },
-          "start_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "start_time": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          },
-          "state": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1InstrumentState"
-          },
-          "symbol": {
-            "title": "unique identifier for this instrument",
-            "type": "string"
-          },
-          "termination_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tick_size": {
-            "type": "number",
-            "format": "double"
-          },
-          "trade_day_roll_convention": {
-            "$ref": "#/components/schemas/v1beta1TradeDayRollConvention"
-          },
-          "trade_day_roll_schedule": {
-            "type": "array",
-            "description": "If set, contains the rules that define when trade days roll to the next trade day.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1TradeDayRoll"
-            }
-          },
-          "trade_settlement_period": {
-            "title": "number of days required to settle a trade of this instrument",
-            "type": "string",
-            "format": "int64"
-          },
-          "trading_schedule": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1TradingHours"
-            }
-          },
-          "update_time": {
-            "title": "The update timestamp of the Instrument",
-            "type": "string",
-            "format": "date-time"
-          },
-          "zero_coupon_inflation_swap_attributes": {
-            "$ref": "#/components/schemas/v1beta1ZeroCouponInflationSwapAttributes"
           }
         },
-        "description": "Instrument is an asset that can be trading on the exchange platform."
+        "description": "Response with list of instruments."
       },
-      "v1beta1BasisSwapAttributes": {
+      "ListSymbolsRequest": {
+        "type": "object",
+        "description": "Request for listing symbols."
+      },
+      "ListSymbolsResponse": {
         "type": "object",
         "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "effective_date_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_first_unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "leg1_first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg1_first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg1_float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg1_float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "leg1_float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "leg1_float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg1_float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg1_float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "leg1_float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "leg1_float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leg1_float_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "leg1_float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "leg1_float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "leg1_float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "leg1_float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg1_float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "leg1_float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "leg1_floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "leg1_floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "leg1_index_tenor_omit": {
-            "title": "Flag that determines if the indexTenor fields will be omitted from certain adapter code",
-            "type": "boolean"
-          },
-          "leg2_first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg2_first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg2_float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg2_float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "leg2_float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "leg2_float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "leg2_float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg2_float_fixing_date_holiday_calendars": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "leg2_float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "leg2_float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "leg2_float_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "leg2_float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "leg2_float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "leg2_float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "leg2_float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "leg2_float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "leg2_float_roll_convention": {
-            "type": "string"
-          },
-          "leg2_floating_rate_index": {
-            "type": "string"
-          },
-          "leg2_floating_rate_index_tenor": {
-            "type": "string"
-          },
-          "leg2_index_tenor_omit": {
-            "title": "Flag that determines if the indexTenor fields will be omitted from certain adapter code",
-            "type": "boolean"
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "payment_date_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "BasisSwapAttributes are attributes that define an Basis Swap tradable instrument."
-      },
-      "v1beta1InterestRateSwapAttributesBusinessDayConvention": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesBusinessDayConvention defines the business day convention rules for IRS instruments.\n\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_MODIFIED_FOLLOWING: Modified Following\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_FOLLOWING: Following\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_FRN: FRN\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_PRECEDING: Preceding\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_MODIFIED_PRECEDING: ModPreceding\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NEAREST: Nearest\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NONE: None\n - INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NOTAPPLICABLE: NotApplicable",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_MODIFIED_FOLLOWING",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_FOLLOWING",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_FRN",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_PRECEDING",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_MODIFIED_PRECEDING",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NEAREST",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NONE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_BUSINESS_DAY_CONVENTION_NOTAPPLICABLE"
-        ]
-      },
-      "v1beta1Date": {
-        "type": "object",
-        "properties": {
-          "day": {
-            "type": "integer",
-            "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
-            "format": "int32"
-          },
-          "month": {
-            "type": "integer",
-            "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
-            "format": "int32"
-          },
-          "year": {
-            "type": "integer",
-            "description": "Year of date. Must be from 1 to 9999, or 0 if specifying a date without\na year.",
-            "format": "int32"
-          }
-        },
-        "description": "Date represents a whole or partial calendar date."
-      },
-      "v1beta1InterestRateSwapAttributesTimePeriod": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesTimePeriod defines time period rules for IRS instruments.\n\n - INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_YEARS: Associated period is in years.\n - INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_MONTHS: Associated period is in months.\n - INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_DAYS: Associated period is in days.",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_YEARS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_MONTHS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_TIME_PERIOD_DAYS"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesCompoundingMethod": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesCompoundingMethod defines the compounding method rules for IRS instruments.",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_COMPOUNDING_METHOD_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_COMPOUNDING_METHOD_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_COMPOUNDING_METHOD_NONE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_COMPOUNDING_METHOD_FLAT"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesDayCountConvention": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesDayCountConvention defines day/year counting rules for IRS instruments.\n\n - INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_30_360: 30/360\n - INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ACT_360: ACT/360\n - INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ACT_365_FIXED: ACT/365.FIXED\n - INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ONE_TO_ONE: 1/1",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_30_360",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ACT_360",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ACT_365_FIXED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_COUNT_CONVENTION_ONE_TO_ONE"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesDayType": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesDayType defines day type rules for IRS instruments.",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_BUSINESS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_CALENDAR",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_COMMODITY_BUSINESS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_CURRENCY_BUSINESS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_EXCHANGE_BUSINESS",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DAY_TYPE_SCHEDULED_TRADING_DAY"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesDateRelativeTo": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesDateRelativeTo defines payment date relative to rules for IRS instruments.",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_CALCULATION_PERIOD_START_DATE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_CALCULATION_PERIOD_END_DATE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_LAST_PRICING_DATE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_RESET_DATE",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_DATE_RELATIVE_TO_VALUATION_DATE"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesFrequency": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesFrequency defines the frequencies for payment rules for IRS instruments.",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_MONTHLY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_QUARTERLY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_SEMI_ANNUALLY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_ANNUALLY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_DAILY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_FREQUENCY_TERM"
-        ]
-      },
-      "v1beta1InterestRateSwapAttributesSideConvention": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesSideConvention defines the side conventions for IRS instruments.\n\n - INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_BUY: Pay Fixed\n - INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_SELL: Receive Fixed",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_BUY",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_SIDE_CONVENTION_SELL"
-        ]
-      },
-      "v1beta1BlockTradeThreshold": {
-        "type": "object",
-        "properties": {
-          "minimum_notional": {
-            "type": "string",
-            "description": "The minimum notional that must be provided for an order cross to be marked as a block trade in units of the price_scale multiplied by the fractional_qty_scale. For example, given a price_scale of 100 and a fractional_qty_scale of 10, the minimum_notional should be in units of 100 * 10 = 1000. So if a Minimum Notional of 50 USD is desired, the minimum_notional integer should be set to 50 * 1000 = 50000. Either this threshold or the minimum quantity criteria must be met for a valid block trade.",
-            "format": "int64"
-          },
-          "minimum_quantity": {
-            "type": "string",
-            "description": "The minimum quantity that must be provided for an order cross to be marked as a block trade in units of fractional_qty_scale. Either this threshold or the minimum notional criteria must be met for a valid block trade.",
-            "format": "int64"
-          }
-        },
-        "description": "BlockTradeThreshold describes the minimum values required to mark an order cross as a block trade."
-      },
-      "v1beta1EventAttributes": {
-        "type": "object",
-        "properties": {
-          "calculation_method": {
-            "$ref": "#/components/schemas/v1beta1CalculationMethod"
-          },
-          "evaluation_type": {
-            "type": "string",
-            "description": "Type of evaluation to be used when interpreting strike_value."
-          },
-          "event_display_name": {
-            "type": "string",
-            "description": "The common/shared display name across EP3 event instruments that describes the underlying market conditions for an event."
-          },
-          "event_id": {
-            "type": "string",
-            "description": "The common/shared ID across EP3 event instruments that describes the underlying market conditions for an event."
-          },
-          "expected_payout_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "expected_payout_time": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          },
-          "frequency_type": {
-            "type": "string",
-            "description": "The frequency type of the product (\"W\", \"M\", \"Q\")."
-          },
-          "payout_lower_bound": {
-            "type": "string",
-            "description": "The lower limit of the payout if the event instrument is continuous.",
-            "format": "int64"
-          },
-          "payout_type": {
-            "$ref": "#/components/schemas/v1beta1PayoutType"
-          },
-          "payout_upper_bound": {
-            "type": "string",
-            "description": "The upper limit of the payout if the event instrument is continuous.",
-            "format": "int64"
-          },
-          "payout_value": {
-            "type": "string",
-            "description": "The value of the payout.",
-            "format": "int64"
-          },
-          "position_accountability_value": {
-            "type": "string",
-            "description": "Soft maximum number of contracts an account can have open interest in for a given Product before exchange personnel should begin reviewing the account's positions. Used for alerting only. EP3 will not reject orders that would cause the Position Accountability Value to be exceeded.",
-            "format": "int64"
-          },
-          "position_limit": {
-            "type": "string",
-            "description": "Hard maximum number of contracts an account can have open interest in for a given Product. Used for alerting only. EP3 will not reject orders that would cause the Position Limit to be exceeded.",
-            "format": "int64"
-          },
-          "question": {
-            "title": "The exact question that describes the conditions for an affirmative outcome of the event. Example: Will the May 2022 CPI be greater than 1.5%?",
-            "type": "string"
-          },
-          "source_agency": {
-            "type": "string",
-            "description": "Source of the resulting outcome."
-          },
-          "source_agency_url": {
-            "type": "string",
-            "description": "The website of the Source Agency."
-          },
-          "strike_evaluation_lower_limit": {
-            "type": "string",
-            "description": "The lower limit of values to consider valid for evaluation in comparison to the strike value."
-          },
-          "strike_evaluation_upper_limit": {
-            "type": "string",
-            "description": "The upper limit of values to consider valid for evaluation in comparison to the strike value."
-          },
-          "strike_unit": {
-            "type": "string",
-            "description": "Describes what the strike_value (which is a string in the proto) represents in a business sense. Likely to be \"string\", \"integer\", \"decimal\", or \"percentage\".\nFor example a strike_value of \"1.5\" and a strike_unit of \"percentage\" means that the strike is 1.5%."
-          },
-          "strike_value": {
-            "type": "string",
-            "description": "Determines the threshold by which an event is said to have happened."
-          },
-          "sub_types": {
-            "type": "array",
-            "description": "sub_types describe the instrument sub type price adjustment models.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1HedgeMarket"
-            }
-          },
-          "time_specifier": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "underlying_event_specification": {
-            "type": "string",
-            "description": "The legal language describing how the market outcome and expiration is determined."
-          }
-        },
-        "description": "EventAttributes are attributes that define an Event tradable instrument."
-      },
-      "v1beta1CalculationMethod": {
-        "type": "string",
-        "description": "CalculationMethod of the event.\n\n - CALCULATION_METHOD_UNDEFINED: The undefined default value.\n - CALCULATION_METHOD_MONTH_OVER_MONTH: Indicates the outcome data value (e.g. 1.5%) used to resolve an event (e.g. May 2022 CPI) was calculated by the data source (e.g. Bureau of Labor Statistics) as a month-over-month change.\n - CALCULATION_METHOD_YEAR_OVER_YEAR: Indicates the outcome data value (e.g. 1.5%) used to resolve an event (e.g. May 2022 CPI) was calculated by the data source (e.g. Bureau of Labor Statistics) as a year-over-year change.\n - CALCULATION_METHOD_VALUE: Indicates a single outcome data value is used to resolve the event (e.g. \"Donald Trump\" or \"12 inches of rain\"), with no comparison to a prior data value required.\n - CALCULATION_METHOD_QUARTER_OVER_QUARTER: Indicates the outcome data value (e.g. 1.5%) used to resolve an event (e.g. May 2022 CPI) was calculated by the data source (e.g. Bureau of Labor Statistics) as a quarter-over-quarter change.",
-        "default": "CALCULATION_METHOD_UNDEFINED",
-        "enum": [
-          "CALCULATION_METHOD_UNDEFINED",
-          "CALCULATION_METHOD_MONTH_OVER_MONTH",
-          "CALCULATION_METHOD_YEAR_OVER_YEAR",
-          "CALCULATION_METHOD_VALUE",
-          "CALCULATION_METHOD_QUARTER_OVER_QUARTER"
-        ]
-      },
-      "v1beta1TimeOfDay": {
-        "type": "object",
-        "properties": {
-          "hours": {
-            "type": "integer",
-            "description": "Hours of day in 24 hour format. Must be from 0 to 23.",
-            "format": "int32"
-          },
-          "minutes": {
-            "type": "integer",
-            "description": "Minutes of hour of day. Must be from 0 to 59.",
-            "format": "int32"
-          },
-          "seconds": {
-            "type": "integer",
-            "description": "Seconds of minutes of the time. Must be from 0 to 59.",
-            "format": "int32"
-          }
-        },
-        "description": "TimeOfDay represents a time of day. The date and time zone are either not significant\nor are specified elsewhere. Related types are [google.type.Date][google.type.Date]\nand `google.protobuf.Timestamp`."
-      },
-      "v1beta1PayoutType": {
-        "type": "string",
-        "description": "Payout Type for the instrument.\n\n - PAYOUT_TYPE_BINARY: The payout is either 0 or the Payout Value.\n - PAYOUT_TYPE_CONTINUOUS: The payout can be anything between the Payout Lower Bound and Payout Upper Bound.",
-        "default": "PAYOUT_TYPE_BINARY",
-        "enum": [
-          "PAYOUT_TYPE_BINARY",
-          "PAYOUT_TYPE_CONTINUOUS"
-        ]
-      },
-      "v1beta1HedgeMarket": {
-        "type": "object",
-        "properties": {
-          "buy_price_increment": {
-            "type": "string",
-            "description": "If an incoming order is a buy, then increment the price in ticks by this value for the hedge.",
-            "format": "int64"
-          },
-          "buy_quantity_ratio": {
-            "type": "string",
-            "description": "If an incoming order is a buy, then multiply the quantity by this value for the hedge. If zero, then not applied.",
-            "format": "int64"
-          },
-          "buy_scale": {
-            "type": "string",
-            "description": "If an incoming order is a buy, then multiply the price scale by this value for the hedge. If zero, then no scale applied.",
-            "format": "int64"
-          },
-          "opposing_side": {
-            "type": "boolean",
-            "description": "If set, orders submitted against the parent symbol shall appear on the opposite side in the hedge market."
-          },
-          "sell_price_increment": {
-            "type": "string",
-            "description": "If an incoming order is a sell, then increment the price in ticks by this value for the hedge.",
-            "format": "int64"
-          },
-          "sell_quantity_ratio": {
-            "type": "string",
-            "description": "If an incoming order is a buy, then multiply the quantity by this value for the hedge. If zero, then not applied.",
-            "format": "int64"
-          },
-          "sell_scale": {
-            "type": "string",
-            "description": "If an incoming order is a sell, then multiply the price scale by this value for the hedge. If zero, then no scale applied.",
-            "format": "int64"
-          },
-          "strict_limit": {
-            "type": "boolean",
-            "description": "If set, orders submitted against the parent symbol shall be mandated as strict limit orders in the hedge market."
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Symbol describes the market that a parent order shall hedge into."
-          }
-        },
-        "description": "HedgeMarket defines what markets to hedge into and by what price model."
-      },
-      "v1beta1ForexAttributes": {
-        "type": "object",
-        "properties": {
-          "base_currency": {
-            "type": "string",
-            "description": "The first currency in a currency pair. For example, the base_currency of GBP/USD is GBP.\nWhen an order is placed, the quantity on the order will be in terms of the base_currency.\nFor example, if an order to buy 10 GBP/USD is filled, the buyer will receive 10 GBP.\nNOTE: This ForexAttributes base_currency should not be confused with the InstrumentAttributes base_currency.\nThe InstrumentAttributes base_currency was created before Forex instruments existed in EP3, and therefore it should not be interpreted in a Forex context.\nRather, it simply represents the currency in which trading is \"based on\".\nFor example, for an Equity instrument where prices are quoted in USD, the InstrumentAttributes base_currency would simply be USD.\nTo avoid confusion, in the EP3 Admin UI, the InstrumentAttributes base_currency is simply displayed as \"Currency\"."
-          },
-          "quote_currency": {
-            "type": "string",
-            "description": "The second currency in a currency pair. For example, the quote_currency of GBP/USD is USD.\nWhen an order is placed, the price on the order will be in terms of the quote_currency.\nFor example, if an order to buy GBP/USD at a price of \"1.20\" is filled, the buyer will pay 1.20 USD for each GBP received.\nNOTE: Even for Forex instruments, the InstrumentAttributes base_currency is still a required field because downstream components depend on this field being populated.\nAnd it is actually the ForexAttributes quote_currency field that is equivalent to the the InstrumentAttributes base_currency, as these both represent the currency that prices are quoted in.\nAs such, EP3 validates when creating a Forex instrument that the ForexAttributes quote_currency equals the InstrumentAttributes base_currency."
-          }
-        },
-        "description": "ForexAttributes are attributes that define a Foreign Exchange (Forex) instrument."
-      },
-      "v1beta1ForwardRateAgreementSwapAttributes": {
-        "type": "object",
-        "properties": {
-          "calculation_period_number_of_days": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "ForwardRateAgreementSwapAttributes are attributes that define an Forward Rate Agreement Swap tradable instrument."
-      },
-      "v1beta1ForwardStartingInterestRateSwapAttributes": {
-        "type": "object",
-        "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "effective_date_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "fixed_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "ForwardStartingInterestRateSwapAttributes are attributes that define a Forward Starting Interest Rate Swap tradable instrument."
-      },
-      "v1beta1FutureAttributes": {
-        "type": "object",
-        "properties": {
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "FutureAttributes are attributes that define a Future tradable instrument."
-      },
-      "v1beta1InterestRateSwapAttributes": {
-        "type": "object",
-        "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "effective_date_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "fixed_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "InterestRateSwapAttributes are attributes that define an Interest Rate Swap tradable instrument."
-      },
-      "v1beta1MultilegAttributes": {
-        "type": "object",
-        "properties": {
-          "legs": {
-            "type": "array",
-            "description": "legs describe the underlying instruments that make up the overall strategy.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1LegAttributes"
-            }
-          }
-        },
-        "description": "MultilegAttributes are attributes that define a Multileg tradable instrument."
-      },
-      "v1beta1LegAttributes": {
-        "type": "object",
-        "properties": {
-          "opposing_side": {
-            "type": "boolean",
-            "description": "opposing_side describes if this leg should have a side opposite the other legs."
-          },
-          "ratio": {
-            "type": "string",
-            "description": "ratio is the multiplier of trade quantity that must align with the other legs.",
-            "format": "int64"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "symbol is the instrument id of the individual leg."
-          }
-        },
-        "description": "LegAttributes are attributes that define a leg of a Multileg tradable instrument."
-      },
-      "v1beta1NonDeliverableForwardAttributes": {
-        "type": "object",
-        "properties": {
-          "currency1": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "currency2": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "currency_instrument_name": {
-            "title": "Name used in the lookup of the currency rate price instrument",
-            "type": "string"
-          },
-          "exchange_rate_currency1": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "exchange_rate_currency2": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "exchange_rate_quote_basis": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesExchangeRateQuoteBasis"
-          },
-          "exchanged_currency1": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "exchanged_currency2": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "fixing_currency1": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "fixing_currency2": {
-            "title": "AUD | BRL | CAD | CHF | CLP | CNY | COP | DKK | EUR | GBP | HKD | IDR | INR | JPY | KRW | MXN | MYT | NZD | NOK | PEN | PHP | RUB | SEK | SGD | TWD | ZAR",
-            "type": "string"
-          },
-          "fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixing_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the valuation date is offset from the fixing date\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "fixing_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "fixing_quote_basis": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesExchangeRateQuoteBasis"
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "settlement_currency": {
-            "title": "USD",
-            "type": "string"
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_valuation_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "valuation_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "valuation_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "valuation_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
+          "symbols": {
             "type": "array",
             "items": {
               "type": "string"
             }
           }
         },
-        "description": "NonDeliverableForwardAttributes are attributes that define an Non Deliverable Forward tradable instrument."
+        "description": "Response with list of symbols."
       },
-      "v1beta1InterestRateSwapAttributesExchangeRateQuoteBasis": {
-        "type": "string",
-        "description": "InterestRateSwapAttributesExchangeRateQuoteBasis defines the method used for the Exchange Rate Quote.\n\n - INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_CURRENCY_1_PER_CURRENCY_2: The Rate is quoted as Currency 1 Per Currency 2\n - INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_CURRENCY_2_PER_CURRENCY_1: The Rate is quoted as Currency 2 Per Currency 1",
-        "default": "INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_UNDEFINED",
-        "enum": [
-          "INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_UNDEFINED",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_CURRENCY_1_PER_CURRENCY_2",
-          "INTEREST_RATE_SWAP_ATTRIBUTES_EXCHANGE_RATE_QUOTE_BASIS_CURRENCY_2_PER_CURRENCY_1"
-        ]
-      },
-      "v1beta1OptionAttributes": {
+      "OrderSizeLimit": {
         "type": "object",
         "properties": {
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "put_or_call": {
-            "$ref": "#/components/schemas/v1beta1PutOrCall"
-          },
-          "strike_price": {
-            "title": "Integer strike price representation",
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "description": "OptionAttributes are attributes that define a Option tradable instrument."
-      },
-      "v1beta1PutOrCall": {
-        "type": "string",
-        "description": "PutOrCall represents if an option type is a put or call.\n\n - PUT_OR_CALL_UNDEFINED: The undefined default value\n - PUT_OR_CALL_PUT: Gives the holder the right to sell the underlying\n - PUT_OR_CALL_CALL: Gives the holder the right to buy the underlying",
-        "default": "PUT_OR_CALL_UNDEFINED",
-        "enum": [
-          "PUT_OR_CALL_UNDEFINED",
-          "PUT_OR_CALL_PUT",
-          "PUT_OR_CALL_CALL"
-        ]
-      },
-      "v1beta1OrderSizeLimit": {
-        "type": "object",
-        "properties": {
-          "high": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high_set": {
-            "type": "boolean"
-          },
           "low": {
             "type": "string",
             "format": "int64"
           },
-          "low_set": {
-            "type": "boolean"
-          },
-          "total_notional_high": {
+          "high": {
             "type": "string",
             "format": "int64"
           },
-          "total_notional_high_set": {
+          "lowSet": {
             "type": "boolean"
           },
-          "total_notional_low": {
+          "highSet": {
+            "type": "boolean"
+          },
+          "totalNotionalLow": {
             "type": "string",
             "format": "int64"
           },
-          "total_notional_low_set": {
+          "totalNotionalHigh": {
+            "type": "string",
+            "format": "int64"
+          },
+          "totalNotionalLowSet": {
+            "type": "boolean"
+          },
+          "totalNotionalHighSet": {
             "type": "boolean"
           }
         },
         "description": "OrderSizeLimit describes optional order size limits on an instrument."
       },
-      "v1beta1OvernightIndexSwapAttributes": {
+      "PriceLimit": {
         "type": "object",
         "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "effective_date_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "fixed_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "fixed_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "fixed_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "float_fixing_dates_offset": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "payment_date_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "OvernightIndexSwapAttributes are attributes that define an Overnight Index Swap tradable instrument."
-      },
-      "v1beta1PriceLimit": {
-        "type": "object",
-        "properties": {
-          "high": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high_set": {
-            "type": "boolean"
-          },
           "low": {
             "type": "string",
             "format": "int64"
           },
-          "low_set": {
+          "high": {
+            "type": "string",
+            "format": "int64"
+          },
+          "lowSet": {
             "type": "boolean"
           },
-          "relative_high": {
+          "highSet": {
+            "type": "boolean"
+          },
+          "relativeLow": {
             "type": "number",
             "format": "double"
           },
-          "relative_high_set": {
-            "type": "boolean"
-          },
-          "relative_low": {
+          "relativeHigh": {
             "type": "number",
             "format": "double"
           },
-          "relative_low_set": {
+          "relativeLowSet": {
+            "type": "boolean"
+          },
+          "relativeHighSet": {
             "type": "boolean"
           }
         },
         "description": "PriceLimit describes optional price limits on an instrument."
       },
-      "v1beta1SinglePeriodSwapAttributes": {
+      "TimeOfDay": {
         "type": "object",
         "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "first_float_fixing_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "first_float_reset_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_calculation_period_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "fixed_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "fixed_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "float_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_fixing_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_fixing_date_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_fixing_dates_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "float_fixing_dates_offset": {
+          "hours": {
             "type": "integer",
             "format": "int32"
           },
-          "float_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_payment_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_rate_reset_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_reset_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_reset_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "floating_rate_index_tenor": {
-            "type": "string",
-            "description": "1M | 3M | 6M | 1Y | etc..."
-          },
-          "leg2_index_tenor_omit": {
-            "title": "Flag that determines if the indexTenor fields will be omitted from certain adapter code",
-            "type": "boolean"
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "payment_date_day_type": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayType"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
+          "minutes": {
             "type": "integer",
             "format": "int32"
           },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
+          "seconds": {
+            "type": "integer",
+            "format": "int32"
           }
         },
-        "description": "SinglePeriodSwapAttributes are attributes that define an Single Period Swap tradable instrument."
+        "description": "TimeOfDay represents a time of day."
       },
-      "v1beta1TradeDayRollConvention": {
+      "TradableFilter": {
         "type": "string",
-        "description": "TradeDayRollConvention are the rules used to determine how trade dates are adjusted before and after the trade day roll time.\n\n - TRADE_DAY_ROLL_CONVENTION_NEXT_DAY_BOOKING: Default behavior is to book trades before the trade day roll time_of_day into the current calendar day's trade date, and all trades at or after the roll time into the next day's trade date.\n - TRADE_DAY_ROLL_CONVENTION_PRIOR_DAY_BOOKING: Prior day booking indicates that trades before the trade day roll time_of_day are for the prior calendar day's trade date, and all trades at or after the roll time are for the current day's trade date.",
-        "default": "TRADE_DAY_ROLL_CONVENTION_NEXT_DAY_BOOKING",
         "enum": [
-          "TRADE_DAY_ROLL_CONVENTION_NEXT_DAY_BOOKING",
-          "TRADE_DAY_ROLL_CONVENTION_PRIOR_DAY_BOOKING"
-        ]
+          "TRADABLE_FILTER_NON_TRADABLE",
+          "TRADABLE_FILTER_TRADABLE"
+        ],
+        "description": "TradableFilter for filtering instruments by tradability."
       },
-      "v1beta1TradeDayRoll": {
+      "TradingHours": {
         "type": "object",
         "properties": {
-          "days_of_week": {
+          "daysOfWeek": {
             "type": "array",
-            "description": "The days of the week for which this trade day roll is active.",
             "items": {
-              "$ref": "#/components/schemas/v1beta1DayOfWeek"
+              "type": "integer",
+              "format": "int32"
             }
           },
-          "time_of_day": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          }
-        },
-        "description": "TradeDayRoll is an abstraction for describing an Instrument trade day roll schedule."
-      },
-      "v1beta1DayOfWeek": {
-        "type": "string",
-        "description": "DayOfWeek represents a day of week.\n\n - DAY_OF_WEEK_UNSPECIFIED: The unspecified day-of-week.\n - DAY_OF_WEEK_MONDAY: The day-of-week of Monday.\n - DAY_OF_WEEK_TUESDAY: The day-of-week of Tuesday.\n - DAY_OF_WEEK_WEDNESDAY: The day-of-week of Wednesday.\n - DAY_OF_WEEK_THURSDAY: The day-of-week of Thursday.\n - DAY_OF_WEEK_FRIDAY: The day-of-week of Friday.\n - DAY_OF_WEEK_SATURDAY: The day-of-week of Saturday.\n - DAY_OF_WEEK_SUNDAY: The day-of-week of Sunday.",
-        "default": "DAY_OF_WEEK_UNSPECIFIED",
-        "enum": [
-          "DAY_OF_WEEK_UNSPECIFIED",
-          "DAY_OF_WEEK_MONDAY",
-          "DAY_OF_WEEK_TUESDAY",
-          "DAY_OF_WEEK_WEDNESDAY",
-          "DAY_OF_WEEK_THURSDAY",
-          "DAY_OF_WEEK_FRIDAY",
-          "DAY_OF_WEEK_SATURDAY",
-          "DAY_OF_WEEK_SUNDAY"
-        ]
-      },
-      "v1beta1TradingHours": {
-        "type": "object",
-        "properties": {
-          "days_of_week": {
-            "type": "array",
-            "description": "The days of the week for which this trading hours segment is active.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1DayOfWeek"
-            }
+          "timeOfDay": {
+            "$ref": "#/components/schemas/TimeOfDay"
           },
           "duration": {
-            "type": "string",
-            "description": "The duration of time that this trading hours segment is to be applied."
-          },
-          "expire_all_orders": {
-            "type": "boolean",
-            "description": "Set if the instrument should expire all orders during this stage."
-          },
-          "hide_market_data": {
-            "type": "boolean",
-            "description": "Set if the instrument should hide upstream market data information during this stage."
+            "type": "string"
           },
           "state": {
-            "$ref": "#/components/schemas/ep3instrumentsv1beta1InstrumentState"
+            "$ref": "#/components/schemas/InstrumentState"
           },
-          "time_of_day": {
-            "$ref": "#/components/schemas/v1beta1TimeOfDay"
-          }
-        },
-        "description": "TradingHours is an abstraction for describing an Instrument trading schedule."
-      },
-      "ep3instrumentsv1beta1InstrumentState": {
-        "type": "string",
-        "description": "InstrumentState of the Instrument.\n\n - INSTRUMENT_STATE_PENDING: The instrument is still pending.\n - INSTRUMENT_STATE_CLOSED: The instrument is closed. No trading can occur.\n - INSTRUMENT_STATE_OPEN: The instrument is open and is available for full trading.\n - INSTRUMENT_STATE_PREOPEN: The instrument is available to place orders and modify them before the opening, but no matching will occur until the open.\n - INSTRUMENT_STATE_SUSPENDED: The instrument has temporarily suspended trading. In this state, no orders can be placed or modified, but they can be cancelled.\n - INSTRUMENT_STATE_EXPIRED: The instrument has expired.\n - INSTRUMENT_STATE_TERMINATED: The instrument has been terminated.\n - INSTRUMENT_STATE_HALTED: The instrument has halted trading.\nThis state is similar to the suspended state in that no orders can be placed or modified,\nbut orders cannot be cancelled unlike the suspended state which allows cancellation.\n - INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION: The instrument is available to place orders and modify them just as in pre open, but no matching will occur until this state has been exited.",
-        "default": "INSTRUMENT_STATE_PENDING",
-        "enum": [
-          "INSTRUMENT_STATE_PENDING",
-          "INSTRUMENT_STATE_CLOSED",
-          "INSTRUMENT_STATE_OPEN",
-          "INSTRUMENT_STATE_PREOPEN",
-          "INSTRUMENT_STATE_SUSPENDED",
-          "INSTRUMENT_STATE_EXPIRED",
-          "INSTRUMENT_STATE_TERMINATED",
-          "INSTRUMENT_STATE_HALTED",
-          "INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION"
-        ]
-      },
-      "v1beta1ZeroCouponInflationSwapAttributes": {
-        "type": "object",
-        "properties": {
-          "effective_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "effective_date_offset": {
-            "type": "integer",
-            "description": "Number of Calendar days the payment is offset\n-2 | -1 | 0 | 1 | 2 | etc...",
-            "format": "int32"
-          },
-          "fallback_bond_applicable": {
-            "title": "The applicability of a fallback bond as defined in the 2006 ISDA Inflation Derivatives Definitions, sections 1.3 and 1.8",
+          "hideMarketData": {
             "type": "boolean"
           },
-          "fixed_calculation_period_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_calculation_period_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_calculation_period_frequency_multiplier": {
-            "title": "Multiplier for the frequency field",
-            "type": "integer",
-            "format": "int32"
-          },
-          "fixed_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "fixed_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "fixed_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "fixed_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "fixed_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "fixed_payment_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "fixed_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "fixed_payment_frequency_multiplier": {
-            "title": "Multiplier for the frequency field",
-            "type": "integer",
-            "format": "int32"
-          },
-          "fixed_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "float_calculation_period_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_calculation_period_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_calculation_period_frequency_multiplier": {
-            "title": "Multiplier for the frequency field",
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_compounding_method": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesCompoundingMethod"
-          },
-          "float_day_count_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDayCountConvention"
-          },
-          "float_first_unadjusted_payment_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "float_holiday_calendars": {
-            "title": "London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "float_payment_date_relative_to": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesDateRelativeTo"
-          },
-          "float_payment_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "float_payment_frequency": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesFrequency"
-          },
-          "float_payment_frequency_multiplier": {
-            "title": "Multiplier for the frequency field",
-            "type": "integer",
-            "format": "int32"
-          },
-          "float_roll_convention": {
-            "title": "EOM | FRN | IMM | IMMCAD | IMMAUD | IMMNZD | SFE | NONE | TBILL | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |\n11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 |\nMON | TUE | WED | THU | FRI | SAT | SUN",
-            "type": "string"
-          },
-          "floating_rate_index": {
-            "title": "1M USD LIBOR | 3M USD LIBOR | 6M USD LIBOR | 3M EURIBOR | 6M EURIBOR | 3M GDP LIBOR | 6M GDP LIBOR |\n3M CDOR | 6M NIBOR | 3M JPY LIBOR | 6M JPY LIBOR | 6M CNF LIBOR | 3M BBSW | 6M BBSW | 3M STIBOR | 6M CIBOR2",
-            "type": "string"
-          },
-          "forward_starting_period": {
-            "title": "in units given by forward starting period time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "forward_starting_period_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "index_source": {
-            "title": "The reference source such as Reuters or Bloomberg\nUKRPI | CPTFEMU | FRCPXTOB",
-            "type": "string"
-          },
-          "inflation_instrument_name": {
-            "title": "Name used in the lookup of the inflation price instrument",
-            "type": "string"
-          },
-          "inflation_lag": {
-            "type": "string",
-            "description": "An offsetting period from the payment date which determines the reference period for which the inflation index is observed.\n1M | 3M | 6M | 1Y | etc..."
-          },
-          "interpolation_method": {
-            "type": "string",
-            "description": "The method used when calculating the Inflation Index Level from multiple points - the most common is Linear."
-          },
-          "maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "maturity_date_business_day_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesBusinessDayConvention"
-          },
-          "roll_and_payment_date_holiday_calendars": {
-            "title": "usually only 1 calendar but can be 2.\nNew York | London | TARGET | Canada | Norway | Swiss | Japan | Sweden | Denmark",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "side_convention": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesSideConvention"
-          },
-          "swap_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "tenor": {
-            "title": "tenor is the duration of the contract in units given by the tenor time period",
-            "type": "integer",
-            "format": "int32"
-          },
-          "tenor_time_period": {
-            "$ref": "#/components/schemas/v1beta1InterestRateSwapAttributesTimePeriod"
-          },
-          "unadjusted_effective_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "unadjusted_maturity_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          }
-        },
-        "description": "ZeroCouponInflationSwapAttributes are attributes that define a spot or forward starting Zero Coupon Inflation Swap tradable instrument."
-      },
-      "v1beta1ListSymbolsRequest": {
-        "type": "object"
-      },
-      "v1beta1ListSymbolsResponse": {
-        "type": "object",
-        "properties": {
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
-      "v1beta1CreateMarketDataSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "depth": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "snapshot_only": {
-            "type": "boolean"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "unaggregated": {
+          "expireAllOrders": {
             "type": "boolean"
           }
-        }
-      },
-      "v1beta1CreateMarketDataSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "heartbeat": {
-            "$ref": "#/components/schemas/v1beta1Heartbeat"
-          },
-          "update": {
-            "$ref": "#/components/schemas/v1beta1CreateMarketDataSubscriptionResponseUpdate"
-          }
-        }
-      },
-      "v1beta1Heartbeat": {
-        "type": "object",
-        "description": "Heartbeat can be sent on a streaming RPC call to keep the line open."
-      },
-      "v1beta1CreateMarketDataSubscriptionResponseUpdate": {
-        "type": "object",
-        "properties": {
-          "bids": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CreateMarketDataSubscriptionResponseBookEntry"
-            }
-          },
-          "book_hidden": {
-            "type": "boolean"
-          },
-          "offers": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CreateMarketDataSubscriptionResponseBookEntry"
-            }
-          },
-          "state": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1InstrumentState"
-          },
-          "stats": {
-            "$ref": "#/components/schemas/v1beta1InstrumentStats"
-          },
-          "symbol": {
-            "type": "string"
-          },
-          "transact_time": {
-            "type": "string",
-            "format": "date-time"
-          }
         },
-        "description": "Update is streamed on a market data update."
-      },
-      "CreateMarketDataSubscriptionResponseBookEntry": {
-        "type": "object",
-        "properties": {
-          "px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "qty": {
-            "type": "string",
-            "format": "int64"
-          },
-          "symbol_sub_type": {
-            "type": "string"
-          }
-        },
-        "description": "BookEntry lists a price and volume for a given record in a market data update."
-      },
-      "v1beta1InstrumentStats": {
-        "type": "object",
-        "properties": {
-          "close_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "close_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "high_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "indicative_open_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "indicative_open_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "last_trade_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "last_trade_qty": {
-            "type": "string",
-            "format": "int64"
-          },
-          "last_trade_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "low_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "low_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "notional_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "notional_traded": {
-            "type": "string",
-            "format": "int64"
-          },
-          "open_interest": {
-            "type": "string",
-            "format": "int64"
-          },
-          "open_interest_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "open_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "open_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "settlement_preliminary_flag": {
-            "type": "boolean"
-          },
-          "settlement_price_calculation_method": {
-            "$ref": "#/components/schemas/v1beta1SettlementPriceCalculationMethod"
-          },
-          "settlement_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "settlement_set_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "shares_traded": {
-            "type": "string",
-            "format": "int64"
-          },
-          "trading_reference_px": {
-            "type": "string",
-            "description": "Optional trading reference price to be used instead of settlement price as the basis for relative price limits.",
-            "format": "int64"
-          },
-          "trading_reference_set_time": {
-            "type": "string",
-            "description": "Time at which the trading reference price was set.",
-            "format": "date-time"
-          }
-        },
-        "description": "InstrumentStats are a collection of stats on an instrument."
-      },
-      "v1beta1SettlementPriceCalculationMethod": {
-        "type": "string",
-        "description": "SettlementPriceCalculationMethod indicates the settlement price calculation method of the book.\n\n - SETTLEMENT_PRICE_CALCULATION_METHOD_UNSET: The settlement price calculation method has not been set\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_1: If using the VWAP Settlement Price Logic, indicates that there were enough trades to calculate the settlement price using Volume Weighted Average Price\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_1: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Bid / Best Ask / Last Trade existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_2: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Bid / Best Ask existing and Last Trade not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_3: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Bid / Last Trade existing and Best Ask not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_4: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Bid existing and Best Ask / Last Trade not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_1: Indicates that the settlement price was set as a result of \"PerformResolution\".  In addition, settlement prices that have this calculation method are considered final and will no longer be updated by the Settlement Price Module.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_2: If using the EVENT Settlement Price Logic, indicates that the settlement price was set to the price of the trading day's latest trade for the Opposing Side = \"As Defined\" sub type\n - SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_3: If using the EVENT Settlement Price Logic, indicates that at the market close no trades for the Opposing Side = \"As Defined\" sub type during the trade day, and therefore the settlement price was set to the current settlement price\n - SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_4: If using the EVENT Settlement Price Logic, indicates that there were no trades for the Opposing Side = \"As Defined\" sub type during the trade day, nor current settlement price, and therefore the settlement price was set to 0\n - SETTLEMENT_PRICE_CALCULATION_METHOD_OVERRIDE: Indicates the calculated settlement price was overridden by the exchange\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_5: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Ask / Last Trade existing and Best Bid not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_6: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Ask existing and Best Bid / Last Trade not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_7: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Last Trade existing and Best Bid / Best Ask not existing.\n - SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_8: If using the VWAP Settlement Price Logic, indicates that there weren't enough trades to calculate the settlement price using VWAP, and the Best Bid / Best Ask / Last Trade / Previous Settlement logic was used instead, with Best Bid / Best Ask / Last Trade not existing.",
-        "default": "SETTLEMENT_PRICE_CALCULATION_METHOD_UNSET",
-        "enum": [
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_UNSET",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_1",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_1",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_2",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_3",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_4",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_1",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_2",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_3",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_EVENT_TIER_4",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_OVERRIDE",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_5",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_6",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_7",
-          "SETTLEMENT_PRICE_CALCULATION_METHOD_VWAP_TIER_2_RULE_8"
-        ]
+        "description": "TradingHours describes an instrument trading schedule segment."
       }
     }
   }

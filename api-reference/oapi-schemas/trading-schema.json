@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Dropcopy API",
+    "title": "Trading API",
     "version": "v1.0.0"
   },
   "servers": [
@@ -11,23 +11,23 @@
   ],
   "tags": [
     {
-      "name": "DropCopyAPI"
+      "name": "OrderEntryAPI"
     }
   ],
   "paths": {
-    "/v1/dropcopy/instrumentstate": {
+    "/v1/trading/orders": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Trading"
         ],
-        "summary": "Create instrument state change subscription",
-        "description": "Subscribes to instrument state changes (streaming)",
-        "operationId": "DropCopyAPI_CreateInstrumentStateChangeSubscription",
+        "summary": "Insert order",
+        "description": "Inserts an order into the exchange",
+        "operationId": "OrderEntryAPI_InsertOrder",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateInstrumentStateChangeSubscriptionRequest"
+                "$ref": "#/components/schemas/InsertOrderRequest"
               }
             }
           },
@@ -35,17 +35,11 @@
         },
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreateInstrumentStateChangeSubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreateInstrumentStateChangeSubscriptionResponse"
+                  "$ref": "#/components/schemas/InsertOrderResponse"
                 }
               }
             }
@@ -53,19 +47,19 @@
         }
       }
     },
-    "/v1/dropcopy/positionchange": {
+    "/v1/trading/orders/cancel": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Trading"
         ],
-        "summary": "Create position change subscription",
-        "description": "Subscribes to position changes (streaming)",
-        "operationId": "DropCopyAPI_CreatePositionChangeSubscription",
+        "summary": "Cancel order",
+        "description": "Requests cancellation of a working order",
+        "operationId": "OrderEntryAPI_CancelOrder",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePositionChangeSubscriptionRequest"
+                "$ref": "#/components/schemas/CancelOrderRequest"
               }
             }
           },
@@ -73,17 +67,11 @@
         },
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreatePositionChangeSubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreatePositionChangeSubscriptionResponse"
+                  "$ref": "#/components/schemas/CancelOrderResponse"
                 }
               }
             }
@@ -91,19 +79,19 @@
         }
       }
     },
-    "/v1/dropcopy/subscription": {
+    "/v1/trading/orders/cancel/list": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Trading"
         ],
-        "summary": "Create drop copy subscription",
-        "description": "Subscribes to the exchange execution feed (streaming)",
-        "operationId": "DropCopyAPI_CreateDropCopySubscription",
+        "summary": "Cancel order list",
+        "description": "Requests cancellation of multiple working orders",
+        "operationId": "OrderEntryAPI_CancelOrderList",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateDropCopySubscriptionRequest"
+                "$ref": "#/components/schemas/CancelOrderListRequest"
               }
             }
           },
@@ -111,17 +99,11 @@
         },
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreateDropCopySubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreateDropCopySubscriptionResponse"
+                  "$ref": "#/components/schemas/CancelOrderListResponse"
                 }
               }
             }
@@ -129,24 +111,240 @@
         }
       }
     },
-    "/v1/dropcopy/tradecapture": {
+    "/v1/trading/orders/cross": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Trading"
         ],
-        "summary": "Create trade capture report subscription",
-        "description": "Subscribes to trade capture reports (streaming)",
-        "operationId": "DropCopyAPI_CreateTradeCaptureReportSubscription",
+        "summary": "Insert order cross",
+        "description": "Creates a new order cross",
+        "operationId": "OrderEntryAPI_InsertOrderCross",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTradeCaptureReportSubscriptionRequest"
+                "$ref": "#/components/schemas/InsertOrderCrossRequest"
               }
             }
           },
           "required": true
         },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsertOrderCrossResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/list": {
+      "post": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Insert order list",
+        "description": "Inserts multiple orders into the exchange",
+        "operationId": "OrderEntryAPI_InsertOrderList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InsertOrderListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InsertOrderListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/open": {
+      "get": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Get open orders",
+        "description": "Returns a snapshot of working orders",
+        "operationId": "OrderEntryAPI_GetOpenOrders",
+        "parameters": [
+          {
+            "name": "symbols",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array"
+            }
+          },
+          {
+            "name": "accounts",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOpenOrdersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/preview": {
+      "post": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Preview order",
+        "description": "Creates an order preview without inserting it",
+        "operationId": "OrderEntryAPI_PreviewOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/replace": {
+      "post": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Cancel replace order",
+        "description": "Requests modification of a working order",
+        "operationId": "OrderEntryAPI_CancelReplaceOrder",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelReplaceOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelReplaceOrderResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/replace/list": {
+      "post": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Cancel replace order list",
+        "description": "Requests modification of multiple working orders",
+        "operationId": "OrderEntryAPI_CancelReplaceOrderList",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelReplaceOrderListRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelReplaceOrderListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/trading/orders/subscription": {
+      "get": {
+        "tags": [
+          "Trading"
+        ],
+        "summary": "Create order subscription",
+        "description": "Creates a subscription for working orders and updates (streaming)",
+        "operationId": "OrderEntryAPI_CreateOrderSubscription",
+        "parameters": [
+          {
+            "name": "symbols",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array"
+            }
+          },
+          {
+            "name": "accounts",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array"
+            }
+          },
+          {
+            "name": "snapshotOnly",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A successful response.(streaming responses)",
@@ -156,10 +354,10 @@
                   "type": "object",
                   "properties": {
                     "result": {
-                      "$ref": "#/components/schemas/CreateTradeCaptureReportSubscriptionResponse"
+                      "$ref": "#/components/schemas/CreateOrderSubscriptionResponse"
                     }
                   },
-                  "title": "Stream result of v1CreateTradeCaptureReportSubscriptionResponse"
+                  "title": "Stream result of v1CreateOrderSubscriptionResponse"
                 }
               }
             }
@@ -170,171 +368,246 @@
   },
   "components": {
     "schemas": {
-      "CreateDropCopySubscriptionRequest": {
+      "CancelOrderListRequest": {
         "type": "object",
         "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/CancelOrderRequest"
+            }
+          }
+        }
+      },
+      "CancelOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/CancelOrderResponse"
+            }
+          }
+        }
+      },
+      "CancelOrderRequest": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string"
           },
-          "resumeTime": {
+          "clordId": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          }
+        },
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+      },
+      "CancelOrderResponse": {
+        "type": "object"
+      },
+      "CancelReject": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "title": "Maps to exchange assigned ID for the order that could not be canceled or replaced"
+          },
+          "rejectReason": {
+            "$ref": "#/components/schemas/CxlRejReason",
+            "title": "Reason for the cancel or cancel reject"
+          },
+          "text": {
+            "type": "string",
+            "title": "Free format text"
+          },
+          "isReplace": {
+            "type": "boolean",
+            "title": "Set if this cancel reject was for a replace or not"
+          },
+          "clordId": {
+            "type": "string",
+            "title": "Client assigned ID for the order"
+          },
+          "transactTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "description": "CancelReject denotes a cancel or replace request that was rejected.\nWire-compatible with Connamara EP3 CancelReject."
+      },
+      "CancelReplaceOrderListRequest": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/CancelReplaceOrderRequest"
+            }
+          }
+        }
+      },
+      "CancelReplaceOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/CancelReplaceOrderResponse"
+            }
+          }
+        }
+      },
+      "CancelReplaceOrderRequest": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string",
+            "format": "int64"
+          },
+          "orderQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "timeInForce": {
+            "$ref": "#/components/schemas/TimeInForce"
+          },
+          "stopPrice": {
+            "type": "string",
+            "format": "int64"
+          },
+          "minQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "allOrNone": {
+            "type": "boolean"
+          },
+          "participateDontInitiate": {
+            "type": "boolean"
+          },
+          "strictLimit": {
+            "type": "boolean"
+          },
+          "goodTillTime": {
             "type": "string",
             "format": "date-time"
           },
+          "bestLimit": {
+            "type": "boolean"
+          },
+          "immediatelyExecutableLimit": {
+            "type": "boolean"
+          },
+          "manualOrderIndicator": {
+            "$ref": "#/components/schemas/ManualOrderIndicator"
+          }
+        },
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+      },
+      "CancelReplaceOrderResponse": {
+        "type": "object"
+      },
+      "CreateOrderSubscriptionRequest": {
+        "type": "object",
+        "properties": {
           "symbols": {
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "firms": {
+          "accounts": {
             "type": "array",
             "items": {
               "type": "string"
             }
+          },
+          "snapshotOnly": {
+            "type": "boolean"
           }
-        },
-        "description": "Request to start a drop copy subscription."
+        }
       },
-      "CreateDropCopySubscriptionResponse": {
+      "CreateOrderSubscriptionResponse": {
         "type": "object",
         "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
+          "heartbeat": {
+            "$ref": "#/components/schemas/Heartbeat"
           },
+          "snapshot": {
+            "$ref": "#/components/schemas/CreateOrderSubscriptionResponseSnapshot"
+          },
+          "update": {
+            "$ref": "#/components/schemas/CreateOrderSubscriptionResponseUpdate"
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "processedSentTime": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreateOrderSubscriptionResponseSnapshot": {
+        "type": "object",
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Order"
+            }
+          }
+        }
+      },
+      "CreateOrderSubscriptionResponseUpdate": {
+        "type": "object",
+        "properties": {
           "executions": {
             "type": "array",
             "items": {
               "type": "object",
               "$ref": "#/components/schemas/Execution"
             }
+          },
+          "cancelReject": {
+            "$ref": "#/components/schemas/CancelReject"
           }
-        },
-        "description": "Response for drop copy subscription."
+        }
       },
-      "CreateInstrumentStateChangeSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start an instrument state change subscription."
+      "CrossType": {
+        "type": "string",
+        "enum": [
+          "CROSS_TYPE_ALL_OR_NONE"
+        ],
+        "description": "CrossType specifies the type of order cross."
       },
-      "CreateInstrumentStateChangeSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "instruments": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/Instrument"
-            }
-          }
-        },
-        "description": "Response for instrument state change subscription."
-      },
-      "CreatePositionChangeSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start a position change subscription."
-      },
-      "CreatePositionChangeSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "positionChanges": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/PositionChange"
-            }
-          }
-        },
-        "description": "Response for position change subscription."
-      },
-      "CreateTradeCaptureReportSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start a trade capture report subscription."
-      },
-      "CreateTradeCaptureReportSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "tradeCaptureReports": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/Trade"
-            }
-          }
-        },
-        "description": "Response for trade capture report subscription."
+      "CxlRejReason": {
+        "type": "string",
+        "enum": [
+          "CXL_REJ_REASON_UNKNOWN_ORDER",
+          "CXL_REJ_REASON_EXCHANGE_CLOSED",
+          "CXL_REJ_REASON_INCORRECT_QUANTITY",
+          "CXL_REJ_REASON_INVALID_PRICE_INCREMENT",
+          "CXL_REJ_REASON_PRICE_OUT_OF_BOUNDS"
+        ],
+        "description": "CxlRejReason is a code to identify the reason for cancel rejection."
       },
       "Date": {
         "type": "object",
@@ -442,109 +715,197 @@
         ],
         "description": "ExecutionType denotes the execution type."
       },
-      "Instrument": {
+      "GetOpenOrdersRequest": {
         "type": "object",
         "properties": {
-          "symbol": {
-            "type": "string"
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
-          "tickSize": {
-            "type": "number",
-            "format": "double"
-          },
-          "baseCurrency": {
-            "type": "string"
-          },
-          "multiplier": {
-            "type": "number",
-            "format": "double"
-          },
-          "minimumTradeQty": {
-            "type": "string",
-            "format": "int64"
-          },
-          "startDate": {
-            "$ref": "#/components/schemas/Date"
-          },
-          "expirationDate": {
-            "$ref": "#/components/schemas/Date"
-          },
-          "terminationDate": {
-            "$ref": "#/components/schemas/Date"
-          },
-          "tradingSchedule": {
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "GetOpenOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "orders": {
             "type": "array",
             "items": {
               "type": "object",
-              "$ref": "#/components/schemas/TradingHours"
+              "$ref": "#/components/schemas/Order"
+            }
+          }
+        }
+      },
+      "Heartbeat": {
+        "type": "object",
+        "description": "Heartbeat can be sent on a streaming RPC call to keep the line open."
+      },
+      "InsertOrderCrossRequest": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/InsertOrderRequest"
             }
           },
-          "description": {
+          "crossType": {
+            "$ref": "#/components/schemas/CrossType"
+          },
+          "crossId": {
             "type": "string"
           },
-          "clearingHouse": {
-            "type": "string"
-          },
-          "minimumUnaffiliatedFirms": {
-            "type": "string",
-            "format": "int64"
-          },
-          "nonTradable": {
-            "type": "boolean",
-            "title": "type_attributes omitted - complex oneof with many swap types"
-          },
-          "jsonAttributes": {
-            "type": "string"
-          },
-          "productId": {
-            "type": "string"
-          },
-          "priceLimit": {
-            "$ref": "#/components/schemas/PriceLimit"
-          },
-          "orderSizeLimit": {
-            "$ref": "#/components/schemas/OrderSizeLimit"
-          },
-          "expirationTime": {
-            "$ref": "#/components/schemas/TimeOfDay"
-          },
-          "tradeSettlementPeriod": {
-            "type": "string",
-            "format": "int64"
-          },
-          "state": {
-            "$ref": "#/components/schemas/InstrumentState"
-          },
-          "priceScale": {
-            "type": "string",
-            "format": "int64"
-          },
-          "fractionalQtyScale": {
-            "type": "string",
-            "format": "int64"
-          },
-          "settlementCurrency": {
-            "type": "string"
-          },
-          "settlementPriceScale": {
-            "type": "string",
-            "format": "int64"
+          "crossPrioritizedSide": {
+            "$ref": "#/components/schemas/Side"
           }
         },
-        "description": "Instrument represents a tradable instrument.\nWire-compatible with Connamara EP3 Instrument (core fields)."
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
       },
-      "InstrumentState": {
-        "type": "string",
-        "enum": [
-          "INSTRUMENT_STATE_OPEN",
-          "INSTRUMENT_STATE_PREOPEN",
-          "INSTRUMENT_STATE_SUSPENDED",
-          "INSTRUMENT_STATE_EXPIRED",
-          "INSTRUMENT_STATE_TERMINATED",
-          "INSTRUMENT_STATE_HALTED",
-          "INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION"
-        ],
-        "description": "InstrumentState represents the state of an instrument."
+      "InsertOrderCrossResponse": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/InsertOrderResponse"
+            }
+          }
+        }
+      },
+      "InsertOrderListRequest": {
+        "type": "object",
+        "properties": {
+          "requests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/InsertOrderRequest"
+            }
+          }
+        }
+      },
+      "InsertOrderListResponse": {
+        "type": "object",
+        "properties": {
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/InsertOrderResponse"
+            }
+          }
+        }
+      },
+      "InsertOrderRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "orderQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string",
+            "format": "int64"
+          },
+          "timeInForce": {
+            "$ref": "#/components/schemas/TimeInForce"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "account": {
+            "type": "string"
+          },
+          "stopPrice": {
+            "type": "string",
+            "format": "int64"
+          },
+          "minQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "selfMatchPreventionId": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "allOrNone": {
+            "type": "boolean"
+          },
+          "sessionId": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "clientAccountId": {
+            "type": "string"
+          },
+          "clientParticipantId": {
+            "type": "string"
+          },
+          "participateDontInitiate": {
+            "type": "boolean"
+          },
+          "cashOrderQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "strictLimit": {
+            "type": "boolean"
+          },
+          "goodTillTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bestLimit": {
+            "type": "boolean"
+          },
+          "immediatelyExecutableLimit": {
+            "type": "boolean"
+          },
+          "selfMatchPreventionInstruction": {
+            "$ref": "#/components/schemas/SelfMatchPreventionInstruction"
+          },
+          "orderCapacity": {
+            "$ref": "#/components/schemas/OrderCapacity"
+          },
+          "ignorePriceValidityChecks": {
+            "type": "boolean"
+          },
+          "manualOrderIndicator": {
+            "$ref": "#/components/schemas/ManualOrderIndicator"
+          }
+        },
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+      },
+      "InsertOrderResponse": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string"
+          }
+        }
       },
       "LegPrice": {
         "type": "object",
@@ -786,40 +1147,6 @@
         ],
         "description": "OrderCapacity designates the capacity of the party placing an order."
       },
-      "OrderSizeLimit": {
-        "type": "object",
-        "properties": {
-          "low": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high": {
-            "type": "string",
-            "format": "int64"
-          },
-          "lowSet": {
-            "type": "boolean"
-          },
-          "highSet": {
-            "type": "boolean"
-          },
-          "totalNotionalLow": {
-            "type": "string",
-            "format": "int64"
-          },
-          "totalNotionalHigh": {
-            "type": "string",
-            "format": "int64"
-          },
-          "totalNotionalLowSet": {
-            "type": "boolean"
-          },
-          "totalNotionalHighSet": {
-            "type": "boolean"
-          }
-        },
-        "description": "OrderSizeLimit describes optional order size limits on an instrument."
-      },
       "OrderState": {
         "type": "string",
         "enum": [
@@ -846,95 +1173,21 @@
         ],
         "description": "OrderType indicates the type of an order."
       },
-      "Position": {
+      "PreviewOrderRequest": {
         "type": "object",
         "properties": {
-          "account": {
-            "type": "string"
-          },
-          "symbol": {
-            "type": "string"
-          },
-          "netPosition": {
-            "type": "string",
-            "format": "int64"
-          },
-          "qtyBought": {
-            "type": "string",
-            "format": "int64"
-          },
-          "qtySold": {
-            "type": "string",
-            "format": "int64"
-          },
-          "cost": {
-            "type": "string",
-            "format": "int64"
-          },
-          "realized": {
-            "type": "string",
-            "format": "int64"
-          },
-          "bodPosition": {
-            "type": "string",
-            "format": "int64"
-          },
-          "expired": {
-            "type": "boolean"
-          },
-          "updateTime": {
-            "type": "string",
-            "format": "date-time"
+          "request": {
+            "$ref": "#/components/schemas/InsertOrderRequest"
           }
-        },
-        "title": "Position represents a position in the system.\nWire-compatible with Connamara EP3 Position.\nNOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
-      "PositionChange": {
+      "PreviewOrderResponse": {
         "type": "object",
         "properties": {
-          "position": {
-            "$ref": "#/components/schemas/Position"
-          },
-          "changeTime": {
-            "type": "string",
-            "format": "date-time"
+          "previewOrder": {
+            "$ref": "#/components/schemas/Order"
           }
-        },
-        "description": "PositionChange represents a change in position."
-      },
-      "PriceLimit": {
-        "type": "object",
-        "properties": {
-          "low": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high": {
-            "type": "string",
-            "format": "int64"
-          },
-          "lowSet": {
-            "type": "boolean"
-          },
-          "highSet": {
-            "type": "boolean"
-          },
-          "relativeLow": {
-            "type": "number",
-            "format": "double"
-          },
-          "relativeHigh": {
-            "type": "number",
-            "format": "double"
-          },
-          "relativeLowSet": {
-            "type": "boolean"
-          },
-          "relativeHighSet": {
-            "type": "boolean"
-          }
-        },
-        "description": "PriceLimit describes optional price limits on an instrument."
+        }
       },
       "SelfMatchPreventionInstruction": {
         "type": "string",
@@ -963,122 +1216,6 @@
           "TIME_IN_FORCE_FILL_OR_KILL"
         ],
         "description": "TimeInForce specifies how long the order remains in effect."
-      },
-      "TimeOfDay": {
-        "type": "object",
-        "properties": {
-          "hours": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "minutes": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "seconds": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "description": "TimeOfDay represents a time of day."
-      },
-      "Trade": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Exchange assigned ID for this trade"
-          },
-          "aggressor": {
-            "$ref": "#/components/schemas/Execution",
-            "title": "Execution for the incoming order included in the trade"
-          },
-          "passive": {
-            "$ref": "#/components/schemas/Execution",
-            "title": "Execution for the resting order included in the trade"
-          },
-          "tradeType": {
-            "$ref": "#/components/schemas/TradeType",
-            "title": "Type of trade specified"
-          },
-          "state": {
-            "$ref": "#/components/schemas/TradeState",
-            "title": "State of trade specified"
-          },
-          "reportingCounterparty": {
-            "$ref": "#/components/schemas/Side",
-            "title": "Reporting counterparty for this trade"
-          },
-          "text": {
-            "type": "string",
-            "description": "Additional detail regarding the status of the trade. May be empty."
-          },
-          "tradeLinkId": {
-            "type": "string",
-            "description": "Exchange assigned ID for a group of trades that all executed within the same underlying transactional event."
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Metadata attached to this trade."
-          }
-        },
-        "description": "Trade is an execution grouping reflecting a trade between two orders.\nWire-compatible with Connamara EP3 Trade (from v1beta1/api.proto)."
-      },
-      "TradeState": {
-        "type": "string",
-        "enum": [
-          "TRADE_STATE_NEW",
-          "TRADE_STATE_CLEARED",
-          "TRADE_STATE_BUSTED",
-          "TRADE_STATE_INFLIGHT",
-          "TRADE_STATE_PENDING_RISK",
-          "TRADE_STATE_PENDING_CLEARED",
-          "TRADE_STATE_REJECTED",
-          "TRADE_STATE_CLEARING_ACKNOWLEDGED",
-          "TRADE_STATE_RETRY_REQUEST"
-        ],
-        "description": "TradeState indicates the state of a trade."
-      },
-      "TradeType": {
-        "type": "string",
-        "enum": [
-          "TRADE_TYPE_REGULAR",
-          "TRADE_TYPE_REQUEST_FOR_QUOTE",
-          "TRADE_TYPE_BLOCK",
-          "TRADE_TYPE_CROSS"
-        ],
-        "description": "TradeType describes the execution type of the trade."
-      },
-      "TradingHours": {
-        "type": "object",
-        "properties": {
-          "daysOfWeek": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "timeOfDay": {
-            "$ref": "#/components/schemas/TimeOfDay"
-          },
-          "duration": {
-            "type": "string"
-          },
-          "state": {
-            "$ref": "#/components/schemas/InstrumentState"
-          },
-          "hideMarketData": {
-            "type": "boolean"
-          },
-          "expireAllOrders": {
-            "type": "boolean"
-          }
-        },
-        "description": "TradingHours describes an instrument trading schedule segment."
       },
       "UnsolicitedCxlReason": {
         "type": "string",
