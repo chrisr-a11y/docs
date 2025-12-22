@@ -89,11 +89,14 @@ The exchange uses **Protocol Buffers (proto3)** to define message structures. Pr
 ### Package Structure
 
 ```
-connamara.ep3.v1beta1           # Core services
-├── MarketDataSubscriptionAPI   # Market data streaming
-├── OrderEntryAPI               # Order streaming and entry
-connamara.ep3.orders.v1beta1    # Order message types
-connamara.ep3.instruments.v1beta1  # Instrument definitions
+polymarket.v1                       # Core services
+├── MarketDataSubscriptionAPI       # Market data streaming
+├── OrderEntryAPI                   # Order streaming and entry
+├── RefDataAPI                      # Reference data (instruments, symbols)
+├── AccountsAPI                     # Account information
+├── PositionAPI                     # Positions and balances
+├── ReportAPI                       # Order and trade reports
+├── DropCopyAPI                     # Trade execution feed
 ```
 
 ## Quick Start
