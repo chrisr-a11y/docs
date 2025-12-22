@@ -6,7 +6,7 @@ servers:
 - url: http://api.polymarketexchange.com
 tags:
 - name: AccountsAPI
-- name: MarketDataAPI
+- name: RefDataAPI
 - name: MarketDataSubscriptionAPI
 - name: OrderAPI
 - name: OrderEntryAPI
@@ -476,9 +476,9 @@ paths:
   /v1beta1/get_instrument_metadata:
     post:
       tags:
-      - MarketDataAPI
+      - RefDataAPI
       summary: Get Instrument Metadata
-      operationId: MarketDataAPI_GetInstrumentMetadata
+      operationId: RefDataAPI_GetInstrumentMetadata
       requestBody:
         content:
           application/json:
@@ -787,10 +787,10 @@ paths:
   /v1beta1/list_instruments:
     post:
       tags:
-      - MarketDataAPI
+      - RefDataAPI
       summary: List Instruments
       description: Returns a list of instruments matching the request.
-      operationId: MarketDataAPI_ListInstruments
+      operationId: RefDataAPI_ListInstruments
       requestBody:
         content:
           application/json:
@@ -844,10 +844,10 @@ paths:
   /v1beta1/list_symbols:
     post:
       tags:
-      - MarketDataAPI
+      - RefDataAPI
       summary: List Symbols
       description: Returns a list of symbols on the exchange.
-      operationId: MarketDataAPI_ListSymbols
+      operationId: RefDataAPI_ListSymbols
       requestBody:
         content:
           application/json:
