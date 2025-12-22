@@ -7,6 +7,18 @@ description: 'Manage funding sources, accounts, and transactions'
 
 The Funding API provides read access to funding sources, accounts, and transaction history.
 
+## Authentication
+
+<Warning>
+**Auth0 JWT Required** - All Funding endpoints require authentication. Include your Auth0 JWT token in the `Authorization` header.
+</Warning>
+
+```bash
+Authorization: Bearer YOUR_AUTH0_JWT_TOKEN
+```
+
+See [Auth0 Onboarding](/getting-started/auth0-onboarding) for instructions on obtaining tokens.
+
 ## Endpoints
 
 | Method | Endpoint | Description |

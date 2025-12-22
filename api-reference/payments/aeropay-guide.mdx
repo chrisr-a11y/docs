@@ -7,6 +7,18 @@ description: 'Bank account linking and ACH transfers'
 
 Aeropay enables users to link their bank accounts and make ACH transfers for deposits and withdrawals.
 
+## Authentication
+
+<Warning>
+**Auth0 JWT Required** - All Aeropay endpoints require authentication. Include your Auth0 JWT token in the `Authorization` header.
+</Warning>
+
+```bash
+Authorization: Bearer YOUR_AUTH0_JWT_TOKEN
+```
+
+See [Auth0 Onboarding](/getting-started/auth0-onboarding) for instructions on obtaining tokens.
+
 ## Endpoints Overview
 
 ### Orchestrated Endpoints (Recommended)
