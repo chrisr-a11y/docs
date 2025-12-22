@@ -1,21 +1,54 @@
-This is a Mintlify documentation site which currently 
-documents the polymarket existing API exchange docs.
+# Polymarket Exchange Partner Docs
 
-We are releasing a new API, which is adjacent to this folder in go-exchange-gateway-us.
+Mintlify documentation site for the Polymarket Exchange API.
 
-This new API, has everyting the old API has.  FIX, will remain
-the same as the existing instructions.  gRPC and REST
-shoujld match the new code, which, is nearly identical to 
-the existing site, as it is a proxy.  We added order book
-l2 and orderbook bbo for example.  Otherwise, it should be
-similar or identical.
+## Publishing Setup
 
-Review these docs here, and the new gateay, and make 
-a new branch here which we can deploy to a new URL on mintlify.
+**TEMPORARY**: Documentation is published from Chris's personal repo:
+- **Remote name:** `personal`
+- **Repo:** `git@github-polymarket:chrisr-a11y/docs.git`
+- **Branch:** `main`
+- **Mintlify URL:** https://polymarket-7725624a.mintlify.app
 
-We salso have asdded KYC, Aeropay and checkout, and health.
+**Publishing workflow:**
+```bash
+# From go-exchange-gateway-us, sync swagger schemas:
+python3 scripts/sync-swagger-to-docs.py
 
-We removed basic auth for now. 
+# Commit and push from website-dcm-docs:
+cd ../website-dcm-docs
+git add .
+git commit -m "docs: Update API schemas"
+git push personal main
+```
 
-Those shoujld be changes you find, and tehre are otehrs
+The org repo (`origin` = Polymarket-US/website-dcm-docs) is NOT currently used for Mintlify publishing.
+
+## API Documentation Structure
+
+**REST API Tab** (uses OpenAPI schemas from `api-reference/oapi-schemas/`):
+- Health - Service health check
+- Accounts - User/account management
+- Trading - Insert/cancel orders (OrderEntryAPI)
+- Orders - Search orders/trades (OrderAPI)
+- Positions - Balances and positions
+- Reference Data - Instruments and symbols (RefDataAPI)
+- Drop Copy - Execution feeds
+- Order Book - L2 snapshots, BBO
+- KYC - Identity verification
+- Payments - Aeropay, Checkout.com, Funding
+
+**gRPC Streaming Tab** - Market data and order subscriptions
+
+**FIX API Tab** - FIX protocol documentation (unchanged from original)
+
+## URL Path Convention
+
+The REST API uses `/v1/` paths (RESTful style):
+- `/v1/trading/orders` - Insert order
+- `/v1/trading/orders/cancel` - Cancel order
+- `/v1/orders/search` - Search orders
+- `/v1/refdata/instruments` - List instruments
+
+Legacy `/v1beta1/` paths are supported for backwards compatibility but NOT documented.
 
