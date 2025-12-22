@@ -28,11 +28,11 @@
             "pages": [
               "getting-started/getting-access",
               "getting-started/environments",
+              "getting-started/health-check",
               "getting-started/auth0-onboarding",
-              "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/vpc-connection",
-              "getting-started/health-check",
+              "getting-started/rate-limits",
               "getting-started/common-pitfalls",
               "getting-started/backwards-compatibility"
             ]
@@ -133,13 +133,13 @@
       {
         "tab": "FIX API",
         "pages": [
-          "/api-reference/fix-api/ep3-fix-overview",
-          "/api-reference/fix-api/ep3-fix-component-definitions",
-          "/api-reference/fix-api/ep3-fix-session-management",
-          "/api-reference/fix-api/ep3-fix-order-entry-and-matching",
-          "/api-reference/fix-api/ep3-fix-market-data",
-          "/api-reference/fix-api/ep3-fix-api-reference-data",
-          "/api-reference/fix-api/ep3-fix-appendix-a-fix-data-types"
+          "/api-reference/fix-api/fix-overview",
+          "/api-reference/fix-api/fix-component-definitions",
+          "/api-reference/fix-api/fix-session-management",
+          "/api-reference/fix-api/fix-order-entry-and-matching",
+          "/api-reference/fix-api/fix-market-data",
+          "/api-reference/fix-api/fix-api-reference-data",
+          "/api-reference/fix-api/fix-appendix-a-fix-data-types"
         ]
       },
       {

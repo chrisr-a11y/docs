@@ -19,14 +19,14 @@ sequenceDiagram
     participant ISV as Your Application
     participant Auth0
     participant Gateway as Polymarket Gateway
-    participant EP3 as Trading Engine
+    participant Exchange as Exchange
 
     ISV->>Auth0: Client Credentials Grant
     Auth0-->>ISV: Auth0 JWT Token
     ISV->>Gateway: API Request + JWT
     Gateway->>Gateway: Validate JWT
-    Gateway->>EP3: Execute Request
-    EP3-->>Gateway: Response
+    Gateway->>Exchange: Execute Request
+    Exchange-->>Gateway: Response
     Gateway-->>ISV: API Response
 ```
 

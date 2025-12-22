@@ -5,6 +5,26 @@ mode: "center"
 
 This guide provides a comprehensive overview of the Polymarket Exchange's platform functionality, market structure, and API architecture. Please note that this documentation is specific to the Polymarket Exchange.
 
+## Quick Health Check
+
+Verify connectivity to the API with a simple health check:
+
+**REST API:**
+```bash
+curl https://api.prod.polymarketexchange.com/v1/health
+```
+
+**gRPC:**
+```bash
+grpcurl grpc.prod.polymarketexchange.com:443 polymarket.v1.HealthAPI/HealthCheck
+```
+
+**Response:**
+```json
+{"status": "ok"}
+```
+
+---
 
 <Columns cols={2}>
     <Card
@@ -15,28 +35,39 @@ This guide provides a comprehensive overview of the Polymarket Exchange's platfo
     Request access to the Polymarket Exchange
   </Card>
     <Card
+    title="Environments"
+    icon="server"
+    href="/getting-started/environments"
+  >
+    Dev, preprod, and production endpoints
+  </Card>
+    <Card
     title="Authentication"
     icon="key"
-    href="/streaming-endpoints/authentication"
+    href="/getting-started/auth0-onboarding"
   >
-    Learn how to authenticate with the API.
+    Learn how to authenticate with Auth0
   </Card>
-  
   <Card
     title="Rate Limits"
     icon="gauge"
-    href="getting-started/rate-limits"
+    href="/getting-started/rate-limits"
   >
-    API Rate Limits for various endpoints.
+    API Rate Limits for various endpoints
+  </Card>
+    <Card
+    title="REST API"
+    icon="code"
+    href="/api-reference/orderbook/overview"
+  >
+    Explore REST API endpoints
   </Card>
     <Card
     title="Changelog"
     icon="list"
     href="/changelog"
   >
-    Keep up with API changes.
+    Keep up with API changes
   </Card>
-
-
 </Columns>
 

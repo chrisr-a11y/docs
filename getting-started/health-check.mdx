@@ -5,35 +5,59 @@ description: 'Monitor API service status'
 
 # Health Check
 
-The Health Check endpoint allows you to verify the API service status before making trading requests.
+The Health Check endpoint allows you to verify the API service status before making trading requests. Both REST and gRPC health checks are available.
 
-## Endpoint
+## REST Health Check
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/v1/health` | Check service health status |
 
-## Request
+### Request
 
 ```bash
-curl -X GET "https://api.polymarketexchange.com/rest/api/v1/health"
+curl https://api.prod.polymarketexchange.com/v1/health
 ```
 
 No authentication is required for the health check endpoint.
 
-## Response
+### Response
 
 ```json
-{
-  "status": "ok"
-}
+{"status": "ok"}
 ```
 
-### Response Fields
+---
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `status` | string | Service status (`ok` when healthy) |
+## gRPC Health Check
+
+| Service | Method |
+|---------|--------|
+| `polymarket.v1.HealthAPI` | `HealthCheck` |
+
+### Request
+
+```bash
+grpcurl grpc.prod.polymarketexchange.com:443 polymarket.v1.HealthAPI/HealthCheck
+```
+
+### Response
+
+```json
+{"status": "ok"}
+```
+
+---
+
+## Environment Endpoints
+
+| Environment | REST | gRPC |
+|-------------|------|------|
+| **Dev** | `https://api.dev01.polymarketexchange.com/v1/health` | `grpc.dev01.polymarketexchange.com:443` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com/v1/health` | `grpc.preprod.polymarketexchange.com:443` |
+| **Prod** | `https://api.prod.polymarketexchange.com/v1/health` | `grpc.prod.polymarketexchange.com:443` |
+
+---
 
 ## Use Cases
 
@@ -44,13 +68,14 @@ Before initiating trading operations, verify the API is healthy:
 ```python
 import requests
 
-def check_health():
-    response = requests.get("https://api.polymarketexchange.com/rest/api/v1/health")
+def check_health(env="prod"):
+    url = f"https://api.{env}.polymarketexchange.com/v1/health"
+    response = requests.get(url)
     if response.status_code == 200 and response.json().get("status") == "ok":
         return True
     return False
 
-if check_health():
+if check_health("prod"):
     # Proceed with trading operations
     pass
 else:
