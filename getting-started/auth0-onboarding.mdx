@@ -29,7 +29,7 @@ sequenceDiagram
     participant ISV as Your Application
     participant Auth0
     participant Gateway as Polymarket Gateway
-    participant EP3 as Trading Engine
+    participant Engine as Trading Engine
 
     ISV->>ISV: Sign JWT with Private Key
     ISV->>Auth0: Token Request + Signed JWT
@@ -37,8 +37,8 @@ sequenceDiagram
     Auth0-->>ISV: Auth0 Access Token
     ISV->>Gateway: API Request + Access Token
     Gateway->>Gateway: Validate Token
-    Gateway->>EP3: Execute Request
-    EP3-->>Gateway: Response
+    Gateway->>Engine: Execute Request
+    Engine-->>Gateway: Response
     Gateway-->>ISV: API Response
 ```
 
