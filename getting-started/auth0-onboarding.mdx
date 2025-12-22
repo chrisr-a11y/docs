@@ -5,6 +5,15 @@ description: 'Getting started with Auth0 authentication for ISVs, IBs, and FCMs'
 
 # Auth0 Onboarding
 
+<Tip>
+**Quick Start: Generate your key pair**
+```bash
+openssl genrsa -out my_private_key.pem 2048
+openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
+```
+Send us `my_public_key.pem` - keep `my_private_key.pem` secret!
+</Tip>
+
 The Polymarket Exchange API uses [Auth0](https://auth0.com/) for authentication with **Private Key JWT** authentication. This is a more secure method than client secrets - you generate your own key pair and keep the private key secure.
 
 ## Overview

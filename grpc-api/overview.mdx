@@ -1,0 +1,191 @@
+---
+title: "gRPC API Overview"
+sidebarTitle: "Overview"
+description: "Guide to using gRPC unary (request/response) methods on Polymarket Exchange"
+---
+
+# gRPC API
+
+The Polymarket Exchange exposes all API functionality via **gRPC** using Protocol Buffers. This section covers **unary (request/response) methods** - for streaming services, see [gRPC Streaming](/streaming-endpoints/grpc-overview).
+
+## Why Use gRPC?
+
+gRPC offers several advantages over REST:
+
+- **Performance**: Binary protocol with smaller payloads and faster serialization
+- **Type Safety**: Strongly-typed messages defined in Protocol Buffers
+- **Streaming**: Native support for bidirectional streaming (covered in gRPC Streaming tab)
+- **Code Generation**: Auto-generate client libraries in any language
+
+## Server Endpoints
+
+### Pre-Production Environment
+```
+grpc.api.preprod.polymarketexchange.com:443
+```
+
+### Production Environment
+```
+grpc.api.polymarketexchange.com:443
+```
+
+<Info>
+All gRPC connections use **TLS/SSL**. Ensure your client is configured for secure connections.
+</Info>
+
+## Authentication
+
+All gRPC calls require an Auth0 JWT token passed in the `authorization` metadata header:
+
+```python
+import grpc
+
+# Obtain token from Auth0
+token = get_auth0_token()
+
+# Create authenticated channel
+credentials = grpc.ssl_channel_credentials()
+channel = grpc.secure_channel("grpc.api.polymarketexchange.com:443", credentials)
+
+# Add authorization metadata to calls
+metadata = [("authorization", f"Bearer {token}")]
+response = stub.GetWhoAmI(request, metadata=metadata)
+```
+
+See [Authentication](/streaming-endpoints/authentication) for details on obtaining Auth0 tokens.
+
+## Available Services
+
+### Trading Services
+
+| Service | Description |
+|---------|-------------|
+| **OrderEntryAPI** | Insert, cancel, and preview orders |
+| **ReportAPI** | Search orders, trades, and executions |
+| **PositionAPI** | Query account balances and positions |
+
+### Market Data Services
+
+| Service | Description |
+|---------|-------------|
+| **RefDataAPI** | List instruments, symbols, and metadata |
+| **OrderBookAPI** | Get order book snapshots and BBO |
+
+### Account Services
+
+| Service | Description |
+|---------|-------------|
+| **AccountsAPI** | Get user info, list accounts |
+| **HealthAPI** | Health check endpoint |
+
+### Funding Services
+
+| Service | Description |
+|---------|-------------|
+| **KYCAPI** | KYC verification status and referral codes |
+| **AeropayAPI** | ACH bank linking via Aeropay |
+| **CheckoutAPI** | Card payments via Checkout.com |
+| **FundingAPI** | Funding accounts and transactions |
+
+### Execution Feed
+
+| Service | Description |
+|---------|-------------|
+| **DropCopyAPI** | Trade capture and execution feed |
+
+## Package Structure
+
+All services are in the `polymarket.v1` package:
+
+```protobuf
+package polymarket.v1;
+
+service OrderEntryAPI {
+  rpc InsertOrder(InsertOrderRequest) returns (InsertOrderResponse);
+  rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);
+  rpc PreviewOrder(PreviewOrderRequest) returns (PreviewOrderResponse);
+  rpc GetOpenOrders(GetOpenOrdersRequest) returns (GetOpenOrdersResponse);
+}
+```
+
+## Quick Start
+
+### 1. Install gRPC Libraries
+
+```bash
+# Python
+pip install grpcio grpcio-tools
+
+# Go
+go get google.golang.org/grpc
+
+# Node.js
+npm install @grpc/grpc-js @grpc/proto-loader
+```
+
+### 2. Obtain Proto Files
+
+Contact [support@qcex.com](mailto:support@qcex.com) to receive the proto files, or use gRPC server reflection to discover services at runtime.
+
+### 3. Generate Client Code
+
+```bash
+# Python example
+python -m grpc_tools.protoc \
+  --proto_path=./protos \
+  --python_out=./gen \
+  --grpc_python_out=./gen \
+  ./protos/polymarket/v1/*.proto
+```
+
+### 4. Make Your First Call
+
+```python
+import grpc
+from gen.polymarket.v1 import accounts_pb2, accounts_pb2_grpc
+
+# Connect
+channel = grpc.secure_channel(
+    "grpc.api.polymarketexchange.com:443",
+    grpc.ssl_channel_credentials()
+)
+stub = accounts_pb2_grpc.AccountsAPIStub(channel)
+
+# Authenticate and call
+metadata = [("authorization", f"Bearer {token}")]
+response = stub.GetWhoAmI(accounts_pb2.GetWhoAmIRequest(), metadata=metadata)
+print(f"User ID: {response.user_id}")
+```
+
+## REST vs gRPC
+
+Both REST and gRPC access the same underlying services. Choose based on your needs:
+
+| Aspect | REST | gRPC |
+|--------|------|------|
+| Protocol | HTTP/JSON | HTTP/2 + Protobuf |
+| Performance | Good | Better |
+| Type Safety | Schema optional | Built-in |
+| Browser Support | Native | Requires proxy |
+| Tooling | curl, Postman | grpcurl, Bloom RPC |
+
+<Tip>
+Most integrations use **REST for simplicity** and **gRPC for performance-critical paths** like order entry.
+</Tip>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Trading Services" icon="chart-line" href="/grpc-api/trading">
+    Order entry and execution
+  </Card>
+  <Card title="Account Services" icon="user" href="/grpc-api/accounts">
+    Account and position queries
+  </Card>
+  <Card title="Market Data" icon="database" href="/grpc-api/market-data">
+    Reference data and order book
+  </Card>
+  <Card title="Proto Reference" icon="code" href="/grpc-api/proto-reference">
+    Complete proto definitions
+  </Card>
+</CardGroup>
