@@ -2,9 +2,9 @@
 title: "FIX Market Data"
 ---
 
-The market data sessions for the PMX Platform are available by a second, separate FIX gateway; they are not accessible via the order-entry session.
+The market data sessions for the Polymarket US are available by a second, separate FIX gateway; they are not accessible via the order-entry session.
 
-When displaying the order book, the PMX Platform provides a Market-by-Order view; i.e each order is displayed individually with a corresponding timestamp (used to determine time priority within a price level). Each order also carries the unique OrderID reference, which Participants can use to identify their own orders in market data.
+When displaying the order book, the Polymarket US provides a Market-by-Order view; i.e each order is displayed individually with a corresponding timestamp (used to determine time priority within a price level). Each order also carries the unique OrderID reference, which Participants can use to identify their own orders in market data.
 
 ## Subscribing to Market Data
 
@@ -24,7 +24,7 @@ Participants can subscribe to market data for a given symbol using a MarketDataR
 | →55 | Symbol | Y | String | Instrument symbol. |
 | < Standard Trailer > |  | Y |  |  |
 
-If the MarketDataRequest [V] message is valid, PMX Platform will respond with a single MarketDataSnapshotFullRefresh [W] message for each requested Instrument, providing details of all orders in the order book (all levels as a repeating group within a single message). Note that the (repeating) MDEntryType (269) field can be specified if required to tailor the elements returned.
+If the MarketDataRequest [V] message is valid, Polymarket US will respond with a single MarketDataSnapshotFullRefresh [W] message for each requested Instrument, providing details of all orders in the order book (all levels as a repeating group within a single message). Note that the (repeating) MDEntryType (269) field can be specified if required to tailor the elements returned.
 
 **Example 18:** Request a snapshot of all market data elements using MarketDataRequest [V] message
 
@@ -32,7 +32,7 @@ If the MarketDataRequest [V] message is valid, PMX Platform will respond with a 
 8=FIXT.1.1 | 9=92 | 35=V | 49=SENDER | 56=TARGET | 34=4 | 52=20240517-19:05:47 | 262=MD-REQ-001 | 263=1 | 264=3 | 146=1 | 55=GOOG | 10=075 |
 ```
 
-Note that since the PMX Platform returns market data split by order, requesting only the best price using MarketDepth (264) = 1 (Top of book) may still return multiple bid and offer entries if there is more than one order at this price.
+Note that since the Polymarket US returns market data split by order, requesting only the best price using MarketDepth (264) = 1 (Top of book) may still return multiple bid and offer entries if there is more than one order at this price.
 
 ## Table 21: MarketDataSnapshotFullRefresh (W) message
 
@@ -122,7 +122,7 @@ These incremental market data messages may contain a repeating group of updates 
 
 Participants can unsubscribe from a piece of market data by entering a second MarketDataRequest [V] message, referencing the original MDReqID (262) reference and setting SubscriptionRequestType (263) = 2 (unsubscribe).
 
-Note that there is no explicit response to requests to unsubscribe from the PMX Platform; a successful unsubscription will simply prevent further MarketDataIncrementalRefresh [X] messages.
+Note that there is no explicit response to requests to unsubscribe from the Polymarket US; a successful unsubscription will simply prevent further MarketDataIncrementalRefresh [X] messages.
 
 ### Figure 15: Successful market data subscription and unsubscription
 ![](https://files.readme.io/9b2dd8d-unsubscribe.png)

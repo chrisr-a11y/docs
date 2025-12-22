@@ -4,7 +4,7 @@ title: "FIX Session Management"
 
 ## Establishing and Maintaining a FIX Session
 
-The Logon \[A] message initiates a connection to the PMX platform. FIX sessions are typically initiated by customers (as opposed to the exchange platform), and can be made any time.
+The Logon \[A] message initiates a connection to the Polymarket US. FIX sessions are typically initiated by customers (as opposed to the exchange platform), and can be made any time.
 
 **Important: Logon \[A] messages must NOT specify a SenderSubID \[50] in the header. Sending this tag will cause the logon attempt to be rejected.**
 
@@ -64,7 +64,7 @@ At any point either counterparty can force the opposing FIX engine to send a Hea
 
 ## Cancel on Disconnect
 
-Cancel on Disconnect is an optional feature which can act as an automatic risk control for participants in the event that application connectivity is lost. Examples may include where a Participant’s application stops responding to messages for a certain period. In these circumstances, the PMX platform will automatically cancel all open (unexecuted) DAY orders for the Participant while GTC and GTD orders continue to rest.
+Cancel on Disconnect is an optional feature which can act as an automatic risk control for participants in the event that application connectivity is lost. Examples may include where a Participant’s application stops responding to messages for a certain period. In these circumstances, the Polymarket US will automatically cancel all open (unexecuted) DAY orders for the Participant while GTC and GTD orders continue to rest.
 
 Note that a network-level disconnect instantly triggers this Cancel on Disconnect functionality. After reconnecting, missed messages will be replayed including execution reports for any canceled orders.
 
@@ -133,15 +133,15 @@ The expected response to a successful Logout \[5] message is a reciprocal Logout
 ![](https://files.readme.io/d4287de-logout.png)
 
 
-Participants are recommended to schedule a graceful logout before the start of a scheduled maintenance window. If this is not received, then the PMX Platform will initiate the logout process.
+Participants are recommended to schedule a graceful logout before the start of a scheduled maintenance window. If this is not received, then the Polymarket US will initiate the logout process.
 
-**IMPORTANT: If Cancel on Disconnect is enabled, any open (unexecuted) DAY orders in the PMX platform are automatically canceled when a FIX session terminates for any reason, including a graceful logout. GTC and GTD orders will continue to rest.**
+**IMPORTANT: If Cancel on Disconnect is enabled, any open (unexecuted) DAY orders in the Polymarket US are automatically canceled when a FIX session terminates for any reason, including a graceful logout. GTC and GTD orders will continue to rest.**
 
 ## General Error Handling
 
 Most transactional messages in FIX are rejected using an application-level message (as described in various sections which follow).
 
-In the event that one of these messages can not be used to reject a message, however, then the PMX Platform may return either a Reject \[3] message, or a BusinessMessageReject \[j] message as described below.\
+In the event that one of these messages can not be used to reject a message, however, then the Polymarket US may return either a Reject \[3] message, or a BusinessMessageReject \[j] message as described below.\
 Reject \[3] messages are commonly used to reject messages where the message type is known, but there is something syntactically wrong with its content (e.g. incorrect repeating group).
 BusinessMessageReject \[j] is a more generic message used to reject errors such as unsupported message type or malformed messages.
 

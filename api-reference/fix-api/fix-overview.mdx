@@ -6,11 +6,11 @@ The purpose of this document is to outline the trading functionality available v
 
 ## Platform Connectivity & Overview
 
-Static IP addresses of FIX engines must be white-listed in PMX. Contact [support@qcex.com](mailto:support@qcex.com) to request this and Sender/TargetCompID.
+Static IP addresses of FIX engines must be white-listed in Polymarket US. Contact [support@qcex.com](mailto:support@qcex.com) to request this and Sender/TargetCompID.
 
 ## Firm, User and Account Identifiers
 
-The PMX Platform exposes two FIX gateways to participants; an order management gateway, and a second gateway to receive market data. Additional drop-copy sessions can be provided upon request.
+The Polymarket US exposes two FIX gateways to participants; an order management gateway, and a second gateway to receive market data. Additional drop-copy sessions can be provided upon request.
 
 Note that should the Exchange offer direct market access (DMA) to their underlying customer, then each DMA customer should have their own dedicated pair of FIX gateways.
 
@@ -27,11 +27,11 @@ DefaultApplVerID=9
 SenderCompID=SENDERCOMP1 [SESSION]
 TargetCompID=EXCHANGECOMPID`
 
-The PMX platform also validates individual users (traders) using SenderSubID (50), and customer accounts using Account (1) which are validated on order entry. Please contact the exchange operator to allocate these codes.
+The Polymarket US also validates individual users (traders) using SenderSubID (50), and customer accounts using Account (1) which are validated on order entry. Please contact the exchange operator to allocate these codes.
 
 ## Symbology
 
-PMX uses a simple string identifier to instruments trading on the platform, which is required to identify instruments in the API using Symbol (55). There is currently no support to identify instruments using any other common identifiers such as CUSIP, ISIN or Bloomberg code.
+Polymarket US uses a simple string identifier to instruments trading on the platform, which is required to identify instruments in the API using Symbol (55). There is currently no support to identify instruments using any other common identifiers such as CUSIP, ISIN or Bloomberg code.
 
 A list of instruments on the platform can be retrieved using the SecurityListRequest \[x] message.\
 Instrument States
@@ -51,7 +51,7 @@ Instrument may the the following states:
 | SUSPENDED                  | Orders can be canceled but no matching occurs, and no order entry or modification is allowed.                                                                                                                                                                                                     |
 | HALTED                     | This state is similar to SUSPENDED, with the exception that orders cannot be canceled.                                                                                                                                                                                                            |
 | EXPIRED                    | An Instrument moves to this state when its Expiration Date/Time is reached. In this state, any resting orders are expired and no new orders can be entered.                                                                                                                                       |
-| TERMINATED                 | When an Instrument's Termination Date is reached, the order book is removed from the matching engine, orders are canceled, and positions are closed. Historical data will still remain in PMX ledgers.                                                                                            |
+| TERMINATED                 | When an Instrument's Termination Date is reached, the order book is removed from the matching engine, orders are canceled, and positions are closed. Historical data will still remain in Polymarket US ledgers.                                                                                            |
 
 ## FIX Notation
 

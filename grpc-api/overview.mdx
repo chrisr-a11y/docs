@@ -19,6 +19,11 @@ gRPC offers several advantages over REST:
 
 ## Server Endpoints
 
+### Development Environment (dev01)
+```
+grpc.api.dev01.polymarketexchange.com:443
+```
+
 ### Pre-Production Environment
 ```
 grpc.api.preprod.polymarketexchange.com:443
@@ -176,16 +181,16 @@ Most integrations use **REST for simplicity** and **gRPC for performance-critica
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Trading Services" icon="chart-line" href="/grpc-api/trading">
-    Order entry and execution
+  <Card title="gRPC Streaming" icon="bolt" href="/streaming-endpoints/grpc-overview">
+    Real-time market data and order subscriptions
   </Card>
-  <Card title="Account Services" icon="user" href="/grpc-api/accounts">
-    Account and position queries
+  <Card title="Authentication" icon="lock" href="/streaming-endpoints/authentication">
+    Auth0 token setup for gRPC
   </Card>
-  <Card title="Market Data" icon="database" href="/grpc-api/market-data">
-    Reference data and order book
+  <Card title="REST API" icon="code" href="/api-reference">
+    Equivalent REST endpoints
   </Card>
-  <Card title="Proto Reference" icon="code" href="/grpc-api/proto-reference">
-    Complete proto definitions
+  <Card title="Proto Reference" icon="file-code" href="/streaming-endpoints/proto-reference">
+    Proto message definitions
   </Card>
 </CardGroup>
