@@ -42,6 +42,13 @@
         "tab": "REST API",
         "groups": [
           {
+            "group": "Health",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/health-schema.yaml",
+              "directory": "api-reference"
+            }
+          },
+          {
             "group": "Accounts",
             "openapi": {
               "source": "/api-reference/oapi-schemas/accounts-schema.json",
