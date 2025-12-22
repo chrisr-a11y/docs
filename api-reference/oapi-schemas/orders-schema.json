@@ -2,202 +2,32 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Orders API",
-    "version": "v0.6.1"
+    "version": "v1.0.0"
   },
   "servers": [
     {
-      "url": "http://api.polymarketexchange.com/api"
+      "url": "https://api.polymarketexchange.com"
     }
   ],
   "tags": [
-    {
-      "name": "OrderEntryAPI"
-    },
     {
       "name": "OrderAPI"
     }
   ],
   "paths": {
-    "/v1beta1/cancel_order": {
+    "/v1/orders/download": {
       "post": {
         "tags": [
-          "OrderEntryAPI"
+          "Orders"
         ],
-        "summary": "Cancel Order",
-        "operationId": "OrderEntryAPI_CancelOrder",
+        "summary": "Download orders",
+        "description": "Downloads orders as a CSV file stream",
+        "operationId": "OrderAPI_DownloadOrders",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1CancelOrderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1CancelOrderResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/cancel_order_list": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Cancel Order (List)",
-        "operationId": "OrderEntryAPI_CancelOrderList",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1CancelOrderListRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1CancelOrderListResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/cancel_replace_order": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Cancel or Replace Order",
-        "operationId": "OrderEntryAPI_CancelReplaceOrder",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/connamaraep3v1beta1CancelReplaceOrderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1CancelReplaceOrderResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/cancel_replace_order_list": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Cancel or Replace Orders (List)",
-        "operationId": "OrderEntryAPI_CancelReplaceOrderList",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1CancelReplaceOrderListRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1CancelReplaceOrderListResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/create_order_subscription": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Create Order Subscription",
-        "operationId": "OrderEntryAPI_CreateOrderSubscription",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionRequest"
+                "$ref": "#/components/schemas/DownloadOrdersRequest"
               }
             }
           },
@@ -209,261 +39,33 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Stream result of v1beta1CreateOrderSubscriptionResponse",
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "$ref": "#/components/schemas/rpcStatus"
-                    },
                     "result": {
-                      "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionResponse"
+                      "$ref": "#/components/schemas/DownloadOrdersResponse"
                     }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  },
+                  "title": "Stream result of v1DownloadOrdersResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     },
-    "/v1beta1/get_open_orders": {
+    "/v1/orders/executions/download": {
       "post": {
         "tags": [
-          "OrderEntryAPI"
+          "Orders"
         ],
-        "summary": "Get Open Orders",
-        "description": "Returns a snapshot of working orders.",
-        "operationId": "OrderEntryAPI_GetOpenOrders",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1GetOpenOrdersRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1GetOpenOrdersResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/insert_order": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Insert Order",
-        "description": "Inserts a new order into the exchange and returns the assigned order ID.",
-        "operationId": "OrderEntryAPI_InsertOrder",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/connamaraep3v1beta1InsertOrderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1InsertOrderResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/insert_order_cross": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Insert Order Cross",
-        "description": "Creates a new order cross and returns the exchange assigned order IDs.",
-        "operationId": "OrderEntryAPI_InsertOrderCross",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/connamaraep3v1beta1InsertOrderCrossRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1InsertOrderCrossResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/insert_order_list": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Insert Order (List)",
-        "description": "Inserts a list of orders into the exchange and returns the exchange assigned order IDs.",
-        "operationId": "OrderEntryAPI_InsertOrderList",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1InsertOrderListRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1InsertOrderListResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/preview_order": {
-      "post": {
-        "tags": [
-          "OrderEntryAPI"
-        ],
-        "summary": "Preview Order",
-        "description": "Creates an order and assigns attributes but does not insert the order into the exchange.",
-        "operationId": "OrderEntryAPI_PreviewOrder",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1PreviewOrderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1PreviewOrderResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/download_executions": {
-      "post": {
-        "tags": [
-          "OrderAPI"
-        ],
-        "summary": "Download Executions",
+        "summary": "Download executions",
+        "description": "Downloads executions as a CSV file stream",
         "operationId": "OrderAPI_DownloadExecutions",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1DownloadExecutionsRequest"
+                "$ref": "#/components/schemas/DownloadExecutionsRequest"
               }
             }
           },
@@ -471,196 +73,37 @@
         },
         "responses": {
           "200": {
-            "description": "bytes array of file stream.(streaming responses)",
+            "description": "A successful response.(streaming responses)",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "Stream result of v1beta1DownloadExecutionsResponse",
                   "type": "object",
                   "properties": {
-                    "error": {
-                      "$ref": "#/components/schemas/rpcStatus"
-                    },
                     "result": {
-                      "type": "object"
+                      "$ref": "#/components/schemas/DownloadExecutionsResponse"
                     }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  },
+                  "title": "Stream result of v1DownloadExecutionsResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     },
-    "/v1beta1/download_orders": {
+    "/v1/orders/executions/search": {
       "post": {
         "tags": [
-          "OrderAPI"
+          "Orders"
         ],
-        "summary": "Download Orders",
-        "operationId": "OrderAPI_DownloadOrders",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1DownloadOrdersRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "bytes array of file stream.(streaming responses)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Stream result of v1beta1DownloadOrdersResponse",
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "$ref": "#/components/schemas/rpcStatus"
-                    },
-                    "result": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/download_trades": {
-      "post": {
-        "tags": [
-          "OrderAPI"
-        ],
-        "summary": "Download Trades",
-        "operationId": "OrderAPI_DownloadTrades",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1DownloadTradesRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "bytes array of file stream.(streaming responses)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Stream result of v1beta1DownloadTradesResponse",
-                  "type": "object",
-                  "properties": {
-                    "error": {
-                      "$ref": "#/components/schemas/rpcStatus"
-                    },
-                    "result": {
-                      "type": "object"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/get_trade_stats": {
-      "post": {
-        "tags": [
-          "OrderAPI"
-        ],
-        "summary": "Get Trade Stats",
-        "description": "Gets aggregated trade data for a given period of time.",
-        "operationId": "OrderAPI_GetTradeStats",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/v1beta1GetTradeStatsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/v1beta1GetTradeStatsResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
-                }
-              }
-            }
-          }
-        },
-        "x-codegen-request-body-name": "body"
-      }
-    },
-    "/v1beta1/search_executions": {
-      "post": {
-        "tags": [
-          "OrderAPI"
-        ],
-        "summary": "Search Executions",
-        "description": "Searches for exchange executions using the given details to filter and returns a list of the found executions.",
+        "summary": "Search executions",
+        "description": "Searches for exchange executions using the given details to filter",
         "operationId": "OrderAPI_SearchExecutions",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1SearchExecutionsRequest"
+                "$ref": "#/components/schemas/SearchExecutionsRequest"
               }
             }
           },
@@ -672,38 +115,27 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/v1beta1SearchExecutionsResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  "$ref": "#/components/schemas/SearchExecutionsResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     },
-    "/v1beta1/search_orders": {
+    "/v1/orders/search": {
       "post": {
         "tags": [
-          "OrderAPI"
+          "Orders"
         ],
-        "summary": "Search Orders",
-        "description": "Searches for exchange orders using the given details to filter and returns a list of the found orders.",
+        "summary": "Search orders",
+        "description": "Searches for exchange orders using the given details to filter",
         "operationId": "OrderAPI_SearchOrders",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1SearchOrdersRequest"
+                "$ref": "#/components/schemas/SearchOrdersRequest"
               }
             }
           },
@@ -715,38 +147,65 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/v1beta1SearchOrdersResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  "$ref": "#/components/schemas/SearchOrdersResponse"
                 }
               }
             }
           }
-        },
-        "x-codegen-request-body-name": "body"
+        }
       }
     },
-    "/v1beta1/search_trades": {
+    "/v1/orders/trades/download": {
       "post": {
         "tags": [
-          "OrderAPI"
+          "Orders"
         ],
-        "summary": "Search Trades",
-        "description": "Searches for exchange trades using the given details to filter and returns a list of the found trades.",
+        "summary": "Download trades",
+        "description": "Downloads trades as a CSV file stream",
+        "operationId": "OrderAPI_DownloadTrades",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadTradesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/DownloadTradesResponse"
+                    }
+                  },
+                  "title": "Stream result of v1DownloadTradesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/orders/trades/search": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Search trades",
+        "description": "Searches for exchange trades using the given details to filter",
         "operationId": "OrderAPI_SearchTrades",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/v1beta1SearchTradesRequest"
+                "$ref": "#/components/schemas/SearchTradesRequest"
               }
             }
           },
@@ -758,621 +217,534 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/v1beta1SearchTradesResponse"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/rpcStatus"
+                  "$ref": "#/components/schemas/SearchTradesResponse"
                 }
               }
             }
           }
+        }
+      }
+    },
+    "/v1/orders/trades/stats": {
+      "post": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get trade stats",
+        "description": "Gets aggregated trade data for a given period of time",
+        "operationId": "OrderAPI_GetTradeStats",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTradeStatsRequest"
+              }
+            }
+          },
+          "required": true
         },
-        "x-codegen-request-body-name": "body"
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTradeStatsResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "v1beta1CancelOrderRequest": {
+      "Date": {
         "type": "object",
         "properties": {
-          "clord_id": {
-            "type": "string",
-            "description": "Client assigned ID for the order cancel."
-          },
-          "order_id": {
-            "type": "string",
-            "description": "Exchange assigned ID for the order to be cancelled (required)."
-          },
-          "symbol": {
-            "type": "string",
-            "description": "The instrument symbol for the order (required)."
-          },
-          "symbol_sub_type": {
-            "type": "string",
-            "description": "The sub type of the instrument symbol."
-          }
-        },
-        "description": "Request to cancel an existing order with the given details."
-      },
-      "v1beta1CancelOrderResponse": {
-        "type": "object"
-      },
-      "rpcStatus": {
-        "type": "object",
-        "properties": {
-          "code": {
+          "year": {
             "type": "integer",
             "format": "int32"
           },
-          "details": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/protobufAny"
-            }
+          "month": {
+            "type": "integer",
+            "format": "int32"
           },
-          "message": {
-            "type": "string"
-          }
-        }
-      },
-      "protobufAny": {
-        "type": "object",
-        "properties": {
-          "@type": {
-            "type": "string",
-            "description": "A URL/resource name that uniquely identifies the type of the serialized\nprotocol buffer message. This string must contain at least\none \"/\" character. The last segment of the URL's path must represent\nthe fully qualified name of the type (as in\n`path/google.protobuf.Duration`). The name should be in a canonical form\n(e.g., leading \".\" is not accepted).\n\nIn practice, teams usually precompile into the binary all types that they\nexpect it to use in the context of Any. However, for URLs which use the\nscheme `http`, `https`, or no scheme, one can optionally set up a type\nserver that maps type URLs to message definitions as follows:\n\n* If no scheme is provided, `https` is assumed.\n* An HTTP GET on the URL must yield a [google.protobuf.Type][]\n  value in binary format, or produce an error.\n* Applications are allowed to cache lookup results based on the\n  URL, or have them precompiled into a binary to avoid any\n  lookup. Therefore, binary compatibility needs to be preserved\n  on changes to types. (Use versioned type names to manage\n  breaking changes.)\n\nNote: this functionality is not currently available in the official\nprotobuf release, and it is not used for type URLs beginning with\ntype.googleapis.com. As of May 2023, there are no widely used type server\nimplementations and no plans to implement one.\n\nSchemes other than `http`, `https` (or the empty scheme) might be\nused with implementation specific semantics."
+          "day": {
+            "type": "integer",
+            "format": "int32"
           }
         },
-        "additionalProperties": {
-          "type": "object"
-        },
-        "description": "`Any` contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(&foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n    // or ...\n    if (any.isSameTypeAs(Foo.getDefaultInstance())) {\n      foo = any.unpack(Foo.getDefaultInstance());\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := &pb.Foo{...}\n     any, err := anypb.New(foo)\n     if err != nil {\n       ...\n     }\n     ...\n     foo := &pb.Foo{}\n     if err := any.UnmarshalTo(foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\nJSON\n====\nThe JSON representation of an `Any` value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field `@type` which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": <string>,\n      \"lastName\": <string>\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n`value` which holds the custom JSON in addition to the `@type`\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }"
+        "description": "Date represents a calendar date."
       },
-      "v1beta1CancelOrderListRequest": {
+      "DownloadExecutionsRequest": {
         "type": "object",
         "properties": {
-          "requests": {
-            "type": "array",
-            "description": "A list of requests to cancel orders.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1CancelOrderRequest"
-            }
-          }
-        },
-        "description": "Request to cancel multiple existing orders with the given details."
-      },
-      "v1beta1CancelOrderListResponse": {
-        "type": "object",
-        "properties": {
-          "responses": {
-            "type": "array",
-            "description": "A list of responses to cancelled orders.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1CancelOrderResponse"
-            }
-          }
-        }
-      },
-      "connamaraep3v1beta1CancelReplaceOrderRequest": {
-        "type": "object",
-        "properties": {
-          "all_or_none": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that either all of the order quantity should be filled, or none of it (partial fills will not be allowed)."
-          },
-          "best_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the same side as this order."
-          },
-          "clord_id": {
+          "startTime": {
             "type": "string",
-            "description": "Client assigned ID for the cancel replace order."
-          },
-          "good_till_time": {
-            "type": "string",
-            "description": "The time at which this order shall expire if the time in force is set as good till time.",
             "format": "date-time"
           },
-          "immediately_executable_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the opposing side as this order, thus able to immediately match."
-          },
-          "manual_order_indicator": {
-            "$ref": "#/components/schemas/v1beta1ManualOrderIndicator"
-          },
-          "min_qty": {
+          "endTime": {
             "type": "string",
-            "description": "Desired minimum quantity for the replaced order (optional for IOC time in force).",
-            "format": "int64"
+            "format": "date-time"
           },
-          "order_id": {
-            "type": "string",
-            "description": "Exchange assigned ID for the order to be replaced (required)."
-          },
-          "order_qty": {
-            "type": "string",
-            "description": "Desired order quantity for the replaced order.",
-            "format": "int64"
-          },
-          "participate_dont_initiate": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that immediate match is not desired."
-          },
-          "price": {
-            "type": "string",
-            "description": "Desired limit price for the replaced order (required for limit and stop limit orders).",
-            "format": "int64"
-          },
-          "stop_price": {
-            "type": "string",
-            "description": "Desired stop price for the replaced order (required for stop and stop limit orders).",
-            "format": "int64"
-          },
-          "strict_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates this particular order must be filled at the exact limit price specified without price improvement."
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Desired instrument's symbol (required)."
-          },
-          "symbol_sub_type": {
-            "type": "string",
-            "description": "The sub type of the instrument symbol."
-          },
-          "time_in_force": {
-            "$ref": "#/components/schemas/v1beta1TimeInForce"
-          }
-        },
-        "description": "Request to update an existing order with the given details."
-      },
-      "v1beta1ManualOrderIndicator": {
-        "type": "string",
-        "description": "ManualOrderIndicator designates the manual or automated nature of an order.\n\n - MANUAL_ORDER_INDICATOR_UNDEFINED: An unset value for the manual order indicator.\n - MANUAL_ORDER_INDICATOR_MANUAL: The order was initially received via manual entry.\n - MANUAL_ORDER_INDICATOR_AUTOMATED: The order was initially received electronically.",
-        "default": "MANUAL_ORDER_INDICATOR_UNDEFINED",
-        "enum": [
-          "MANUAL_ORDER_INDICATOR_UNDEFINED",
-          "MANUAL_ORDER_INDICATOR_MANUAL",
-          "MANUAL_ORDER_INDICATOR_AUTOMATED"
-        ]
-      },
-      "v1beta1TimeInForce": {
-        "type": "string",
-        "description": "TimeInForce specifies how long the order remains in effect.\n\n - TIME_IN_FORCE_UNDEFINED: An unset value for TimeInForce. In the context of inserting orders, this will be interpreted as TIME_IN_FORCE_DAY\n - TIME_IN_FORCE_DAY: Order will automatically cancel if it has not been filled by the close of the trading day\n - TIME_IN_FORCE_GOOD_TILL_CANCEL: Order will remain active until filled or cancelled\n - TIME_IN_FORCE_IMMEDIATE_OR_CANCEL: Order will attempt to fill immediately, then cancel any unfilled portions of the order\n - TIME_IN_FORCE_GOOD_TILL_TIME: Order will remain active until filled or until the time specified\n - TIME_IN_FORCE_FILL_OR_KILL: Order will attempt to fill immediately for the entire order quantity, then cancel if the order was unable to be filled.",
-        "default": "TIME_IN_FORCE_UNDEFINED",
-        "enum": [
-          "TIME_IN_FORCE_UNDEFINED",
-          "TIME_IN_FORCE_DAY",
-          "TIME_IN_FORCE_GOOD_TILL_CANCEL",
-          "TIME_IN_FORCE_IMMEDIATE_OR_CANCEL",
-          "TIME_IN_FORCE_GOOD_TILL_TIME",
-          "TIME_IN_FORCE_FILL_OR_KILL"
-        ]
-      },
-      "v1beta1CancelReplaceOrderResponse": {
-        "type": "object"
-      },
-      "v1beta1CancelReplaceOrderListRequest": {
-        "type": "object",
-        "properties": {
-          "requests": {
-            "type": "array",
-            "description": "A list of requests to update orders.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1CancelReplaceOrderRequest"
-            }
-          }
-        },
-        "description": "Request to update multiple existing orders with the given details."
-      },
-      "v1beta1CancelReplaceOrderListResponse": {
-        "type": "object",
-        "properties": {
-          "responses": {
-            "type": "array",
-            "description": "A list of responses to updated orders.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1CancelReplaceOrderResponse"
-            }
-          }
-        }
-      },
-      "v1beta1CreateOrderSubscriptionRequest": {
-        "type": "object",
-        "properties": {
           "accounts": {
             "type": "array",
-            "description": "A list of accounts to filter upon and return in streamed responses.\nThis field is optional.",
             "items": {
               "type": "string"
             }
-          },
-          "snapshot_only": {
-            "type": "boolean",
-            "description": "If true, only return the current set of snapshots for working orders and do not keep an open subscription."
-          },
-          "symbols": {
-            "type": "array",
-            "description": "A list of symbols to filter upon and return in streamed responses.\nThis field is optional.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start an order subscription to get snapshots and updates for this session."
-      },
-      "v1beta1CreateOrderSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "heartbeat": {
-            "$ref": "#/components/schemas/v1beta1Heartbeat"
-          },
-          "processed_sent_time": {
-            "type": "string",
-            "description": "The time at which this message was processed and sent by the gateway, useful for calculating real world networking latency.",
-            "format": "date-time"
-          },
-          "session_id": {
-            "type": "string",
-            "description": "ID of the session this subscription belongs to."
-          },
-          "snapshot": {
-            "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionResponseSnapshot"
-          },
-          "update": {
-            "$ref": "#/components/schemas/v1beta1CreateOrderSubscriptionResponseUpdate"
           }
         }
       },
-      "v1beta1Heartbeat": {
-        "type": "object",
-        "description": "Heartbeat can be sent on a streaming RPC call to keep the line open."
-      },
-      "v1beta1CreateOrderSubscriptionResponseSnapshot": {
+      "DownloadExecutionsResponse": {
         "type": "object",
         "properties": {
-          "orders": {
+          "filechunk": {
+            "type": "string"
+          }
+        }
+      },
+      "DownloadOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accounts": {
             "type": "array",
-            "description": "A list of orders contained in the snapshot.",
             "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Order"
+              "type": "string"
             }
           }
-        },
-        "description": "Snapshot is the current state of working orders."
+        }
       },
-      "connamaraep3v1beta1Order": {
+      "DownloadOrdersResponse": {
         "type": "object",
         "properties": {
-          "account": {
-            "title": "Account is the trading account for this order",
+          "filechunk": {
             "type": "string"
-          },
-          "all_or_none": {
-            "title": "Set if all or none of the order qty should be filled",
-            "type": "boolean"
-          },
-          "avg_px": {
-            "title": "Average fill price",
-            "type": "string",
-            "format": "int64"
-          },
-          "best_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the same side as this order."
-          },
-          "block_trade_indicator": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that this order is part of a block trade."
-          },
-          "cash_order_qty": {
-            "title": "Fixed point decimal representation of the total cash order qty",
-            "type": "string",
-            "format": "int64"
-          },
-          "client_account_id": {
-            "title": "Client assigned free-form account ID for the order",
-            "type": "string"
-          },
-          "client_participant_id": {
-            "title": "Client assigned free-form participant ID for the order",
-            "type": "string"
-          },
-          "clord_id": {
-            "title": "Client assigned ID for the order",
-            "type": "string"
-          },
-          "collateral_memo": {
-            "title": "The risk status given by the position risk check",
-            "type": "string"
-          },
-          "commission_notional_total_collected": {
-            "type": "string",
-            "description": "The total notional value of all commissions collected on the order so far, it is unscaled so one must apply the parent instrument price and fractional quantity scales to get the exact decimal value.",
-            "format": "int64"
-          },
-          "commissions_basis_points": {
-            "title": "The total basis points associated with all commissions on this order",
-            "type": "string"
-          },
-          "context": {
-            "$ref": "#/components/schemas/v1beta1OrderContext"
-          },
-          "create_time": {
-            "title": "The time this order was created",
+          }
+        }
+      },
+      "DownloadTradesRequest": {
+        "type": "object",
+        "properties": {
+          "startTime": {
             "type": "string",
             "format": "date-time"
           },
-          "cross_id": {
-            "title": "Client assigned Order Cross ID",
-            "type": "string"
-          },
-          "cum_qty": {
-            "title": "Cumulative filled order qty",
-            "type": "string",
-            "format": "int64"
-          },
-          "fractional_quantity_scale": {
-            "type": "string",
-            "description": "The fractional quantity scale of the order assigned from the associated instrument for convenience in scaling display values.",
-            "format": "int64"
-          },
-          "good_till_time": {
-            "title": "The time at which this order shall expire if the time in force is set as good till time",
+          "endTime": {
             "type": "string",
             "format": "date-time"
           },
-          "host_cross_id": {
-            "title": "Exchange generated Host Cross ID",
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DownloadTradesResponse": {
+        "type": "object",
+        "properties": {
+          "filechunk": {
             "type": "string"
-          },
+          }
+        }
+      },
+      "Execution": {
+        "type": "object",
+        "properties": {
           "id": {
-            "title": "Exchange assigned ID for the order",
-            "type": "string"
+            "type": "string",
+            "title": "Exchange assigned ID for this execution"
           },
-          "ignore_price_validity_checks": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that this order is exempt from instrument level price, order, and total notional limits. Only allowed in case of market sell orders to support liquidation."
+          "order": {
+            "$ref": "#/components/schemas/Order",
+            "title": "The Order at the time of this execution"
           },
-          "immediately_executable_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the opposing side as this order, thus able to immediately match."
+          "lastShares": {
+            "type": "string",
+            "format": "int64"
           },
-          "insert_time": {
-            "title": "The time this order was inserted into the book or the time the order was replaced in the book",
+          "lastPx": {
+            "type": "string",
+            "format": "int64"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ExecutionType"
+          },
+          "text": {
+            "type": "string",
+            "title": "Free format text"
+          },
+          "orderRejectReason": {
+            "$ref": "#/components/schemas/OrdRejectReason",
+            "title": "For optional use if exec type is rejected"
+          },
+          "transactTime": {
             "type": "string",
             "format": "date-time"
           },
-          "last_trade_id": {
-            "title": "Set to the last, most recent trade ID that this order was party to",
+          "legPrices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/LegPrice"
+            },
+            "title": "If a fill on a multi leg instrument, contains the derived leg prices"
+          },
+          "tradeId": {
+            "type": "string",
+            "title": "If a fill, the trade id for this transaction"
+          },
+          "aggressor": {
+            "type": "boolean",
+            "title": "If a fill, true if this execution belongs to aggressor order"
+          },
+          "commissionNotionalCollected": {
+            "type": "string",
+            "format": "int64",
+            "title": "The notional value of commissions collected as part of the execution"
+          },
+          "unsolicitedCancelReason": {
+            "$ref": "#/components/schemas/UnsolicitedCxlReason",
+            "title": "For optional use if exec type is canceled and a reason is provided"
+          },
+          "traceId": {
+            "type": "string",
+            "title": "If present, contains the exchange trace identifier"
+          },
+          "commissionSpreadPx": {
+            "type": "string",
+            "format": "int64",
+            "title": "The price at which a commission spread order filled at"
+          },
+          "transactTradeDate": {
+            "$ref": "#/components/schemas/Date",
+            "title": "The trade date when this transactional event occurred"
+          }
+        },
+        "description": "Execution denotes a state change for an order in the exchange.\nWire-compatible with Connamara EP3 Execution."
+      },
+      "ExecutionType": {
+        "type": "string",
+        "enum": [
+          "EXECUTION_TYPE_PARTIAL_FILL",
+          "EXECUTION_TYPE_FILL",
+          "EXECUTION_TYPE_CANCELED",
+          "EXECUTION_TYPE_REPLACE",
+          "EXECUTION_TYPE_REJECTED",
+          "EXECUTION_TYPE_EXPIRED",
+          "EXECUTION_TYPE_DONE_FOR_DAY"
+        ],
+        "description": "ExecutionType denotes the execution type."
+      },
+      "GetTradeStatsRequest": {
+        "type": "object",
+        "properties": {
+          "symbol": {
             "type": "string"
           },
-          "last_transact_time": {
+          "startTime": {
             "type": "string",
-            "description": "The most recent time this order was updated in any capacity.",
             "format": "date-time"
           },
-          "leaves_qty": {
-            "title": "Remaining working qty",
+          "endTime": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           },
-          "maker_commissions_basis_points": {
-            "type": "string",
-            "description": "The total basis points associated with all commissions on this order if it executes on the passive side of a trade."
+          "bars": {
+            "type": "integer",
+            "format": "int32"
           },
-          "manual_order_indicator": {
-            "$ref": "#/components/schemas/v1beta1ManualOrderIndicator"
+          "startTradeDate": {
+            "$ref": "#/components/schemas/Date"
           },
-          "min_qty": {
-            "title": "Minimum quantity (optional for IOC time in force)",
-            "type": "string",
-            "format": "int64"
+          "endTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "GetTradeStatsResponse": {
+        "type": "object",
+        "properties": {
+          "stats": {
+            "$ref": "#/components/schemas/TradeStats"
           },
-          "order_capacity": {
-            "$ref": "#/components/schemas/v1beta1OrderCapacity"
-          },
-          "order_qty": {
-            "type": "string",
-            "format": "int64"
-          },
-          "parent_order_id": {
-            "title": "The parent order this order is the child of",
-            "type": "string"
-          },
-          "participant": {
-            "title": "Participant that placed this order",
-            "type": "string"
-          },
-          "participate_dont_initiate": {
-            "title": "Set if immediate match is not desired",
-            "type": "boolean"
-          },
-          "price": {
-            "title": "Integer price representation (for limit, stop limit)",
-            "type": "string",
-            "format": "int64"
-          },
-          "price_scale": {
-            "type": "string",
-            "description": "The price scale of the order assigned from the associated instrument for convenience in scaling display values.",
-            "format": "int64"
-          },
-          "price_to_quantity_filled": {
-            "title": "Denotes the quantity filled at each price point over the life of the order",
-            "type": "object",
-            "additionalProperties": {
-              "type": "string",
-              "format": "int64"
+          "bars": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/TradeStats"
             }
           },
-          "priority_weight": {
-            "title": "Relative priority among the same price level",
-            "type": "string",
-            "format": "int64"
+          "barStartTime": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
           },
-          "risk_check_time": {
-            "title": "The time at which this order was risk checked",
+          "barEndTime": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      },
+      "LegPrice": {
+        "type": "object",
+        "properties": {
+          "symbol": {
             "type": "string",
-            "format": "date-time"
+            "title": "The symbol of the leg"
           },
-          "self_match_prevention_instruction": {
-            "$ref": "#/components/schemas/v1beta1SelfMatchPreventionInstruction"
+          "anchor": {
+            "type": "boolean",
+            "title": "Indicates that this entry is used as the anchor price"
+          },
+          "px": {
+            "type": "string",
+            "format": "int64",
+            "title": "The price of the leg"
+          },
+          "qty": {
+            "type": "string",
+            "format": "int64",
+            "title": "The quantity of the leg"
           },
           "side": {
-            "$ref": "#/components/schemas/v1beta1Side"
+            "type": "string",
+            "title": "The side of the leg"
           },
-          "state": {
-            "$ref": "#/components/schemas/v1beta1OrderState"
+          "referencePx": {
+            "type": "string",
+            "format": "int64",
+            "title": "The reference price of the leg used in the calculation of the derived price"
+          }
+        },
+        "description": "LegPrice indicates a price for a leg as part of a multi leg instrument."
+      },
+      "ManualOrderIndicator": {
+        "type": "string",
+        "enum": [
+          "MANUAL_ORDER_INDICATOR_MANUAL",
+          "MANUAL_ORDER_INDICATOR_AUTOMATED"
+        ],
+        "description": "ManualOrderIndicator designates the manual or automated nature of an order."
+      },
+      "OrdRejectReason": {
+        "type": "string",
+        "enum": [
+          "ORD_REJECT_REASON_UNKNOWN_SYMBOL",
+          "ORD_REJECT_REASON_EXCHANGE_CLOSED",
+          "ORD_REJECT_REASON_INCORRECT_QUANTITY",
+          "ORD_REJECT_REASON_INVALID_PRICE_INCREMENT",
+          "ORD_REJECT_REASON_INCORRECT_ORDER_TYPE",
+          "ORD_REJECT_REASON_PRICE_OUT_OF_BOUNDS",
+          "ORD_REJECT_REASON_NO_LIQUIDITY"
+        ],
+        "description": "OrdRejectReason is the code to identify reason for order rejection."
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Exchange assigned ID for the order"
           },
-          "stop_price": {
-            "title": "Integer stop price representation (for stop, stop limit)",
+          "type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "orderQty": {
             "type": "string",
             "format": "int64"
-          },
-          "strict_limit": {
-            "title": "Set if this particular order must be filled at the exact limit price specified without price improvement",
-            "type": "boolean"
-          },
-          "submitting_participant": {
-            "title": "If this order is being submitted on behalf of another entity, set to the agent submitter",
-            "type": "string"
           },
           "symbol": {
             "type": "string"
           },
-          "symbol_sub_type": {
-            "title": "The sub type of the instrument symbol",
-            "type": "string"
-          },
-          "time_in_force": {
-            "$ref": "#/components/schemas/v1beta1TimeInForce"
-          },
-          "transaction_booked_time": {
+          "clordId": {
             "type": "string",
-            "description": "In the context of an order cross, the time at which the order was booked.",
-            "format": "date-time"
+            "title": "Client assigned ID for the order"
           },
-          "trigger_method": {
-            "$ref": "#/components/schemas/v1beta1ConditionTriggerMethod"
+          "timeInForce": {
+            "$ref": "#/components/schemas/TimeInForce",
+            "title": "Absence of this field is interpreted as DAY"
           },
-          "type": {
-            "$ref": "#/components/schemas/v1beta1OrderType"
-          }
-        },
-        "description": "Order indicates an order received by the exchange."
-      },
-      "v1beta1OrderContext": {
-        "type": "object",
-        "properties": {
-          "any_context": {
-            "$ref": "#/components/schemas/protobufAny"
-          },
-          "fix_context": {
-            "$ref": "#/components/schemas/v1beta1FIXOrderContext"
-          },
-          "service_name": {
+          "account": {
             "type": "string",
-            "description": "ServiceName is an optional string that contains the name of the service through which this order was submitted."
+            "title": "Account is the trading account for this order"
           },
-          "validation_contexts": {
-            "type": "array",
-            "description": "ValidationContexts are an optional collection of free-form contexts that shall be checked upon order insertion or modification.",
-            "items": {
-              "$ref": "#/components/schemas/protobufAny"
-            }
+          "cumQty": {
+            "type": "string",
+            "format": "int64",
+            "title": "Cumulative filled order qty"
+          },
+          "avgPx": {
+            "type": "string",
+            "format": "int64",
+            "title": "Average fill price"
+          },
+          "leavesQty": {
+            "type": "string",
+            "format": "int64",
+            "title": "Remaining working qty"
+          },
+          "state": {
+            "$ref": "#/components/schemas/OrderState"
+          },
+          "participant": {
+            "type": "string",
+            "title": "Participant that placed this order"
+          },
+          "price": {
+            "type": "string",
+            "format": "int64",
+            "title": "Integer price representation (for limit, stop limit)"
+          },
+          "insertTime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "The time this order was inserted into the book"
+          },
+          "stopPrice": {
+            "type": "string",
+            "format": "int64",
+            "title": "Integer stop price representation (for stop, stop limit)"
+          },
+          "minQty": {
+            "type": "string",
+            "format": "int64",
+            "title": "Minimum quantity (optional for IOC time in force)"
+          },
+          "createTime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "The time this order was created"
+          },
+          "allOrNone": {
+            "type": "boolean",
+            "title": "Set if all or none of the order qty should be filled"
+          },
+          "crossId": {
+            "type": "string",
+            "title": "Client assigned Order Cross ID"
+          },
+          "hostCrossId": {
+            "type": "string",
+            "title": "Exchange generated Host Cross ID"
+          },
+          "submittingParticipant": {
+            "type": "string",
+            "title": "If this order is being submitted on behalf of another entity"
+          },
+          "clientAccountId": {
+            "type": "string",
+            "title": "Client assigned free-form account ID for the order"
+          },
+          "clientParticipantId": {
+            "type": "string",
+            "title": "Client assigned free-form participant ID for the order"
+          },
+          "parentOrderId": {
+            "type": "string",
+            "title": "The parent order this order is the child of"
+          },
+          "commissionsBasisPoints": {
+            "type": "string",
+            "title": "The total basis points associated with all commissions on this order"
+          },
+          "participateDontInitiate": {
+            "type": "boolean",
+            "title": "Set if immediate match is not desired"
+          },
+          "cashOrderQty": {
+            "type": "string",
+            "format": "int64",
+            "title": "Fixed point decimal representation of the total cash order qty"
+          },
+          "strictLimit": {
+            "type": "boolean",
+            "title": "Set if this particular order must be filled at the exact limit price"
+          },
+          "goodTillTime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "The time at which this order shall expire if the time in force is GOOD_TILL_TIME"
+          },
+          "bestLimit": {
+            "type": "boolean",
+            "title": "Context may contain additional meta data regarding the order (reserved)\norders.v1beta1.OrderContext context = 35;\nA flag for best limit pricing"
+          },
+          "immediatelyExecutableLimit": {
+            "type": "boolean",
+            "title": "A flag for immediately executable limit pricing"
+          },
+          "lastTradeId": {
+            "type": "string",
+            "title": "Set to the last, most recent trade ID that this order was party to"
+          },
+          "commissionNotionalTotalCollected": {
+            "type": "string",
+            "format": "int64",
+            "title": "The total notional value of all commissions collected on the order so far"
+          },
+          "selfMatchPreventionInstruction": {
+            "$ref": "#/components/schemas/SelfMatchPreventionInstruction",
+            "title": "If present, determines the behavior for order self match prevention"
+          },
+          "orderCapacity": {
+            "$ref": "#/components/schemas/OrderCapacity",
+            "title": "If present, designates the order capacity"
+          },
+          "ignorePriceValidityChecks": {
+            "type": "boolean",
+            "title": "A flag indicating order is exempt from price validity checks"
+          },
+          "lastTransactTime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "The most recent time this order was updated in any capacity"
+          },
+          "makerCommissionsBasisPoints": {
+            "type": "string",
+            "title": "The total basis points for maker commissions"
+          },
+          "manualOrderIndicator": {
+            "$ref": "#/components/schemas/ManualOrderIndicator",
+            "title": "If present, designates the manual order indicator"
           }
         },
-        "description": "OrderContext contains additional meta data regarding an order."
+        "title": "Order indicates an order received by the exchange.\nWire-compatible with Connamara EP3 Order (flattened structure).\nNOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
       },
-      "v1beta1FIXOrderContext": {
-        "type": "object",
-        "properties": {
-          "begin_string": {
-            "type": "string"
-          },
-          "on_behalf_of_comp_id": {
-            "type": "string"
-          },
-          "on_behalf_of_sub_id": {
-            "type": "string"
-          },
-          "orig_clord_id": {
-            "type": "string"
-          },
-          "security_type": {
-            "type": "string"
-          },
-          "sender_comp_id": {
-            "type": "string"
-          },
-          "sender_location_id": {
-            "type": "string"
-          },
-          "sender_sub_id": {
-            "type": "string"
-          },
-          "target_comp_id": {
-            "type": "string"
-          },
-          "target_location_id": {
-            "type": "string"
-          },
-          "target_sub_id": {
-            "type": "string"
-          }
-        },
-        "description": "FIXOrderContext is the context set for orders sent via the FIX API."
-      },
-      "v1beta1OrderCapacity": {
+      "OrderCapacity": {
         "type": "string",
-        "description": "OrderCapacity designates the capacity of the party placing an order.\n\n - ORDER_CAPACITY_UNDEFINED: An unset value for the order capacity.\n - ORDER_CAPACITY_AGENCY: Firm is acting to match a customer order with another participant in the market in an agency capacity.\n - ORDER_CAPACITY_PRINCIPAL: Firm is trading with its own inventory and capital in a principal capacity.\n - ORDER_CAPACITY_PROPRIETARY: Firm is trading with its own inventory and capital in a proprietary capacity.\n - ORDER_CAPACITY_INDIVIDUAL: An individual is trading with their own inventory and capital.\n - ORDER_CAPACITY_RISKLESS_PRINCIPAL: Firm is placing a principal order that is party to an offsetting transaction.\n - ORDER_CAPACITY_AGENT_FOR_OTHER_MEMBER: Firm is acting to match a customer order with another participant in the market on behalf of another member.",
-        "default": "ORDER_CAPACITY_UNDEFINED",
         "enum": [
-          "ORDER_CAPACITY_UNDEFINED",
           "ORDER_CAPACITY_AGENCY",
           "ORDER_CAPACITY_PRINCIPAL",
           "ORDER_CAPACITY_PROPRIETARY",
           "ORDER_CAPACITY_INDIVIDUAL",
           "ORDER_CAPACITY_RISKLESS_PRINCIPAL",
           "ORDER_CAPACITY_AGENT_FOR_OTHER_MEMBER"
-        ]
+        ],
+        "description": "OrderCapacity designates the capacity of the party placing an order."
       },
-      "v1beta1SelfMatchPreventionInstruction": {
+      "OrderState": {
         "type": "string",
-        "description": "SelfMatchPreventionInstruction is the methodology used to handle self match prevention upon insertion onto the book.\n\n - SELF_MATCH_PREVENTION_INSTRUCTION_UNDEFINED: An unset value for the self match prevention instruction uses the default behavior of the exchange, which is to reject the incoming order and allow resting orders to remain on the book.\n - SELF_MATCH_PREVENTION_INSTRUCTION_REJECT_AGGRESSOR: Reject the incoming aggressor order and allow resting orders to remain on the book.\n - SELF_MATCH_PREVENTION_INSTRUCTION_CANCEL_RESTING: Cancel any resting orders on the book that would self match and allow the aggressor to insert on the book.\n - SELF_MATCH_PREVENTION_INSTRUCTION_REMOVE_BOTH: Cancel any resting orders on the book that would self match and reject the aggressor insertion on the book.",
-        "default": "SELF_MATCH_PREVENTION_INSTRUCTION_UNDEFINED",
         "enum": [
-          "SELF_MATCH_PREVENTION_INSTRUCTION_UNDEFINED",
-          "SELF_MATCH_PREVENTION_INSTRUCTION_REJECT_AGGRESSOR",
-          "SELF_MATCH_PREVENTION_INSTRUCTION_CANCEL_RESTING",
-          "SELF_MATCH_PREVENTION_INSTRUCTION_REMOVE_BOTH"
-        ]
-      },
-      "v1beta1Side": {
-        "type": "string",
-        "description": "Side indicates the side of an Order.",
-        "default": "SIDE_UNDEFINED",
-        "enum": [
-          "SIDE_UNDEFINED",
-          "SIDE_BUY",
-          "SIDE_SELL"
-        ]
-      },
-      "v1beta1OrderState": {
-        "type": "string",
-        "description": "OrderState denotes the current order state.\n\n - ORDER_STATE_PENDING_NEW: Order received by exchange at edges of the system but has not been processed by matching engine.\n - ORDER_STATE_PENDING_REPLACE: Cancel Replace request received by exchange at edges of the system but has not been processed by matching engine.\n - ORDER_STATE_PENDING_CANCEL: Cancel request received by exchange at edges of the system but has not been processed by matching engine.\n - ORDER_STATE_PENDING_RISK: Order is pending risk approval",
-        "default": "ORDER_STATE_NEW",
-        "enum": [
-          "ORDER_STATE_NEW",
           "ORDER_STATE_PARTIALLY_FILLED",
           "ORDER_STATE_FILLED",
           "ORDER_STATE_CANCELED",
@@ -1383,900 +755,12 @@
           "ORDER_STATE_PENDING_REPLACE",
           "ORDER_STATE_PENDING_CANCEL",
           "ORDER_STATE_PENDING_RISK"
-        ]
+        ],
+        "description": "OrderState denotes the current order state."
       },
-      "v1beta1ConditionTriggerMethod": {
+      "OrderStateFilter": {
         "type": "string",
-        "description": "ConditionTriggerMethod is the methodology used to trigger an order for insertion onto the book.\n\n - CONDITION_TRIGGER_METHOD_UNDEFINED: An unset value for the trigger method must be used when the order type is not meant to trigger (a limit order for instance) or uses the default last price method for orders that do trigger (a stop order for instance).\n - CONDITION_TRIGGER_METHOD_LAST_PRICE: Trigger the order using the last trade price on the book.\n - CONDITION_TRIGGER_METHOD_SETTLEMENT_PRICE: Trigger the order using the settlement price on the book.",
-        "default": "CONDITION_TRIGGER_METHOD_UNDEFINED",
         "enum": [
-          "CONDITION_TRIGGER_METHOD_UNDEFINED",
-          "CONDITION_TRIGGER_METHOD_LAST_PRICE",
-          "CONDITION_TRIGGER_METHOD_SETTLEMENT_PRICE"
-        ]
-      },
-      "v1beta1OrderType": {
-        "type": "string",
-        "description": "OrderType indicates the type of an order.\n\n - ORDER_TYPE_MARKET_TO_LIMIT: An order that executes at the current best price. \nIf only partially filled, the remainder is cancelled and reinserted as a LIMIT order\nwith the price equal to the price at which the filled portion of the order executed\n - ORDER_TYPE_LIMIT: An order that will fill only at the specified price or better\n - ORDER_TYPE_STOP: An order that will become active as a MARKET_TO_LIMIT order once a trade has occured at the specified stop price\n - ORDER_TYPE_STOP_LIMIT: An order that will become active as a LIMIT order once a trade has occured at the specified stop price",
-        "default": "ORDER_TYPE_UNDEFINED",
-        "enum": [
-          "ORDER_TYPE_UNDEFINED",
-          "ORDER_TYPE_MARKET_TO_LIMIT",
-          "ORDER_TYPE_LIMIT",
-          "ORDER_TYPE_STOP",
-          "ORDER_TYPE_STOP_LIMIT"
-        ]
-      },
-      "v1beta1CreateOrderSubscriptionResponseUpdate": {
-        "type": "object",
-        "properties": {
-          "cancel_reject": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1CancelReject"
-          },
-          "executions": {
-            "type": "array",
-            "description": "A list of executions involving working orders, or new orders after subscription.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Execution"
-            }
-          }
-        },
-        "description": "Update(s) are modifications to working orders, or new orders after subscription."
-      },
-      "connamaraep3v1beta1CancelReject": {
-        "type": "object",
-        "properties": {
-          "clord_id": {
-            "title": "Client assigned ID for the order",
-            "type": "string"
-          },
-          "is_replace": {
-            "title": "Set if this cancel reject was for a replace or not",
-            "type": "boolean"
-          },
-          "order_id": {
-            "title": "Maps to exchange assigned ID for the order that could not be canceled or replaced",
-            "type": "string"
-          },
-          "reject_reason": {
-            "$ref": "#/components/schemas/v1beta1CxlRejReason"
-          },
-          "text": {
-            "title": "Free format text",
-            "type": "string"
-          },
-          "transact_time": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "description": "CancelReject denotes a cancel or replace request that was rejected."
-      },
-      "v1beta1CxlRejReason": {
-        "type": "string",
-        "description": "CxlRejReason is a code to identify the reason for cancel rejection.",
-        "default": "CXL_REJ_REASON_EXCHANGE_OPTION",
-        "enum": [
-          "CXL_REJ_REASON_EXCHANGE_OPTION",
-          "CXL_REJ_REASON_UNKNOWN_ORDER",
-          "CXL_REJ_REASON_EXCHANGE_CLOSED",
-          "CXL_REJ_REASON_INCORRECT_QUANTITY",
-          "CXL_REJ_REASON_INVALID_PRICE_INCREMENT",
-          "CXL_REJ_REASON_PRICE_OUT_OF_BOUNDS"
-        ]
-      },
-      "connamaraep3v1beta1Execution": {
-        "type": "object",
-        "properties": {
-          "aggressor": {
-            "title": "if a fill, true if this execution belongs to aggressor order, false if belongs to passive order",
-            "type": "boolean"
-          },
-          "commission_notional_collected": {
-            "type": "string",
-            "description": "The notional value of commissions collected as part of the execution, it is unscaled so one must apply the parent instrument price and fractional quantity scales to get the exact decimal value.",
-            "format": "int64"
-          },
-          "commission_spread_px": {
-            "type": "string",
-            "description": "The price at which a commission spread order filled at from the viewpoint of the firm that placed the order. For all other orders, this field matches the last_px.",
-            "format": "int64"
-          },
-          "id": {
-            "title": "Exchange assigned ID for this execution",
-            "type": "string"
-          },
-          "last_px": {
-            "type": "string",
-            "format": "int64"
-          },
-          "last_shares": {
-            "type": "string",
-            "format": "int64"
-          },
-          "leg_prices": {
-            "title": "if a fill on a multi leg instrument, contains the derived leg prices at the time of execution",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1LegPrice"
-            }
-          },
-          "order": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1Order"
-          },
-          "order_reject_reason": {
-            "$ref": "#/components/schemas/v1beta1OrdRejectReason"
-          },
-          "text": {
-            "title": "Free format text",
-            "type": "string"
-          },
-          "trace_id": {
-            "title": "if present, contains the exchange trace identifier that resulted in this execution",
-            "type": "string"
-          },
-          "trade_id": {
-            "title": "if a fill, the trade id for this transaction",
-            "type": "string"
-          },
-          "transact_time": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "transact_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "type": {
-            "$ref": "#/components/schemas/v1beta1ExecutionType"
-          },
-          "unsolicited_cancel_reason": {
-            "$ref": "#/components/schemas/v1beta1UnsolicitedCxlReason"
-          }
-        },
-        "description": "Execution denotes a state change for an order in the exchange."
-      },
-      "v1beta1LegPrice": {
-        "type": "object",
-        "properties": {
-          "anchor": {
-            "title": "Indicates that this entry is used as the anchor price",
-            "type": "boolean"
-          },
-          "px": {
-            "title": "The price of the leg",
-            "type": "string",
-            "format": "int64"
-          },
-          "qty": {
-            "title": "The quantity of the leg",
-            "type": "string",
-            "format": "int64"
-          },
-          "reference_px": {
-            "title": "The reference price of the leg used in the calculation of the derived price",
-            "type": "string",
-            "format": "int64"
-          },
-          "side": {
-            "$ref": "#/components/schemas/v1beta1Side"
-          },
-          "symbol": {
-            "title": "The symbol of the leg",
-            "type": "string"
-          }
-        },
-        "description": "LegPrice indicates a price for a leg as part of a multi leg instrument."
-      },
-      "v1beta1OrdRejectReason": {
-        "type": "string",
-        "description": "OrdRejectReason is the code to identify reason for order rejection.",
-        "default": "ORD_REJECT_REASON_EXCHANGE_OPTION",
-        "enum": [
-          "ORD_REJECT_REASON_EXCHANGE_OPTION",
-          "ORD_REJECT_REASON_UNKNOWN_SYMBOL",
-          "ORD_REJECT_REASON_EXCHANGE_CLOSED",
-          "ORD_REJECT_REASON_INCORRECT_QUANTITY",
-          "ORD_REJECT_REASON_INVALID_PRICE_INCREMENT",
-          "ORD_REJECT_REASON_INCORRECT_ORDER_TYPE",
-          "ORD_REJECT_REASON_PRICE_OUT_OF_BOUNDS",
-          "ORD_REJECT_REASON_NO_LIQUIDITY"
-        ]
-      },
-      "v1beta1Date": {
-        "type": "object",
-        "properties": {
-          "day": {
-            "type": "integer",
-            "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
-            "format": "int32"
-          },
-          "month": {
-            "type": "integer",
-            "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
-            "format": "int32"
-          },
-          "year": {
-            "type": "integer",
-            "description": "Year of date. Must be from 1 to 9999, or 0 if specifying a date without\na year.",
-            "format": "int32"
-          }
-        },
-        "description": "Date represents a whole or partial calendar date."
-      },
-      "v1beta1ExecutionType": {
-        "type": "string",
-        "description": "ExecutionType denotes the execution type.",
-        "default": "EXECUTION_TYPE_NEW",
-        "enum": [
-          "EXECUTION_TYPE_NEW",
-          "EXECUTION_TYPE_PARTIAL_FILL",
-          "EXECUTION_TYPE_FILL",
-          "EXECUTION_TYPE_CANCELED",
-          "EXECUTION_TYPE_REPLACE",
-          "EXECUTION_TYPE_REJECTED",
-          "EXECUTION_TYPE_EXPIRED",
-          "EXECUTION_TYPE_DONE_FOR_DAY"
-        ]
-      },
-      "v1beta1UnsolicitedCxlReason": {
-        "type": "string",
-        "description": "UnsolicitedCxlReason is a code to identify the reason for an unsolicited cancellation.",
-        "default": "UNSOLICITED_CXL_REASON_UNDEFINED",
-        "enum": [
-          "UNSOLICITED_CXL_REASON_UNDEFINED",
-          "UNSOLICITED_CXL_REASON_CONNECTION_LOSS",
-          "UNSOLICITED_CXL_REASON_LOGOUT",
-          "UNSOLICITED_CXL_REASON_EXCHANGE_OPTION",
-          "UNSOLICITED_CXL_REASON_OTHER"
-        ]
-      },
-      "v1beta1GetOpenOrdersRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "A list of accounts to filter upon and return in the response.\nThis field is optional.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "symbols": {
-            "type": "array",
-            "description": "A list of symbols to filter upon and return in the response.\nThis field is optional.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to get open orders."
-      },
-      "v1beta1GetOpenOrdersResponse": {
-        "type": "object",
-        "properties": {
-          "orders": {
-            "type": "array",
-            "description": "A snapshot list of the current working orders.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Order"
-            }
-          }
-        }
-      },
-      "connamaraep3v1beta1InsertOrderRequest": {
-        "type": "object",
-        "properties": {
-          "account": {
-            "type": "string",
-            "description": "The trading account for this order."
-          },
-          "all_or_none": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that either all of the order quantity should be filled, or none of it (partial fills will not be allowed)."
-          },
-          "best_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the same side as this order."
-          },
-          "cash_order_qty": {
-            "type": "string",
-            "description": "Fixed point decimal representation of the total cash order qty.\n(One of order_qty and cash_order_qty must be set. If set, must be > 0 and order_type must be MARKET_TO_LIMIT).",
-            "format": "int64"
-          },
-          "client_account_id": {
-            "type": "string",
-            "description": "Client assigned free-form account ID for the order."
-          },
-          "client_participant_id": {
-            "type": "string",
-            "description": "Client assigned free-form participant ID for the order."
-          },
-          "clord_id": {
-            "type": "string",
-            "description": "Client assigned ID for the order."
-          },
-          "commission_override_basis_points": {
-            "type": "string",
-            "description": "If present and an eligible singular commission with allow_order_entry_override is present for the order, assigns basis points to this value."
-          },
-          "commission_override_flat_fee": {
-            "type": "string",
-            "description": "If present and an eligible singular commission with allow_order_entry_override is present for the order, assigns flat fee to this value."
-          },
-          "good_till_time": {
-            "type": "string",
-            "description": "The time at which this order shall expire (required for time_in_force of GOOD_TILL_TIME, ignored otherwise).",
-            "format": "date-time"
-          },
-          "ignore_price_validity_checks": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that this order is exempt from instrument level price, order, and total notional limits. Only allowed in case of market sell orders to support liquidation."
-          },
-          "immediately_executable_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that the price of a limit order shall be set to the price at the top of the book on the opposing side as this order, thus able to immediately match."
-          },
-          "manual_order_indicator": {
-            "$ref": "#/components/schemas/v1beta1ManualOrderIndicator"
-          },
-          "min_qty": {
-            "type": "string",
-            "description": "Minimum order quantity to fill at once. Matches for fills under this amount will not be made (optional for IOC time in force).",
-            "format": "int64"
-          },
-          "order_capacity": {
-            "$ref": "#/components/schemas/v1beta1OrderCapacity"
-          },
-          "order_qty": {
-            "type": "string",
-            "description": "The quantity to be ordered (One of order_qty and cash_order_qty must be set. If set, must be > 0).",
-            "format": "int64"
-          },
-          "participate_dont_initiate": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that immediate match is not desired."
-          },
-          "price": {
-            "type": "string",
-            "description": "Integer representation of limit price (required for limit and stop limit orders).",
-            "format": "int64"
-          },
-          "quote": {
-            "type": "string",
-            "description": "If set, the quote to accept."
-          },
-          "self_match_prevention_id": {
-            "type": "string",
-            "description": "Client assigned Self Match Prevention ID (required to use the optional Self Match Prevention functionality)."
-          },
-          "self_match_prevention_instruction": {
-            "$ref": "#/components/schemas/v1beta1SelfMatchPreventionInstruction"
-          },
-          "session_id": {
-            "type": "string",
-            "description": "Client assigned Session ID (required to use the optional Cancel on Disconnect functionality)."
-          },
-          "side": {
-            "$ref": "#/components/schemas/v1beta1Side"
-          },
-          "stop_price": {
-            "type": "string",
-            "description": "Integer representation of stop price (required for stop and stop limit orders).",
-            "format": "int64"
-          },
-          "strict_limit": {
-            "type": "boolean",
-            "description": "A flag that if set indicates this particular order must be filled at the exact limit price specified without price improvement."
-          },
-          "symbol": {
-            "type": "string",
-            "description": "The symbol of the instrument to be ordered (required for all orders)."
-          },
-          "symbol_sub_type": {
-            "type": "string",
-            "description": "The sub type of the instrument symbol."
-          },
-          "time_in_force": {
-            "$ref": "#/components/schemas/v1beta1TimeInForce"
-          },
-          "trigger_method": {
-            "$ref": "#/components/schemas/v1beta1ConditionTriggerMethod"
-          },
-          "type": {
-            "$ref": "#/components/schemas/v1beta1OrderType"
-          },
-          "user": {
-            "type": "string",
-            "description": "The participant for which an agent is submitting the order (an agent must set this field, ignored otherwise)."
-          }
-        },
-        "description": "Request to insert an order with the given details."
-      },
-      "v1beta1InsertOrderResponse": {
-        "type": "object",
-        "properties": {
-          "order_id": {
-            "type": "string",
-            "description": "The exchange assigned ID for the order."
-          }
-        }
-      },
-      "connamaraep3v1beta1InsertOrderCrossRequest": {
-        "type": "object",
-        "properties": {
-          "block_trade_indicator": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that this cross represents a block trade."
-          },
-          "cross_id": {
-            "type": "string",
-            "description": "Client assigned free-form ID for the cross (required)."
-          },
-          "cross_prioritized_side": {
-            "$ref": "#/components/schemas/v1beta1Side"
-          },
-          "cross_type": {
-            "$ref": "#/components/schemas/v1beta1CrossType"
-          },
-          "requests": {
-            "type": "array",
-            "description": "A list of orders to insert (Only supports 2 orders at a time).",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1InsertOrderRequest"
-            }
-          },
-          "transaction_booked_time": {
-            "type": "string",
-            "description": "The time at which the order was booked.",
-            "format": "date-time"
-          }
-        },
-        "description": "Request to insert orders for a cross with the given details."
-      },
-      "v1beta1CrossType": {
-        "type": "string",
-        "description": "CrossType specifies the type of order cross. Must be set when inserting a cross.\n\n - CROSS_TYPE_ALL_OR_NONE: Cross order will either fill all of the order quantity or none of it",
-        "default": "CROSS_TYPE_UNDEFINED",
-        "enum": [
-          "CROSS_TYPE_UNDEFINED",
-          "CROSS_TYPE_ALL_OR_NONE"
-        ]
-      },
-      "v1beta1InsertOrderCrossResponse": {
-        "type": "object",
-        "properties": {
-          "responses": {
-            "type": "array",
-            "description": "A list of responses to inserted orders.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1InsertOrderResponse"
-            }
-          }
-        }
-      },
-      "v1beta1InsertOrderListRequest": {
-        "type": "object",
-        "properties": {
-          "requests": {
-            "type": "array",
-            "description": "A list of orders to insert.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1InsertOrderRequest"
-            }
-          }
-        },
-        "description": "Request to insert multiple orders with the given details."
-      },
-      "v1beta1InsertOrderListResponse": {
-        "type": "object",
-        "properties": {
-          "responses": {
-            "type": "array",
-            "description": "A list of responses to inserted orders.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1InsertOrderResponse"
-            }
-          }
-        }
-      },
-      "v1beta1PreviewOrderRequest": {
-        "type": "object",
-        "properties": {
-          "request": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1InsertOrderRequest"
-          }
-        }
-      },
-      "v1beta1PreviewOrderResponse": {
-        "type": "object",
-        "properties": {
-          "preview_order": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1Order"
-          }
-        }
-      },
-      "v1beta1DownloadExecutionsRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
-            "items": {
-              "type": "string"
-            }
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the executions to be fetched.",
-            "format": "date-time"
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the executions to be fetched.",
-            "format": "date-time"
-          }
-        },
-        "description": "Request to download executions filtered using the given details as a csv."
-      },
-      "v1beta1DownloadOrdersRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
-            "items": {
-              "type": "string"
-            }
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the orders to be fetched.",
-            "format": "date-time"
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the orders to be fetched.",
-            "format": "date-time"
-          }
-        },
-        "description": "Request to download orders filtered using the given details as a csv."
-      },
-      "v1beta1DownloadTradesRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
-            "items": {
-              "type": "string"
-            }
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the trades to be fetched.",
-            "format": "date-time"
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the trades to be fetched.",
-            "format": "date-time"
-          }
-        },
-        "description": "Request to download trades filtered using the given details as a csv."
-      },
-      "v1beta1GetTradeStatsRequest": {
-        "type": "object",
-        "properties": {
-          "bars": {
-            "type": "integer",
-            "description": "Number of individual bars to include for the given time window.",
-            "format": "int32"
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the trade data time window.",
-            "format": "date-time"
-          },
-          "end_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the trade data time window.",
-            "format": "date-time"
-          },
-          "start_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Symbol to filter upon."
-          }
-        }
-      },
-      "v1beta1GetTradeStatsResponse": {
-        "type": "object",
-        "properties": {
-          "bar_end_time": {
-            "type": "array",
-            "description": "The end of the time window corresponding to the same index as the `bars` array.",
-            "items": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          "bar_start_time": {
-            "type": "array",
-            "description": "The start of the time window corresponding to the same index as the `bars` array.",
-            "items": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          "bars": {
-            "type": "array",
-            "description": "The stats calculated in the given time window, split into individual time slices.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1TradeStats"
-            }
-          },
-          "stats": {
-            "$ref": "#/components/schemas/v1beta1TradeStats"
-          }
-        }
-      },
-      "v1beta1TradeStats": {
-        "type": "object",
-        "properties": {
-          "cleared_notional": {
-            "title": "Total notional traded in this time that has been cleared, one can divide this value by the volume field to get cleared volume weighted average price",
-            "type": "string",
-            "format": "int64"
-          },
-          "cleared_trade_count": {
-            "title": "The number of cleared trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "cleared_volume": {
-            "title": "Volume (total shares traded) that has been cleared",
-            "type": "string",
-            "format": "int64"
-          },
-          "first": {
-            "title": "First trade price in a collection of trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "high": {
-            "title": "High trade price in a collection of trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "last": {
-            "title": "Last trade price in a collection of trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "low": {
-            "title": "Low trade price in a collection of trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "notional": {
-            "title": "Total notional traded in this time, one can divide this value by the volume field to get volume weighted average price",
-            "type": "string",
-            "format": "int64"
-          },
-          "total_trade_count": {
-            "title": "Total number of trades",
-            "type": "string",
-            "format": "int64"
-          },
-          "volume": {
-            "title": "Volume (total shares traded) in this time",
-            "type": "string",
-            "format": "int64"
-          }
-        },
-        "description": "TradeStats are a collection of stats on a set of trades."
-      },
-      "v1beta1SearchExecutionsRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
-            "items": {
-              "type": "string"
-            }
-          },
-          "client_account_id": {
-            "type": "string",
-            "description": "Client account ID to filter upon."
-          },
-          "client_participant_id": {
-            "type": "string",
-            "description": "Client participant ID to filter upon."
-          },
-          "clord_id": {
-            "type": "string",
-            "description": "Client assigned order ID to filter upon."
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the orders to be fetched.",
-            "format": "date-time"
-          },
-          "end_transact_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "exec_ids": {
-            "type": "array",
-            "description": "Execution IDs to filter upon.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "newest_first": {
-            "type": "boolean",
-            "description": "A flag that if set indicates that executions found should be sorted from most recent to oldest."
-          },
-          "order_id": {
-            "type": "string",
-            "description": "Exchange assigned order ID of the order to filter upon."
-          },
-          "page_size": {
-            "type": "integer",
-            "description": "The maximum number of fills to return in a response.\nThis field is optional.",
-            "format": "int32"
-          },
-          "page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchExecutionsRequest`.\nthat indicates where this listing should continue from.\nThis field is optional."
-          },
-          "parent_order_id": {
-            "type": "string",
-            "description": "Parent order ID to filter upon."
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the orders to be fetched.",
-            "format": "date-time"
-          },
-          "start_transact_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Instrument symbol to filter upon."
-          },
-          "symbol_sub_type": {
-            "type": "string",
-            "description": "Symbol sub type to filter upon."
-          },
-          "types": {
-            "type": "array",
-            "description": "Execution types to filter upon.",
-            "items": {
-              "$ref": "#/components/schemas/v1beta1ExecutionType"
-            }
-          }
-        },
-        "description": "Request to search for executions filtered using the given details."
-      },
-      "v1beta1SearchExecutionsResponse": {
-        "type": "object",
-        "properties": {
-          "eof": {
-            "type": "boolean",
-            "description": "A flag that if set indicates the end of file has been reached and there are no further pages."
-          },
-          "executions": {
-            "type": "array",
-            "description": "List of executions found.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Execution"
-            }
-          },
-          "next_page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchExecutions`.\nthat indicates from where listing should continue.\nThis field is optional."
-          }
-        }
-      },
-      "v1beta1SearchOrdersRequest": {
-        "type": "object",
-        "properties": {
-          "accounts": {
-            "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
-            "items": {
-              "type": "string"
-            }
-          },
-          "client_account_id": {
-            "type": "string",
-            "description": "Client account ID to filter upon."
-          },
-          "client_participant_id": {
-            "type": "string",
-            "description": "Client participant ID to filter upon."
-          },
-          "clord_id": {
-            "type": "string",
-            "description": "Client assigned order ID to filter upon."
-          },
-          "cross_id": {
-            "type": "string",
-            "description": "Client assigned Order Cross ID."
-          },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the orders to be fetched.",
-            "format": "date-time"
-          },
-          "end_transact_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "host_cross_id": {
-            "type": "string",
-            "description": "Exchange generated Host Cross ID."
-          },
-          "order_id": {
-            "type": "string",
-            "description": "Exchange assigned order ID of the order to filter upon."
-          },
-          "order_state_filter": {
-            "$ref": "#/components/schemas/v1beta1OrderStateFilter"
-          },
-          "page_size": {
-            "type": "integer",
-            "description": "The maximum number of orders to return in a response.\nThis field is optional.",
-            "format": "int32"
-          },
-          "page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchOrdersRequest`.\nthat indicates where this listing should continue from.\nThis field is optional."
-          },
-          "parent_order_id": {
-            "type": "string",
-            "description": "Parent order ID to filter upon."
-          },
-          "side": {
-            "$ref": "#/components/schemas/v1beta1Side"
-          },
-          "start_time": {
-            "type": "string",
-            "description": "Start time for the orders to be fetched.",
-            "format": "date-time"
-          },
-          "start_transact_trade_date": {
-            "$ref": "#/components/schemas/v1beta1Date"
-          },
-          "symbol": {
-            "type": "string",
-            "description": "Instrument symbol to filter upon."
-          },
-          "symbol_sub_type": {
-            "type": "string",
-            "description": "Symbol sub type to filter upon."
-          },
-          "type": {
-            "$ref": "#/components/schemas/v1beta1OrderType"
-          },
-          "with_last_execution": {
-            "type": "boolean",
-            "description": "When true indicates that the response should also return the last execution created that is associated with the matched orders."
-          }
-        },
-        "description": "Request to search for orders filtered using the given details."
-      },
-      "v1beta1OrderStateFilter": {
-        "type": "string",
-        "description": "OrderStateFilter describes a filter for searching orders that are open or closed.",
-        "default": "ORDER_STATE_FILTER_UNDEFINED",
-        "enum": [
-          "ORDER_STATE_FILTER_UNDEFINED",
           "ORDER_STATE_FILTER_OPEN",
           "ORDER_STATE_FILTER_CLOSED",
           "ORDER_STATE_FILTER_NEW",
@@ -2287,96 +771,332 @@
           "ORDER_STATE_FILTER_REJECTED",
           "ORDER_STATE_FILTER_EXPIRED",
           "ORDER_STATE_FILTER_PENDING_RISK"
-        ]
+        ],
+        "description": "OrderStateFilter describes a filter for searching orders that are open or closed."
       },
-      "v1beta1SearchOrdersResponse": {
+      "OrderType": {
+        "type": "string",
+        "enum": [
+          "ORDER_TYPE_MARKET_TO_LIMIT",
+          "ORDER_TYPE_LIMIT",
+          "ORDER_TYPE_STOP",
+          "ORDER_TYPE_STOP_LIMIT"
+        ],
+        "description": "OrderType indicates the type of an order."
+      },
+      "SearchExecutionsRequest": {
         "type": "object",
         "properties": {
-          "last_executions": {
-            "type": "array",
-            "description": "The list of last executions associated with the returned orders. Will be empty unless with_last_execution is set to true in the request.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Execution"
-            }
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
           },
-          "next_page_token": {
+          "pageToken": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "startTime": {
             "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchOrders`.\nthat indicates from where listing should continue.\nThis field is optional."
+            "format": "date-time"
           },
-          "order": {
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "types": {
             "type": "array",
-            "description": "List of orders found.",
             "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Order"
+              "$ref": "#/components/schemas/ExecutionType"
             }
-          }
-        }
-      },
-      "v1beta1SearchTradesRequest": {
-        "type": "object",
-        "properties": {
+          },
+          "newestFirst": {
+            "type": "boolean"
+          },
           "accounts": {
             "type": "array",
-            "description": "Fully qualified resource account names to filter upon (ie: \"firms/[firmid]/accounts/[accountid]\").",
             "items": {
               "type": "string"
             }
           },
-          "end_time": {
-            "type": "string",
-            "description": "End time for the orders to be fetched.",
-            "format": "date-time"
+          "clientAccountId": {
+            "type": "string"
           },
-          "exec_id": {
-            "type": "string",
-            "description": "Exchange assigned execution ID to filter upon."
+          "clientParticipantId": {
+            "type": "string"
           },
-          "order_id": {
-            "type": "string",
-            "description": "Exchange assigned order ID of the order to filter upon."
+          "parentOrderId": {
+            "type": "string"
           },
-          "page_size": {
+          "execIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "endTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          }
+        },
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+      },
+      "SearchExecutionsResponse": {
+        "type": "object",
+        "properties": {
+          "executions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Execution"
+            }
+          },
+          "nextPageToken": {
+            "type": "string"
+          },
+          "eof": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SearchOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
             "type": "integer",
-            "description": "The maximum number of orders to return in a response.\nThis field is optional.",
             "format": "int32"
           },
-          "page_token": {
-            "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchTradesRequest`.\nthat indicates where this listing should continue from.\nThis field is optional."
+          "pageToken": {
+            "type": "string"
           },
-          "start_time": {
+          "orderId": {
+            "type": "string"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "startTime": {
             "type": "string",
-            "description": "Start time for the orders to be fetched.",
             "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "orderStateFilter": {
+            "$ref": "#/components/schemas/OrderStateFilter"
+          },
+          "crossId": {
+            "type": "string"
+          },
+          "hostCrossId": {
+            "type": "string"
+          },
+          "clientAccountId": {
+            "type": "string"
+          },
+          "clientParticipantId": {
+            "type": "string"
+          },
+          "parentOrderId": {
+            "type": "string"
+          },
+          "startTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "endTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "withLastExecution": {
+            "type": "boolean"
+          }
+        },
+        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+      },
+      "SearchOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Order"
+            }
+          },
+          "nextPageToken": {
+            "type": "string"
+          },
+          "lastExecutions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Execution"
+            }
+          }
+        }
+      },
+      "SearchTradesRequest": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageToken": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "tradeId": {
+            "type": "string"
+          },
+          "execId": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "states": {
             "type": "array",
-            "description": "Trade states to filter upon.",
             "items": {
-              "$ref": "#/components/schemas/v1beta1TradeState"
+              "$ref": "#/components/schemas/TradeState"
             }
           },
-          "symbol": {
-            "type": "string",
-            "description": "Instrument symbol to filter upon."
-          },
-          "trade_id": {
-            "type": "string",
-            "description": "Exchange assigned trade ID to filter upon."
-          },
-          "trade_link_id": {
-            "title": "Trade Link ID to filter upon",
+          "tradeLinkId": {
             "type": "string"
           }
-        },
-        "description": "Request to search for trades filtered using the given details."
+        }
       },
-      "v1beta1TradeState": {
+      "SearchTradesResponse": {
+        "type": "object",
+        "properties": {
+          "trade": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Trade"
+            }
+          },
+          "nextPageToken": {
+            "type": "string"
+          }
+        }
+      },
+      "SelfMatchPreventionInstruction": {
         "type": "string",
-        "description": "TradeState indicates the state of a trade.\n\n - TRADE_STATE_NEW: Trade created\n - TRADE_STATE_CLEARED: Trade successfully cleared by clearing house\n - TRADE_STATE_BUSTED: Trade withdrawal request successfully approved\n - TRADE_STATE_INFLIGHT: Trade information sent to clearinghouse\n - TRADE_STATE_PENDING_RISK: Clearinghouse is pending at least one DCM claim for the trade\n - TRADE_STATE_PENDING_CLEARED: Clearinghouse is pending the counterparty DCM claim\n - TRADE_STATE_REJECTED: Clearinghouse has rejected the trade\n - TRADE_STATE_CLEARING_ACKNOWLEDGED: Clearing request acknowledged by clearing house\n - TRADE_STATE_RETRY_REQUEST: Trade has requested to retry clearing and is pending submission to the clearing house",
-        "default": "TRADE_STATE_UNDEFINED",
         "enum": [
-          "TRADE_STATE_UNDEFINED",
+          "SELF_MATCH_PREVENTION_INSTRUCTION_REJECT_AGGRESSOR",
+          "SELF_MATCH_PREVENTION_INSTRUCTION_CANCEL_RESTING",
+          "SELF_MATCH_PREVENTION_INSTRUCTION_REMOVE_BOTH"
+        ],
+        "description": "SelfMatchPreventionInstruction is the methodology used to handle self match prevention."
+      },
+      "Side": {
+        "type": "string",
+        "enum": [
+          "SIDE_BUY",
+          "SIDE_SELL"
+        ],
+        "description": "Side indicates the side of an Order."
+      },
+      "TimeInForce": {
+        "type": "string",
+        "enum": [
+          "TIME_IN_FORCE_DAY",
+          "TIME_IN_FORCE_GOOD_TILL_CANCEL",
+          "TIME_IN_FORCE_IMMEDIATE_OR_CANCEL",
+          "TIME_IN_FORCE_GOOD_TILL_TIME",
+          "TIME_IN_FORCE_FILL_OR_KILL"
+        ],
+        "description": "TimeInForce specifies how long the order remains in effect."
+      },
+      "Trade": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Exchange assigned ID for this trade"
+          },
+          "aggressor": {
+            "$ref": "#/components/schemas/Execution",
+            "title": "Execution for the incoming order included in the trade"
+          },
+          "passive": {
+            "$ref": "#/components/schemas/Execution",
+            "title": "Execution for the resting order included in the trade"
+          },
+          "tradeType": {
+            "$ref": "#/components/schemas/TradeType",
+            "title": "Type of trade specified"
+          },
+          "state": {
+            "$ref": "#/components/schemas/TradeState",
+            "title": "State of trade specified"
+          },
+          "reportingCounterparty": {
+            "$ref": "#/components/schemas/Side",
+            "title": "Reporting counterparty for this trade"
+          },
+          "text": {
+            "type": "string",
+            "description": "Additional detail regarding the status of the trade. May be empty."
+          },
+          "tradeLinkId": {
+            "type": "string",
+            "description": "Exchange assigned ID for a group of trades that all executed within the same underlying transactional event."
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Metadata attached to this trade."
+          }
+        },
+        "description": "Trade is an execution grouping reflecting a trade between two orders.\nWire-compatible with Connamara EP3 Trade (from v1beta1/api.proto)."
+      },
+      "TradeState": {
+        "type": "string",
+        "enum": [
           "TRADE_STATE_NEW",
           "TRADE_STATE_CLEARED",
           "TRADE_STATE_BUSTED",
@@ -2386,75 +1106,84 @@
           "TRADE_STATE_REJECTED",
           "TRADE_STATE_CLEARING_ACKNOWLEDGED",
           "TRADE_STATE_RETRY_REQUEST"
-        ]
+        ],
+        "description": "TradeState indicates the state of a trade."
       },
-      "v1beta1SearchTradesResponse": {
+      "TradeStats": {
         "type": "object",
         "properties": {
-          "next_page_token": {
+          "first": {
             "type": "string",
-            "description": "A pagination token returned from a previous call to `SearchTrades`.\nthat indicates from where listing should continue.\nThis field is optional."
+            "format": "int64",
+            "title": "First trade price in a collection of trades"
           },
-          "trade": {
-            "type": "array",
-            "description": "List of trades found.",
-            "items": {
-              "$ref": "#/components/schemas/connamaraep3v1beta1Trade"
-            }
-          }
-        }
-      },
-      "connamaraep3v1beta1Trade": {
-        "type": "object",
-        "properties": {
-          "aggressor": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1Execution"
-          },
-          "id": {
-            "title": "Exchange assigned ID for this trade",
-            "type": "string"
-          },
-          "metadata": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            },
-            "description": "Metadata attached to this trade."
-          },
-          "passive": {
-            "$ref": "#/components/schemas/connamaraep3v1beta1Execution"
-          },
-          "reporting_counterparty": {
-            "$ref": "#/components/schemas/v1beta1Side"
-          },
-          "state": {
-            "$ref": "#/components/schemas/v1beta1TradeState"
-          },
-          "text": {
+          "last": {
             "type": "string",
-            "description": "Additional detail regarding the status of the trade. May be empty."
+            "format": "int64",
+            "title": "Last trade price in a collection of trades"
           },
-          "trade_link_id": {
+          "high": {
             "type": "string",
-            "description": "Exchange assigned ID for a group of trades that all executed within the same underlying transactional event in the platform."
+            "format": "int64",
+            "title": "High trade price in a collection of trades"
           },
-          "trade_type": {
-            "$ref": "#/components/schemas/v1beta1TradeType"
+          "low": {
+            "type": "string",
+            "format": "int64",
+            "title": "Low trade price in a collection of trades"
+          },
+          "totalTradeCount": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total number of trades"
+          },
+          "clearedTradeCount": {
+            "type": "string",
+            "format": "int64",
+            "title": "The number of cleared trades"
+          },
+          "volume": {
+            "type": "string",
+            "format": "int64",
+            "title": "Volume (total shares traded) in this time"
+          },
+          "clearedVolume": {
+            "type": "string",
+            "format": "int64",
+            "title": "Volume (total shares traded) that has been cleared"
+          },
+          "notional": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total notional traded in this time"
+          },
+          "clearedNotional": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total notional traded in this time that has been cleared"
           }
         },
-        "description": "Trade is an execution grouping reflecting a trade between two orders in the system."
+        "description": "TradeStats are a collection of stats on a set of trades."
       },
-      "v1beta1TradeType": {
+      "TradeType": {
         "type": "string",
-        "description": "TradeType describes the execution type of the trade.",
-        "default": "TRADE_TYPE_UNDEFINED",
         "enum": [
-          "TRADE_TYPE_UNDEFINED",
           "TRADE_TYPE_REGULAR",
           "TRADE_TYPE_REQUEST_FOR_QUOTE",
           "TRADE_TYPE_BLOCK",
           "TRADE_TYPE_CROSS"
-        ]
+        ],
+        "description": "TradeType describes the execution type of the trade."
+      },
+      "UnsolicitedCxlReason": {
+        "type": "string",
+        "enum": [
+          "UNSOLICITED_CXL_REASON_CONNECTION_LOSS",
+          "UNSOLICITED_CXL_REASON_LOGOUT",
+          "UNSOLICITED_CXL_REASON_EXCHANGE_OPTION",
+          "UNSOLICITED_CXL_REASON_OTHER"
+        ],
+        "description": "UnsolicitedCxlReason is a code to identify the reason for an unsolicited cancellation."
       }
     }
   }

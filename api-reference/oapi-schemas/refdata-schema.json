@@ -1,0 +1,469 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Refdata API",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "RefDataAPI"
+    }
+  ],
+  "paths": {
+    "/v1/refdata/instruments": {
+      "post": {
+        "tags": [
+          "ReferenceData"
+        ],
+        "summary": "List instruments",
+        "description": "Returns a list of instruments matching the request",
+        "operationId": "RefDataAPI_ListInstruments",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListInstrumentsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListInstrumentsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/refdata/metadata": {
+      "post": {
+        "tags": [
+          "ReferenceData"
+        ],
+        "summary": "Get instrument metadata",
+        "description": "Returns miscellaneous instrument metadata",
+        "operationId": "RefDataAPI_GetInstrumentMetadata",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetInstrumentMetadataRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetInstrumentMetadataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/refdata/symbols": {
+      "post": {
+        "tags": [
+          "ReferenceData"
+        ],
+        "summary": "List symbols",
+        "description": "Returns a list of symbols on the exchange",
+        "operationId": "RefDataAPI_ListSymbols",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListSymbolsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListSymbolsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Date": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "day": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "Date represents a calendar date."
+      },
+      "GetInstrumentMetadataRequest": {
+        "type": "object",
+        "description": "Request for getting instrument metadata."
+      },
+      "GetInstrumentMetadataResponse": {
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Response with instrument metadata."
+      },
+      "Instrument": {
+        "type": "object",
+        "properties": {
+          "symbol": {
+            "type": "string"
+          },
+          "tickSize": {
+            "type": "number",
+            "format": "double"
+          },
+          "baseCurrency": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimumTradeQty": {
+            "type": "string",
+            "format": "int64"
+          },
+          "startDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "expirationDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "terminationDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "tradingSchedule": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/TradingHours"
+            }
+          },
+          "description": {
+            "type": "string"
+          },
+          "clearingHouse": {
+            "type": "string"
+          },
+          "minimumUnaffiliatedFirms": {
+            "type": "string",
+            "format": "int64"
+          },
+          "nonTradable": {
+            "type": "boolean",
+            "title": "type_attributes omitted - complex oneof with many swap types"
+          },
+          "jsonAttributes": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "priceLimit": {
+            "$ref": "#/components/schemas/PriceLimit"
+          },
+          "orderSizeLimit": {
+            "$ref": "#/components/schemas/OrderSizeLimit"
+          },
+          "expirationTime": {
+            "$ref": "#/components/schemas/TimeOfDay"
+          },
+          "tradeSettlementPeriod": {
+            "type": "string",
+            "format": "int64"
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstrumentState"
+          },
+          "priceScale": {
+            "type": "string",
+            "format": "int64"
+          },
+          "fractionalQtyScale": {
+            "type": "string",
+            "format": "int64"
+          },
+          "settlementCurrency": {
+            "type": "string"
+          },
+          "settlementPriceScale": {
+            "type": "string",
+            "format": "int64"
+          }
+        },
+        "description": "Instrument represents a tradable instrument.\nWire-compatible with Connamara EP3 Instrument (core fields)."
+      },
+      "InstrumentState": {
+        "type": "string",
+        "enum": [
+          "INSTRUMENT_STATE_OPEN",
+          "INSTRUMENT_STATE_PREOPEN",
+          "INSTRUMENT_STATE_SUSPENDED",
+          "INSTRUMENT_STATE_EXPIRED",
+          "INSTRUMENT_STATE_TERMINATED",
+          "INSTRUMENT_STATE_HALTED",
+          "INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION"
+        ],
+        "description": "InstrumentState represents the state of an instrument."
+      },
+      "InstrumentType": {
+        "type": "string",
+        "enum": [
+          "INSTRUMENT_TYPE_DEFAULT",
+          "INSTRUMENT_TYPE_FUTURE",
+          "INSTRUMENT_TYPE_OPTION",
+          "INSTRUMENT_TYPE_MULTILEG",
+          "INSTRUMENT_TYPE_IRS",
+          "INSTRUMENT_TYPE_FRA",
+          "INSTRUMENT_TYPE_FSIRS",
+          "INSTRUMENT_TYPE_BASIS",
+          "INSTRUMENT_TYPE_EVENT",
+          "INSTRUMENT_TYPE_OIS",
+          "INSTRUMENT_TYPE_SPS",
+          "INSTRUMENT_TYPE_NDF",
+          "INSTRUMENT_TYPE_FOREX",
+          "INSTRUMENT_TYPE_ZCIS",
+          "INSTRUMENT_TYPE_XCCY"
+        ],
+        "description": "InstrumentType represents the type of instrument."
+      },
+      "ListInstrumentsRequest": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageToken": {
+            "type": "string"
+          },
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productId": {
+            "type": "string"
+          },
+          "tradableFilter": {
+            "$ref": "#/components/schemas/TradableFilter"
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InstrumentState"
+            }
+          },
+          "type": {
+            "$ref": "#/components/schemas/InstrumentType"
+          }
+        },
+        "description": "Request for listing instruments."
+      },
+      "ListInstrumentsResponse": {
+        "type": "object",
+        "properties": {
+          "instruments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Instrument"
+            }
+          },
+          "nextPageToken": {
+            "type": "string"
+          },
+          "eof": {
+            "type": "boolean"
+          }
+        },
+        "description": "Response with list of instruments."
+      },
+      "ListSymbolsRequest": {
+        "type": "object",
+        "description": "Request for listing symbols."
+      },
+      "ListSymbolsResponse": {
+        "type": "object",
+        "properties": {
+          "symbols": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Response with list of symbols."
+      },
+      "OrderSizeLimit": {
+        "type": "object",
+        "properties": {
+          "low": {
+            "type": "string",
+            "format": "int64"
+          },
+          "high": {
+            "type": "string",
+            "format": "int64"
+          },
+          "lowSet": {
+            "type": "boolean"
+          },
+          "highSet": {
+            "type": "boolean"
+          },
+          "totalNotionalLow": {
+            "type": "string",
+            "format": "int64"
+          },
+          "totalNotionalHigh": {
+            "type": "string",
+            "format": "int64"
+          },
+          "totalNotionalLowSet": {
+            "type": "boolean"
+          },
+          "totalNotionalHighSet": {
+            "type": "boolean"
+          }
+        },
+        "description": "OrderSizeLimit describes optional order size limits on an instrument."
+      },
+      "PriceLimit": {
+        "type": "object",
+        "properties": {
+          "low": {
+            "type": "string",
+            "format": "int64"
+          },
+          "high": {
+            "type": "string",
+            "format": "int64"
+          },
+          "lowSet": {
+            "type": "boolean"
+          },
+          "highSet": {
+            "type": "boolean"
+          },
+          "relativeLow": {
+            "type": "number",
+            "format": "double"
+          },
+          "relativeHigh": {
+            "type": "number",
+            "format": "double"
+          },
+          "relativeLowSet": {
+            "type": "boolean"
+          },
+          "relativeHighSet": {
+            "type": "boolean"
+          }
+        },
+        "description": "PriceLimit describes optional price limits on an instrument."
+      },
+      "TimeOfDay": {
+        "type": "object",
+        "properties": {
+          "hours": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seconds": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "description": "TimeOfDay represents a time of day."
+      },
+      "TradableFilter": {
+        "type": "string",
+        "enum": [
+          "TRADABLE_FILTER_NON_TRADABLE",
+          "TRADABLE_FILTER_TRADABLE"
+        ],
+        "description": "TradableFilter for filtering instruments by tradability."
+      },
+      "TradingHours": {
+        "type": "object",
+        "properties": {
+          "daysOfWeek": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "timeOfDay": {
+            "$ref": "#/components/schemas/TimeOfDay"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "state": {
+            "$ref": "#/components/schemas/InstrumentState"
+          },
+          "hideMarketData": {
+            "type": "boolean"
+          },
+          "expireAllOrders": {
+            "type": "boolean"
+          }
+        },
+        "description": "TradingHours describes an instrument trading schedule segment."
+      }
+    }
+  }
+}
