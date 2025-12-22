@@ -56,6 +56,13 @@
             }
           },
           {
+            "group": "Trading",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/trading-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
             "group": "Orders",
             "openapi": {
               "source": "/api-reference/oapi-schemas/orders-schema.json",
@@ -70,9 +77,9 @@
             }
           },
           {
-            "group": "Market Data",
+            "group": "Reference Data",
             "openapi": {
-              "source": "/api-reference/oapi-schemas/marketdata-merged-schema.json",
+              "source": "/api-reference/oapi-schemas/refdata-schema.json",
               "directory": "api-reference"
             }
           },
