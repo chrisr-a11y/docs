@@ -10,7 +10,7 @@ Subscribe to real-time market data updates including order book depth, instrumen
 
 ## Service Definition
 
-**Service:** `connamara.ep3.v1beta1.MarketDataSubscriptionAPI`
+**Service:** `polymarket.v1.MarketDataSubscriptionAPI`
 
 **RPC:** `CreateMarketDataSubscription`
 
@@ -37,10 +37,10 @@ service MarketDataSubscriptionAPI {
 ### Example Request
 
 ```python
-from connamara.ep3.v1beta1 import market_data_pb2
+from polymarket.v1 import marketdatasubscription_pb2
 
 # Subscribe to specific symbols
-request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
     symbols=["mlb-ari-sf-2025-09-08", "nba-lal-gsw-2025-01-20"],
     unaggregated=False,
     depth=10,
@@ -48,7 +48,7 @@ request = market_data_pb2.CreateMarketDataSubscriptionRequest(
 )
 
 # Subscribe to all symbols
-request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
     symbols=[],  # Empty = all symbols
     depth=20
 )
@@ -158,8 +158,10 @@ if update.HasField('stats') and update.stats.HasField('last_trade_px'):
 | `INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION` | 7 | Closing auction, will match upon state change |
 
 ```python
+from polymarket.v1 import refdata_pb2
+
 # Get state name
-state_name = market_data_pb2.InstrumentState.Name(update.state)
+state_name = refdata_pb2.InstrumentState.Name(update.state)
 print(f"State: {state_name}")
 ```
 
@@ -172,13 +174,14 @@ import grpc
 import requests
 from datetime import datetime, timedelta
 from typing import Optional
-from connamara.ep3.v1beta1 import market_data_pb2
-from connamara.ep3.v1beta1 import market_data_pb2_grpc
+from polymarket.v1 import marketdatasubscription_pb2
+from polymarket.v1 import marketdatasubscription_pb2_grpc
+from polymarket.v1 import refdata_pb2
 
 
 class PolymarketStreamer:
     def __init__(self, base_url: str = "https://rest.preprod.polymarketexchange.com",
-                 grpc_server: str = "traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443"):
+                 grpc_server: str = "grpc.api.preprod.polymarketexchange.com:443"):
         self.base_url = base_url
         self.grpc_server = grpc_server
         self.access_token: Optional[str] = None
@@ -228,10 +231,10 @@ class PolymarketStreamer:
         channel = grpc.secure_channel(self.grpc_server, credentials)
 
         # Create stub
-        stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+        stub = marketdatasubscription_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
 
         # Create request
-        request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+        request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
             symbols=symbols,
             unaggregated=unaggregated,
             depth=depth,
@@ -240,7 +243,7 @@ class PolymarketStreamer:
 
         # Set up metadata with authorization
         metadata = [
-            ('authorization', self.access_token)
+            ('authorization', f'Bearer {self.access_token}')
         ]
 
         try:
@@ -272,7 +275,7 @@ class PolymarketStreamer:
             print(f"\n[{datetime.now().strftime('%H:%M:%S')}] Market Update for {update.symbol}")
 
             # Display instrument state
-            state_name = market_data_pb2.InstrumentState.Name(update.state)
+            state_name = refdata_pb2.InstrumentState.Name(update.state)
             print(f"  State: {state_name}")
 
             # Get price_scale from instrument metadata (via list_instruments API)

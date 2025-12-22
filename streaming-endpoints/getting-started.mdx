@@ -14,7 +14,7 @@ Before you begin, ensure you have:
 
 - **Auth0 Credentials**: Client ID and Client Secret from [onboarding](/getting-started/auth0-onboarding)
 - **Python 3.7+**: Python development environment
-- **Network Access**: Ability to connect to `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443`
+- **Network Access**: Ability to connect to `grpc.api.preprod.polymarketexchange.com:443`
 
 ## Step 1: Install Python gRPC Libraries
 
@@ -47,10 +47,10 @@ Server reflection allows you to discover service definitions at runtime without 
 pip install grpcio-reflection
 
 # Use grpcurl to explore services (TLS connection - no -plaintext flag)
-grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
+grpcurl grpc.api.preprod.polymarketexchange.com:443 list
 
 # Describe a service
-grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
+grpcurl grpc.api.preprod.polymarketexchange.com:443 describe polymarket.v1.MarketDataSubscriptionAPI
 ```
 
 ## Step 3: Generate Python Client Code
@@ -62,11 +62,11 @@ python -m grpc_tools.protoc \
   --python_out=. \
   --grpc_python_out=. \
   --proto_path=protos \
-  protos/connamara/ep3/v1beta1/market_data.proto \
-  protos/connamara/ep3/v1beta1/order_entry.proto \
-  protos/connamara/ep3/orders/v1beta1/orders.proto \
-  protos/connamara/ep3/instruments/v1beta1/instruments.proto \
-  protos/connamara/ep3/type/v1beta1/common.proto
+  protos/polymarket/v1/marketdatasubscription.proto \
+  protos/polymarket/v1/trading.proto \
+  protos/polymarket/v1/enums.proto \
+  protos/polymarket/v1/types.proto \
+  protos/polymarket/v1/refdata.proto
 ```
 
 This generates:
@@ -128,18 +128,18 @@ Create your first streaming connection:
 ```python
 import grpc
 from datetime import datetime
-from connamara.ep3.v1beta1 import market_data_pb2
-from connamara.ep3.v1beta1 import market_data_pb2_grpc
+from polymarket.v1 import marketdatasubscription_pb2
+from polymarket.v1 import marketdatasubscription_pb2_grpc
 
 # Create secure channel
 credentials = grpc.ssl_channel_credentials()
-channel = grpc.secure_channel('traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443', credentials)
+channel = grpc.secure_channel('grpc.api.preprod.polymarketexchange.com:443', credentials)
 
 # Create stub
-stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
+stub = marketdatasubscription_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
 
 # Create request
-request = market_data_pb2.CreateMarketDataSubscriptionRequest(
+request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
     symbols=["mlb-ari-sf-2025-09-08"],
     unaggregated=False,
     depth=10,
@@ -211,7 +211,7 @@ for response in response_stream:
   export PYTHONPATH="${PYTHONPATH}:."
   ```
 
-### Module Not Found: connamara
+### Module Not Found: polymarket
 - **Cause**: Proto files not generated or in wrong location
 - **Solution**: Re-run the `protoc` command from step 3, ensure you're in the correct directory
 

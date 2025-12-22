@@ -10,7 +10,7 @@ Subscribe to real-time order updates, execution reports, fills, and cancellation
 
 ## Service Definition
 
-**Service:** `connamara.ep3.v1beta1.OrderEntryAPI`
+**Service:** `polymarket.v1.OrderEntryAPI`
 **RPC:** `CreateOrderSubscription`
 **Type:** Server-side streaming
 
@@ -34,24 +34,24 @@ service OrderEntryAPI {
 ### Example Request
 
 ```python
-from connamara.ep3.v1beta1 import order_entry_pb2
+from polymarket.v1 import trading_pb2
 
 # Subscribe to all orders for your accounts
-request = order_entry_pb2.CreateOrderSubscriptionRequest(
+request = trading_pb2.CreateOrderSubscriptionRequest(
     symbols=[],
     accounts=[],
     snapshot_only=False
 )
 
 # Subscribe to specific symbol
-request = order_entry_pb2.CreateOrderSubscriptionRequest(
+request = trading_pb2.CreateOrderSubscriptionRequest(
     symbols=["mlb-ari-sf-2025-09-08"],
     accounts=[],
     snapshot_only=False
 )
 
 # Get snapshot only (current state)
-request = order_entry_pb2.CreateOrderSubscriptionRequest(
+request = trading_pb2.CreateOrderSubscriptionRequest(
     symbols=[],
     accounts=[],
     snapshot_only=True
@@ -84,6 +84,8 @@ if response.HasField('heartbeat'):
 Initial state of all matching orders when subscription starts.
 
 ```python
+from polymarket.v1 import enums_pb2
+
 if response.HasField('snapshot'):
     snapshot = response.snapshot
     print(f"Snapshot received: {len(snapshot.orders)} orders")
@@ -91,8 +93,8 @@ if response.HasField('snapshot'):
     for order in snapshot.orders:
         print(f"  Order ID: {order.id}")
         print(f"  Symbol: {order.symbol}")
-        print(f"  Side: {orders_pb2.Side.Name(order.side)}")
-        print(f"  State: {orders_pb2.OrderState.Name(order.state)}")
+        print(f"  Side: {enums_pb2.Side.Name(order.side)}")
+        print(f"  State: {enums_pb2.OrderState.Name(order.state)}")
 ```
 
 ### 3. Update Messages
@@ -105,11 +107,11 @@ if response.HasField('update'):
 
     # Process executions
     for execution in update.executions:
-        print(f"Execution: {orders_pb2.ExecutionType.Name(execution.type)}")
+        print(f"Execution: {enums_pb2.ExecutionType.Name(execution.type)}")
 
     # Process cancel rejects
     if update.HasField('cancel_reject'):
-        print(f"Cancel rejected: {orders_pb2.CxlRejReason.Name(update.cancel_reject.reject_reason)}")
+        print(f"Cancel rejected: {enums_pb2.CxlRejReason.Name(update.cancel_reject.reject_reason)}")
 ```
 
 ## Order Message Structure
@@ -137,10 +139,10 @@ if response.HasField('update'):
     **Price Fields:**
     - `price`, `avg_px`, `stop_price` are `int64` values
     - Divide by the instrument's `price_scale` to get decimal prices
-    - `price_scale` is included in order responses for convenience
+    - `price_scale` is available from instrument metadata via the RefDataAPI
 
     ```python
-    price = order.price / order.price_scale
+    price = order.price / price_scale
     print(f"Price: ${price:.4f}")
     ```
 </Warning>
@@ -149,21 +151,22 @@ if response.HasField('update'):
 
 | State | Value | Description |
 |-------|-------|-------------|
-| `ORDER_STATE_NEW` | 1 | Order accepted, resting in book |
-| `ORDER_STATE_PARTIALLY_FILLED` | 2 | Order partially executed |
-| `ORDER_STATE_FILLED` | 3 | **Order completely filled** |
-| `ORDER_STATE_CANCELED` | 4 | Order canceled (leaves_qty = 0) |
-| `ORDER_STATE_REPLACED` | 5 | Order modified/replaced |
-| `ORDER_STATE_PENDING_CANCEL` | 6 | Cancel request pending |
-| `ORDER_STATE_REJECTED` | 7 | Order rejected by exchange |
+| `ORDER_STATE_NEW` | 0 | Order accepted, resting in book |
+| `ORDER_STATE_PARTIALLY_FILLED` | 1 | Order partially executed |
+| `ORDER_STATE_FILLED` | 2 | **Order completely filled** |
+| `ORDER_STATE_CANCELED` | 3 | Order canceled (leaves_qty = 0) |
+| `ORDER_STATE_REPLACED` | 4 | Order modified/replaced |
+| `ORDER_STATE_REJECTED` | 5 | Order rejected by exchange |
+| `ORDER_STATE_EXPIRED` | 6 | Order expired (e.g., Day order at end of day) |
+| `ORDER_STATE_PENDING_NEW` | 7 | Order pending acceptance |
 | `ORDER_STATE_PENDING_REPLACE` | 8 | Replace request pending |
-| `ORDER_STATE_EXPIRED` | 9 | Order expired (e.g., Day order at end of day) |
+| `ORDER_STATE_PENDING_CANCEL` | 9 | Cancel request pending |
 
 ```python
-from connamara.ep3.orders.v1beta1 import orders_pb2
+from polymarket.v1 import enums_pb2
 
 # Get state name
-state_name = orders_pb2.OrderState.Name(order.state)
+state_name = enums_pb2.OrderState.Name(order.state)
 print(f"State: {state_name}")
 ```
 
@@ -175,7 +178,7 @@ print(f"State: {state_name}")
 | `SIDE_SELL` | 2 |
 
 ```python
-side_name = orders_pb2.Side.Name(order.side)
+side_name = enums_pb2.Side.Name(order.side)
 print(f"Side: {side_name}")
 ```
 
@@ -211,27 +214,27 @@ Executions represent order lifecycle events (new, fill, cancel, reject).
 
 | Type | Value | Description |
 |------|-------|-------------|
-| `EXECUTION_TYPE_NEW` | 1 | Order accepted (confirmed) |
-| `EXECUTION_TYPE_PARTIAL_FILL` | 2 | Partial fill occurred |
-| `EXECUTION_TYPE_FILL` | 3 | **Complete fill** (order fully executed) |
-| `EXECUTION_TYPE_TRADE` | 9 | Trade report (same as fill) |
-| `EXECUTION_TYPE_CANCELED` | 4 | Order canceled |
-| `EXECUTION_TYPE_REJECTED` | 7 | Order rejected |
-| `EXECUTION_TYPE_REPLACED` | 5 | Order modified |
-| `EXECUTION_TYPE_EXPIRED` | 10 | Order expired |
+| `EXECUTION_TYPE_NEW` | 0 | Order accepted (confirmed) |
+| `EXECUTION_TYPE_PARTIAL_FILL` | 1 | Partial fill occurred |
+| `EXECUTION_TYPE_FILL` | 2 | **Complete fill** (order fully executed) |
+| `EXECUTION_TYPE_CANCELED` | 3 | Order canceled |
+| `EXECUTION_TYPE_REPLACE` | 4 | Order modified |
+| `EXECUTION_TYPE_REJECTED` | 5 | Order rejected |
+| `EXECUTION_TYPE_EXPIRED` | 6 | Order expired |
+| `EXECUTION_TYPE_DONE_FOR_DAY` | 7 | Order done for day |
 
 ### Order Reject Reasons
 
 | Reason | Value | Description |
 |--------|-------|-------------|
+| `ORD_REJECT_REASON_EXCHANGE_OPTION` | 0 | Exchange option |
 | `ORD_REJECT_REASON_UNKNOWN_SYMBOL` | 1 | Symbol not found |
 | `ORD_REJECT_REASON_EXCHANGE_CLOSED` | 2 | Market is closed |
-| `ORD_REJECT_REASON_ORDER_EXCEEDS_LIMIT` | 3 | Exceeds risk limits |
-| `ORD_REJECT_REASON_DUPLICATE_ORDER` | 4 | Duplicate clord_id |
-| `ORD_REJECT_REASON_UNKNOWN_ACCOUNT` | 5 | Account not found |
-| `ORD_REJECT_REASON_INCORRECT_QUANTITY` | 6 | Invalid quantity |
-| `ORD_REJECT_REASON_INVALID_PRICE` | 7 | Invalid price |
-| `ORD_REJECT_REASON_OTHER` | 99 | Other reason (see text field) |
+| `ORD_REJECT_REASON_INCORRECT_QUANTITY` | 3 | Invalid quantity |
+| `ORD_REJECT_REASON_INVALID_PRICE_INCREMENT` | 4 | Invalid price increment |
+| `ORD_REJECT_REASON_INCORRECT_ORDER_TYPE` | 5 | Incorrect order type |
+| `ORD_REJECT_REASON_PRICE_OUT_OF_BOUNDS` | 6 | Price out of bounds |
+| `ORD_REJECT_REASON_NO_LIQUIDITY` | 7 | No liquidity available |
 
 ## Complete Example (from order_stream.py)
 
@@ -242,20 +245,21 @@ import grpc
 import requests
 from datetime import datetime, timedelta
 from typing import Optional
-from connamara.ep3.v1beta1 import order_entry_pb2
-from connamara.ep3.v1beta1 import order_entry_pb2_grpc
-from connamara.ep3.orders.v1beta1 import orders_pb2
+from polymarket.v1 import trading_pb2
+from polymarket.v1 import trading_pb2_grpc
+from polymarket.v1 import enums_pb2
 
 
 class PolymarketOrderStreamer:
     def __init__(self, base_url: str = "https://rest.preprod.polymarketexchange.com",
-                 grpc_server: str = "traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443"):
+                 grpc_server: str = "grpc.api.preprod.polymarketexchange.com:443"):
         self.base_url = base_url
         self.grpc_server = grpc_server
         self.access_token: Optional[str] = None
         self.refresh_token: Optional[str] = None
         self.access_expiration: Optional[datetime] = None
         self.session_id: Optional[str] = None
+        self.price_scale: int = 1000  # Get from instrument metadata
 
     def login(self, auth0_domain: str, client_id: str, client_secret: str, audience: str) -> dict:
         """Authenticate with Auth0 and store the access token."""
@@ -293,10 +297,10 @@ class PolymarketOrderStreamer:
         channel = grpc.secure_channel(self.grpc_server, credentials)
 
         # Create stub
-        stub = order_entry_pb2_grpc.OrderEntryAPIStub(channel)
+        stub = trading_pb2_grpc.OrderEntryAPIStub(channel)
 
         # Create request
-        request = order_entry_pb2.CreateOrderSubscriptionRequest(
+        request = trading_pb2.CreateOrderSubscriptionRequest(
             symbols=symbols or [],
             accounts=accounts or [],
             snapshot_only=snapshot_only
@@ -304,7 +308,7 @@ class PolymarketOrderStreamer:
 
         # Set up metadata with authorization
         metadata = [
-            ('authorization', self.access_token)
+            ('authorization', f'Bearer {self.access_token}')
         ]
 
         try:
@@ -371,12 +375,12 @@ class PolymarketOrderStreamer:
         print(f"  Order ID: {order.id}")
         print(f"    Client Order ID: {order.clord_id}")
         print(f"    Symbol: {order.symbol}")
-        print(f"    Side: {orders_pb2.Side.Name(order.side)}")
-        print(f"    Type: {orders_pb2.OrderType.Name(order.type)}")
-        print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
+        print(f"    Side: {enums_pb2.Side.Name(order.side)}")
+        print(f"    Type: {enums_pb2.OrderType.Name(order.type)}")
+        print(f"    State: {enums_pb2.OrderState.Name(order.state)}")
 
         if order.price > 0:
-            price = order.price / order.price_scale
+            price = order.price / self.price_scale
             print(f"    Price: ${price:.4f}")
 
         print(f"    Order Qty: {order.order_qty}")
@@ -384,7 +388,7 @@ class PolymarketOrderStreamer:
         print(f"    Remaining Qty: {order.leaves_qty}")
 
         if order.avg_px > 0:
-            avg_px = order.avg_px / order.price_scale
+            avg_px = order.avg_px / self.price_scale
             print(f"    Avg Price: ${avg_px:.4f}")
 
         if order.account:
@@ -395,20 +399,20 @@ class PolymarketOrderStreamer:
     def _display_execution(self, execution):
         """Display execution details."""
         print(f"  Execution ID: {execution.id}")
-        print(f"    Type: {orders_pb2.ExecutionType.Name(execution.type)}")
+        print(f"    Type: {enums_pb2.ExecutionType.Name(execution.type)}")
 
         if execution.HasField('order'):
             order = execution.order
             print(f"    Order ID: {order.id}")
             print(f"    Symbol: {order.symbol}")
-            print(f"    Side: {orders_pb2.Side.Name(order.side)}")
-            print(f"    State: {orders_pb2.OrderState.Name(order.state)}")
+            print(f"    Side: {enums_pb2.Side.Name(order.side)}")
+            print(f"    State: {enums_pb2.OrderState.Name(order.state)}")
 
         if execution.last_shares > 0:
             print(f"    Last Shares: {execution.last_shares}")
 
         if execution.last_px > 0:
-            last_px = execution.last_px / execution.order.price_scale
+            last_px = execution.last_px / self.price_scale
             print(f"    Last Price: ${last_px:.4f}")
 
         if execution.trade_id:
@@ -417,19 +421,17 @@ class PolymarketOrderStreamer:
         if execution.text:
             print(f"    Text: {execution.text}")
 
-        if execution.order_reject_reason != orders_pb2.ORD_REJECT_REASON_UNDEFINED:
-            print(f"    Reject Reason: {orders_pb2.OrdRejectReason.Name(execution.order_reject_reason)}")
+        if execution.order_reject_reason != enums_pb2.ORD_REJECT_REASON_EXCHANGE_OPTION:
+            print(f"    Reject Reason: {enums_pb2.OrdRejectReason.Name(execution.order_reject_reason)}")
 
         print()
 
     def _display_cancel_reject(self, cancel_reject):
         """Display cancel reject details."""
         print(f"  Cancel Reject:")
-        print(f"    ID: {cancel_reject.id}")
+        print(f"    Order ID: {cancel_reject.order_id}")
         print(f"    Client Order ID: {cancel_reject.clord_id}")
-        print(f"    Original Client Order ID: {cancel_reject.orig_clord_id}")
-        print(f"    Response To: {orders_pb2.CxlRejResponseTo.Name(cancel_reject.response_to)}")
-        print(f"    Reject Reason: {orders_pb2.CxlRejReason.Name(cancel_reject.reject_reason)}")
+        print(f"    Reject Reason: {enums_pb2.CxlRejReason.Name(cancel_reject.reject_reason)}")
         if cancel_reject.text:
             print(f"    Text: {cancel_reject.text}")
         print()
@@ -505,24 +507,24 @@ Snapshot only: False
 ### Typical Order Flow
 
 ```
-1. NEW          → Order accepted, resting in book
-2. PARTIAL_FILL → First partial fill
-3. PARTIAL_FILL → Additional partial fills (if any)
-4. FILL         → Final fill, order complete
+1. NEW          -> Order accepted, resting in book
+2. PARTIAL_FILL -> First partial fill
+3. PARTIAL_FILL -> Additional partial fills (if any)
+4. FILL         -> Final fill, order complete
 ```
 
 ### Cancel Flow
 
 ```
-1. NEW              → Order resting
-2. PENDING_CANCEL   → Cancel request received
-3. CANCELED         → Cancel confirmed
+1. NEW              -> Order resting
+2. PENDING_CANCEL   -> Cancel request received
+3. CANCELED         -> Cancel confirmed
 ```
 
 ### Reject Flow
 
 ```
-1. REJECTED → Order rejected immediately
+1. REJECTED -> Order rejected immediately
 ```
 
 
