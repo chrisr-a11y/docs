@@ -1,0 +1,181 @@
+---
+title: "Environments"
+sidebarTitle: "Environments"
+description: "API endpoints for dev, preprod, and production environments"
+---
+
+# Environments
+
+The Polymarket Exchange API is available in three environments. Use the appropriate endpoints based on your integration stage.
+
+## Environment Summary
+
+| Environment | Purpose | Auth0 Domain |
+|-------------|---------|--------------|
+| **Dev** | Development and testing | `pmx-dev01.us.auth0.com` |
+| **Preprod** | Pre-production validation | `pmx-preprod.us.auth0.com` |
+| **Prod** | Production trading | `pmx-prod.us.auth0.com` |
+
+---
+
+## Dev Environment
+
+Development environment for initial integration and testing.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://api.dev01.polymarketexchange.com` |
+| **gRPC** | `grpc.dev01.polymarketexchange.com:443` |
+| **Auth0 Domain** | `pmx-dev01.us.auth0.com` |
+| **Auth0 Audience** | `https://api.dev01.polymarketexchange.com` |
+
+<Card title="Dev Health Check" icon="heart-pulse" href="https://api.dev01.polymarketexchange.com/v1/health">
+  Click to check dev environment health
+</Card>
+
+---
+
+## Preprod Environment
+
+Pre-production environment for final validation before going live.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://api.preprod.polymarketexchange.com` |
+| **gRPC** | `grpc.preprod.polymarketexchange.com:443` |
+| **Auth0 Domain** | `pmx-preprod.us.auth0.com` |
+| **Auth0 Audience** | `https://api.preprod.polymarketexchange.com` |
+
+<Card title="Preprod Health Check" icon="heart-pulse" href="https://api.preprod.polymarketexchange.com/v1/health">
+  Click to check preprod environment health
+</Card>
+
+---
+
+## Production Environment
+
+Live production environment for real trading.
+
+| Service | Endpoint |
+|---------|----------|
+| **REST API** | `https://api.prod.polymarketexchange.com` |
+| **gRPC** | `grpc.prod.polymarketexchange.com:443` |
+| **Auth0 Domain** | `pmx-prod.us.auth0.com` |
+| **Auth0 Audience** | `https://api.prod.polymarketexchange.com` |
+
+<Card title="Production Health Check" icon="heart-pulse" href="https://api.prod.polymarketexchange.com/v1/health">
+  Click to check production environment health
+</Card>
+
+---
+
+## Health Check Endpoint
+
+All environments expose the same health check endpoint:
+
+```
+GET /v1/health
+```
+
+### Example Request
+
+```bash
+curl https://api.dev01.polymarketexchange.com/v1/health
+```
+
+### Example Response
+
+```json
+{
+  "status": "SERVING",
+  "version": "1.0.0"
+}
+```
+
+---
+
+## Quick Reference
+
+### REST API Base URLs
+
+| Environment | Base URL |
+|-------------|----------|
+| Dev | `https://api.dev01.polymarketexchange.com` |
+| Preprod | `https://api.preprod.polymarketexchange.com` |
+| Prod | `https://api.prod.polymarketexchange.com` |
+
+### gRPC Endpoints
+
+| Environment | Endpoint |
+|-------------|----------|
+| Dev | `grpc.dev01.polymarketexchange.com:443` |
+| Preprod | `grpc.preprod.polymarketexchange.com:443` |
+| Prod | `grpc.prod.polymarketexchange.com:443` |
+
+---
+
+## AWS PrivateLink Connection
+
+For secure, private connectivity from your AWS VPC, use AWS PrivateLink. This routes traffic over AWS's private network instead of the public internet.
+
+### PrivateLink Endpoints
+
+| Environment | PrivateLink DNS |
+|-------------|-----------------|
+| Preprod | `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com` |
+| Prod | `traderapi.us-east-1.privatelink.prod.polymarketexchange.com` |
+
+### PrivateLink Ports
+
+| Protocol | Port |
+|----------|------|
+| REST API | `443` |
+| gRPC | `443` |
+
+<Info>
+The load balancer terminates TLS on port 443 and forwards to the internal gRPC service on port 9090.
+</Info>
+
+### Setup Requirements
+
+1. **Whitelist your AWS account** - Contact support to whitelist your AWS Account ID
+2. **Create VPC Endpoint** - Use the VPC Service Name for your environment
+3. **Wait for approval** - Polymarket DevOps will approve the connection request
+4. **Configure DNS** - Enable Private DNS or create CNAME aliases
+
+### VPC Service Names
+
+| Environment | VPC Service Name |
+|-------------|------------------|
+| Preprod | `com.amazonaws.vpce.us-east-1.vpce-svc-0ab4dc57271d74d3e` |
+| Prod | `com.amazonaws.vpce.us-east-1.vpce-svc-0cb1220f882b3879e` |
+
+<Card title="Full PrivateLink Setup Guide" icon="link" href="/getting-started/vpc-connection">
+  Complete VPC connection instructions including availability zones and troubleshooting
+</Card>
+
+### Auth0 Token Endpoints
+
+| Environment | Token URL |
+|-------------|-----------|
+| Dev | `https://pmx-dev01.us.auth0.com/oauth/token` |
+| Preprod | `https://pmx-preprod.us.auth0.com/oauth/token` |
+| Prod | `https://pmx-prod.us.auth0.com/oauth/token` |
+
+<Warning>
+**Tokens must be refreshed every 3 minutes** across all environments.
+</Warning>
+
+---
+
+## Environment Progression
+
+We recommend the following integration progression:
+
+1. **Dev** - Initial development and unit testing
+2. **Preprod** - Integration testing and pre-launch validation
+3. **Prod** - Live trading
+
+<Info>
+Contact [support@qcex.com](mailto:support@qcex.com) to request access credentials for each environment.
+</Info>

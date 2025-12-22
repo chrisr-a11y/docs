@@ -12,7 +12,7 @@ This guide will help you set up gRPC streaming with Python and connect to your f
 
 Before you begin, ensure you have:
 
-- **API Credentials**: Username and password for the Polymarket Exchange
+- **Auth0 Credentials**: Client ID and Client Secret from [onboarding](/getting-started/auth0-onboarding)
 - **Python 3.7+**: Python development environment
 - **Network Access**: Ability to connect to `traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443`
 
@@ -46,8 +46,8 @@ Server reflection allows you to discover service definitions at runtime without 
 # Install reflection client
 pip install grpcio-reflection
 
-# Use grpcurl to explore services
-grpcurl -plaintext traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
+# Use grpcurl to explore services (TLS connection - no -plaintext flag)
+grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 list
 
 # Describe a service
 grpcurl traderapi.us-east-1.privatelink.preprod.polymarketexchange.com:443 describe connamara.ep3.v1beta1.MarketDataSubscriptionAPI
@@ -73,17 +73,53 @@ This generates:
 - `*_pb2.py` files: Message definitions
 - `*_pb2_grpc.py` files: Service stubs
 
-## Step 4: Authenticate via REST API
-
-Obtain a JWT token from the REST API (curl example):
-
-```bash
-curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
-```
+## Step 4: Authenticate via Auth0
 
 <Warning>
-Store your access token securely. It will be used to authenticate all gRPC streaming connections.
+**CRITICAL: Tokens must be refreshed every 3 minutes.**
+
+Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
 </Warning>
+
+### Auth0 Tenants
+
+| Environment | Auth0 Domain |
+|-------------|--------------|
+| **Production** | `pmx-prod.us.auth0.com` |
+| **Preprod** | `pmx-preprod.us.auth0.com` |
+
+Obtain a JWT token using the OAuth 2.0 Client Credentials flow:
+
+```bash
+# For preprod environment
+curl --request POST \
+  --url "https://pmx-preprod.us.auth0.com/oauth/token" \
+  --header "content-type: application/json" \
+  --data '{
+    "client_id": "YOUR_CLIENT_ID",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "audience": "YOUR_API_AUDIENCE",
+    "grant_type": "client_credentials"
+  }'
+```
+
+The response contains your `access_token`:
+
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIs...",
+  "token_type": "Bearer",
+  "expires_in": 180
+}
+```
+
+<Info>
+The `expires_in` is 180 seconds (3 minutes). Implement automatic token refresh before expiration.
+</Info>
+
+<Info>
+See the [Auth0 Onboarding Guide](/getting-started/auth0-onboarding) for complete authentication details.
+</Info>
 
 ## Step 5: Connect to Market Data Stream
 
@@ -110,10 +146,9 @@ request = market_data_pb2.CreateMarketDataSubscriptionRequest(
     snapshot_only=False
 )
 
-# Set up metadata with authorization
-# access_token obtained from REST API login (see Step 4)
+# Set up metadata with authorization (JWT from Auth0)
 metadata = [
-    ('authorization', access_token)  # from login response
+    ('authorization', f'Bearer {access_token}')
 ]
 
 # Start streaming
@@ -167,7 +202,7 @@ for response in response_stream:
 
 ### Authentication Failed
 - **Cause**: Invalid or expired access token
-- **Solution**: Verify token from REST login, check expiration time
+- **Solution**: Verify JWT from Auth0, refresh token if expired (tokens expire every 3 minutes)
 
 ### Import Errors
 - **Cause**: Generated proto files not in Python path

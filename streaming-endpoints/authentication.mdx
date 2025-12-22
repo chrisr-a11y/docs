@@ -1,62 +1,90 @@
 ---
-title: "gRPC Authentication"
+title: "Authentication"
 sidebarTitle: "Authentication"
-description: "How to authenticate gRPC streaming connections with Python"
+description: "How to authenticate with the Polymarket Exchange API"
 ---
 
-# Authentication for gRPC Streaming
+# Authentication
 
-gRPC streaming connections use **JWT (JSON Web Token)** authentication obtained from the REST API. This guide explains the complete authentication flow using Python.
+The Polymarket Exchange API uses **Auth0 JWT (JSON Web Token)** authentication. You obtain a token from Auth0 and include it in every API request.
 
-## Authentication Architecture
+<Warning>
+**CRITICAL: Tokens must be refreshed every 3 minutes.**
+
+Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted API and streaming connections.
+</Warning>
+
+## Authentication Flow
 
 ```mermaid
 sequenceDiagram
     participant Client
-    participant REST API
-    participant gRPC Server
+    participant Auth0
+    participant API
 
-    Client->>REST API: POST /auth/v1beta1/login
-    REST API->>Client: JWT Token + Expiration
-    Client->>gRPC Server: Connect with token in metadata
-    gRPC Server->>Client: Stream data
-    Note over Client,gRPC Server: Token expires after configured duration
-    Client->>REST API: Re-login for new token
-    REST API->>Client: New JWT Token
+    Client->>Auth0: Request token (client credentials)
+    Auth0->>Client: JWT Token
+    Client->>API: API request with JWT in Authorization header
+    API->>Client: Response
+    Note over Client,API: Refresh token before expiration (every 3 min)
 ```
 
-## Step 1: Obtain JWT Token from REST API
+## Auth0 Configuration
 
-Before establishing any gRPC streaming connection, you must first authenticate via the REST API.
+### Auth0 Tenants
 
-### Login Request
+| Environment | Auth0 Domain |
+|-------------|--------------|
+| **Production** | `pmx-prod.us.auth0.com` |
+| **Preprod** | `pmx-preprod.us.auth0.com` |
 
-```curl
-curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/login" -H "Host: rest.preprod.polymarketexchange.com" -H "accept: application/json" -H "content-type: application/json" --data '{"password":"<password>","username":"<username>"}'
+Contact support for your `client_id`, `client_secret`, and `audience` values.
+
+## Step 1: Obtain Auth0 Token
+
+Request a JWT token from Auth0 using the OAuth 2.0 Client Credentials flow:
+
+```bash
+curl --request POST \
+  --url "https://pmx-preprod.us.auth0.com/oauth/token" \
+  --header "content-type: application/json" \
+  --data '{
+    "client_id": "YOUR_CLIENT_ID",
+    "client_secret": "YOUR_CLIENT_SECRET",
+    "audience": "YOUR_API_AUDIENCE",
+    "grant_type": "client_credentials"
+  }'
 ```
 
-### Login Response
+### Response
 
 ```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "access_expiration_time": "2025-01-18T12:00:00Z",
-  "refresh_expiration_time": "2025-01-19T12:00:00Z"
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIs...",
+  "token_type": "Bearer",
+  "expires_in": 180
 }
 ```
 
 <Info>
-**Token Fields:**
-- `access_token`: Use this for gRPC authentication
-- `refresh_token`: Use this to obtain a new access token before expiration
-- `access_expiration_time`: When the access token expires
-- `refresh_expiration_time`: When the refresh token expires
+The `expires_in` value is in seconds. With a 3-minute (180 second) expiration, you must refresh tokens frequently.
 </Info>
 
-## Step 2: Attach Token to gRPC Metadata
+## Step 2: Use Token in API Requests
 
-Once you have the access token, include it in the **gRPC metadata** for every streaming connection.
+Include the JWT token in the `Authorization` header for every request.
+
+### REST API
+
+```bash
+curl "https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/v1/accounts/whoami" \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "accept: application/json"
+```
+
+### gRPC Streaming
+
+Include the token in gRPC metadata:
 
 ```python
 import grpc
@@ -69,9 +97,9 @@ channel = grpc.secure_channel('traderapi.us-east-1.privatelink.preprod.polymarke
 # Create stub
 stub = market_data_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
 
-# Create metadata with authorization token
+# Include JWT in metadata
 metadata = [
-    ('authorization', access_token)
+    ('authorization', f'Bearer {jwt_token}')
 ]
 
 # Make streaming call with metadata
@@ -79,9 +107,60 @@ response_stream = stub.CreateMarketDataSubscription(request, metadata=metadata)
 ```
 
 <Warning>
-The metadata key **must** be `authorization` (lowercase). The value is the raw JWT token string.
+The metadata key **must** be `authorization` (lowercase). Include `Bearer ` prefix before the token.
 </Warning>
 
+## Token Refresh Strategy
+
+Since tokens expire every 3 minutes, implement automatic refresh:
+
+```python
+import time
+import requests
+from datetime import datetime, timedelta
+
+class TokenManager:
+    def __init__(self, auth0_domain, client_id, client_secret, audience):
+        self.auth0_domain = auth0_domain
+        self.client_id = client_id
+        self.client_secret = client_secret
+        self.audience = audience
+        self.token = None
+        self.expires_at = None
+
+    def get_token(self):
+        # Refresh if token is missing or expires within 30 seconds
+        if not self.token or datetime.now() >= self.expires_at - timedelta(seconds=30):
+            self._refresh_token()
+        return self.token
+
+    def _refresh_token(self):
+        response = requests.post(
+            f"https://{self.auth0_domain}/oauth/token",
+            json={
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+                "audience": self.audience,
+                "grant_type": "client_credentials"
+            }
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        self.token = data["access_token"]
+        self.expires_at = datetime.now() + timedelta(seconds=data["expires_in"])
+
+# Usage
+token_manager = TokenManager(
+    auth0_domain="pmx-preprod.us.auth0.com",
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET",
+    audience="YOUR_API_AUDIENCE"
+)
+
+# Always use get_token() - it handles refresh automatically
+token = token_manager.get_token()
+```
 
 ## Handling Authentication Errors
 
@@ -89,10 +168,9 @@ The metadata key **must** be `authorization` (lowercase). The value is the raw J
 
 | Error Code | Description | Solution |
 |------------|-------------|----------|
-| `UNAUTHENTICATED` | Token is invalid or missing | Verify token in metadata, re-login if expired |
-| `PERMISSION_DENIED` | Token is valid but lacks permissions | Check user permissions with support |
+| `UNAUTHENTICATED` | Token is invalid, expired, or missing | Refresh token and retry |
+| `PERMISSION_DENIED` | Token is valid but lacks required scopes | Check user permissions with support |
 | `UNAVAILABLE` | Cannot reach authentication service | Check network connectivity, retry with backoff |
-
 
 ## Next Steps
 
@@ -105,8 +183,5 @@ The metadata key **must** be `authorization` (lowercase). The value is the raw J
   </Card>
   <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
     Handle errors and implement reconnection
-  </Card>
-  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
-    See complete working examples
   </Card>
 </CardGroup>

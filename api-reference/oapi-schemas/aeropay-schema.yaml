@@ -1,0 +1,532 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/aeropay.proto
+  version: version not set
+tags:
+  - name: AeropayAPI
+basePath: /rest/api/
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  # Orchestrated Endpoints (Recommended)
+  /v1/aeropay/initialize:
+    post:
+      summary: Initialize Aeropay
+      description: Start the Aeropay integration for a user. Handles user creation and MFA triggering automatically. Returns one of three response types based on user state.
+      operationId: AeropayAPI_InitializeAeropay
+      responses:
+        "200":
+          description: A successful response. Check response fields to determine outcome type.
+          schema:
+            $ref: '#/definitions/v1InitializeAeropayResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1InitializeAeropayRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/validate-mfa:
+    post:
+      summary: Validate MFA Code
+      description: Submit the MFA code received after InitializeAeropay returns mfa_required. Returns SDK credentials or linked accounts.
+      operationId: AeropayAPI_ValidateAeropayMFA
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ValidateAeropayMFAResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ValidateAeropayMFARequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/methods:
+    get:
+      summary: Get Payment Methods
+      description: List linked payment methods with deposit limits and FIFO withdrawal requirements.
+      operationId: AeropayAPI_GetAeropayMethods
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetAeropayMethodsResponse'
+      parameters:
+        - name: fundingAccountId
+          in: query
+          required: true
+          type: string
+          description: The funding account ID
+      tags:
+        - AeropayAPI
+  # Primitive Endpoints (Advanced)
+  /v1/aeropay/aggregator/credentials:
+    post:
+      operationId: AeropayAPI_GetAggregatorCredentials
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetAggregatorCredentialsResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1GetAggregatorCredentialsRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/aggregator/link:
+    post:
+      operationId: AeropayAPI_LinkAccountFromAggregator
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1LinkAccountFromAggregatorResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1LinkAccountFromAggregatorRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/deposits:
+    post:
+      operationId: AeropayAPI_CreateAeropayDeposit
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayDepositResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayDepositRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/funding-sources/enable:
+    post:
+      operationId: AeropayAPI_EnableAeropayFundingSource
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1EnableAeropayFundingSourceResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1EnableAeropayFundingSourceRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/users:
+    post:
+      operationId: AeropayAPI_CreateAeropayUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayUserResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayUserRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/users/confirm:
+    post:
+      operationId: AeropayAPI_ConfirmAeropayUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ConfirmAeropayUserResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ConfirmAeropayUserRequest'
+      tags:
+        - AeropayAPI
+  /v1/aeropay/withdrawals:
+    post:
+      operationId: AeropayAPI_CreateAeropayWithdrawal
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateAeropayWithdrawalResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateAeropayWithdrawalRequest'
+      tags:
+        - AeropayAPI
+definitions:
+  # Orchestrated Endpoint Types
+  v1InitializeAeropayRequest:
+    type: object
+    required:
+      - fundingAccountId
+      - userProfile
+    properties:
+      fundingAccountId:
+        type: string
+        description: ISV's unique identifier for the user's funding account
+      userProfile:
+        $ref: '#/definitions/v1AeropayUserProfile'
+  v1AeropayUserProfile:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      phoneNumber:
+        type: string
+  v1InitializeAeropayResponse:
+    type: object
+    description: "Response contains one of three possible outcomes: mfa_required, sdk_credentials, or accounts_linked"
+    properties:
+      fundingAccountId:
+        type: string
+      aeropayMfaRequired:
+        $ref: '#/definitions/v1AeropayMFARequired'
+        description: Present when existing user needs MFA verification
+      aeropaySDKCredentials:
+        $ref: '#/definitions/v1AeropaySDKCredentials'
+        description: Present when new user is ready to link bank accounts
+      aeropayAccountsLinked:
+        $ref: '#/definitions/v1AeropayAccountsLinked'
+        description: Present when confirmed user already has linked accounts
+  v1AeropayMFARequired:
+    type: object
+    description: Returned when an existing Aeropay user needs to verify via MFA
+    properties:
+      aeropayUserId:
+        type: string
+        description: Aeropay user ID to use in validate-mfa call
+      phone:
+        type: string
+        description: Masked phone number where OTP was sent
+      email:
+        type: string
+        description: Masked email address
+      displayMessage:
+        type: string
+        description: User-friendly message to display
+  v1AeropaySDKCredentials:
+    type: object
+    description: Credentials for launching the bank linking SDK (Yodlee FastLink)
+    properties:
+      fastLinkUrl:
+        type: string
+        description: URL for the FastLink SDK
+      token:
+        type: string
+        description: JWT token for SDK authentication
+      username:
+        type: string
+        description: Username for SDK session
+  v1AeropayAccountsLinked:
+    type: object
+    description: Returned when user is confirmed and has existing linked accounts
+    properties:
+      aeropayUserId:
+        type: string
+      paymentMethods:
+        type: array
+        items:
+          $ref: '#/definitions/v1AeropayPaymentMethod'
+  v1ValidateAeropayMFARequest:
+    type: object
+    required:
+      - fundingAccountId
+      - aeropayUserId
+      - mfaCode
+    properties:
+      fundingAccountId:
+        type: string
+      aeropayUserId:
+        type: string
+        description: From the mfa_required response
+      mfaCode:
+        type: string
+        description: 6-digit OTP code received by user
+  v1ValidateAeropayMFAResponse:
+    type: object
+    description: "Response contains either sdk_credentials or accounts_linked"
+    properties:
+      fundingAccountId:
+        type: string
+      aeropaySDKCredentials:
+        $ref: '#/definitions/v1AeropaySDKCredentials'
+        description: Present when user needs to link bank accounts
+      aeropayAccountsLinked:
+        $ref: '#/definitions/v1AeropayAccountsLinked'
+        description: Present when user has existing linked accounts
+  v1GetAeropayMethodsRequest:
+    type: object
+    properties:
+      fundingAccountId:
+        type: string
+  v1GetAeropayMethodsResponse:
+    type: object
+    properties:
+      paymentMethods:
+        type: array
+        items:
+          $ref: '#/definitions/v1AeropayPaymentMethod'
+  v1AeropayPaymentMethod:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for this payment method
+      bankName:
+        type: string
+      accountLast4:
+        type: string
+      accountType:
+        type: string
+        description: "checking or savings"
+      status:
+        type: string
+        description: "active, disabled, etc."
+      isDefault:
+        type: boolean
+      depositLimits:
+        $ref: '#/definitions/v1AeropayDepositLimits'
+      withdrawalRequirements:
+        type: array
+        description: FIFO withdrawal requirements - amounts that must be withdrawn to this source
+        items:
+          $ref: '#/definitions/v1AeropayWithdrawalRequirement'
+  v1AeropayDepositLimits:
+    type: object
+    properties:
+      currency:
+        type: string
+      maxPerTransaction:
+        type: string
+        description: Maximum amount per single deposit
+      maxDaily:
+        type: string
+        description: Maximum daily deposit amount
+      max60Day:
+        type: string
+        description: Maximum deposit amount over 60 days
+  v1AeropayWithdrawalRequirement:
+    type: object
+    description: FIFO rule - withdrawals must return to original deposit source
+    properties:
+      amount:
+        type: string
+        description: Amount that must be withdrawn to this source
+      currency:
+        type: string
+      fundingSourceId:
+        type: string
+        description: The funding source ID to withdraw to
+      description:
+        type: string
+        description: Human-readable explanation of the requirement
+  # Primitive Endpoint Types
+  v1AeropayBankAccount:
+    type: object
+    properties:
+      bankAccountId:
+        type: string
+      userId:
+        type: string
+      bankName:
+        type: string
+      accountLast4:
+        type: string
+      name:
+        type: string
+      externalBankAccountId:
+        type: string
+      isSelected:
+        type: string
+      accountType:
+        type: string
+      status:
+        type: string
+      createdDate:
+        type: string
+  v1AeropayUser:
+    type: object
+    properties:
+      userId:
+        type: string
+      aeroPassUserUuid:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      type:
+        type: string
+      email:
+        type: string
+      phone:
+        type: string
+      bankAccounts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1AeropayBankAccount'
+      createdDate:
+        type: string
+  v1ConfirmAeropayUserRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      code:
+        type: string
+      fundingAccountId:
+        type: string
+  v1ConfirmAeropayUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1AeropayUser'
+      fundingSourceIds:
+        type: array
+        items:
+          type: string
+  v1CreateAeropayDepositRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      bankAccountId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      fundingAccountId:
+        type: string
+      fundingSourceId:
+        type: string
+  v1CreateAeropayDepositResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      aeropayUuid:
+        type: string
+  v1CreateAeropayUserRequest:
+    type: object
+    properties:
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phoneNumber:
+        type: string
+      email:
+        type: string
+      fundingAccountId:
+        type: string
+  v1CreateAeropayUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1AeropayUser'
+      requiresConfirmation:
+        type: boolean
+      displayMessage:
+        type: string
+  v1CreateAeropayWithdrawalRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      bankAccountId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      fundingAccountId:
+        type: string
+      fundingSourceId:
+        type: string
+  v1CreateAeropayWithdrawalResponse:
+    type: object
+    properties:
+      fundingTransactionId:
+        type: string
+      aeropayUuid:
+        type: string
+  v1EnableAeropayFundingSourceRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      fundingSourceId:
+        type: string
+      fundingAccountId:
+        type: string
+  v1EnableAeropayFundingSourceResponse:
+    type: object
+  v1GetAggregatorCredentialsRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+      fundingAccountId:
+        type: string
+  v1GetAggregatorCredentialsResponse:
+    type: object
+    properties:
+      fastLinkUrl:
+        type: string
+      username:
+        type: string
+      token:
+        type: string
+  v1LinkAccountFromAggregatorRequest:
+    type: object
+    properties:
+      aeropayUserId:
+        type: string
+      aggregatorUserId:
+        type: string
+      aggregatorUserPassword:
+        type: string
+      fundingAccountId:
+        type: string
+  v1LinkAccountFromAggregatorResponse:
+    type: object
+    properties:
+      userBankInfo:
+        $ref: '#/definitions/v1AeropayBankAccount'

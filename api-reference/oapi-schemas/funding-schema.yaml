@@ -1,0 +1,831 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/funding.proto
+  version: version not set
+tags:
+  - name: FundingAPI
+basePath: /rest/api/
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/funding/accounts:
+    get:
+      operationId: FundingAPI_ListFundingAccounts
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFundingAccountsResponse'
+      parameters:
+        - name: pageSize
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          in: query
+          required: false
+          type: string
+        - name: accountIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: fundingSourceIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: riskAccountIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: accountType
+          in: query
+          required: false
+          type: string
+          enum:
+            - ACCOUNT_TYPE_CLEARING
+            - ACCOUNT_TYPE_REVENUE
+            - ACCOUNT_TYPE_HOLDING
+            - ACCOUNT_TYPE_ADVANCE
+        - name: clearingMemberIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: clearingHouseFundingSourceIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: clearingHouseIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: aliases
+          in: query
+          required: false
+          type: string
+      tags:
+        - FundingAPI
+  /v1/funding/accounts/{account.id}:
+    patch:
+      operationId: FundingAPI_UpdateFundingAccount
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1UpdateFundingAccountResponse'
+      parameters:
+        - name: account.id
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FundingAPIUpdateFundingAccountBody'
+      tags:
+        - FundingAPI
+  /v1/funding/sources:
+    get:
+      operationId: FundingAPI_ListFundingSources
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFundingSourcesResponse'
+      parameters:
+        - name: pageSize
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          in: query
+          required: false
+          type: string
+        - name: fundingSourceIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: fundingSourceType
+          in: query
+          required: false
+          type: string
+          enum:
+            - FUNDING_SOURCE_TYPE_BANK_ACCOUNT
+            - FUNDING_SOURCE_TYPE_AEROPAY_BANK_ACCOUNT
+            - FUNDING_SOURCE_TYPE_CHECKOUT_CARD
+            - FUNDING_SOURCE_TYPE_APPLE_PAY
+      tags:
+        - FundingAPI
+  /v1/funding/transaction-requirements:
+    get:
+      operationId: FundingAPI_ListTransactionRequirements
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListTransactionRequirementsResponse'
+      parameters:
+        - name: pageSize
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          in: query
+          required: false
+          type: string
+        - name: accountIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+      tags:
+        - FundingAPI
+  /v1/funding/transactions:
+    get:
+      operationId: FundingAPI_ListFundingTransactions
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListFundingTransactionsResponse'
+      parameters:
+        - name: pageSize
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: pageToken
+          in: query
+          required: false
+          type: string
+        - name: accountId
+          in: query
+          required: false
+          type: string
+        - name: currency
+          in: query
+          required: false
+          type: string
+        - name: fundingTransactionId
+          in: query
+          required: false
+          type: string
+        - name: transactionTypes
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - TRANSACTION_TYPE_DEPOSIT
+              - TRANSACTION_TYPE_WITHDRAWAL
+              - TRANSACTION_TYPE_TRANSFER
+              - TRANSACTION_TYPE_MANUAL_ADJUSTMENT
+              - TRANSACTION_TYPE_SETTLEMENT_FEE
+              - TRANSACTION_TYPE_INTEREST_DEPOSIT
+              - TRANSACTION_TYPE_EXECUTION_FEE
+              - TRANSACTION_TYPE_DEPOSIT_ALLOCATION
+              - TRANSACTION_TYPE_ADVANCE
+              - TRANSACTION_TYPE_RETURN
+              - TRANSACTION_TYPE_INCENTIVE
+          collectionFormat: multi
+        - name: startTime
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: endTime
+          in: query
+          required: false
+          type: string
+          format: date-time
+        - name: startDate.year
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: startDate.month
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: startDate.day
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: endDate.year
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: endDate.month
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: endDate.day
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: newestFirst
+          in: query
+          required: false
+          type: boolean
+        - name: transactionIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: transactionStates
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - TRANSACTION_STATE_ACKNOWLEDGED
+              - TRANSACTION_STATE_COMPLETED
+              - TRANSACTION_STATE_CANCELLED
+              - TRANSACTION_STATE_ALLOCATED
+              - TRANSACTION_STATE_PARTIALLY_REFUNDED
+              - TRANSACTION_STATE_REFUNDED
+              - TRANSACTION_STATE_PARTIALLY_RELEASED
+              - TRANSACTION_STATE_RELEASED
+              - TRANSACTION_STATE_PROCESSING
+          collectionFormat: multi
+        - name: parentTransactionIds
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+          collectionFormat: multi
+        - name: reviewStatuses
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - REVIEW_STATUS_PENDING
+              - REVIEW_STATUS_APPROVED
+              - REVIEW_STATUS_REJECTED
+              - REVIEW_STATUS_SKIPPED
+          collectionFormat: multi
+        - name: fundingSourceTypes
+          in: query
+          required: false
+          type: array
+          items:
+            type: string
+            enum:
+              - FUNDING_SOURCE_TYPE_BANK_ACCOUNT
+              - FUNDING_SOURCE_TYPE_AEROPAY_BANK_ACCOUNT
+              - FUNDING_SOURCE_TYPE_CHECKOUT_CARD
+              - FUNDING_SOURCE_TYPE_APPLE_PAY
+          collectionFormat: multi
+      tags:
+        - FundingAPI
+definitions:
+  FundingAPIUpdateFundingAccountBody:
+    type: object
+    properties:
+      account:
+        type: object
+        properties:
+          name:
+            type: string
+          accountType:
+            $ref: '#/definitions/v1FundingAccountType'
+          clearingHouseId:
+            type: string
+          clearingMemberId:
+            type: string
+          associatedFundingSources:
+            type: array
+            items:
+              type: string
+          riskAccountId:
+            type: string
+          destinationFundingSource:
+            type: string
+          allowedDestinationFundingSources:
+            type: array
+            items:
+              type: string
+          clearingHouseFundingSources:
+            type: array
+            items:
+              type: string
+          aliases:
+            type: object
+            additionalProperties:
+              type: string
+          creationTime:
+            type: string
+            format: date-time
+  v1AeropayBankAccountDetails:
+    type: object
+    properties:
+      userId:
+        type: string
+      bankAccountId:
+        type: string
+      name:
+        type: string
+      bankName:
+        type: string
+      accountLast4:
+        type: string
+      accountType:
+        type: string
+  v1BankAccountDetails:
+    type: object
+    properties:
+      bankId:
+        type: string
+      bankAccountId:
+        type: string
+      bankIdType:
+        $ref: '#/definitions/v1FundingBankIdType'
+      currency:
+        type: string
+      accountTitle:
+        type: string
+      bankName:
+        type: string
+      bankAddress1:
+        type: string
+      bankAddress2:
+        type: string
+      bankCity:
+        type: string
+      bankState:
+        type: string
+      bankPostalCode:
+        type: string
+      bankCountryCode:
+        type: string
+      beneficiaryName:
+        type: string
+      beneficiaryAddress1:
+        type: string
+      beneficiaryAddress2:
+        type: string
+      beneficiaryCity:
+        type: string
+      beneficiaryState:
+        type: string
+      beneficiaryPostalCode:
+        type: string
+      beneficiaryCountryCode:
+        type: string
+  v1BusinessHours:
+    type: object
+    properties:
+      daysOfWeek:
+        type: array
+        items:
+          $ref: '#/definitions/v1FundingDayOfWeek'
+      startTime:
+        $ref: '#/definitions/v1FundingTimeOfDay'
+      duration:
+        type: string
+  v1BusinessSchedule:
+    type: object
+    properties:
+      businessHours:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1BusinessHours'
+      timezone:
+        type: string
+  v1CheckoutApplePayPaymentMethodDetails:
+    type: object
+    properties:
+      userId:
+        type: string
+      instrumentId:
+        type: string
+      last4:
+        type: string
+      scheme:
+        type: string
+      cardType:
+        type: string
+      billingAddress:
+        $ref: '#/definitions/v1FundingAddress'
+      email:
+        type: string
+      dob:
+        type: string
+      accountHolderType:
+        $ref: '#/definitions/v1FundingCheckoutAccountHolderType'
+      firstName:
+        type: string
+      lastName:
+        type: string
+      companyName:
+        type: string
+      phoneNumber:
+        type: string
+      displayLast4:
+        type: string
+  v1CheckoutCardPaymentMethodDetails:
+    type: object
+    properties:
+      userId:
+        type: string
+      instrumentId:
+        type: string
+      last4:
+        type: string
+      scheme:
+        type: string
+      cardType:
+        type: string
+      billingAddress:
+        $ref: '#/definitions/v1FundingAddress'
+      email:
+        type: string
+      dob:
+        type: string
+      accountHolderType:
+        $ref: '#/definitions/v1FundingCheckoutAccountHolderType'
+      firstName:
+        type: string
+      lastName:
+        type: string
+      companyName:
+        type: string
+      phoneNumber:
+        type: string
+  v1CurrencyTransactionLimits:
+    type: object
+    properties:
+      currency:
+        type: string
+      maxDepositRequestAmount:
+        $ref: '#/definitions/v1StringValue'
+      maxDepositDailyAmount:
+        $ref: '#/definitions/v1StringValue'
+      maxDeposit60dayAmount:
+        $ref: '#/definitions/v1StringValue'
+  v1FundingAccount:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      accountType:
+        $ref: '#/definitions/v1FundingAccountType'
+      clearingHouseId:
+        type: string
+      clearingMemberId:
+        type: string
+      associatedFundingSources:
+        type: array
+        items:
+          type: string
+      riskAccountId:
+        type: string
+      destinationFundingSource:
+        type: string
+      allowedDestinationFundingSources:
+        type: array
+        items:
+          type: string
+      clearingHouseFundingSources:
+        type: array
+        items:
+          type: string
+      aliases:
+        type: object
+        additionalProperties:
+          type: string
+      creationTime:
+        type: string
+        format: date-time
+  v1FundingAccountType:
+    type: string
+    enum:
+      - ACCOUNT_TYPE_CLEARING
+      - ACCOUNT_TYPE_REVENUE
+      - ACCOUNT_TYPE_HOLDING
+      - ACCOUNT_TYPE_ADVANCE
+  v1FundingAddress:
+    type: object
+    properties:
+      addressLine1:
+        type: string
+      addressLine2:
+        type: string
+      city:
+        type: string
+      state:
+        type: string
+      country:
+        type: string
+      zip:
+        type: string
+  v1FundingBankIdType:
+    type: string
+    enum:
+      - BANK_ID_TYPE_SWIFT
+      - BANK_ID_TYPE_FED
+      - BANK_ID_TYPE_OTHER
+  v1FundingCheckoutAccountHolderType:
+    type: string
+    enum:
+      - FUNDING_CHECKOUT_ACCOUNT_HOLDER_TYPE_INDIVIDUAL
+      - FUNDING_CHECKOUT_ACCOUNT_HOLDER_TYPE_CORPORATE
+      - FUNDING_CHECKOUT_ACCOUNT_HOLDER_TYPE_GOVERNMENT
+  v1FundingDate:
+    type: object
+    properties:
+      year:
+        type: integer
+        format: int32
+      month:
+        type: integer
+        format: int32
+      day:
+        type: integer
+        format: int32
+    title: Date for funding operations
+  v1FundingDayOfWeek:
+    type: string
+    enum:
+      - DAY_OF_WEEK_MONDAY
+      - DAY_OF_WEEK_TUESDAY
+      - DAY_OF_WEEK_WEDNESDAY
+      - DAY_OF_WEEK_THURSDAY
+      - DAY_OF_WEEK_FRIDAY
+      - DAY_OF_WEEK_SATURDAY
+      - DAY_OF_WEEK_SUNDAY
+  v1FundingLedgerEntryType:
+    type: string
+    enum:
+      - LEDGER_ENTRY_TYPE_CREDIT
+      - LEDGER_ENTRY_TYPE_DEBIT
+  v1FundingReviewStatus:
+    type: string
+    enum:
+      - REVIEW_STATUS_PENDING
+      - REVIEW_STATUS_APPROVED
+      - REVIEW_STATUS_REJECTED
+      - REVIEW_STATUS_SKIPPED
+  v1FundingSource:
+    type: object
+    properties:
+      id:
+        type: string
+      type:
+        $ref: '#/definitions/v1FundingSourceType'
+      businessSchedule:
+        $ref: '#/definitions/v1BusinessSchedule'
+      transactionLimits:
+        $ref: '#/definitions/v1TransactionLimits'
+      bankAccountDetails:
+        $ref: '#/definitions/v1BankAccountDetails'
+      aeropayBankAccountDetails:
+        $ref: '#/definitions/v1AeropayBankAccountDetails'
+      checkoutCardPaymentMethodDetails:
+        $ref: '#/definitions/v1CheckoutCardPaymentMethodDetails'
+      checkoutApplePayPaymentMethodDetails:
+        $ref: '#/definitions/v1CheckoutApplePayPaymentMethodDetails'
+      disabled:
+        type: boolean
+  v1FundingSourceType:
+    type: string
+    enum:
+      - FUNDING_SOURCE_TYPE_BANK_ACCOUNT
+      - FUNDING_SOURCE_TYPE_AEROPAY_BANK_ACCOUNT
+      - FUNDING_SOURCE_TYPE_CHECKOUT_CARD
+      - FUNDING_SOURCE_TYPE_APPLE_PAY
+  v1FundingTimeOfDay:
+    type: object
+    properties:
+      hour:
+        type: integer
+        format: int32
+      minute:
+        type: integer
+        format: int32
+      second:
+        type: integer
+        format: int32
+  v1FundingTransaction:
+    type: object
+    properties:
+      transactionId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      ledgerEntryType:
+        $ref: '#/definitions/v1FundingLedgerEntryType'
+      transactionType:
+        $ref: '#/definitions/v1FundingTransactionType'
+      transactionState:
+        $ref: '#/definitions/v1FundingTransactionState'
+      transactTime:
+        type: string
+        format: date-time
+      transactDate:
+        $ref: '#/definitions/v1FundingDate'
+      clearingHouseId:
+        type: string
+      clearingMemberId:
+        type: string
+      accountId:
+        type: string
+      fundingSourceId:
+        type: string
+      fundingTransactionId:
+        type: string
+      beforeBalance:
+        type: string
+      afterBalance:
+        type: string
+      riskAccountId:
+        type: string
+      riskTransactionId:
+        type: string
+      context:
+        type: string
+      parentTransactionId:
+        type: string
+      clearingHouseFundingSourceId:
+        type: string
+      metadata:
+        type: object
+        additionalProperties:
+          type: string
+      createTime:
+        type: string
+        format: date-time
+      balanceReservation:
+        type: string
+      fundingSourceType:
+        $ref: '#/definitions/v1FundingSourceType'
+      clearingHouseFundingSourceType:
+        $ref: '#/definitions/v1FundingSourceType'
+      marginRequirement:
+        type: string
+      reviewStatus:
+        $ref: '#/definitions/v1FundingReviewStatus'
+      statusMessage:
+        type: string
+  v1FundingTransactionState:
+    type: string
+    enum:
+      - TRANSACTION_STATE_ACKNOWLEDGED
+      - TRANSACTION_STATE_COMPLETED
+      - TRANSACTION_STATE_CANCELLED
+      - TRANSACTION_STATE_ALLOCATED
+      - TRANSACTION_STATE_PARTIALLY_REFUNDED
+      - TRANSACTION_STATE_REFUNDED
+      - TRANSACTION_STATE_PARTIALLY_RELEASED
+      - TRANSACTION_STATE_RELEASED
+      - TRANSACTION_STATE_PROCESSING
+  v1FundingTransactionType:
+    type: string
+    enum:
+      - TRANSACTION_TYPE_DEPOSIT
+      - TRANSACTION_TYPE_WITHDRAWAL
+      - TRANSACTION_TYPE_TRANSFER
+      - TRANSACTION_TYPE_MANUAL_ADJUSTMENT
+      - TRANSACTION_TYPE_SETTLEMENT_FEE
+      - TRANSACTION_TYPE_INTEREST_DEPOSIT
+      - TRANSACTION_TYPE_EXECUTION_FEE
+      - TRANSACTION_TYPE_DEPOSIT_ALLOCATION
+      - TRANSACTION_TYPE_ADVANCE
+      - TRANSACTION_TYPE_RETURN
+      - TRANSACTION_TYPE_INCENTIVE
+  v1ListFundingAccountsResponse:
+    type: object
+    properties:
+      accounts:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1FundingAccount'
+      nextPageToken:
+        type: string
+      eof:
+        type: boolean
+  v1ListFundingSourcesResponse:
+    type: object
+    properties:
+      fundingSources:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1FundingSource'
+      nextPageToken:
+        type: string
+      eof:
+        type: boolean
+  v1ListFundingTransactionsResponse:
+    type: object
+    properties:
+      transactions:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1FundingTransaction'
+      nextPageToken:
+        type: string
+      eof:
+        type: boolean
+  v1ListTransactionRequirementsResponse:
+    type: object
+    properties:
+      transactionRequirements:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1TransactionRequirement'
+      nextPageToken:
+        type: string
+      eof:
+        type: boolean
+  v1StringValue:
+    type: object
+    properties:
+      value:
+        type: string
+  v1TransactionLimits:
+    type: object
+    properties:
+      currencyLimits:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1CurrencyTransactionLimits'
+  v1TransactionRequirement:
+    type: object
+    properties:
+      id:
+        type: string
+      accountId:
+        type: string
+      transactionType:
+        $ref: '#/definitions/v1FundingTransactionType'
+      fundingSourceId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      triggers:
+        type: array
+        items:
+          type: string
+  v1UpdateFundingAccountResponse:
+    type: object
+    properties:
+      account:
+        $ref: '#/definitions/v1FundingAccount'

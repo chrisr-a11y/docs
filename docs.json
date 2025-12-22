@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Polymarket Exchange",
+  "name": "Polymarket Exchange Partner Docs",
   "colors": {
     "primary": "#2E5CFF",
     "dark": "#2E5CFF",
@@ -10,6 +10,9 @@
   "appearance": {
     "default": "light",
     "strict": false
+  },
+  "shield": {
+    "type": "password"
   },
   "navigation": {
     "tabs": [
@@ -24,9 +27,12 @@
             "group": "Getting Started",
             "pages": [
               "getting-started/getting-access",
+              "getting-started/environments",
+              "getting-started/auth0-onboarding",
               "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/vpc-connection",
+              "getting-started/health-check",
               "getting-started/common-pitfalls"
             ]
           }
@@ -35,13 +41,6 @@
       {
         "tab": "REST API",
         "groups": [
-          {
-            "group": "Authentication",
-            "openapi": {
-              "source": "/api-reference/oapi-schemas/auth-schema.json",
-              "directory": "api-reference"
-            }
-          },
           {
             "group": "Accounts",
             "openapi": {
@@ -76,6 +75,30 @@
               "source": "/api-reference/oapi-schemas/dropcopy-schema.json",
               "directory": "api-reference"
             }
+          },
+          {
+            "group": "Order Book",
+            "pages": [
+              "api-reference/orderbook/overview"
+            ]
+          },
+          {
+            "group": "KYC",
+            "pages": [
+              "api-reference/kyc/overview",
+              "api-reference/kyc/prefill-flow",
+              "api-reference/kyc/verification-flow",
+              "api-reference/kyc/referral-codes"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "api-reference/payments/overview",
+              "api-reference/payments/aeropay-guide",
+              "api-reference/payments/checkout-guide",
+              "api-reference/payments/funding-management"
+            ]
           }
         ]
       },

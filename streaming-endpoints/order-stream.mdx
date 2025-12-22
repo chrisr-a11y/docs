@@ -240,7 +240,7 @@ This example matches the implementation from the Python examples repository:
 ```python
 import grpc
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 from connamara.ep3.v1beta1 import order_entry_pb2
 from connamara.ep3.v1beta1 import order_entry_pb2_grpc
@@ -257,16 +257,17 @@ class PolymarketOrderStreamer:
         self.access_expiration: Optional[datetime] = None
         self.session_id: Optional[str] = None
 
-    def login(self, username: str, password: str) -> dict:
-        """Authenticate with the Polymarket API and store tokens."""
-        url = f"{self.base_url}/auth/v1beta1/login"
+    def login(self, auth0_domain: str, client_id: str, client_secret: str, audience: str) -> dict:
+        """Authenticate with Auth0 and store the access token."""
+        url = f"https://{auth0_domain}/oauth/token"
         headers = {
-            "accept": "application/json",
             "Content-Type": "application/json"
         }
         data = {
-            "username": username,
-            "password": password
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "audience": audience,
+            "grant_type": "client_credentials"
         }
 
         response = requests.post(url, headers=headers, json=data)
@@ -274,10 +275,9 @@ class PolymarketOrderStreamer:
 
         token_data = response.json()
         self.access_token = token_data["access_token"]
-        self.refresh_token = token_data["refresh_token"]
-        self.access_expiration = datetime.fromisoformat(
-            token_data["access_expiration_time"].replace("Z", "+00:00")
-        )
+        # Set expiration with 5-minute buffer
+        expires_in = token_data.get("expires_in", 86400)
+        self.access_expiration = datetime.now() + timedelta(seconds=expires_in - 300)
 
         return token_data
 
@@ -439,8 +439,13 @@ class PolymarketOrderStreamer:
 if __name__ == "__main__":
     streamer = PolymarketOrderStreamer()
 
-    # Login
-    streamer.login("your_username", "your_password")
+    # Login with Auth0 credentials
+    streamer.login(
+        auth0_domain="your-tenant.us.auth0.com",
+        client_id="your_client_id",
+        client_secret="your_client_secret",
+        audience="https://api.polymarketexchange.com"
+    )
 
     # Stream orders
     streamer.stream_orders(
@@ -529,9 +534,6 @@ Snapshot only: False
   </Card>
   <Card title="Error Handling" icon="triangle-exclamation" href="/streaming-endpoints/error-handling">
     Handle errors and reconnections
-  </Card>
-  <Card title="Code Examples" icon="code" href="/streaming-endpoints/code-examples">
-    Complete working Python examples
   </Card>
   <Card title="Market Data Stream" icon="chart-line" href="/streaming-endpoints/market-data-stream">
     Stream real-time market data
