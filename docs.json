@@ -63,9 +63,9 @@
             }
           },
           {
-            "group": "Orders",
+            "group": "Report",
             "openapi": {
-              "source": "/api-reference/oapi-schemas/orders-schema.json",
+              "source": "/api-reference/oapi-schemas/report-schema.json",
               "directory": "api-reference"
             }
           },
@@ -92,9 +92,10 @@
           },
           {
             "group": "Order Book",
-            "pages": [
-              "api-reference/orderbook/overview"
-            ]
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/orderbook-schema.json",
+              "directory": "api-reference"
+            }
           },
           {
             "group": "KYC",

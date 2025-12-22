@@ -404,8 +404,7 @@
           "symbol": {
             "type": "string"
           }
-        },
-        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
       "CancelOrderResponse": {
         "type": "object"
@@ -517,8 +516,7 @@
           "manualOrderIndicator": {
             "$ref": "#/components/schemas/ManualOrderIndicator"
           }
-        },
-        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
       "CancelReplaceOrderResponse": {
         "type": "object"
@@ -767,8 +765,7 @@
           "crossPrioritizedSide": {
             "$ref": "#/components/schemas/Side"
           }
-        },
-        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
       "InsertOrderCrossResponse": {
         "type": "object",
@@ -896,8 +893,7 @@
           "manualOrderIndicator": {
             "$ref": "#/components/schemas/ManualOrderIndicator"
           }
-        },
-        "title": "NOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
       "InsertOrderResponse": {
         "type": "object",
@@ -1132,8 +1128,7 @@
             "$ref": "#/components/schemas/ManualOrderIndicator",
             "title": "If present, designates the manual order indicator"
           }
-        },
-        "title": "Order indicates an order received by the exchange.\nWire-compatible with Connamara EP3 Order (flattened structure).\nNOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       },
       "OrderCapacity": {
         "type": "string",

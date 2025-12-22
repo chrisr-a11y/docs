@@ -47,7 +47,7 @@
         }
       }
     },
-    "/v1/accounts/users": {
+    "/v1/users": {
       "get": {
         "tags": [
           "Accounts"
@@ -69,7 +69,7 @@
         }
       }
     },
-    "/v1/accounts/whoami": {
+    "/v1/whoami": {
       "get": {
         "tags": [
           "Accounts"

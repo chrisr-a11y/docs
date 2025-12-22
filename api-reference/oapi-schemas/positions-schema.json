@@ -401,8 +401,7 @@
             "type": "string",
             "format": "date-time"
           }
-        },
-        "title": "Position represents a position in the system.\nWire-compatible with Connamara EP3 Position.\nNOTE: Some fields hidden for API simplification. See docs/API_SLIMMING_RECOMMENDATION.md"
+        }
       }
     }
   }

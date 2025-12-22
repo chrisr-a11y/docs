@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Dropcopy API",
+    "title": "Orders API",
     "version": "v1.0.0"
   },
   "servers": [
@@ -11,23 +11,23 @@
   ],
   "tags": [
     {
-      "name": "DropCopyAPI"
+      "name": "ReportAPI"
     }
   ],
   "paths": {
-    "/v1/dropcopy/instrumentstate": {
+    "/v1/report/executions/csv": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Report"
         ],
-        "summary": "Create instrument state change subscription",
-        "description": "Subscribes to instrument state changes (streaming)",
-        "operationId": "DropCopyAPI_CreateInstrumentStateChangeSubscription",
+        "summary": "Download executions CSV",
+        "description": "Downloads executions as a CSV file stream",
+        "operationId": "ReportAPI_DownloadExecutions",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateInstrumentStateChangeSubscriptionRequest"
+                "$ref": "#/components/schemas/DownloadExecutionsRequest"
               }
             }
           },
@@ -42,10 +42,10 @@
                   "type": "object",
                   "properties": {
                     "result": {
-                      "$ref": "#/components/schemas/CreateInstrumentStateChangeSubscriptionResponse"
+                      "$ref": "#/components/schemas/DownloadExecutionsResponse"
                     }
                   },
-                  "title": "Stream result of v1CreateInstrumentStateChangeSubscriptionResponse"
+                  "title": "Stream result of v1DownloadExecutionsResponse"
                 }
               }
             }
@@ -53,19 +53,19 @@
         }
       }
     },
-    "/v1/dropcopy/positionchange": {
+    "/v1/report/executions/search": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Report"
         ],
-        "summary": "Create position change subscription",
-        "description": "Subscribes to position changes (streaming)",
-        "operationId": "DropCopyAPI_CreatePositionChangeSubscription",
+        "summary": "Search executions",
+        "description": "Searches for exchange executions using the given details to filter",
+        "operationId": "ReportAPI_SearchExecutions",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePositionChangeSubscriptionRequest"
+                "$ref": "#/components/schemas/SearchExecutionsRequest"
               }
             }
           },
@@ -73,17 +73,11 @@
         },
         "responses": {
           "200": {
-            "description": "A successful response.(streaming responses)",
+            "description": "A successful response.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreatePositionChangeSubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreatePositionChangeSubscriptionResponse"
+                  "$ref": "#/components/schemas/SearchExecutionsResponse"
                 }
               }
             }
@@ -91,19 +85,19 @@
         }
       }
     },
-    "/v1/dropcopy/subscription": {
+    "/v1/report/orders/csv": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Report"
         ],
-        "summary": "Create drop copy subscription",
-        "description": "Subscribes to the exchange execution feed (streaming)",
-        "operationId": "DropCopyAPI_CreateDropCopySubscription",
+        "summary": "Download orders CSV",
+        "description": "Downloads orders as a CSV file stream",
+        "operationId": "ReportAPI_DownloadOrders",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateDropCopySubscriptionRequest"
+                "$ref": "#/components/schemas/DownloadOrdersRequest"
               }
             }
           },
@@ -118,10 +112,10 @@
                   "type": "object",
                   "properties": {
                     "result": {
-                      "$ref": "#/components/schemas/CreateDropCopySubscriptionResponse"
+                      "$ref": "#/components/schemas/DownloadOrdersResponse"
                     }
                   },
-                  "title": "Stream result of v1CreateDropCopySubscriptionResponse"
+                  "title": "Stream result of v1DownloadOrdersResponse"
                 }
               }
             }
@@ -129,19 +123,51 @@
         }
       }
     },
-    "/v1/dropcopy/tradecapture": {
+    "/v1/report/orders/search": {
       "post": {
         "tags": [
-          "DropCopy"
+          "Report"
         ],
-        "summary": "Create trade capture report subscription",
-        "description": "Subscribes to trade capture reports (streaming)",
-        "operationId": "DropCopyAPI_CreateTradeCaptureReportSubscription",
+        "summary": "Search orders",
+        "description": "Searches for exchange orders using the given details to filter",
+        "operationId": "ReportAPI_SearchOrders",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTradeCaptureReportSubscriptionRequest"
+                "$ref": "#/components/schemas/SearchOrdersRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchOrdersResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/report/trades/csv": {
+      "post": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Download trades CSV",
+        "description": "Downloads trades as a CSV file stream",
+        "operationId": "ReportAPI_DownloadTrades",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DownloadTradesRequest"
               }
             }
           },
@@ -156,10 +182,74 @@
                   "type": "object",
                   "properties": {
                     "result": {
-                      "$ref": "#/components/schemas/CreateTradeCaptureReportSubscriptionResponse"
+                      "$ref": "#/components/schemas/DownloadTradesResponse"
                     }
                   },
-                  "title": "Stream result of v1CreateTradeCaptureReportSubscriptionResponse"
+                  "title": "Stream result of v1DownloadTradesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/report/trades/search": {
+      "post": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Search trades",
+        "description": "Searches for exchange trades using the given details to filter",
+        "operationId": "ReportAPI_SearchTrades",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchTradesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchTradesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/report/trades/stats": {
+      "post": {
+        "tags": [
+          "Report"
+        ],
+        "summary": "Get trade stats",
+        "description": "Gets aggregated trade data for a given period of time",
+        "operationId": "ReportAPI_GetTradeStats",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTradeStatsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTradeStatsResponse"
                 }
               }
             }
@@ -170,172 +260,6 @@
   },
   "components": {
     "schemas": {
-      "CreateDropCopySubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start a drop copy subscription."
-      },
-      "CreateDropCopySubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "executions": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/Execution"
-            }
-          }
-        },
-        "description": "Response for drop copy subscription."
-      },
-      "CreateInstrumentStateChangeSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start an instrument state change subscription."
-      },
-      "CreateInstrumentStateChangeSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "instruments": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/Instrument"
-            }
-          }
-        },
-        "description": "Response for instrument state change subscription."
-      },
-      "CreatePositionChangeSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start a position change subscription."
-      },
-      "CreatePositionChangeSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "positionChanges": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/PositionChange"
-            }
-          }
-        },
-        "description": "Response for position change subscription."
-      },
-      "CreateTradeCaptureReportSubscriptionRequest": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "resumeTime": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "symbols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "firms": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "description": "Request to start a trade capture report subscription."
-      },
-      "CreateTradeCaptureReportSubscriptionResponse": {
-        "type": "object",
-        "properties": {
-          "resumeToken": {
-            "type": "string",
-            "format": "byte"
-          },
-          "tradeCaptureReports": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "$ref": "#/components/schemas/Trade"
-            }
-          }
-        },
-        "description": "Response for trade capture report subscription."
-      },
       "Date": {
         "type": "object",
         "properties": {
@@ -353,6 +277,87 @@
           }
         },
         "description": "Date represents a calendar date."
+      },
+      "DownloadExecutionsRequest": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DownloadExecutionsResponse": {
+        "type": "object",
+        "properties": {
+          "filechunk": {
+            "type": "string"
+          }
+        }
+      },
+      "DownloadOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DownloadOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "filechunk": {
+            "type": "string"
+          }
+        }
+      },
+      "DownloadTradesRequest": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "DownloadTradesResponse": {
+        "type": "object",
+        "properties": {
+          "filechunk": {
+            "type": "string"
+          }
+        }
       },
       "Execution": {
         "type": "object",
@@ -442,109 +447,60 @@
         ],
         "description": "ExecutionType denotes the execution type."
       },
-      "Instrument": {
+      "GetTradeStatsRequest": {
         "type": "object",
         "properties": {
           "symbol": {
             "type": "string"
           },
-          "tickSize": {
-            "type": "number",
-            "format": "double"
-          },
-          "baseCurrency": {
-            "type": "string"
-          },
-          "multiplier": {
-            "type": "number",
-            "format": "double"
-          },
-          "minimumTradeQty": {
+          "startTime": {
             "type": "string",
-            "format": "int64"
+            "format": "date-time"
           },
-          "startDate": {
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bars": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startTradeDate": {
             "$ref": "#/components/schemas/Date"
           },
-          "expirationDate": {
+          "endTradeDate": {
             "$ref": "#/components/schemas/Date"
+          }
+        }
+      },
+      "GetTradeStatsResponse": {
+        "type": "object",
+        "properties": {
+          "stats": {
+            "$ref": "#/components/schemas/TradeStats"
           },
-          "terminationDate": {
-            "$ref": "#/components/schemas/Date"
-          },
-          "tradingSchedule": {
+          "bars": {
             "type": "array",
             "items": {
               "type": "object",
-              "$ref": "#/components/schemas/TradingHours"
+              "$ref": "#/components/schemas/TradeStats"
             }
           },
-          "description": {
-            "type": "string"
+          "barStartTime": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
           },
-          "clearingHouse": {
-            "type": "string"
-          },
-          "minimumUnaffiliatedFirms": {
-            "type": "string",
-            "format": "int64"
-          },
-          "nonTradable": {
-            "type": "boolean",
-            "title": "type_attributes omitted - complex oneof with many swap types"
-          },
-          "jsonAttributes": {
-            "type": "string"
-          },
-          "productId": {
-            "type": "string"
-          },
-          "priceLimit": {
-            "$ref": "#/components/schemas/PriceLimit"
-          },
-          "orderSizeLimit": {
-            "$ref": "#/components/schemas/OrderSizeLimit"
-          },
-          "expirationTime": {
-            "$ref": "#/components/schemas/TimeOfDay"
-          },
-          "tradeSettlementPeriod": {
-            "type": "string",
-            "format": "int64"
-          },
-          "state": {
-            "$ref": "#/components/schemas/InstrumentState"
-          },
-          "priceScale": {
-            "type": "string",
-            "format": "int64"
-          },
-          "fractionalQtyScale": {
-            "type": "string",
-            "format": "int64"
-          },
-          "settlementCurrency": {
-            "type": "string"
-          },
-          "settlementPriceScale": {
-            "type": "string",
-            "format": "int64"
+          "barEndTime": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "date-time"
+            }
           }
-        },
-        "description": "Instrument represents a tradable instrument.\nWire-compatible with Connamara EP3 Instrument (core fields)."
-      },
-      "InstrumentState": {
-        "type": "string",
-        "enum": [
-          "INSTRUMENT_STATE_OPEN",
-          "INSTRUMENT_STATE_PREOPEN",
-          "INSTRUMENT_STATE_SUSPENDED",
-          "INSTRUMENT_STATE_EXPIRED",
-          "INSTRUMENT_STATE_TERMINATED",
-          "INSTRUMENT_STATE_HALTED",
-          "INSTRUMENT_STATE_MATCH_AND_CLOSE_AUCTION"
-        ],
-        "description": "InstrumentState represents the state of an instrument."
+        }
       },
       "LegPrice": {
         "type": "object",
@@ -785,40 +741,6 @@
         ],
         "description": "OrderCapacity designates the capacity of the party placing an order."
       },
-      "OrderSizeLimit": {
-        "type": "object",
-        "properties": {
-          "low": {
-            "type": "string",
-            "format": "int64"
-          },
-          "high": {
-            "type": "string",
-            "format": "int64"
-          },
-          "lowSet": {
-            "type": "boolean"
-          },
-          "highSet": {
-            "type": "boolean"
-          },
-          "totalNotionalLow": {
-            "type": "string",
-            "format": "int64"
-          },
-          "totalNotionalHigh": {
-            "type": "string",
-            "format": "int64"
-          },
-          "totalNotionalLowSet": {
-            "type": "boolean"
-          },
-          "totalNotionalHighSet": {
-            "type": "boolean"
-          }
-        },
-        "description": "OrderSizeLimit describes optional order size limits on an instrument."
-      },
       "OrderState": {
         "type": "string",
         "enum": [
@@ -835,6 +757,22 @@
         ],
         "description": "OrderState denotes the current order state."
       },
+      "OrderStateFilter": {
+        "type": "string",
+        "enum": [
+          "ORDER_STATE_FILTER_OPEN",
+          "ORDER_STATE_FILTER_CLOSED",
+          "ORDER_STATE_FILTER_NEW",
+          "ORDER_STATE_FILTER_PARTIALLY_FILLED",
+          "ORDER_STATE_FILTER_FILLED",
+          "ORDER_STATE_FILTER_CANCELED",
+          "ORDER_STATE_FILTER_REPLACED",
+          "ORDER_STATE_FILTER_REJECTED",
+          "ORDER_STATE_FILTER_EXPIRED",
+          "ORDER_STATE_FILTER_PENDING_RISK"
+        ],
+        "description": "OrderStateFilter describes a filter for searching orders that are open or closed."
+      },
       "OrderType": {
         "type": "string",
         "enum": [
@@ -845,94 +783,240 @@
         ],
         "description": "OrderType indicates the type of an order."
       },
-      "Position": {
+      "SearchExecutionsRequest": {
         "type": "object",
         "properties": {
-          "account": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageToken": {
             "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
           },
           "symbol": {
             "type": "string"
           },
-          "netPosition": {
-            "type": "string",
-            "format": "int64"
+          "types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExecutionType"
+            }
           },
-          "qtyBought": {
-            "type": "string",
-            "format": "int64"
-          },
-          "qtySold": {
-            "type": "string",
-            "format": "int64"
-          },
-          "cost": {
-            "type": "string",
-            "format": "int64"
-          },
-          "realized": {
-            "type": "string",
-            "format": "int64"
-          },
-          "bodPosition": {
-            "type": "string",
-            "format": "int64"
-          },
-          "expired": {
+          "newestFirst": {
             "type": "boolean"
           },
-          "updateTime": {
-            "type": "string",
-            "format": "date-time"
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clientAccountId": {
+            "type": "string"
+          },
+          "clientParticipantId": {
+            "type": "string"
+          },
+          "parentOrderId": {
+            "type": "string"
+          },
+          "execIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "endTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
           }
         }
       },
-      "PositionChange": {
+      "SearchExecutionsResponse": {
         "type": "object",
         "properties": {
-          "position": {
-            "$ref": "#/components/schemas/Position"
+          "executions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Execution"
+            }
           },
-          "changeTime": {
+          "nextPageToken": {
+            "type": "string"
+          },
+          "eof": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SearchOrdersRequest": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageToken": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "clordId": {
+            "type": "string"
+          },
+          "startTime": {
             "type": "string",
             "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "side": {
+            "$ref": "#/components/schemas/Side"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrderType"
+          },
+          "orderStateFilter": {
+            "$ref": "#/components/schemas/OrderStateFilter"
+          },
+          "crossId": {
+            "type": "string"
+          },
+          "hostCrossId": {
+            "type": "string"
+          },
+          "clientAccountId": {
+            "type": "string"
+          },
+          "clientParticipantId": {
+            "type": "string"
+          },
+          "parentOrderId": {
+            "type": "string"
+          },
+          "startTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "endTransactTradeDate": {
+            "$ref": "#/components/schemas/Date"
+          },
+          "withLastExecution": {
+            "type": "boolean"
           }
-        },
-        "description": "PositionChange represents a change in position."
+        }
       },
-      "PriceLimit": {
+      "SearchOrdersResponse": {
         "type": "object",
         "properties": {
-          "low": {
-            "type": "string",
-            "format": "int64"
+          "order": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Order"
+            }
           },
-          "high": {
-            "type": "string",
-            "format": "int64"
+          "nextPageToken": {
+            "type": "string"
           },
-          "lowSet": {
-            "type": "boolean"
-          },
-          "highSet": {
-            "type": "boolean"
-          },
-          "relativeLow": {
-            "type": "number",
-            "format": "double"
-          },
-          "relativeHigh": {
-            "type": "number",
-            "format": "double"
-          },
-          "relativeLowSet": {
-            "type": "boolean"
-          },
-          "relativeHighSet": {
-            "type": "boolean"
+          "lastExecutions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Execution"
+            }
           }
-        },
-        "description": "PriceLimit describes optional price limits on an instrument."
+        }
+      },
+      "SearchTradesRequest": {
+        "type": "object",
+        "properties": {
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageToken": {
+            "type": "string"
+          },
+          "orderId": {
+            "type": "string"
+          },
+          "tradeId": {
+            "type": "string"
+          },
+          "execId": {
+            "type": "string"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "states": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TradeState"
+            }
+          },
+          "tradeLinkId": {
+            "type": "string"
+          }
+        }
+      },
+      "SearchTradesResponse": {
+        "type": "object",
+        "properties": {
+          "trade": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "$ref": "#/components/schemas/Trade"
+            }
+          },
+          "nextPageToken": {
+            "type": "string"
+          }
+        }
       },
       "SelfMatchPreventionInstruction": {
         "type": "string",
@@ -961,24 +1045,6 @@
           "TIME_IN_FORCE_FILL_OR_KILL"
         ],
         "description": "TimeInForce specifies how long the order remains in effect."
-      },
-      "TimeOfDay": {
-        "type": "object",
-        "properties": {
-          "hours": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "minutes": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "seconds": {
-            "type": "integer",
-            "format": "int32"
-          }
-        },
-        "description": "TimeOfDay represents a time of day."
       },
       "Trade": {
         "type": "object",
@@ -1040,6 +1106,62 @@
         ],
         "description": "TradeState indicates the state of a trade."
       },
+      "TradeStats": {
+        "type": "object",
+        "properties": {
+          "first": {
+            "type": "string",
+            "format": "int64",
+            "title": "First trade price in a collection of trades"
+          },
+          "last": {
+            "type": "string",
+            "format": "int64",
+            "title": "Last trade price in a collection of trades"
+          },
+          "high": {
+            "type": "string",
+            "format": "int64",
+            "title": "High trade price in a collection of trades"
+          },
+          "low": {
+            "type": "string",
+            "format": "int64",
+            "title": "Low trade price in a collection of trades"
+          },
+          "totalTradeCount": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total number of trades"
+          },
+          "clearedTradeCount": {
+            "type": "string",
+            "format": "int64",
+            "title": "The number of cleared trades"
+          },
+          "volume": {
+            "type": "string",
+            "format": "int64",
+            "title": "Volume (total shares traded) in this time"
+          },
+          "clearedVolume": {
+            "type": "string",
+            "format": "int64",
+            "title": "Volume (total shares traded) that has been cleared"
+          },
+          "notional": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total notional traded in this time"
+          },
+          "clearedNotional": {
+            "type": "string",
+            "format": "int64",
+            "title": "Total notional traded in this time that has been cleared"
+          }
+        },
+        "description": "TradeStats are a collection of stats on a set of trades."
+      },
       "TradeType": {
         "type": "string",
         "enum": [
@@ -1049,34 +1171,6 @@
           "TRADE_TYPE_CROSS"
         ],
         "description": "TradeType describes the execution type of the trade."
-      },
-      "TradingHours": {
-        "type": "object",
-        "properties": {
-          "daysOfWeek": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "timeOfDay": {
-            "$ref": "#/components/schemas/TimeOfDay"
-          },
-          "duration": {
-            "type": "string"
-          },
-          "state": {
-            "$ref": "#/components/schemas/InstrumentState"
-          },
-          "hideMarketData": {
-            "type": "boolean"
-          },
-          "expireAllOrders": {
-            "type": "boolean"
-          }
-        },
-        "description": "TradingHours describes an instrument trading schedule segment."
       },
       "UnsolicitedCxlReason": {
         "type": "string",
