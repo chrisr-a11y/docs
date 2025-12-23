@@ -1,10 +1,166 @@
 ---
-title: 'API Deep Dive'
-description: 'API Endpoints'
+title: 'REST API Overview'
+description: 'Complete guide to the Polymarket US REST API'
 ---
 
+# REST API Overview
+
+The Polymarket US REST API provides programmatic access to trading, account management, market data, and funding operations.
+
 <Note>
-This is the API Reference for Polymarket US. The international version of these docs can be found [here](https://docs.polymarket.com/)
+This documentation is specific to Polymarket US. The international version can be found [here](https://docs.polymarket.com/).
 </Note>
 
-## Welcome
+## Base URLs
+
+| Environment | Base URL |
+|-------------|----------|
+| Development | `https://api.dev01.polymarketexchange.com` |
+| Pre-production | `https://api.preprod.polymarketexchange.com` |
+| Production | `https://api.prod.polymarketexchange.com` |
+
+All endpoints use the `/v1/` path prefix.
+
+## Authentication
+
+All API requests require an Auth0 JWT token in the `Authorization` header:
+
+```bash
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/accounts/whoami" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json"
+```
+
+<Warning>
+Access tokens expire every **3 minutes**. Implement automatic token refresh in your application.
+</Warning>
+
+See the [Auth0 Onboarding Guide](/getting-started/auth0-onboarding) for complete authentication setup.
+
+## API Groups
+
+### Trading
+
+| Endpoint Group | Description |
+|----------------|-------------|
+| **Trading** | Insert, cancel, and replace orders |
+| **Report** | Search orders and trades, download history |
+| **Positions** | Query account balances and positions |
+
+### Market Data
+
+| Endpoint Group | Description |
+|----------------|-------------|
+| **Reference Data** | List instruments, symbols, and metadata |
+| **Order Book** | Get order book depth and best bid/offer |
+| **Drop Copy** | Execution feed and trade capture |
+
+### Account & Funding
+
+| Endpoint Group | Description |
+|----------------|-------------|
+| **Accounts** | Get user and account information |
+| **KYC** | Verification and referral codes |
+| **Payments** | Aeropay (ACH) and Checkout.com (card) |
+
+## Request Format
+
+### Headers
+
+| Header | Required | Description |
+|--------|----------|-------------|
+| `Authorization` | Yes | `Bearer {access_token}` |
+| `Content-Type` | Yes | `application/json` |
+
+### Request Body
+
+POST requests accept JSON bodies:
+
+```json
+{
+  "symbol": "mlb-ari-sf-2025-09-08",
+  "side": "SIDE_BUY",
+  "order_qty": 100,
+  "price": 5500,
+  "type": "ORDER_TYPE_LIMIT",
+  "time_in_force": "TIME_IN_FORCE_GOOD_TILL_CANCEL"
+}
+```
+
+## Response Format
+
+### Success Response
+
+```json
+{
+  "order": {
+    "id": "ord_abc123",
+    "symbol": "mlb-ari-sf-2025-09-08",
+    "state": "ORDER_STATE_NEW",
+    "order_qty": 100,
+    "leaves_qty": 100,
+    "cum_qty": 0
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "code": 3,
+  "message": "invalid order quantity",
+  "details": []
+}
+```
+
+| HTTP Status | Meaning |
+|-------------|---------|
+| `200` | Success |
+| `400` | Bad Request - Invalid parameters |
+| `401` | Unauthorized - Invalid or expired token |
+| `403` | Forbidden - Insufficient permissions |
+| `404` | Not Found - Resource doesn't exist |
+| `429` | Too Many Requests - Rate limited |
+| `500` | Internal Server Error |
+
+## Price Representation
+
+All prices are represented as `int64` values. Divide by the instrument's `price_scale` to get the decimal price:
+
+```python
+# Get price_scale from instrument metadata
+instrument = get_instrument("mlb-ari-sf-2025-09-08")
+price_scale = instrument.price_scale  # e.g., 10000
+
+# Convert API price to decimal
+decimal_price = api_price / price_scale
+# 5500 / 10000 = 0.55 ($0.55)
+```
+
+<Info>
+Query `price_scale` from the Reference Data API (`/v1/refdata/instruments`) and cache it for each instrument.
+</Info>
+
+## Rate Limits
+
+The API enforces a rate limit of **20 requests per second per IP address**.
+
+See [Rate Limits](/getting-started/rate-limits) for details on limits and best practices.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quickstart Guide" icon="rocket" href="/getting-started/quickstart">
+    Place your first order in 5 minutes
+  </Card>
+  <Card title="Authentication" icon="key" href="/getting-started/auth0-onboarding">
+    Set up Private Key JWT authentication
+  </Card>
+  <Card title="gRPC Streaming" icon="bolt" href="/streaming-endpoints/grpc-overview">
+    Real-time market data and order updates
+  </Card>
+  <Card title="Environments" icon="server" href="/getting-started/environments">
+    API endpoints for dev, preprod, and prod
+  </Card>
+</CardGroup>

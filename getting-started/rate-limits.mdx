@@ -1,20 +1,175 @@
 ---
-title: "API Rate Limits"
+title: "Rate Limits"
+sidebarTitle: "Rate Limits"
+description: "API rate limits and best practices for integration"
 ---
-## General
 
-The APIs are designed to provide a current snapshot of each category of data, and then streaming events that contain changes to the data. These APIs are not intended to be used as REST APIs where the consumer makes repeated requests to get the "current" state of data. This is a streaming API, and consumers must implement their integrations to support receiving streams of events instead of repeatedly asking for snapshots of data.
+# Rate Limits
 
-## Caching
+The Polymarket US API enforces rate limits to ensure fair usage and system stability.
 
-It is expected that API consumers will implement appropriate caching mechanisms in their software implementations, along with appropriate limits on the rate at which requests for data are made to the API.
+## Rate Limit
 
-Historical data can be cached indefinitely.
+| Limit | Value |
+|-------|-------|
+| **Requests per second** | 20 |
+| **Scope** | Per IP address |
 
-Participant data such as positions, balances, orders, etc. should be reasonably cached by the caller to limit the potential abuse of their implementation. This could result in high numbers of requests to the API for the same data where that data is not changing at a rate commensurate with the rate of requests to refresh the data. Abuse of the API or implementations which do not have a reasonable caching system implemented may result in usage restrictions being placed upon the caller's API credentials.
+<Warning>
+Exceeding 20 requests per second from a single IP address will result in `HTTP 429 Too Many Requests` responses.
+</Warning>
 
-## Events
+## Rate Limit Response
 
-Most commands to retrieve a current snapshot of data also have corresponding events for notifications of changes in that data. Consumers of this API are expected to subscribe to those events and maintain a current state of data instead of making repeated calls to retrieve the data snapshots. 
+When rate limited, the API returns:
 
-If a consumer of this API is observed to be making excessive repeated calls to retrieve data that is updated through the events, usage restrictions may be placed upon the API credentials being used.
+```json
+{
+  "code": 8,
+  "message": "rate limit exceeded",
+  "details": []
+}
+```
+
+**HTTP Status:** `429 Too Many Requests`
+
+### Retry Strategy
+
+When receiving a 429 response:
+
+1. Stop making requests immediately
+2. Wait 1 second before retrying
+3. Implement exponential backoff for repeated 429s
+4. Consider reducing your request rate
+
+```python
+import time
+
+def make_request_with_retry(url, headers, max_retries=3):
+    for attempt in range(max_retries):
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 429:
+            wait_time = 2 ** attempt  # 1, 2, 4 seconds
+            print(f"Rate limited. Waiting {wait_time}s...")
+            time.sleep(wait_time)
+            continue
+
+        return response
+
+    raise Exception("Max retries exceeded")
+```
+
+## Best Practices
+
+### Use Streaming Instead of Polling
+
+The API is designed as a **streaming-first** system. Instead of repeatedly polling for updates, subscribe to real-time streams:
+
+| Don't Poll | Use Streaming Instead |
+|------------|----------------------|
+| Repeated calls to `/v1/orders/search` | `CreateOrderSubscription` gRPC stream |
+| Repeated calls to `/v1/positions` | `CreatePositionSubscription` gRPC stream |
+| Repeated calls to `/v1/orderbook` | `CreateMarketDataSubscription` gRPC stream |
+
+<Info>
+Streaming connections don't count against the REST rate limit. One streaming connection can replace hundreds of polling requests.
+</Info>
+
+### Cache Reference Data
+
+Reference data (instruments, symbols, metadata) changes infrequently. Cache it locally:
+
+```python
+class InstrumentCache:
+    def __init__(self):
+        self.instruments = {}
+        self.last_refresh = None
+
+    def get_instrument(self, symbol):
+        # Refresh cache every 5 minutes
+        if self._needs_refresh():
+            self._refresh_instruments()
+        return self.instruments.get(symbol)
+
+    def _needs_refresh(self):
+        if not self.last_refresh:
+            return True
+        return (time.time() - self.last_refresh) > 300
+
+    def _refresh_instruments(self):
+        response = api.list_instruments()
+        for inst in response.instruments:
+            self.instruments[inst.symbol] = inst
+        self.last_refresh = time.time()
+```
+
+### Batch Operations
+
+Where possible, batch your operations instead of making individual requests:
+
+- Use `SearchOrders` with filters instead of fetching orders one by one
+- Use `ListInstruments` with symbol filters instead of individual lookups
+- Subscribe to multiple symbols in a single streaming connection
+
+### Connection Limits
+
+| Connection Type | Limit |
+|-----------------|-------|
+| REST requests | 20/sec per IP |
+| gRPC streaming connections | 10 concurrent per account |
+| WebSocket connections | Not supported (use gRPC) |
+
+## Monitoring Your Usage
+
+Track your request patterns to stay within limits:
+
+```python
+import time
+from collections import deque
+
+class RateLimiter:
+    def __init__(self, max_requests=20, window_seconds=1):
+        self.max_requests = max_requests
+        self.window = window_seconds
+        self.requests = deque()
+
+    def can_make_request(self):
+        now = time.time()
+        # Remove old requests outside the window
+        while self.requests and self.requests[0] < now - self.window:
+            self.requests.popleft()
+        return len(self.requests) < self.max_requests
+
+    def record_request(self):
+        self.requests.append(time.time())
+
+    def wait_if_needed(self):
+        while not self.can_make_request():
+            time.sleep(0.05)  # 50ms
+        self.record_request()
+```
+
+## Abuse Prevention
+
+Patterns that may result in temporary or permanent restrictions:
+
+- Sustained requests above the rate limit
+- Polling for data available via streaming
+- Requesting the same unchanged data repeatedly
+- Automated retry loops without backoff
+
+<Warning>
+Abuse of the API may result in temporary or permanent restrictions on your API credentials. Contact [support@qcex.com](mailto:support@qcex.com) if you need higher limits for legitimate use cases.
+</Warning>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="gRPC Streaming" icon="bolt" href="/streaming-endpoints/grpc-overview">
+    Replace polling with real-time streams
+  </Card>
+  <Card title="Authentication" icon="key" href="/getting-started/auth0-onboarding">
+    Set up API authentication
+  </Card>
+</CardGroup>

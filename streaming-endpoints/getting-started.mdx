@@ -88,19 +88,43 @@ Auth0 tokens have a short expiration. Your application MUST implement automatic 
 | **Production** | `pmx-prod.us.auth0.com` |
 | **Preprod** | `pmx-preprod.us.auth0.com` |
 
-Obtain a JWT token using the OAuth 2.0 Client Credentials flow:
+Obtain a JWT token using Private Key JWT authentication:
 
-```bash
-# For preprod environment
-curl --request POST \
-  --url "https://pmx-preprod.us.auth0.com/oauth/token" \
-  --header "content-type: application/json" \
-  --data '{
-    "client_id": "YOUR_CLIENT_ID",
-    "client_secret": "YOUR_CLIENT_SECRET",
-    "audience": "YOUR_API_AUDIENCE",
-    "grant_type": "client_credentials"
-  }'
+```python
+import jwt
+import uuid
+import time
+import requests
+from cryptography.hazmat.primitives import serialization
+
+# Load your private key
+with open("private_key.pem", "rb") as f:
+    private_key = serialization.load_pem_private_key(f.read(), password=None)
+
+# Create signed JWT assertion
+now = int(time.time())
+claims = {
+    "iss": "YOUR_CLIENT_ID",
+    "sub": "YOUR_CLIENT_ID",
+    "aud": "https://pmx-preprod.us.auth0.com/oauth/token",
+    "iat": now,
+    "exp": now + 300,
+    "jti": str(uuid.uuid4()),
+}
+assertion = jwt.encode(claims, private_key, algorithm="RS256")
+
+# Exchange for access token
+response = requests.post(
+    "https://pmx-preprod.us.auth0.com/oauth/token",
+    json={
+        "client_id": "YOUR_CLIENT_ID",
+        "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+        "client_assertion": assertion,
+        "audience": "YOUR_API_AUDIENCE",
+        "grant_type": "client_credentials"
+    }
+)
+access_token = response.json()["access_token"]
 ```
 
 The response contains your `access_token`:

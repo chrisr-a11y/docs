@@ -8,6 +8,28 @@ description: "API endpoints for dev, preprod, and production environments"
 
 The Polymarket Exchange API is available in three environments. Use the appropriate endpoints based on your integration stage.
 
+## Complete Endpoint Reference
+
+<Info>
+This is the **single source of truth** for all API endpoints. Bookmark this page for quick reference.
+</Info>
+
+| Environment | REST API | gRPC | Auth0 Domain | Auth0 Audience |
+|-------------|----------|------|--------------|----------------|
+| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc.dev01.polymarketexchange.com:443` | `pmx-dev01.us.auth0.com` | `https://api.dev01.polymarketexchange.com` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `pmx-preprod.us.auth0.com` | `https://api.preprod.polymarketexchange.com` |
+| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `pmx-prod.us.auth0.com` | `https://api.prod.polymarketexchange.com` |
+
+### API Path Patterns
+
+| API Type | Path Pattern | Example |
+|----------|--------------|---------|
+| REST endpoints | `/v1/{service}/{operation}` | `/v1/trading/order` |
+| Health check | `/v1/health` | `GET /v1/health` |
+| Auth0 token | `/oauth/token` | `POST https://pmx-preprod.us.auth0.com/oauth/token` |
+
+---
+
 ## Environment Summary
 
 | Environment | Purpose | Auth0 Domain |
