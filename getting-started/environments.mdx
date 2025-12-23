@@ -14,11 +14,11 @@ The Polymarket Exchange API is available in three environments. Use the appropri
 This is the **single source of truth** for all API endpoints. Bookmark this page for quick reference.
 </Info>
 
-| Environment | REST API | gRPC | Auth0 Domain | Auth0 Audience |
-|-------------|----------|------|--------------|----------------|
-| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc.dev01.polymarketexchange.com:443` | `pmx-dev01.us.auth0.com` | `https://api.dev01.polymarketexchange.com` |
-| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `pmx-preprod.us.auth0.com` | `https://api.preprod.polymarketexchange.com` |
-| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `pmx-prod.us.auth0.com` | `https://api.prod.polymarketexchange.com` |
+| Environment | REST API | gRPC | Auth Domain | Audience |
+|-------------|----------|------|-------------|----------|
+| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc.dev01.polymarketexchange.com:443` | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` |
+| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` |
 
 ### API Path Patterns
 
@@ -26,17 +26,17 @@ This is the **single source of truth** for all API endpoints. Bookmark this page
 |----------|--------------|---------|
 | REST endpoints | `/v1/{service}/{operation}` | `/v1/trading/order` |
 | Health check | `/v1/health` | `GET /v1/health` |
-| Auth0 token | `/oauth/token` | `POST https://pmx-preprod.us.auth0.com/oauth/token` |
+| Auth token | `/oauth/token` | `POST https://auth.preprod.polymarketexchange.com/oauth/token` |
 
 ---
 
 ## Environment Summary
 
-| Environment | Purpose | Auth0 Domain |
-|-------------|---------|--------------|
-| **Dev** | Development and testing | `pmx-dev01.us.auth0.com` |
-| **Preprod** | Pre-production validation | `pmx-preprod.us.auth0.com` |
-| **Prod** | Production trading | `pmx-prod.us.auth0.com` |
+| Environment | Purpose | Auth Domain |
+|-------------|---------|-------------|
+| **Dev** | Development and testing | `auth.dev.polymarketexchange.com` |
+| **Preprod** | Pre-production validation | `auth.preprod.polymarketexchange.com` |
+| **Prod** | Production trading | `auth.polymarketexchange.com` |
 
 ---
 
@@ -48,8 +48,8 @@ Development environment for initial integration and testing.
 |---------|----------|
 | **REST API** | `https://api.dev01.polymarketexchange.com` |
 | **gRPC** | `grpc.dev01.polymarketexchange.com:443` |
-| **Auth0 Domain** | `pmx-dev01.us.auth0.com` |
-| **Auth0 Audience** | `https://api.dev01.polymarketexchange.com` |
+| **Auth Domain** | `auth.dev.polymarketexchange.com` |
+| **Audience** | `https://api.dev01.polymarketexchange.com` |
 
 <Card title="Dev Health Check" icon="heart-pulse" href="https://api.dev01.polymarketexchange.com/v1/health">
   Click to check dev environment health
@@ -65,8 +65,8 @@ Pre-production environment for final validation before going live.
 |---------|----------|
 | **REST API** | `https://api.preprod.polymarketexchange.com` |
 | **gRPC** | `grpc.preprod.polymarketexchange.com:443` |
-| **Auth0 Domain** | `pmx-preprod.us.auth0.com` |
-| **Auth0 Audience** | `https://api.preprod.polymarketexchange.com` |
+| **Auth Domain** | `auth.preprod.polymarketexchange.com` |
+| **Audience** | `https://api.preprod.polymarketexchange.com` |
 
 <Card title="Preprod Health Check" icon="heart-pulse" href="https://api.preprod.polymarketexchange.com/v1/health">
   Click to check preprod environment health
@@ -82,8 +82,8 @@ Live production environment for real trading.
 |---------|----------|
 | **REST API** | `https://api.prod.polymarketexchange.com` |
 | **gRPC** | `grpc.prod.polymarketexchange.com:443` |
-| **Auth0 Domain** | `pmx-prod.us.auth0.com` |
-| **Auth0 Audience** | `https://api.prod.polymarketexchange.com` |
+| **Auth Domain** | `auth.polymarketexchange.com` |
+| **Audience** | `https://api.prod.polymarketexchange.com` |
 
 <Card title="Production Health Check" icon="heart-pulse" href="https://api.prod.polymarketexchange.com/v1/health">
   Click to check production environment health
@@ -176,13 +176,13 @@ The load balancer terminates TLS on port 443 and forwards to the internal gRPC s
   Complete VPC connection instructions including availability zones and troubleshooting
 </Card>
 
-### Auth0 Token Endpoints
+### Authentication Endpoints
 
 | Environment | Token URL |
 |-------------|-----------|
-| Dev | `https://pmx-dev01.us.auth0.com/oauth/token` |
-| Preprod | `https://pmx-preprod.us.auth0.com/oauth/token` |
-| Prod | `https://pmx-prod.us.auth0.com/oauth/token` |
+| Dev | `https://auth.dev.polymarketexchange.com/oauth/token` |
+| Preprod | `https://auth.preprod.polymarketexchange.com/oauth/token` |
+| Prod | `https://auth.polymarketexchange.com/oauth/token` |
 
 <Warning>
 **Tokens must be refreshed every 3 minutes** across all environments.

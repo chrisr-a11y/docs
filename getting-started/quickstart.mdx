@@ -45,7 +45,7 @@ import requests
 from cryptography.hazmat.primitives import serialization
 
 # Your credentials (from onboarding)
-AUTH0_DOMAIN = "pmx-preprod.us.auth0.com"
+AUTH_DOMAIN = "auth.preprod.polymarketexchange.com"
 CLIENT_ID = "your_client_id"
 AUDIENCE = "https://api.preprod.polymarketexchange.com"
 PRIVATE_KEY_PATH = "private_key.pem"
@@ -60,7 +60,7 @@ def get_access_token():
     claims = {
         "iss": CLIENT_ID,
         "sub": CLIENT_ID,
-        "aud": f"https://{AUTH0_DOMAIN}/oauth/token",
+        "aud": f"https://{AUTH_DOMAIN}/oauth/token",
         "iat": now,
         "exp": now + 300,
         "jti": str(uuid.uuid4()),
@@ -69,7 +69,7 @@ def get_access_token():
 
     # Exchange for access token
     response = requests.post(
-        f"https://{AUTH0_DOMAIN}/oauth/token",
+        f"https://{AUTH_DOMAIN}/oauth/token",
         json={
             "client_id": CLIENT_ID,
             "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
@@ -276,7 +276,7 @@ import requests
 from cryptography.hazmat.primitives import serialization
 
 # Configuration
-AUTH0_DOMAIN = "pmx-preprod.us.auth0.com"
+AUTH_DOMAIN = "auth.preprod.polymarketexchange.com"
 CLIENT_ID = "your_client_id"  # From onboarding
 AUDIENCE = "https://api.preprod.polymarketexchange.com"
 PRIVATE_KEY_PATH = "private_key.pem"
@@ -291,7 +291,7 @@ def get_access_token():
     claims = {
         "iss": CLIENT_ID,
         "sub": CLIENT_ID,
-        "aud": f"https://{AUTH0_DOMAIN}/oauth/token",
+        "aud": f"https://{AUTH_DOMAIN}/oauth/token",
         "iat": now,
         "exp": now + 300,
         "jti": str(uuid.uuid4()),
@@ -299,7 +299,7 @@ def get_access_token():
     assertion = jwt.encode(claims, private_key, algorithm="RS256")
 
     response = requests.post(
-        f"https://{AUTH0_DOMAIN}/oauth/token",
+        f"https://{AUTH_DOMAIN}/oauth/token",
         json={
             "client_id": CLIENT_ID,
             "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",

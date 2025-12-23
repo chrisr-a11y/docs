@@ -81,12 +81,12 @@ This generates:
 Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
 </Warning>
 
-### Auth0 Tenants
+### Auth Domains
 
-| Environment | Auth0 Domain |
-|-------------|--------------|
-| **Production** | `pmx-prod.us.auth0.com` |
-| **Preprod** | `pmx-preprod.us.auth0.com` |
+| Environment | Auth Domain |
+|-------------|-------------|
+| **Production** | `auth.polymarketexchange.com` |
+| **Preprod** | `auth.preprod.polymarketexchange.com` |
 
 Obtain a JWT token using Private Key JWT authentication:
 
@@ -106,7 +106,7 @@ now = int(time.time())
 claims = {
     "iss": "YOUR_CLIENT_ID",
     "sub": "YOUR_CLIENT_ID",
-    "aud": "https://pmx-preprod.us.auth0.com/oauth/token",
+    "aud": "https://auth.preprod.polymarketexchange.com/oauth/token",
     "iat": now,
     "exp": now + 300,
     "jti": str(uuid.uuid4()),
@@ -115,7 +115,7 @@ assertion = jwt.encode(claims, private_key, algorithm="RS256")
 
 # Exchange for access token
 response = requests.post(
-    "https://pmx-preprod.us.auth0.com/oauth/token",
+    "https://auth.preprod.polymarketexchange.com/oauth/token",
     json={
         "client_id": "YOUR_CLIENT_ID",
         "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
