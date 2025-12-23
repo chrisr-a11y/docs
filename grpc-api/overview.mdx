@@ -40,13 +40,13 @@ All gRPC connections use **TLS/SSL**. Ensure your client is configured for secur
 
 ## Authentication
 
-All gRPC calls require an Auth0 JWT token passed in the `authorization` metadata header:
+All gRPC calls require an access token passed in the `authorization` metadata header:
 
 ```python
 import grpc
 
-# Obtain token from Auth0
-token = get_auth0_token()
+# Obtain access token
+token = get_access_token()
 
 # Create authenticated channel
 credentials = grpc.ssl_channel_credentials()
@@ -57,7 +57,7 @@ metadata = [("authorization", f"Bearer {token}")]
 response = stub.GetWhoAmI(request, metadata=metadata)
 ```
 
-See [Authentication](/streaming-endpoints/authentication) for details on obtaining Auth0 tokens.
+See [Authentication](/streaming-endpoints/authentication) for details on obtaining access tokens.
 
 ## Available Services
 
@@ -185,7 +185,7 @@ Most integrations use **REST for simplicity** and **gRPC for performance-critica
     Real-time market data and order subscriptions
   </Card>
   <Card title="Authentication" icon="lock" href="/streaming-endpoints/authentication">
-    Auth0 token setup for gRPC
+    Access token setup for gRPC
   </Card>
   <Card title="REST API" icon="code" href="/api-reference">
     Equivalent REST endpoints

@@ -1,9 +1,9 @@
 ---
-title: 'Auth0 Onboarding'
-description: 'Getting started with Auth0 authentication for ISVs, IBs, and FCMs'
+title: 'Authentication Setup'
+description: 'Getting started with API authentication for ISVs, IBs, and FCMs'
 ---
 
-# Auth0 Onboarding
+# Authentication Setup
 
 <Tip>
 **Quick Start: Generate your key pair**
@@ -14,32 +14,29 @@ openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
 Send us `my_public_key.pem` - keep `my_private_key.pem` secret!
 </Tip>
 
-The Polymarket Exchange API uses [Auth0](https://auth0.com/) for authentication with **Private Key JWT** authentication. This is a more secure method than client secrets - you generate your own key pair and keep the private key secure.
+The Polymarket Exchange API uses **Private Key JWT** authentication. This is a more secure method than client secrets - you generate your own key pair and keep the private key secure.
 
 ## Overview
 
 Authentication follows a two-step flow:
 
 1. **Create a signed JWT assertion** - Sign a JWT with your private key
-2. **Exchange for Auth0 access token** - Send the assertion to Auth0
-3. **Call API with access token** - The gateway validates your token and handles authorization
+2. **Exchange for API access token** - Send the assertion to the token endpoint
+3. **Call API with access token** - The API validates your token and handles authorization
 
 ```mermaid
 sequenceDiagram
-    participant ISV as Your Application
-    participant Auth0
-    participant Gateway as Polymarket Gateway
-    participant Exchange as Polymarket US
+    participant Client as Your Application
+    participant Auth as Polymarket US Auth
+    participant API as Polymarket US API
 
-    ISV->>ISV: Sign JWT with Private Key
-    ISV->>Auth0: Token Request + Signed JWT
-    Auth0->>Auth0: Verify with your Public Key
-    Auth0-->>ISV: Auth0 Access Token
-    ISV->>Gateway: API Request + Access Token
-    Gateway->>Gateway: Validate Token
-    Gateway->>Exchange: Execute Request
-    Exchange-->>Gateway: Response
-    Gateway-->>ISV: API Response
+    Client->>Client: Sign JWT with Private Key
+    Client->>Auth: Token Request + Signed JWT
+    Auth->>Auth: Verify with your Public Key
+    Auth-->>Client: API Access Token
+    Client->>API: API Request + Access Token
+    API->>API: Validate Token
+    API-->>Client: API Response
 ```
 
 ## Getting Your Credentials
@@ -53,7 +50,7 @@ To access the Polymarket Exchange API, you need to:
 | What You Provide | What We Provide |
 |-----------------|-----------------|
 | Your RSA Public Key | Client ID |
-| Company Information | Auth0 Domain |
+| Company Information | Auth Domain |
 | IP Addresses | API Audience |
 
 <Info>
@@ -125,7 +122,7 @@ Create a JWT with these claims, signed with your private key using RS256:
 |-------|-------------|
 | `iss` | Your client ID (issuer) |
 | `sub` | Your client ID (subject) |
-| `aud` | Auth0 token endpoint URL |
+| `aud` | Token endpoint URL |
 | `iat` | Issued at time (Unix timestamp) |
 | `exp` | Expiration time (max 5 minutes from iat) |
 | `jti` | Unique token ID (prevents replay attacks) |
@@ -164,7 +161,7 @@ import time
 import requests
 from cryptography.hazmat.primitives import serialization
 
-class Auth0Client:
+class AuthClient:
     def __init__(self, domain: str, client_id: str, audience: str, private_key_path: str):
         self.domain = domain
         self.client_id = client_id
@@ -231,7 +228,7 @@ class Auth0Client:
 
 
 # Usage
-auth_client = Auth0Client(
+auth_client = AuthClient(
     domain="auth.preprod.polymarketexchange.com",
     client_id="YOUR_CLIENT_ID",
     audience="https://api.preprod.polymarketexchange.com",
@@ -265,7 +262,7 @@ import (
     "github.com/google/uuid"
 )
 
-func getAuth0Token(domain, clientID, audience, privateKeyPath string) (string, error) {
+func getAccessToken(domain, clientID, audience, privateKeyPath string) (string, error) {
     // Load private key
     keyData, err := os.ReadFile(privateKeyPath)
     if err != nil {
@@ -295,7 +292,7 @@ func getAuth0Token(domain, clientID, audience, privateKeyPath string) (string, e
         return "", fmt.Errorf("sign assertion: %w", err)
     }
 
-    // Request access token from Auth0
+    // Request access token
     // (implement HTTP POST to token endpoint)
     // ...
 
@@ -335,7 +332,7 @@ You can rotate your keys at any time:
 
 1. Generate a new key pair
 2. Submit the new public key to us
-3. We add the new key to your Auth0 app (both old and new will work)
+3. We add the new key to your application
 4. Update your systems to use the new private key
 5. Notify us to remove the old public key
 
@@ -378,7 +375,7 @@ If authentication fails, verify your client assertion JWT contains correct claim
 ```
 
 Common mistakes:
-- Wrong `aud` (must be the Auth0 token endpoint, not the API)
+- Wrong `aud` (must be the token endpoint, not the API)
 - Expired JWT (exp in the past)
 - Reused `jti` (must be unique per request)
 
@@ -386,7 +383,7 @@ Common mistakes:
 
 ## API Scopes
 
-Your Auth0 application is granted specific **scopes** that control which API endpoints you can access. Scopes are included in your access token and validated by the API.
+Your application is granted specific **scopes** that control which API endpoints you can access. Scopes are included in your access token and validated by the API.
 
 ### Available Scopes
 
@@ -441,7 +438,7 @@ If you receive a `403 Forbidden` error, check that your application has been gra
 
 ---
 
-## Auth0 Documentation
+## Additional Resources
 
 For more details on Private Key JWT authentication:
 

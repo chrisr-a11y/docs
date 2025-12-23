@@ -29,7 +29,7 @@
               "getting-started/getting-access",
               "getting-started/quickstart",
               "getting-started/environments",
-              "getting-started/auth0-onboarding",
+              "getting-started/authentication",
               "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/vpc-connection",

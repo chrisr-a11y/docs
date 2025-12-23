@@ -23,7 +23,7 @@ All endpoints use the `/v1/` path prefix.
 
 ## Authentication
 
-All API requests require an Auth0 JWT token in the `Authorization` header:
+All API requests require an access token in the `Authorization` header:
 
 ```bash
 curl -X GET "https://api.preprod.polymarketexchange.com/v1/accounts/whoami" \
@@ -35,7 +35,7 @@ curl -X GET "https://api.preprod.polymarketexchange.com/v1/accounts/whoami" \
 Access tokens expire every **3 minutes**. Implement automatic token refresh in your application.
 </Warning>
 
-See the [Auth0 Onboarding Guide](/getting-started/auth0-onboarding) for complete authentication setup.
+See the [Authentication Setup Guide](/getting-started/authentication) for complete authentication setup.
 
 ## API Groups
 
@@ -158,7 +158,7 @@ For REST API questions or issues, contact [restapi@polymarket.com](mailto:restap
   <Card title="Quickstart Guide" icon="rocket" href="/getting-started/quickstart">
     Place your first order in 5 minutes
   </Card>
-  <Card title="Authentication" icon="key" href="/getting-started/auth0-onboarding">
+  <Card title="Authentication" icon="key" href="/getting-started/authentication">
     Set up Private Key JWT authentication
   </Card>
   <Card title="gRPC Streaming" icon="bolt" href="/streaming-endpoints/grpc-overview">

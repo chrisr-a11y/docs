@@ -114,7 +114,7 @@ Ready to get started? Follow our [Getting Started Guide](/streaming-endpoints/ge
 graph LR
     A[Python Client] -->|REST| B[REST API]
     A -->|gRPC Stream| C[gRPC Server]
-    A -->|M2M Auth| D[Auth0]
+    A -->|M2M Auth| D[Polymarket US Auth]
     D -->|JWT Token| A
     A -->|Bearer Token| B
     A -->|Bearer Token| C
@@ -124,7 +124,7 @@ graph LR
 
 ### Authentication Flow
 
-1. **Obtain JWT Token**: Request M2M token from Auth0 using client credentials
+1. **Obtain JWT Token**: Request M2M token using client credentials
 2. **Attach Token**: Include token in gRPC metadata as `authorization` header
 3. **Stream Data**: Receive continuous updates over persistent connection
 

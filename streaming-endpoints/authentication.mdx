@@ -6,12 +6,12 @@ description: "How to authenticate with the Polymarket Exchange API using Private
 
 # Authentication
 
-The Polymarket Exchange API uses **Auth0 with Private Key JWT** authentication. You sign a JWT with your private key, exchange it for an access token, then include that token in every API request.
+The Polymarket Exchange API uses **Private Key JWT** authentication. You sign a JWT with your private key, exchange it for an access token, then include that token in every API request.
 
 <Warning>
 **CRITICAL: Access tokens must be refreshed every 3 minutes.**
 
-Auth0 access tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted API and streaming connections.
+Access tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted API and streaming connections.
 </Warning>
 
 ## Authentication Flow
@@ -19,19 +19,19 @@ Auth0 access tokens have a short expiration. Your application MUST implement aut
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Auth0
-    participant API
+    participant Auth as Polymarket US Auth
+    participant API as Polymarket US API
 
     Client->>Client: Sign JWT with private key
-    Client->>Auth0: Token request + signed JWT assertion
-    Auth0->>Auth0: Verify signature with your public key
-    Auth0->>Client: Access Token
+    Client->>Auth: Token request + signed JWT assertion
+    Auth->>Auth: Verify signature with your public key
+    Auth->>Client: Access Token
     Client->>API: API request with access token
     API->>Client: Response
     Note over Client,API: Refresh token before expiration (every 3 min)
 ```
 
-## Auth0 Configuration
+## Authentication Configuration
 
 ### Auth Domains
 
@@ -232,7 +232,7 @@ You can rotate your keys without downtime:
 ## Next Steps
 
 <CardGroup cols={2}>
-  <Card title="Auth0 Onboarding" icon="key" href="/getting-started/auth0-onboarding">
+  <Card title="Authentication Setup" icon="key" href="/getting-started/authentication">
     Complete onboarding guide with key generation
   </Card>
   <Card title="Market Data Streaming" icon="chart-line" href="/streaming-endpoints/market-data-stream">

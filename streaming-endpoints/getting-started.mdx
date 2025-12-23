@@ -12,7 +12,7 @@ This guide will help you set up gRPC streaming with Python and connect to your f
 
 Before you begin, ensure you have:
 
-- **Auth0 Credentials**: Client ID and Client Secret from [onboarding](/getting-started/auth0-onboarding)
+- **API Credentials**: Client ID from [authentication setup](/getting-started/authentication)
 - **Python 3.7+**: Python development environment
 - **Network Access**: Ability to connect to `grpc.api.preprod.polymarketexchange.com:443`
 
@@ -73,12 +73,12 @@ This generates:
 - `*_pb2.py` files: Message definitions
 - `*_pb2_grpc.py` files: Service stubs
 
-## Step 4: Authenticate via Auth0
+## Step 4: Authenticate
 
 <Warning>
 **CRITICAL: Tokens must be refreshed every 3 minutes.**
 
-Auth0 tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
+Access tokens have a short expiration. Your application MUST implement automatic token refresh before expiration to maintain uninterrupted streaming connections.
 </Warning>
 
 ### Auth Domains
@@ -142,7 +142,7 @@ The `expires_in` is 180 seconds (3 minutes). Implement automatic token refresh b
 </Info>
 
 <Info>
-See the [Auth0 Onboarding Guide](/getting-started/auth0-onboarding) for complete authentication details.
+See the [Authentication Setup Guide](/getting-started/authentication) for complete authentication details.
 </Info>
 
 ## Step 5: Connect to Market Data Stream
@@ -170,7 +170,7 @@ request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
     snapshot_only=False
 )
 
-# Set up metadata with authorization (JWT from Auth0)
+# Set up metadata with authorization
 metadata = [
     ('authorization', f'Bearer {access_token}')
 ]
@@ -226,7 +226,7 @@ for response in response_stream:
 
 ### Authentication Failed
 - **Cause**: Invalid or expired access token
-- **Solution**: Verify JWT from Auth0, refresh token if expired (tokens expire every 3 minutes)
+- **Solution**: Verify JWT, refresh token if expired (tokens expire every 3 minutes)
 
 ### Import Errors
 - **Cause**: Generated proto files not in Python path

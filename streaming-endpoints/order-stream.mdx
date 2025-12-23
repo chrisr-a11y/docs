@@ -262,7 +262,7 @@ class PolymarketOrderStreamer:
         self.price_scale: int = 1000  # Get from instrument metadata
 
     def login(self, auth0_domain: str, client_id: str, private_key_path: str, audience: str) -> dict:
-        """Authenticate with Auth0 using Private Key JWT and store the access token."""
+        """Authenticate using Private Key JWT and store the access token."""
         import jwt
         import uuid
         from cryptography.hazmat.primitives import serialization

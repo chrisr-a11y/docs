@@ -91,24 +91,15 @@ REST API
 
 ---
 
-## 5. Rename "Auth0 Access Token" Terminology
+## ~~5. Rename "Auth0 Access Token" Terminology~~ ✅ DONE
 
-**Problem:** "Auth0 Access Token" exposes implementation details. External users don't need to know we use Auth0.
-
-**Solution:** Rename to "Polymarket US API Access Token" throughout documentation.
-
-### Tasks:
-- [ ] Search all docs for "Auth0" references
-- [ ] Replace terminology:
-  - "Auth0 Access Token" → "Polymarket US API Access Token" (or "API Access Token")
-  - "Auth0 JWT" → "API Access Token"
-- [ ] Update authentication guide with cleaner terminology
-- [ ] Keep any necessary Auth0 references only in internal/implementation notes (if any)
-
-### Search patterns:
-- `Auth0`
-- `auth0`
-- `AUTH0`
+Removed Auth0 branding from all documentation:
+- Renamed `auth0-onboarding.mdx` → `authentication.mdx`
+- Updated all "Auth0 JWT" → "access token"
+- Updated all "Auth0 Access Token" → "API access token"
+- Updated diagrams to show "Polymarket US Auth" instead of "Auth0"
+- Updated class names from `Auth0Client` → `AuthClient`
+- Updated all internal links to new authentication page
 
 ---
 
@@ -128,13 +119,11 @@ Auth custom domain infrastructure is in place. Documentation updated to use:
 ## Implementation Order
 
 1. ~~**Auth custom domain (#6)**~~ ✅ DONE
-2. **Terminology changes (#5)** - Quick find/replace, low risk
+2. ~~**Terminology changes (#5)**~~ ✅ DONE
 3. **Diagram fixes (#4)** - Isolated changes to diagram files
 4. **Rate limit warnings (#1)** - Add callouts to existing pages
 5. **Streaming links (#2)** - Requires mapping exercise first
 6. **ISV bifurcation (#3)** - Largest structural change, do last
-
-**Note:** #5 (terminology) should be done next to complete Auth0 branding removal.
 
 ---
 
