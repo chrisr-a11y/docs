@@ -1,0 +1,58 @@
+---
+title: 'Trading API Overview'
+description: 'Insert, cancel, and manage orders'
+---
+
+# Trading API
+
+The Trading API provides order entry and management capabilities for the Polymarket Exchange.
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/trading/orders` | Insert a new order |
+| `POST` | `/v1/trading/orders/cancel` | Cancel an existing order |
+| `POST` | `/v1/trading/orders/replace` | Replace/modify an order |
+| `POST` | `/v1/trading/orders/preview` | Preview order before submission |
+
+## Order Types
+
+| Type | Description |
+|------|-------------|
+| `LIMIT` | Limit order at specified price |
+| `MARKET_TO_LIMIT` | Market order that converts to limit |
+| `STOP` | Stop order |
+| `STOP_LIMIT` | Stop-limit order |
+
+## Order Lifecycle
+
+Orders progress through these states:
+
+```
+NEW → PARTIALLY_FILLED → FILLED
+         ↓
+      CANCELED
+```
+
+<Tip>
+**Real-Time Order Updates**
+
+After submitting orders via REST, use the [gRPC Order Stream](/streaming-endpoints/order-stream) to receive real-time updates on order status, fills, and cancellations. This is more efficient than polling for order status.
+</Tip>
+
+## Time in Force
+
+| TIF | Description |
+|-----|-------------|
+| `DAY` | Good for the trading day |
+| `GTC` | Good till canceled |
+| `IOC` | Immediate or cancel |
+| `FOK` | Fill or kill |
+
+## Best Practices
+
+1. **Use Order Stream for updates** - Don't poll for order status; use streaming
+2. **Include client order ID** - Use `clOrdId` for your own order tracking
+3. **Preview before submit** - Use the preview endpoint for order validation
+4. **Handle rejects** - Implement proper error handling for rejected orders

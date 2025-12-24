@@ -5,7 +5,13 @@ description: 'Access L2 order book snapshots and best bid/offer (BBO) data'
 
 # Order Book API
 
-The Order Book API provides real-time access to aggregated order book data for any trading instrument. This API is designed for applications that need quick snapshots of market depth without maintaining a streaming connection.
+<Warning>
+**Prefer Streaming for Production Use**
+
+This polling API is subject to rate limits. For production applications that need continuous market data, use the [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) instead. The streaming API provides real-time updates with lower latency and no rate limit concerns.
+</Warning>
+
+The Order Book API provides access to aggregated order book data for any trading instrument. This API is designed for applications that need occasional snapshots of market depth.
 
 ## Endpoints
 
@@ -98,7 +104,19 @@ curl -X GET "https://api.polymarketexchange.com/rest/api/v1/orderbook/BTC-USD/bb
 
 ## When to Use
 
-- **Order Book Snapshot**: Use when you need to see multiple price levels and understand market depth
-- **BBO**: Use when you only need the current best prices (more efficient, smaller payload)
+| Use Case | Recommended API |
+|----------|-----------------|
+| Continuous market data feed | [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) |
+| One-time snapshot for display | REST Order Book (this API) |
+| Building a trading UI | [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) |
+| Quick price check | REST BBO endpoint |
 
-For real-time streaming order book updates, see the [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) documentation.
+<Tip>
+**Streaming First Architecture**
+
+For any use case requiring more than occasional snapshots, use the streaming API. It provides:
+- Real-time updates as they happen
+- No rate limiting concerns
+- Lower latency than polling
+- Reduced API calls and infrastructure load
+</Tip>

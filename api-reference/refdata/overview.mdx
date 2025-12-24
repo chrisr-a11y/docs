@@ -1,0 +1,63 @@
+---
+title: 'Reference Data API Overview'
+description: 'Instruments, symbols, and market metadata'
+---
+
+# Reference Data API
+
+The Reference Data API provides access to instrument definitions, symbol metadata, and market reference data.
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/refdata/instruments` | List all instruments |
+| `GET` | `/v1/refdata/instruments/{symbol}` | Get instrument details |
+| `GET` | `/v1/refdata/symbols` | List trading symbols |
+
+## Instrument Data
+
+Each instrument includes:
+
+| Field | Description |
+|-------|-------------|
+| `symbol` | Trading symbol |
+| `name` | Human-readable name |
+| `description` | Instrument description |
+| `state` | Current trading state |
+| `priceScale` | Price decimal places |
+| `qtyScale` | Quantity decimal places |
+| `minQty` | Minimum order quantity |
+| `maxQty` | Maximum order quantity |
+
+## Instrument States
+
+| State | Description |
+|-------|-------------|
+| `OPEN` | Trading active |
+| `PREOPEN` | Pre-open (orders accepted, no matching) |
+| `SUSPENDED` | Trading suspended |
+| `HALTED` | Trading halted |
+| `EXPIRED` | Instrument expired |
+| `TERMINATED` | Instrument terminated |
+
+## Price Scale
+
+Prices in the API are represented as integers. Divide by `priceScale` to get decimal prices:
+
+```python
+decimal_price = int_price / instrument.price_scale
+# Example: 52500 / 1000 = $52.50
+```
+
+<Tip>
+**Cache Reference Data**
+
+Instrument metadata changes infrequently. Cache reference data locally and refresh periodically (e.g., daily or on startup) rather than fetching for every request.
+</Tip>
+
+## Usage Notes
+
+- Reference data is static during a trading session
+- Use `/v1/refdata/instruments` to get `priceScale` for price conversions
+- Instrument states change based on market schedule

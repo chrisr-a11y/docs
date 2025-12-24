@@ -11,6 +11,30 @@ The Polymarket US REST API provides programmatic access to trading, account mana
 This documentation is specific to Polymarket US. The international version can be found [here](https://docs.polymarket.com/).
 </Note>
 
+## Streaming First Architecture
+
+<Warning>
+**Use gRPC Streaming for Real-Time Data**
+
+For production applications requiring continuous data updates, use the [gRPC Streaming APIs](/streaming-endpoints/grpc-overview) instead of polling REST endpoints. Streaming provides:
+
+- **Real-time updates** as they happen
+- **No rate limiting** concerns
+- **Lower latency** than polling
+- **Reduced infrastructure load**
+
+REST APIs are subject to rate limits and are best suited for one-time queries, historical data, and administrative operations.
+</Warning>
+
+| Use Case | Recommended API |
+|----------|-----------------|
+| Real-time market data | [gRPC Market Data Stream](/streaming-endpoints/market-data-stream) |
+| Real-time order/trade updates | [gRPC Order Stream](/streaming-endpoints/order-stream) |
+| Order entry/cancellation | REST Trading API |
+| Historical data queries | REST Report API |
+| Account management | REST Accounts API |
+| KYC and payments | REST ISV Partner APIs |
+
 ## Base URLs
 
 | Environment | Base URL |
@@ -39,29 +63,35 @@ See the [Authentication Setup Guide](/getting-started/authentication) for comple
 
 ## API Groups
 
-### Trading
+### Trading APIs
+
+For direct trading operations. Used by all partners.
+
+| Endpoint Group | Description | Streaming Alternative |
+|----------------|-------------|----------------------|
+| **Trading** | Insert, cancel, and replace orders | - |
+| **Report** | Search orders and trades, download history | [Order Stream](/streaming-endpoints/order-stream) |
+| **Positions** | Query account balances and positions | - |
+| **Reference Data** | List instruments, symbols, and metadata | - |
+| **Order Book** | Get order book depth and best bid/offer | [Market Data Stream](/streaming-endpoints/market-data-stream) |
+| **Drop Copy** | Execution feed and trade capture | [Order Stream](/streaming-endpoints/order-stream) |
+
+### ISV Partner APIs
+
+For partners building retail trading platforms. These APIs manage end-users and their accounts.
 
 | Endpoint Group | Description |
 |----------------|-------------|
-| **Trading** | Insert, cancel, and replace orders |
-| **Report** | Search orders and trades, download history |
-| **Positions** | Query account balances and positions |
+| **Accounts** | User and account management |
+| **KYC** | Identity verification workflow |
+| **Payments** | Aeropay (ACH) and Checkout.com (card) funding |
 
-### Market Data
+<Info>
+**Which APIs do I need?**
 
-| Endpoint Group | Description |
-|----------------|-------------|
-| **Reference Data** | List instruments, symbols, and metadata |
-| **Order Book** | Get order book depth and best bid/offer |
-| **Drop Copy** | Execution feed and trade capture |
-
-### Account & Funding
-
-| Endpoint Group | Description |
-|----------------|-------------|
-| **Accounts** | Get user and account information |
-| **KYC** | Verification and referral codes |
-| **Payments** | Aeropay (ACH) and Checkout.com (card) |
+- **Direct trading partners**: Use Trading APIs only
+- **ISV partners (retail platforms)**: Use both Trading APIs and ISV Partner APIs
+</Info>
 
 ## Request Format
 

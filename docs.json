@@ -43,6 +43,12 @@
         "tab": "REST API",
         "groups": [
           {
+            "group": "Overview",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
             "group": "Health",
             "openapi": {
               "source": "/api-reference/oapi-schemas/health-schema.json",
@@ -50,11 +56,10 @@
             }
           },
           {
-            "group": "Accounts",
-            "openapi": {
-              "source": "/api-reference/oapi-schemas/accounts-schema.json",
-              "directory": "api-reference"
-            }
+            "group": "Trading APIs",
+            "pages": [
+              "api-reference/trading/overview"
+            ]
           },
           {
             "group": "Trading",
@@ -65,6 +70,12 @@
           },
           {
             "group": "Report",
+            "pages": [
+              "api-reference/report/overview"
+            ]
+          },
+          {
+            "group": "Orders & Trades",
             "openapi": {
               "source": "/api-reference/oapi-schemas/report-schema.json",
               "directory": "api-reference"
@@ -72,13 +83,38 @@
           },
           {
             "group": "Positions",
+            "pages": [
+              "api-reference/positions/overview"
+            ]
+          },
+          {
+            "group": "Account Positions",
             "openapi": {
               "source": "/api-reference/oapi-schemas/positions-schema.json",
               "directory": "api-reference"
             }
           },
           {
+            "group": "Market Data",
+            "pages": [
+              "api-reference/orderbook/overview"
+            ]
+          },
+          {
+            "group": "Order Book",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/orderbook-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
             "group": "Reference Data",
+            "pages": [
+              "api-reference/refdata/overview"
+            ]
+          },
+          {
+            "group": "Instruments & Symbols",
             "openapi": {
               "source": "/api-reference/oapi-schemas/refdata-schema.json",
               "directory": "api-reference"
@@ -86,15 +122,27 @@
           },
           {
             "group": "Drop Copy",
+            "pages": [
+              "api-reference/dropcopy/overview"
+            ]
+          },
+          {
+            "group": "Execution Feed",
             "openapi": {
               "source": "/api-reference/oapi-schemas/dropcopy-schema.json",
               "directory": "api-reference"
             }
           },
           {
-            "group": "Order Book",
+            "group": "ISV Partner APIs",
+            "pages": [
+              "api-reference/accounts/overview"
+            ]
+          },
+          {
+            "group": "Accounts",
             "openapi": {
-              "source": "/api-reference/oapi-schemas/orderbook-schema.json",
+              "source": "/api-reference/oapi-schemas/accounts-schema.json",
               "directory": "api-reference"
             }
           },

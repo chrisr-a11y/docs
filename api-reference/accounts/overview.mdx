@@ -1,0 +1,51 @@
+---
+title: 'Accounts API Overview'
+description: 'User and account management for ISV partners'
+---
+
+# Accounts API
+
+The Accounts API provides user and account management capabilities for ISV partners managing retail traders.
+
+<Info>
+**ISV Partner API**
+
+This API is primarily used by ISV partners (Independent Software Vendors) who are building trading platforms for retail users. Direct trading partners typically don't need these endpoints.
+</Info>
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/accounts/whoami` | Get current user info |
+| `GET` | `/v1/accounts` | List accounts |
+| `POST` | `/v1/accounts` | Create account |
+| `GET` | `/v1/accounts/{id}` | Get account details |
+
+## Account Hierarchy
+
+```
+ISV Partner (Firm)
+└── Users
+    └── Accounts
+        └── Positions & Orders
+```
+
+- **Firm**: Your ISV organization
+- **Users**: Individual retail traders on your platform
+- **Accounts**: Trading accounts belonging to users
+
+## User vs Account
+
+| Entity | Description |
+|--------|-------------|
+| **User** | A person with identity (KYC verified) |
+| **Account** | A trading account with balances and positions |
+
+A user can have multiple accounts (e.g., for different strategies or purposes).
+
+## Common Use Cases
+
+1. **User onboarding** - Create accounts for new users after KYC
+2. **Account lookup** - Get account details for display
+3. **Multi-account management** - List and manage user accounts

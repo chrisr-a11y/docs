@@ -1,0 +1,56 @@
+---
+title: 'Drop Copy API Overview'
+description: 'Execution feed for trade capture and reporting'
+---
+
+# Drop Copy API
+
+<Warning>
+**Prefer Streaming for Real-Time Executions**
+
+This polling API is subject to rate limits. For production applications that need real-time execution notifications, use the [gRPC Order Stream](/streaming-endpoints/order-stream) instead. The streaming API provides execution reports as they happen with lower latency.
+</Warning>
+
+The Drop Copy API provides access to execution data for trade capture and reporting purposes.
+
+## What is Drop Copy?
+
+Drop Copy is a post-trade feed that provides a copy of all executions for your accounts. It's commonly used for:
+
+- Trade capture systems
+- Risk management
+- Compliance monitoring
+- Reconciliation
+
+## When to Use
+
+| Use Case | Recommended API |
+|----------|-----------------|
+| Real-time execution notifications | [gRPC Order Stream](/streaming-endpoints/order-stream) |
+| Real-time risk monitoring | [gRPC Order Stream](/streaming-endpoints/order-stream) |
+| Historical execution queries | REST Drop Copy (this API) |
+| End-of-day reconciliation | REST Drop Copy (this API) |
+
+<Tip>
+**Streaming First Architecture**
+
+For real-time trade capture and risk monitoring, always use the gRPC Order Stream. The streaming API provides:
+- Immediate execution notifications
+- Full execution details including fills and rejects
+- No polling overhead or rate limit concerns
+
+Use the REST Drop Copy API only for historical queries and batch reconciliation.
+</Tip>
+
+## Execution Types
+
+The drop copy feed includes all execution types:
+
+| Type | Description |
+|------|-------------|
+| `NEW` | Order accepted |
+| `PARTIAL_FILL` | Partial execution |
+| `FILL` | Complete execution |
+| `CANCELED` | Order canceled |
+| `REJECTED` | Order rejected |
+| `REPLACED` | Order modified |

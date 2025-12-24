@@ -1,0 +1,52 @@
+---
+title: 'Positions API Overview'
+description: 'Query account balances and positions'
+---
+
+# Positions API
+
+The Positions API provides access to account balances and open positions.
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/positions` | Get current positions |
+| `GET` | `/v1/positions/balances` | Get account balances |
+
+## Position Data
+
+Each position includes:
+
+| Field | Description |
+|-------|-------------|
+| `symbol` | Trading instrument |
+| `account` | Trading account |
+| `qty` | Current position quantity |
+| `avgPx` | Average entry price |
+| `marketValue` | Current market value |
+| `unrealizedPnl` | Unrealized profit/loss |
+
+## Balance Data
+
+Account balances include:
+
+| Field | Description |
+|-------|-------------|
+| `account` | Account identifier |
+| `currency` | Currency code |
+| `available` | Available balance for trading |
+| `reserved` | Balance reserved for open orders |
+| `total` | Total balance |
+
+## Usage Notes
+
+<Info>
+**Position Updates After Trades**
+
+Position data is updated after each trade execution. For real-time trade notifications that affect positions, use the [gRPC Order Stream](/streaming-endpoints/order-stream).
+</Info>
+
+- Positions are aggregated by symbol and account
+- Balances reflect current available and reserved amounts
+- Use the Order Stream for real-time execution updates that affect positions
