@@ -113,8 +113,10 @@ curl -X POST "https://api.polymarketexchange.com/rest/api/v1/kyc/start" \
 
 ### Check Status
 
+Use the `user_id` you provided in the start request:
+
 ```bash
-curl -X GET "https://api.polymarketexchange.com/rest/api/v1/kyc/status?externalId=ext_123" \
+curl -X GET "https://api.polymarketexchange.com/rest/api/v1/kyc/status?externalId=user_123" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
@@ -124,10 +126,10 @@ The status response contains:
 
 | Field | Description |
 |-------|-------------|
-| `decision` | Final decision (approved, denied, pending) |
-| `status` | Current status in the workflow |
-| `subStatus` | Detailed sub-status |
-| `externalId` | External reference ID |
+| `decision` | Final decision: `ACCEPT`, `REJECT`, `REVIEW`, or empty (not started) |
+| `status` | Current status: `NOT_STARTED`, `OPEN`, `ON_HOLD`, `CLOSED` |
+| `subStatus` | Detailed sub-status (e.g., `Document Request Initiated`) |
+| `externalId` | The user_id you provided |
 
 ## Document Verification (DocV)
 

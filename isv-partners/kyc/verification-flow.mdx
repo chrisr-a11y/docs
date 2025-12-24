@@ -71,13 +71,15 @@ POST /v1/kyc/start
 
 ### Response
 
+When document verification is required:
+
 ```json
 {
   "status": {
-    "decision": "pending",
-    "status": "in_review",
-    "subStatus": "document_required",
-    "externalId": "ext_abc123"
+    "decision": "REVIEW",
+    "status": "ON_HOLD",
+    "subStatus": "Document Request Initiated",
+    "externalId": "user_123"
   },
   "docv": {
     "docvTransactionToken": "token_xyz",
@@ -97,10 +99,10 @@ If the identity can be verified immediately:
 ```json
 {
   "status": {
-    "decision": "approved",
-    "status": "complete",
+    "decision": "ACCEPT",
+    "status": "CLOSED",
     "subStatus": "",
-    "externalId": "ext_abc123"
+    "externalId": "user_123"
   }
 }
 ```
@@ -123,19 +125,44 @@ If additional documents are needed, the response includes DocV details:
 
 ### Checking Status
 
-Poll the status endpoint to track verification progress:
+Poll the status endpoint to track verification progress. Use the `user_id` you provided in the start request:
 
 ```bash
-GET /v1/kyc/status?externalId=ext_abc123
+GET /v1/kyc/status?externalId=user_123
 ```
 
+**Response when KYC is pending (documents required):**
 ```json
 {
   "status": {
-    "decision": "pending",
-    "status": "document_review",
-    "subStatus": "awaiting_review",
-    "externalId": "ext_abc123"
+    "decision": "REVIEW",
+    "status": "ON_HOLD",
+    "subStatus": "Document Request Initiated",
+    "externalId": "user_123"
+  }
+}
+```
+
+**Response when KYC is approved:**
+```json
+{
+  "status": {
+    "decision": "ACCEPT",
+    "status": "CLOSED",
+    "subStatus": "",
+    "externalId": "user_123"
+  }
+}
+```
+
+**Response when user hasn't started KYC:**
+```json
+{
+  "status": {
+    "decision": "",
+    "status": "NOT_STARTED",
+    "subStatus": "",
+    "externalId": "user_123"
   }
 }
 ```
@@ -146,19 +173,27 @@ GET /v1/kyc/status?externalId=ext_abc123
 
 | Value | Description |
 |-------|-------------|
-| `pending` | Verification in progress |
-| `approved` | Identity verified successfully |
-| `denied` | Verification failed |
+| `ACCEPT` | Identity verified successfully |
+| `REJECT` | Verification failed |
+| `REVIEW` | Verification in progress, may require action |
+| *(empty)* | KYC not started |
 
 ### Status
 
 | Value | Description |
 |-------|-------------|
-| `initiated` | Verification started |
-| `in_review` | Being reviewed |
-| `document_required` | Documents needed |
-| `document_review` | Documents being reviewed |
-| `complete` | Process complete |
+| `NOT_STARTED` | User has not initiated KYC |
+| `OPEN` | Verification in progress with Socure |
+| `ON_HOLD` | Waiting for user to upload documents (DocV) |
+| `CLOSED` | Final decision reached (check `decision` field) |
+
+### SubStatus
+
+| Value | Description |
+|-------|-------------|
+| `pending` | Waiting for Socure decision |
+| `Document Request Initiated` | User must complete document verification |
+| *(empty)* | No additional status info |
 
 ## Integration Flow
 
