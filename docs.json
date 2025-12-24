@@ -205,6 +205,41 @@
         ]
       },
       {
+        "tab": "ISV Partner Guide",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "isv-partners/overview"
+            ]
+          },
+          {
+            "group": "Accounts",
+            "pages": [
+              "isv-partners/accounts"
+            ]
+          },
+          {
+            "group": "KYC Verification",
+            "pages": [
+              "isv-partners/kyc/overview",
+              "isv-partners/kyc/prefill-flow",
+              "isv-partners/kyc/verification-flow",
+              "isv-partners/kyc/referral-codes"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "isv-partners/payments/overview",
+              "isv-partners/payments/aeropay-guide",
+              "isv-partners/payments/checkout-guide",
+              "isv-partners/payments/funding-management"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "FIX API",
         "pages": [
           "/api-reference/fix-api/fix-overview",

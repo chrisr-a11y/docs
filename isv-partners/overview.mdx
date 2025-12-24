@@ -1,0 +1,143 @@
+---
+title: 'ISV Partner Guide'
+description: 'Guide for Independent Software Vendors building retail trading platforms'
+---
+
+# ISV Partner Guide
+
+This guide is for **Independent Software Vendors (ISVs)** building retail trading platforms on top of Polymarket US. If you're building a platform that onboards end-users for trading, this section is for you.
+
+<Info>
+**What is an ISV?**
+
+An ISV (Independent Software Vendor) is a partner that builds a consumer-facing trading application. ISVs manage their own users, handle KYC verification, process deposits and withdrawals, and execute trades on behalf of their customers.
+</Info>
+
+## Partner Types
+
+Polymarket US supports two types of partners:
+
+| Partner Type | Description | APIs Used |
+|--------------|-------------|-----------|
+| **Direct Trading** | Institutional or proprietary traders who trade their own capital | Trading APIs only |
+| **ISV Partner** | Retail platforms onboarding end-users | Trading APIs + ISV Partner APIs |
+
+## User Lifecycle
+
+ISV partners manage the complete user lifecycle from signup to trading:
+
+```mermaid
+graph LR
+    A[Signup] --> B[KYC]
+    B --> C[Funding]
+    C --> D[Trading]
+    D --> E[Positions]
+    E --> F[Withdrawal]
+```
+
+### 1. Signup & Account Creation
+
+Create user accounts in the Polymarket system.
+
+- **API**: [Accounts API](/isv-partners/accounts)
+- **Key endpoint**: `POST /v1/accounts`
+
+### 2. Identity Verification (KYC)
+
+Verify user identity using Polymarket's KYC workflow. Optional prefill reduces friction.
+
+- **API**: [KYC API](/isv-partners/kyc/overview)
+- **Guides**: [Prefill Flow](/isv-partners/kyc/prefill-flow) | [Verification Flow](/isv-partners/kyc/verification-flow)
+- **Key endpoints**:
+  - `POST /v1/kyc/prefill` - Start prefill (optional)
+  - `POST /v1/kyc/start` - Start verification
+  - `GET /v1/kyc/status` - Check status
+
+### 3. Funding
+
+Link bank accounts or cards and process deposits.
+
+- **API**: [Payments API](/isv-partners/payments/overview)
+- **Guides**: [Aeropay (ACH)](/isv-partners/payments/aeropay-guide) | [Checkout (Cards)](/isv-partners/payments/checkout-guide)
+- **Key endpoints**:
+  - `POST /v1/aeropay/initialize` - Link bank account
+  - `POST /v1/checkout/deposits` - Process card deposit
+
+### 4. Trading
+
+Once funded, users can place orders.
+
+- **API**: [Trading API](/api-reference/trading/overview)
+- **Key endpoints**:
+  - `POST /v1/trading/orders` - Insert order
+  - `POST /v1/trading/orders/cancel` - Cancel order
+
+### 5. Positions & Withdrawals
+
+Track positions and process withdrawals (following FIFO rules).
+
+- **API**: [Positions API](/api-reference/positions/overview) | [Funding Management](/isv-partners/payments/funding-management)
+- **Key endpoints**:
+  - `GET /v1/positions` - Get positions
+  - `POST /v1/aeropay/withdrawals` - Process withdrawal
+
+## Complete Onboarding Flow
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant I as ISV Platform
+    participant P as Polymarket US
+
+    U->>I: Sign up
+    I->>P: Create account
+    P-->>I: Account created
+
+    U->>I: Start KYC
+    I->>P: POST /v1/kyc/prefill (optional)
+    P-->>I: OTP sent
+    U->>I: Enter OTP
+    I->>P: POST /v1/kyc/prefill/otp
+    P-->>I: Prefilled data
+    I->>P: POST /v1/kyc/start
+    P-->>I: Verification started
+
+    loop Poll for status
+        I->>P: GET /v1/kyc/status
+        P-->>I: Status (pending/approved)
+    end
+
+    U->>I: Link bank account
+    I->>P: POST /v1/aeropay/initialize
+    P-->>I: SDK credentials
+    U->>I: Complete bank linking
+
+    U->>I: Deposit $100
+    I->>P: POST /v1/aeropay/deposits
+    P-->>I: Deposit confirmed
+
+    U->>I: Place trade
+    I->>P: POST /v1/trading/orders
+    P-->>I: Order confirmed
+```
+
+## Getting Started
+
+<CardGroup cols={2}>
+  <Card title="Accounts API" icon="user" href="/isv-partners/accounts">
+    Create and manage user accounts
+  </Card>
+  <Card title="KYC Verification" icon="id-card" href="/isv-partners/kyc/overview">
+    Identity verification workflow
+  </Card>
+  <Card title="Payments" icon="credit-card" href="/isv-partners/payments/overview">
+    Bank and card payment processing
+  </Card>
+  <Card title="Referral Codes" icon="ticket" href="/isv-partners/kyc/referral-codes">
+    Track user acquisition
+  </Card>
+</CardGroup>
+
+## Support
+
+For ISV integration questions, contact [fixapi@polymarket.com](mailto:fixapi@polymarket.com).
