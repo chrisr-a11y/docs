@@ -7,12 +7,12 @@ title: "VPC Connection"
 Connect to Polymarket Exchange's Trading API using AWS PrivateLink for secure, private network connectivity. This guide walks you through setting up a VPC Endpoint connection for both pre-production and production environments.
 
 <Note>
-Your AWS account must be whitelisted before you can establish a VPC connection. Contact Polymarket support to whitelist your account.
+Your AWS account must be allowlisted before you can establish a VPC connection. Contact Polymarket support to allowlist your account.
 </Note>
 
 ## Prerequisites
 
-- An AWS account whitelisted by Polymarket
+- An AWS account allowlisted by Polymarket
 - Appropriate permissions to create VPC Endpoints in AWS
 - Subnets in the required Availability Zones (see below)
 
@@ -20,8 +20,8 @@ Your AWS account must be whitelisted before you can establish a VPC connection. 
 
 We recommend using separate AWS accounts for pre-production and production environments to maintain clear isolation.
 
-- **By default**, your whitelisted AWS account has access to **Preprod only**
-- When ready for production, provide Polymarket with your production AWS Account ID for whitelisting
+- **By default**, your allowlisted AWS account has access to **Preprod only**
+- When ready for production, provide Polymarket with your production AWS Account ID for allowlisting
 
 ## 2. Create VPC Endpoint
 
