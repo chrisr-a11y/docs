@@ -132,37 +132,6 @@
               "source": "/api-reference/oapi-schemas/dropcopy-schema.json",
               "directory": "api-reference"
             }
-          },
-          {
-            "group": "ISV Partner APIs",
-            "pages": [
-              "api-reference/accounts/overview"
-            ]
-          },
-          {
-            "group": "Accounts",
-            "openapi": {
-              "source": "/api-reference/oapi-schemas/accounts-schema.json",
-              "directory": "api-reference"
-            }
-          },
-          {
-            "group": "KYC",
-            "pages": [
-              "api-reference/kyc/overview",
-              "api-reference/kyc/prefill-flow",
-              "api-reference/kyc/verification-flow",
-              "api-reference/kyc/referral-codes"
-            ]
-          },
-          {
-            "group": "Payments",
-            "pages": [
-              "api-reference/payments/overview",
-              "api-reference/payments/aeropay-guide",
-              "api-reference/payments/checkout-guide",
-              "api-reference/payments/funding-management"
-            ]
           }
         ]
       },
