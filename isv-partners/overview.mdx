@@ -13,30 +13,10 @@ This guide is for **Independent Software Vendors (ISVs)** building retail tradin
 An ISV (Independent Software Vendor) is a partner that builds a consumer-facing trading application. ISVs manage their own users, handle KYC verification, process deposits and withdrawals, and execute trades on behalf of their customers.
 </Info>
 
-## Onboarding Checklist
+## Before You Start
 
-Before you can access the API, complete these onboarding steps:
-
-<Steps>
-  <Step title="Generate your API keys">
-    ```bash
-    openssl genrsa -out my_private_key.pem 2048
-    openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
-    ```
-    <Warning>
-    **Keep your private key secret!** Store it securely with `chmod 600 my_private_key.pem`. Never share it with anyone.
-    </Warning>
-  </Step>
-  <Step title="Share your public key">
-    Create a Google Doc, paste the contents of `my_public_key.pem`, and share it with **fixapi@polymarket.com**
-  </Step>
-  <Step title="Receive your credentials">
-    We'll provide your Client ID and environment details
-  </Step>
-</Steps>
-
-<Card title="Full Authentication Setup" icon="key" href="/getting-started/authentication">
-  Complete guide with code examples for Python, Go, and cURL
+<Card title="Authentication Setup & Onboarding" icon="key" href="/getting-started/authentication">
+  Generate your API keys, share your public key with Polymarket, and get your credentials. Includes code examples for Python, Go, and cURL.
 </Card>
 
 ## Partner Types
