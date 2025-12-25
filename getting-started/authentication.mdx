@@ -83,21 +83,39 @@ openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
 
 ## Step 2: Submit Your Public Key
 
-Send us your **public key** (`my_public_key.pem` contents) along with:
+Share your public key with us securely:
 
-- Company name and ISV identifier
-- Technical contact information
-- IP addresses for API access
-- Environment requested (dev, preprod, production)
+<Steps>
+  <Step title="Create a Google Doc">
+    Create a new Google Document titled "**[Your Company Name] - Polymarket API Public Key**"
+  </Step>
+  <Step title="Copy your public key">
+    Copy the entire contents of `my_public_key.pem` into the document:
+    ```
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+    (several lines of base64 encoded data)
+    ...IDAQAB
+    -----END PUBLIC KEY-----
+    ```
+  </Step>
+  <Step title="Add your details">
+    Include in the same document:
+    - Company name and ISV identifier
+    - Technical contact name and email
+    - IP addresses for API access (static IPs required)
+    - Environment requested (dev, preprod, production)
+  </Step>
+  <Step title="Share with Polymarket">
+    Share the Google Doc with **fixapi@polymarket.com** (Editor access)
+  </Step>
+</Steps>
 
-Your public key looks like this:
-```
------BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
-(several lines of base64 encoded data)
-...IDAQAB
------END PUBLIC KEY-----
-```
+<Warning>
+**Only share your PUBLIC key!**
+
+The public key file starts with `-----BEGIN PUBLIC KEY-----`. Never share your private key (`-----BEGIN RSA PRIVATE KEY-----` or `-----BEGIN PRIVATE KEY-----`) with anyone, including Polymarket support.
+</Warning>
 
 ## Step 3: Authenticate with Private Key JWT
 
