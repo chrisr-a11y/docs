@@ -104,7 +104,7 @@ headers = {
 }
 
 # Check who you are
-response = requests.post(f"{BASE_URL}/v1/accounts/whoami", headers=headers, json={})
+response = requests.get(f"{BASE_URL}/v1/whoami", headers=headers)
 response.raise_for_status()
 print(f"Authenticated as: {response.json()}")
 ```
@@ -112,11 +112,11 @@ print(f"Authenticated as: {response.json()}")
 Expected response:
 ```json
 {
-  "user": {
-    "id": "usr_abc123",
-    "name": "Your Company",
-    "firm_id": "firm_xyz"
-  }
+  "user": "firms/ISV-Participant-Acme/users/admin",
+  "userDisplayName": "Your Company",
+  "firm": "ISV-Participant-Acme",
+  "firmDisplayName": "Acme Trading",
+  "firmType": "FIRM_TYPE_PARTICIPANT"
 }
 ```
 
@@ -321,7 +321,7 @@ def main():
 
     # 2. Verify identity
     print("\n2. Checking identity...")
-    resp = requests.post(f"{BASE_URL}/v1/accounts/whoami", headers=headers, json={})
+    resp = requests.get(f"{BASE_URL}/v1/whoami", headers=headers)
     resp.raise_for_status()
     print(f"   Logged in as: {resp.json()}")
 

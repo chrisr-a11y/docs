@@ -1,51 +1,87 @@
 ---
-title: 'Accounts API Overview'
-description: 'User and account management for ISV partners'
+title: 'Accounts API'
+description: 'Trading account management for ISV partners'
 ---
 
 # Accounts API
 
-The Accounts API provides user and account management capabilities for ISV partners managing retail traders.
+The Accounts API provides trading account information for ISV partners. Accounts are the containers for positions, balances, and order history.
 
 <Info>
-**ISV Partner API**
+**Automatic Account Creation**
 
-This API is primarily used by ISV partners (Independent Software Vendors) who are building trading platforms for retail users. Direct trading partners typically don't need these endpoints.
+Trading accounts are created automatically when a user's KYC verification is approved. There is no manual account creation endpoint. See [KYC Verification](/isv-partners/kyc/overview) for details on the user onboarding flow.
 </Info>
 
 ## Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/v1/accounts/whoami` | Get current user info |
-| `GET` | `/v1/accounts` | List accounts |
-| `POST` | `/v1/accounts` | Create account |
-| `GET` | `/v1/accounts/{id}` | Get account details |
+| `GET` | `/v1/accounts` | List trading accounts |
+
+<Note>
+For user identity information, see the [Users API](/isv-partners/users) which provides `GET /v1/whoami` and `GET /v1/users`.
+</Note>
 
 ## Account Hierarchy
 
 ```
 ISV Partner (Firm)
-└── Users
-    └── Accounts
+└── Users (created via KYC)
+    └── Accounts (auto-provisioned)
         └── Positions & Orders
 ```
 
 - **Firm**: Your ISV organization
-- **Users**: Individual retail traders on your platform
-- **Accounts**: Trading accounts belonging to users
+- **Users**: Individual retail traders (created when KYC is approved)
+- **Accounts**: Trading accounts (automatically provisioned with user)
+
+## List Accounts
+
+Returns the trading accounts available to the authenticated user.
+
+### Request
+
+```bash
+GET /v1/accounts
+```
+
+Optional query parameter:
+- `user` - Filter by user ID
+
+### Response
+
+```json
+{
+  "accounts": [
+    "firms/ISV-Participant-Acme/accounts/user-123-trading",
+    "firms/ISV-Participant-Acme/accounts/user-456-trading"
+  ],
+  "displayNames": [
+    "John's Trading Account",
+    "Jane's Trading Account"
+  ]
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `accounts` | array | EP3 account identifiers |
+| `displayNames` | array | Human-readable account names (parallel array) |
 
 ## User vs Account
 
 | Entity | Description |
 |--------|-------------|
-| **User** | A person with identity (KYC verified) |
-| **Account** | A trading account with balances and positions |
+| **User** | A person with identity (KYC verified). Created automatically on KYC approval. |
+| **Account** | A trading account with balances and positions. Auto-provisioned with user. |
 
-A user can have multiple accounts (e.g., for different strategies or purposes).
+A user can have multiple accounts for different purposes (e.g., separate trading strategies).
 
-## Common Use Cases
+## Related APIs
 
-1. **User onboarding** - Create accounts for new users after KYC
-2. **Account lookup** - Get account details for display
-3. **Multi-account management** - List and manage user accounts
+- [Users API](/isv-partners/users) - Get user identity and list users
+- [KYC Verification](/isv-partners/kyc/overview) - User onboarding (creates users & accounts)
+- [Positions API](/api-reference/positions/overview) - Check account balances and positions

@@ -183,8 +183,9 @@
             ]
           },
           {
-            "group": "Accounts",
+            "group": "Users & Accounts",
             "pages": [
+              "isv-partners/users",
               "isv-partners/accounts"
             ]
           },

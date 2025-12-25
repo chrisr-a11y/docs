@@ -107,6 +107,17 @@ If the identity can be verified immediately:
 }
 ```
 
+<Info>
+**Automatic User Provisioning**
+
+When a user receives `decision: "ACCEPT"`, the system automatically:
+1. Creates an EP3 participant for the user
+2. Provisions a trading account
+3. Makes the user ready for funding and trading
+
+There is no separate account creation step required. The user can proceed directly to [funding](/isv-partners/payments/overview) after KYC approval.
+</Info>
+
 ### Document Verification Required
 
 If additional documents are needed, the response includes DocV details:

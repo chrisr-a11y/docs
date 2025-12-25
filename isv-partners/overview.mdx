@@ -24,36 +24,33 @@ Polymarket US supports two types of partners:
 
 ## User Lifecycle
 
-ISV partners manage the complete user lifecycle from signup to trading:
+ISV partners manage the complete user lifecycle from KYC verification to trading:
 
 ```mermaid
 graph LR
-    A[Signup] --> B[KYC]
-    B --> C[Funding]
-    C --> D[Trading]
-    D --> E[Positions]
-    E --> F[Withdrawal]
+    A[KYC Verification] --> B{Approved?}
+    B -->|Yes| C[User Auto-Created]
+    C --> D[Funding]
+    D --> E[Trading]
+    E --> F[Positions]
+    F --> G[Withdrawal]
+    B -->|No| H[Rejected]
 ```
 
-### 1. Signup & Account Creation
+<Info>
+**Automatic User Creation**
 
-Create user accounts in the Polymarket system.
+Users are created automatically when KYC verification is approved. There is no separate account creation step - the system provisions EP3 trading resources as part of the KYC approval process.
+</Info>
 
-- **API**: [Accounts API](/isv-partners/accounts)
-- **Key endpoint**: `POST /v1/accounts`
+### 1. Identity Verification (KYC)
 
-### 2. Identity Verification (KYC)
-
-Verify user identity using Polymarket's KYC workflow. Optional prefill reduces friction.
+Start by verifying user identity. When approved, the user is automatically provisioned for trading.
 
 - **API**: [KYC API](/isv-partners/kyc/overview)
-- **Guides**: [Prefill Flow](/isv-partners/kyc/prefill-flow) | [Verification Flow](/isv-partners/kyc/verification-flow)
-- **Key endpoints**:
-  - `POST /v1/kyc/prefill` - Start prefill (optional)
-  - `POST /v1/kyc/start` - Start verification
-  - `GET /v1/kyc/status` - Check status
+- **Key endpoint**: `POST /v1/kyc/start`
 
-### 3. Funding
+### 2. Funding
 
 Link bank accounts or cards and process deposits.
 
@@ -63,7 +60,7 @@ Link bank accounts or cards and process deposits.
   - `POST /v1/aeropay/initialize` - Link bank account
   - `POST /v1/checkout/deposits` - Process card deposit
 
-### 4. Trading
+### 3. Trading
 
 Once funded, users can place orders.
 
@@ -72,7 +69,7 @@ Once funded, users can place orders.
   - `POST /v1/trading/orders` - Insert order
   - `POST /v1/trading/orders/cancel` - Cancel order
 
-### 5. Positions & Withdrawals
+### 4. Positions & Withdrawals
 
 Track positions and process withdrawals (following FIFO rules).
 
@@ -89,11 +86,9 @@ sequenceDiagram
     participant I as ISV Platform
     participant P as Polymarket US
 
-    U->>I: Sign up
-    I->>P: Create account
-    P-->>I: Account created
+    U->>I: Sign up on platform
 
-    U->>I: Start KYC
+    Note over I,P: KYC Verification (user auto-created on approval)
     I->>P: POST /v1/kyc/prefill (optional)
     P-->>I: OTP sent
     U->>I: Enter OTP
@@ -106,6 +101,8 @@ sequenceDiagram
         I->>P: GET /v1/kyc/status
         P-->>I: Status (pending/approved)
     end
+
+    Note over P: User & Account auto-provisioned
 
     U->>I: Link bank account
     I->>P: POST /v1/aeropay/initialize
@@ -124,8 +121,8 @@ sequenceDiagram
 ## Getting Started
 
 <CardGroup cols={2}>
-  <Card title="Accounts API" icon="user" href="/isv-partners/accounts">
-    Create and manage user accounts
+  <Card title="Users API" icon="user" href="/isv-partners/users">
+    List and manage users
   </Card>
   <Card title="KYC Verification" icon="id-card" href="/isv-partners/kyc/overview">
     Identity verification workflow
