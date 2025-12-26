@@ -1,0 +1,26 @@
+---
+title: "FAQ"
+description: "Frequently asked questions about Polymarket Exchange API"
+---
+
+<AccordionGroup>
+  <Accordion title="Does /search-trades return my trades only, or all exchange trades?">
+    **`/search-trades` returns only trades for your authenticated user**, not exchange-wide trades.
+
+    The endpoint uses participant-scoped authentication, meaning:
+
+    1. **Per-User Token**: Your Auth0 JWT is exchanged for a participant token scoped to your `participant_id`
+    2. **Automatic Filtering**: The exchange automatically filters results to trades where you are a party (buyer or seller)
+    3. **No Cross-User Access**: You cannot see other participants' trades
+
+    The same scoping applies to related endpoints:
+    - `/search-orders` - only your orders
+    - `/search-executions` - only your executions
+    - `/positions/list` - only your positions
+    - `/accounts/balance` - only your account balances
+
+    <Note>
+    If you need exchange-wide trade data (e.g., for market analysis), use the public market data endpoints or the market data stream instead.
+    </Note>
+  </Accordion>
+</AccordionGroup>

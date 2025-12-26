@@ -34,7 +34,8 @@
               "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/health-check",
-              "getting-started/common-pitfalls"
+              "getting-started/common-pitfalls",
+              "getting-started/faq"
             ]
           }
         ]
