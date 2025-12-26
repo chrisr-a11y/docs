@@ -28,7 +28,6 @@
             "pages": [
               "getting-started/getting-access",
               "getting-started/onboarding",
-              "getting-started/onboarding-template",
               "getting-started/authentication",
               "getting-started/quickstart",
               "getting-started/environments",
@@ -145,14 +144,9 @@
             "pages": [
               "grpc-api/overview"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "gRPC Streaming",
-        "groups": [
+          },
           {
-            "group": "Getting Started",
+            "group": "Streaming",
             "pages": [
               "streaming-endpoints/grpc-overview",
               "streaming-endpoints/getting-started",
@@ -176,12 +170,30 @@
         ]
       },
       {
-        "tab": "ISV Partner Guide",
+        "tab": "FIX API",
+        "pages": [
+          "/api-reference/fix-api/fix-overview",
+          "/api-reference/fix-api/fix-component-definitions",
+          "/api-reference/fix-api/fix-session-management",
+          "/api-reference/fix-api/fix-order-entry-and-matching",
+          "/api-reference/fix-api/fix-market-data",
+          "/api-reference/fix-api/fix-api-reference-data",
+          "/api-reference/fix-api/fix-appendix-a-fix-data-types"
+        ]
+      },
+      {
+        "tab": "Partner Guide",
         "groups": [
           {
             "group": "Overview",
             "pages": [
               "isv-partners/overview"
+            ]
+          },
+          {
+            "group": "Onboarding",
+            "pages": [
+              "isv-partners/onboarding-template"
             ]
           },
           {
@@ -212,18 +224,6 @@
         ]
       },
       {
-        "tab": "FIX API",
-        "pages": [
-          "/api-reference/fix-api/fix-overview",
-          "/api-reference/fix-api/fix-component-definitions",
-          "/api-reference/fix-api/fix-session-management",
-          "/api-reference/fix-api/fix-order-entry-and-matching",
-          "/api-reference/fix-api/fix-market-data",
-          "/api-reference/fix-api/fix-api-reference-data",
-          "/api-reference/fix-api/fix-appendix-a-fix-data-types"
-        ]
-      },
-      {
         "tab": "Changelog",
         "pages": ["changelog"]
       }
@@ -242,7 +242,7 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:fixapi@polymarket.com"
+        "href": "mailto:fix@qcex.com"
       }
     ]
   },

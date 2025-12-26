@@ -1,16 +1,16 @@
 ---
-title: 'ISV Partner Guide'
-description: 'Guide for Independent Software Vendors building retail trading platforms'
+title: 'Partner Guide'
+description: 'Guide for partners building retail trading platforms'
 ---
 
-# ISV Partner Guide
+# Partner Guide
 
-This guide is for **Independent Software Vendors (ISVs)** building retail trading platforms on top of Polymarket US. If you're building a platform that onboards end-users for trading, this section is for you.
+This guide is for **partners** building retail trading platforms on top of Polymarket US. If you're building a platform that onboards end-users for trading, this section is for you.
 
 <Info>
-**What is an ISV?**
+**What is a Partner?**
 
-An ISV (Independent Software Vendor) is a partner that builds a consumer-facing trading application. ISVs manage their own users, handle KYC verification, process deposits and withdrawals, and execute trades on behalf of their customers.
+A partner builds a consumer-facing trading application. Partners manage their own users, handle KYC verification, process deposits and withdrawals, and execute trades on behalf of their customers.
 </Info>
 
 ## Before You Start
@@ -26,11 +26,11 @@ Polymarket US supports two types of partners:
 | Partner Type | Description | APIs Used |
 |--------------|-------------|-----------|
 | **Direct Trading** | Institutional or proprietary traders who trade their own capital | Trading APIs only |
-| **ISV Partner** | Retail platforms onboarding end-users | Trading APIs + ISV Partner APIs |
+| **Retail Partner** | Retail platforms onboarding end-users | Trading APIs + Partner APIs |
 
 ## User Lifecycle
 
-ISV partners manage the complete user lifecycle from KYC verification to trading:
+Partners manage the complete user lifecycle from KYC verification to trading:
 
 ```mermaid
 graph LR
@@ -89,7 +89,7 @@ Track positions and process withdrawals (following FIFO rules).
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant I as ISV Platform
+    participant I as Partner Platform
     participant P as Polymarket US
 
     U->>I: Sign up on platform
@@ -143,4 +143,4 @@ sequenceDiagram
 
 ## Support
 
-For ISV integration questions, contact [fixapi@polymarket.com](mailto:fixapi@polymarket.com).
+For integration questions, contact [fix@qcex.com](mailto:fix@qcex.com).

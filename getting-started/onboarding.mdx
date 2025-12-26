@@ -28,9 +28,9 @@ openssl rsa -pubin -in acme_prod_public_key.pem -fingerprint -noout
 <Info>
 **Key Naming Convention**
 
-Replace `acme` with your firm name. Your keys should be named:
-- `{firmname}_preprod_public_key.pem` - for pre-production/testing
-- `{firmname}_prod_public_key.pem` - for production
+Replace `acme` with your company name. Your keys should be named:
+- `{companyname}_preprod_public_key.pem` - for pre-production/testing
+- `{companyname}_prod_public_key.pem` - for production
 
 Both environments require separate keys for security isolation.
 </Info>
@@ -40,9 +40,9 @@ Both environments require separate keys for security isolation.
 
 Your private key (`my_private_key.pem`) must NEVER be shared with anyone, including Polymarket. If your private key is compromised:
 
-- **Your ISV account is at risk of unauthorized access**
+- **Your account is at risk of unauthorized access**
 - **Contact Polymarket immediately to rotate your credentials**
-- Email: api-onboarding@qcex.com
+- Email: onboarding@polymarket.com
 
 Secure your private key:
 ```bash
@@ -59,11 +59,14 @@ Create a Google Drive folder for your onboarding submission:
 1. Create a new folder in Google Drive named: **"[Your Company Name] - Polymarket API Onboarding"**
 
 2. Add the following files to the folder:
-   - **Pre-production public key** (`{firmname}_preprod_public_key.pem`) - for testing
-   - **Production public key** (`{firmname}_prod_public_key.pem`) - for production
-   - **Onboarding document** - a Google Doc named **"{Firm Name} API Onboarding"** following the [Onboarding Template](/getting-started/onboarding-template)
+   - **Pre-production public key** (`{companyname}_preprod_public_key.pem`)
+   - **Production public key** (`{companyname}_prod_public_key.pem`)
+   - **Onboarding Document** (`{companyname} Onboarding Document.pdf`) - following the [Onboarding Template](/isv-partners/onboarding-template)
+   - **Participant Agreement** (`{companyname} Participant Agreement`)
+   - **Contact Form** (`{companyname} Contact Form`)
+   - **Corporate Application** (`{companyname} Corporate Application`) - *only if applying as a corporate entity*
 
-3. Share the folder with **Viewer** access to: `api-onboarding@qcex.com`
+3. Share the folder with **Viewer** access to: `onboarding@polymarket.com`
 
 <Note>
 **Upload the public key FILES, not the contents.** We need both actual `.pem` files in your shared folder - one for preprod and one for production.
@@ -87,8 +90,8 @@ During the verification call:
 
 Have both key fingerprints ready:
 ```bash
-openssl rsa -pubin -in {firmname}_preprod_public_key.pem -fingerprint -noout
-openssl rsa -pubin -in {firmname}_prod_public_key.pem -fingerprint -noout
+openssl rsa -pubin -in {companyname}_preprod_public_key.pem -fingerprint -noout
+openssl rsa -pubin -in {companyname}_prod_public_key.pem -fingerprint -noout
 ```
 </Warning>
 
@@ -106,14 +109,17 @@ After your key is verified and configured:
 
 - [ ] Generated RSA key pairs for both preprod and production
 - [ ] Secured both private keys with restricted permissions (`chmod 600`)
-- [ ] Created Google Drive folder with company name
-- [ ] Uploaded `{firmname}_preprod_public_key.pem` to folder
-- [ ] Uploaded `{firmname}_prod_public_key.pem` to folder
-- [ ] Created onboarding document from template
-- [ ] Shared folder with `api-onboarding@qcex.com`
+- [ ] Created Google Drive folder named "[Company Name] - Polymarket API Onboarding"
+- [ ] Uploaded `{companyname}_preprod_public_key.pem`
+- [ ] Uploaded `{companyname}_prod_public_key.pem`
+- [ ] Uploaded `{companyname} Onboarding Document.pdf`
+- [ ] Uploaded `{companyname} Participant Agreement`
+- [ ] Uploaded `{companyname} Contact Form`
+- [ ] Uploaded `{companyname} Corporate Application` (if corporate entity)
+- [ ] Shared folder with `onboarding@polymarket.com`
 - [ ] Completed verification call with Polymarket team (both fingerprints verified)
 - [ ] Received Client IDs for preprod and production environments
 
-<Card title="Onboarding Document Template" icon="file-lines" href="/getting-started/onboarding-template">
-  Copy this template into a Google Doc for your onboarding folder
+<Card title="Onboarding Document Template" icon="file-lines" href="/isv-partners/onboarding-template">
+  Use this template to create your onboarding document
 </Card>

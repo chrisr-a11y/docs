@@ -1,11 +1,11 @@
 ---
 title: 'Accounts API'
-description: 'Trading account management for ISV partners'
+description: 'Trading account management for partners'
 ---
 
 # Accounts API
 
-The Accounts API provides trading account information for ISV partners. Accounts are the containers for positions, balances, and order history.
+The Accounts API provides trading account information for partners. Accounts are the containers for positions, balances, and order history.
 
 <Info>
 **Automatic Account Creation**
@@ -26,13 +26,13 @@ For user identity information, see the [Users API](/isv-partners/users) which pr
 ## Account Hierarchy
 
 ```
-ISV Partner (Firm)
+Partner (Firm)
 └── Users (created via KYC)
     └── Accounts (auto-provisioned)
         └── Positions & Orders
 ```
 
-- **Firm**: Your ISV organization
+- **Firm**: Your partner organization
 - **Users**: Individual retail traders (created when KYC is approved)
 - **Accounts**: Trading accounts (automatically provisioned with user)
 

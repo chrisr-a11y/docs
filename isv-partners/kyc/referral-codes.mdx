@@ -1,11 +1,11 @@
 ---
 title: 'Referral Codes'
-description: 'Create and manage ISV referral codes'
+description: 'Create and manage partner referral codes'
 ---
 
 # Referral Codes
 
-Independent Software Vendors (ISVs) can create and manage referral codes for tracking user acquisitions and providing referral bonuses.
+Partners can create and manage referral codes for tracking user acquisitions and providing referral bonuses.
 
 ## Endpoints
 
@@ -37,7 +37,7 @@ POST /v1/kyc/referral-codes
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `userId` | string | Yes | ISV user ID creating the code |
+| `userId` | string | Yes | Partner user ID creating the code |
 | `referralCode` | string | Yes | The referral code string |
 | `category` | string | No | Category for grouping codes |
 
@@ -63,7 +63,7 @@ GET /v1/kyc/referral-codes?userId=isv_user_123&limit=20
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `userId` | string | No | Filter by ISV user ID |
+| `userId` | string | No | Filter by partner user ID |
 | `category` | string | No | Filter by category |
 | `code` | string | No | Filter by specific code |
 | `cursor` | string | No | Pagination cursor |
@@ -107,8 +107,8 @@ GET /v1/kyc/referral-codes?userId=isv_user_123&limit=20
 | Field | Type | Description |
 |-------|------|-------------|
 | `referralCode` | string | The referral code |
-| `userId` | string | ISV user who created the code |
-| `isvId` | string | ISV organization ID |
+| `userId` | string | Partner user who created the code |
+| `isvId` | string | Partner organization ID |
 | `usedCount` | string | Number of times code has been used |
 | `category` | string | Code category (if set) |
 
@@ -140,7 +140,7 @@ GET /v1/kyc/referral-codes/PARTNER2024
 | Field | Type | Description |
 |-------|------|-------------|
 | `isValid` | boolean | Whether the code is valid |
-| `userId` | string | ISV user who owns the code (if valid) |
+| `userId` | string | Partner user who owns the code (if valid) |
 | `amount` | object | Referral bonus amount (if applicable) |
 
 ### Invalid Code Response
