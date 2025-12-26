@@ -45,11 +45,21 @@ Copy this template into a Google Document in your shared onboarding folder.
 
 ## Public Key Information
 
+### Pre-Production Key (for testing)
+
 | Field | Value |
 |-------|-------|
-| **Public Key Filename** | (e.g., `acme_corp_public_key.pem`) |
+| **Public Key Filename** | `{firmname}_preprod_public_key.pem` |
 | **Key Generated Date** | |
-| **Key Fingerprint** | (output of `openssl rsa -pubin -in my_public_key.pem -fingerprint -noout`) |
+| **Key Fingerprint** | (output of `openssl rsa -pubin -in {firmname}_preprod_public_key.pem -fingerprint -noout`) |
+
+### Production Key
+
+| Field | Value |
+|-------|-------|
+| **Public Key Filename** | `{firmname}_prod_public_key.pem` |
+| **Key Generated Date** | |
+| **Key Fingerprint** | (output of `openssl rsa -pubin -in {firmname}_prod_public_key.pem -fingerprint -noout`) |
 
 ## Use Case Description
 
