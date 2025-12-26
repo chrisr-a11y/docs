@@ -33,7 +33,6 @@
               "getting-started/environments",
               "getting-started/rate-limits",
               "getting-started/connection-options",
-              "getting-started/vpc-connection",
               "getting-started/health-check",
               "getting-started/common-pitfalls"
             ]
@@ -173,6 +172,7 @@
         "tab": "FIX API",
         "pages": [
           "/api-reference/fix-api/fix-overview",
+          "/api-reference/fix-api/fix-vpc-connection",
           "/api-reference/fix-api/fix-component-definitions",
           "/api-reference/fix-api/fix-session-management",
           "/api-reference/fix-api/fix-order-entry-and-matching",

@@ -1,10 +1,14 @@
 ---
-title: "VPC Connection"
+title: "FIX VPC Connection"
 ---
 
 ## Overview
 
-Connect to Polymarket Exchange's Trading API using AWS PrivateLink for secure, private network connectivity. This guide walks you through setting up a VPC Endpoint connection for both pre-production and production environments.
+Connect to Polymarket Exchange's FIX API using AWS PrivateLink for secure, private network connectivity. This guide walks you through setting up a VPC Endpoint connection for both pre-production and production environments.
+
+<Info>
+VPC connections are required for FIX API access. REST and gRPC APIs use the public endpoints documented in [Environments](/getting-started/environments).
+</Info>
 
 <Note>
 Your AWS account must be allowlisted before you can establish a VPC connection. Contact Polymarket support to allowlist your account.
