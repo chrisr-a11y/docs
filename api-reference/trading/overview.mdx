@@ -9,12 +9,33 @@ The Trading API provides order entry and management capabilities for the Polymar
 
 ## Endpoints
 
+### Order Entry
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/v1/trading/orders` | Insert a new order |
-| `POST` | `/v1/trading/orders/cancel` | Cancel an existing order |
-| `POST` | `/v1/trading/orders/replace` | Replace/modify an order |
+| `POST` | `/v1/trading/orders` | Insert a single order |
+| `POST` | `/v1/trading/orders/list` | Insert multiple orders (batch) |
 | `POST` | `/v1/trading/orders/preview` | Preview order before submission |
+
+### Order Modification
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/trading/orders/replace` | Replace/modify a single order |
+| `POST` | `/v1/trading/orders/replace/list` | Replace/modify multiple orders (batch) |
+
+### Order Cancellation
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/trading/orders/cancel` | Cancel a single order |
+| `POST` | `/v1/trading/orders/cancel/list` | Cancel multiple orders (batch) |
+
+### Order Query
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/v1/trading/orders/open` | Get open orders |
 
 ## Order Types
 
