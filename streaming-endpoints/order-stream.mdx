@@ -45,7 +45,7 @@ request = trading_pb2.CreateOrderSubscriptionRequest(
 
 # Subscribe to specific symbol
 request = trading_pb2.CreateOrderSubscriptionRequest(
-    symbols=["mlb-ari-sf-2025-09-08"],
+    symbols=["tec-nfl-sbw-2026-02-08-kc"],
     accounts=[],
     snapshot_only=False
 )
@@ -470,7 +470,7 @@ if __name__ == "__main__":
 
     # Stream orders
     streamer.stream_orders(
-        symbols=["mlb-ari-sf-2025-09-08"],
+        symbols=["tec-nfl-sbw-2026-02-08-kc"],
         accounts=[]
     )
 ```
@@ -479,7 +479,7 @@ if __name__ == "__main__":
 
 ```
 Starting order stream
-Symbols: ['mlb-ari-sf-2025-09-08']
+Symbols: ['tec-nfl-sbw-2026-02-08-kc']
 Accounts: ALL
 Snapshot only: False
 ------------------------------------------------------------
@@ -493,7 +493,7 @@ Snapshot only: False
 
   Order ID: order_12345
     Client Order ID: clord_abc
-    Symbol: mlb-ari-sf-2025-09-08
+    Symbol: tec-nfl-sbw-2026-02-08-kc
     Side: SIDE_BUY
     Type: ORDER_TYPE_LIMIT
     State: ORDER_STATE_NEW
@@ -511,7 +511,7 @@ Snapshot only: False
   Execution ID: exec_67890
     Type: EXECUTION_TYPE_PARTIAL_FILL
     Order ID: order_12345
-    Symbol: mlb-ari-sf-2025-09-08
+    Symbol: tec-nfl-sbw-2026-02-08-kc
     Side: SIDE_BUY
     State: ORDER_STATE_PARTIALLY_FILLED
     Last Shares: 300

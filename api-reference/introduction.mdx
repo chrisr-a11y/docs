@@ -106,7 +106,7 @@ POST requests accept JSON bodies:
 
 ```json
 {
-  "symbol": "mlb-ari-sf-2025-09-08",
+  "symbol": "tec-nfl-sbw-2026-02-08-kc",
   "side": "SIDE_BUY",
   "order_qty": 100,
   "price": 5500,
@@ -123,7 +123,7 @@ POST requests accept JSON bodies:
 {
   "order": {
     "id": "ord_abc123",
-    "symbol": "mlb-ari-sf-2025-09-08",
+    "symbol": "tec-nfl-sbw-2026-02-08-kc",
     "state": "ORDER_STATE_NEW",
     "order_qty": 100,
     "leaves_qty": 100,
@@ -158,7 +158,7 @@ All prices are represented as `int64` values. Divide by the instrument's `price_
 
 ```python
 # Get price_scale from instrument metadata
-instrument = get_instrument("mlb-ari-sf-2025-09-08")
+instrument = get_instrument("tec-nfl-sbw-2026-02-08-kc")
 price_scale = instrument.price_scale  # e.g., 10000
 
 # Convert API price to decimal

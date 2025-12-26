@@ -41,7 +41,7 @@ from polymarket.v1 import marketdatasubscription_pb2
 
 # Subscribe to specific symbols
 request = marketdatasubscription_pb2.CreateMarketDataSubscriptionRequest(
-    symbols=["mlb-ari-sf-2025-09-08", "nba-lal-gsw-2025-01-20"],
+    symbols=["tec-nfl-sbw-2026-02-08-kc", "tec-nfl-sbw-2026-02-08-phi"],
     unaggregated=False,
     depth=10,
     snapshot_only=False
@@ -90,7 +90,7 @@ if response.HasField('update'):
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `symbol` | `str` | Instrument symbol (e.g., "mlb-ari-sf-2025-09-08") |
+| `symbol` | `str` | Instrument symbol (e.g., "tec-nfl-sbw-2026-02-08-kc") |
 | `bids` | `list[BookEntry]` | Bid side of order book (buy orders) |
 | `offers` | `list[BookEntry]` | Offer/ask side of order book (sell orders) |
 | `state` | `InstrumentState` | Current trading state of instrument |
@@ -353,7 +353,7 @@ if __name__ == "__main__":
 
     # Stream market data
     streamer.stream_market_data(
-        symbols=["mlb-ari-sf-2025-09-08"],
+        symbols=["tec-nfl-sbw-2026-02-08-kc"],
         depth=10
     )
 ```
