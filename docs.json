@@ -27,9 +27,11 @@
             "group": "Getting Started",
             "pages": [
               "getting-started/getting-access",
+              "getting-started/onboarding",
+              "getting-started/onboarding-template",
+              "getting-started/authentication",
               "getting-started/quickstart",
               "getting-started/environments",
-              "getting-started/authentication",
               "getting-started/rate-limits",
               "getting-started/connection-options",
               "getting-started/vpc-connection",

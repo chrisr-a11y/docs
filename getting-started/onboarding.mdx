@@ -1,0 +1,90 @@
+---
+title: 'Onboarding'
+description: 'Complete onboarding before accessing the Polymarket Exchange API'
+---
+
+# Onboarding
+
+Complete this onboarding process before you can authenticate and access the API.
+
+## Step 1: Generate Your Key Pair
+
+Generate an RSA key pair. You will share only the **public key** with Polymarket.
+
+```bash
+# Generate a 2048-bit RSA private key
+openssl genrsa -out my_private_key.pem 2048
+
+# Extract the public key
+openssl rsa -in my_private_key.pem -pubout -out my_public_key.pem
+
+# Generate the key fingerprint (you'll need this for verification)
+openssl rsa -pubin -in my_public_key.pem -fingerprint -noout
+```
+
+<Warning>
+**CRITICAL: Protect Your Private Key!**
+
+Your private key (`my_private_key.pem`) must NEVER be shared with anyone, including Polymarket. If your private key is compromised:
+
+- **Your ISV account is at risk of unauthorized access**
+- **Contact Polymarket immediately to rotate your credentials**
+- Email: fixapi@polymarket.com
+
+Secure your private key:
+```bash
+chmod 600 my_private_key.pem
+```
+
+Store it in encrypted storage or a secrets manager. Never commit it to version control.
+</Warning>
+
+## Step 2: Create Your Onboarding Folder
+
+Create a Google Drive folder for your onboarding submission:
+
+1. Create a new folder in Google Drive named: **"[Your Company Name] - Polymarket API Onboarding"**
+
+2. Add the following to the folder:
+   - **Your public key file** (`my_public_key.pem`) - upload the actual file
+   - **Onboarding document** - a Google Doc following the [Onboarding Template](/getting-started/onboarding-template)
+
+3. Share the folder with **Editor** access to:
+   - `chris.rodier@qcex.com`
+   - `nick.rice@qcex.com`
+
+<Note>
+**Upload the public key FILE, not the contents.** We need the actual `.pem` file in your shared folder.
+</Note>
+
+## Step 3: Verification Call
+
+After you share your onboarding folder:
+
+1. The Polymarket team will review your submission
+2. We will contact you using the information in your onboarding document
+3. We will schedule an **online meeting** to verbally verify the fingerprint of your public key
+4. Once verified, your key will be configured in the authentication system
+
+## Step 4: Start Using the API
+
+After your key is verified and configured:
+
+1. You will receive your **Client ID** and environment details
+2. Follow the [Authentication Setup](/getting-started/authentication) guide to make API calls
+3. Use your private key to sign JWT assertions and obtain access tokens
+
+## Onboarding Checklist
+
+- [ ] Generated RSA key pair
+- [ ] Secured private key with restricted permissions
+- [ ] Created Google Drive folder with company name
+- [ ] Uploaded public key file (`.pem`) to folder
+- [ ] Created onboarding document from template
+- [ ] Shared folder with `chris.rodier@qcex.com` and `nick.rice@qcex.com`
+- [ ] Completed verification call with Polymarket team
+- [ ] Received Client ID and environment details
+
+<Card title="Onboarding Document Template" icon="file-lines" href="/getting-started/onboarding-template">
+  Copy this template into a Google Doc for your onboarding folder
+</Card>
