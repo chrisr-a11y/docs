@@ -121,38 +121,6 @@
         }
       }
     },
-    "/v1/positions/list": {
-      "post": {
-        "tags": [
-          "Positions"
-        ],
-        "summary": "List account positions",
-        "description": "Lists all positions within an account",
-        "operationId": "PositionAPI_ListAccountPositions",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListAccountPositionsRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListAccountPositionsResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/positions/subscription": {
       "post": {
         "tags": [
