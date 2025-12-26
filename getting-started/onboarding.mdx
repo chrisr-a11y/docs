@@ -63,8 +63,21 @@ After you share your onboarding folder:
 
 1. The Polymarket team will review your submission
 2. We will contact you using the information in your onboarding document
-3. We will schedule an **online meeting** to verbally verify the fingerprint of your public key
-4. Once verified, your key will be configured in the authentication system
+3. We will schedule a **recorded online meeting** with both Polymarket contacts present
+
+<Warning>
+**Identity Verification Required**
+
+During the verification call:
+- **Both** Polymarket contacts (Chris Rodier and Nick Rice) will be present
+- You must provide **government-issued photo ID** to verify your identity
+- The call will be **recorded** for compliance purposes
+- You will verbally confirm the fingerprint of your public key
+
+Have your key fingerprint ready (run `openssl rsa -pubin -in my_public_key.pem -fingerprint -noout`).
+</Warning>
+
+4. Once identity and key fingerprint are verified, your key will be configured in the authentication system
 
 ## Step 4: Start Using the API
 
