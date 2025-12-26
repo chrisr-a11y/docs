@@ -32,7 +32,7 @@ The L2 (Level 2) order book provides aggregated price levels showing the total q
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `symbol` | string | Yes | Instrument symbol (e.g., "BTC-USD") |
+| `symbol` | string | Yes | Instrument symbol (e.g., "tec-nfl-sbw-2026-02-08-kc") |
 | `depth` | integer | No | Number of price levels to return (default: 3, max: 10) |
 
 ### Response Fields
@@ -91,14 +91,14 @@ The `state` field indicates the current trading status:
 ### Get L2 Order Book
 
 ```bash
-curl -X GET "https://api.polymarketexchange.com/rest/api/v1/orderbook/BTC-USD?depth=5" \
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/orderbook/tec-nfl-sbw-2026-02-08-kc?depth=5" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Get BBO
 
 ```bash
-curl -X GET "https://api.polymarketexchange.com/rest/api/v1/orderbook/BTC-USD/bbo" \
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/orderbook/tec-nfl-sbw-2026-02-08-kc/bbo" \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
