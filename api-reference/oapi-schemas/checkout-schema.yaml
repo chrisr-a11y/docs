@@ -157,6 +157,12 @@ definitions:
         type: array
         items:
           type: string
+      userMessage:
+        type: string
+        description: |-
+          User-friendly error message suitable for display to end users.
+          Contains a human-readable explanation of the error.
+          Original error_codes are preserved for debugging/logging.
   v1CheckoutLink:
     type: object
     properties:

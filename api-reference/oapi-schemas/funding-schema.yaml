@@ -320,6 +320,25 @@ paths:
           collectionFormat: multi
       tags:
         - FundingAPI
+  /v1/funding/transactions/{transactionId}:
+    get:
+      summary: |-
+        GetFundingTransaction retrieves a single funding transaction by ID.
+        More efficient than ListFundingTransactions when you know the specific transaction.
+      operationId: FundingAPI_GetFundingTransaction
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1GetFundingTransactionResponse'
+      parameters:
+        - name: transactionId
+          description: The transaction ID to retrieve
+          in: path
+          required: true
+          type: string
+      tags:
+        - FundingAPI
 definitions:
   FundingAPIUpdateFundingAccountBody:
     type: object
@@ -742,6 +761,13 @@ definitions:
       - TRANSACTION_TYPE_ADVANCE
       - TRANSACTION_TYPE_RETURN
       - TRANSACTION_TYPE_INCENTIVE
+  v1GetFundingTransactionResponse:
+    type: object
+    properties:
+      transaction:
+        $ref: '#/definitions/v1FundingTransaction'
+        title: The requested transaction
+    description: GetFundingTransactionResponse contains the requested transaction.
   v1ListFundingAccountsResponse:
     type: object
     properties:

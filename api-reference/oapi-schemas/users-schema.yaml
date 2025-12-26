@@ -1,0 +1,247 @@
+swagger: "2.0"
+info:
+  title: polymarket/v1/users.proto
+  version: version not set
+tags:
+  - name: UsersAPI
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /v1/users:
+    get:
+      summary: List users
+      description: Returns the users that the caller may trade on behalf of
+      operationId: UsersAPI_ListUsers
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListUsersResponse'
+      tags:
+        - Users
+    post:
+      summary: '[DEPRECATED] Create a new user'
+      description: 'DEPRECATED: Users are created automatically when KYC is approved. Use StartKYCVerification to onboard users.'
+      operationId: UsersAPI_CreateUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1CreateUserResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1CreateUserRequest'
+      tags:
+        - Users
+      deprecated: true
+  /v1/users/{userId}:
+    patch:
+      summary: '[DEPRECATED] Update user profile'
+      description: 'DEPRECATED: User profile updates happen via KYC re-verification.'
+      operationId: UsersAPI_UpdateUser
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1UpdateUserResponse'
+      parameters:
+        - name: userId
+          description: The ISV-defined user_id of the user to update
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UsersAPIUpdateUserBody'
+      tags:
+        - Users
+      deprecated: true
+  /v1beta1/list_users:
+    post:
+      summary: List users
+      description: Returns the users that the caller may trade on behalf of
+      operationId: UsersAPI_ListUsers2
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListUsersResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1ListUsersRequest'
+      tags:
+        - Users
+definitions:
+  UsersAPIUpdateUserBody:
+    type: object
+    properties:
+      email:
+        type: string
+        title: New email address
+      phoneNumber:
+        type: string
+        title: New phone number
+      firstName:
+        type: string
+        title: New first name
+      lastName:
+        type: string
+        title: New last name
+      displayName:
+        type: string
+        title: New display name
+      dateOfBirth:
+        type: string
+        title: New date of birth
+      profileImageUrl:
+        type: string
+        title: New profile image URL
+    title: UpdateUserRequest - Request to update a user's profile
+  v1CreateUserRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+        title: |-
+          ISV-defined user identifier. Must be unique within the ISV's firm.
+          This becomes part of the EP3 participant ID.
+          Example: "user-12345" becomes "firms/ISV-Participant-Acme/users/user-12345"
+      email:
+        type: string
+        title: User's email address (required)
+      phoneNumber:
+        type: string
+        title: |-
+          User's phone number in E.164 format (required)
+          Example: "+15551234567"
+      firstName:
+        type: string
+        title: User's first name (required)
+      lastName:
+        type: string
+        title: User's last name (required)
+      displayName:
+        type: string
+        title: Display name (optional, defaults to first_name + last_name)
+      dateOfBirth:
+        type: string
+        title: Date of birth in YYYY-MM-DD format (optional)
+      profileImageUrl:
+        type: string
+        title: Profile image URL (optional)
+    title: CreateUserRequest - Request to create a new user
+  v1CreateUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1ISVUser'
+        title: The created user
+      participantId:
+        type: string
+        title: |-
+          Full EP3 participant ID for trading operations
+          Format: firms/{participant_firm}/users/{user_id}
+      created:
+        type: boolean
+        title: Whether the user was newly created (false if user_id already existed)
+    title: CreateUserResponse - Response after user creation
+  v1ISVUser:
+    type: object
+    properties:
+      id:
+        type: string
+        title: Internal database ID
+      userId:
+        type: string
+        title: ISV-defined user identifier (provided during creation)
+      email:
+        type: string
+        title: User's email address
+      phoneNumber:
+        type: string
+        title: User's phone number (E.164 format)
+      firstName:
+        type: string
+        title: User's first name
+      lastName:
+        type: string
+        title: User's last name
+      displayName:
+        type: string
+        title: Display name (optional)
+      dateOfBirth:
+        type: string
+        title: Date of birth (YYYY-MM-DD format)
+      profileImageUrl:
+        type: string
+        title: Profile image URL
+      ep3ParticipantId:
+        type: string
+        title: 'EP3 participant ID for trading (format: firms/{firm}/users/{user_id})'
+      ep3AccountId:
+        type: string
+        title: EP3 account ID for trading
+      kycStatus:
+        $ref: '#/definitions/v1KYCStatusType'
+        title: Current KYC verification status
+      createdAt:
+        type: string
+        format: date-time
+        title: When the user was created
+      updatedAt:
+        type: string
+        format: date-time
+        title: When the user was last updated
+      firmId:
+        type: string
+        title: The ISV's firm_id this user belongs to
+    title: ISVUser represents a user within an ISV's firm
+  v1KYCStatusType:
+    type: string
+    enum:
+      - KYC_STATUS_TYPE_NONE
+      - KYC_STATUS_TYPE_PENDING
+      - KYC_STATUS_TYPE_APPROVED
+      - KYC_STATUS_TYPE_REJECTED
+      - KYC_STATUS_TYPE_ON_HOLD
+    title: KYCStatusType represents the KYC verification status of a user
+  v1ListUsersRequest:
+    type: object
+    title: ListUsersRequest - Request to list EP3 participant names (migrated from AccountsAPI)
+  v1ListUsersResponse:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          type: string
+      displayNames:
+        type: array
+        items:
+          type: string
+      firms:
+        type: array
+        items:
+          type: string
+      firmsDisplayNames:
+        type: array
+        items:
+          type: string
+    title: ListUsersResponse - List of EP3 participant names (migrated from AccountsAPI)
+  v1UpdateUserResponse:
+    type: object
+    properties:
+      user:
+        $ref: '#/definitions/v1ISVUser'
+        title: The updated user
+    title: UpdateUserResponse - Response after user update
