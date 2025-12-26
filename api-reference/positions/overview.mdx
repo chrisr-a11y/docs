@@ -12,7 +12,13 @@ The Positions API provides access to account balances and open positions.
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/v1/positions` | Get current positions |
-| `GET` | `/v1/positions/balances` | Get account balances |
+| `POST` | `/v1/positions/list` | Get positions (POST variant) |
+| `POST` | `/v1/positions/balance` | Get single account balance |
+| `POST` | `/v1/positions/balances` | Get multiple account balances |
+
+<Note>
+`/v1/positions` (GET) and `/v1/positions/list` (POST) return the same data. Use GET for simple queries with query parameters, or POST when you need to pass complex filters in the request body.
+</Note>
 
 ## Position Data
 
