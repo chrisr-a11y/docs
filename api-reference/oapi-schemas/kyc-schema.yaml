@@ -138,6 +138,24 @@ paths:
           type: string
       tags:
         - KYC
+  /v1/kyc/webhook:
+    post:
+      summary: Register ISV webhook URL
+      description: ISVs can register their webhook URL to receive KYC status notifications
+      operationId: KYCAPI_SetWebhookURL
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1SetWebhookURLResponse'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1SetWebhookURLRequest'
+      tags:
+        - KYC
 definitions:
   v1CheckReferralCodeResponse:
     type: object
@@ -330,3 +348,18 @@ definitions:
       lastName:
         type: string
         x-nullable: true
+  v1SetWebhookURLRequest:
+    type: object
+    properties:
+      webhookUrl:
+        type: string
+        description: HTTPS URL where ISV wants to receive KYC notifications
+  v1SetWebhookURLResponse:
+    type: object
+    properties:
+      validated:
+        type: boolean
+        description: True if test request to webhook URL succeeded
+      message:
+        type: string
+        description: Status message
