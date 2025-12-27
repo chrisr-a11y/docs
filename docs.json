@@ -119,19 +119,6 @@
               "source": "/api-reference/oapi-schemas/refdata-schema.json",
               "directory": "api-reference"
             }
-          },
-          {
-            "group": "Drop Copy",
-            "pages": [
-              "api-reference/dropcopy/overview"
-            ]
-          },
-          {
-            "group": "Execution Feed",
-            "openapi": {
-              "source": "/api-reference/oapi-schemas/dropcopy-schema.json",
-              "directory": "api-reference"
-            }
           }
         ]
       },
