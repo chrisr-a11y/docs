@@ -117,8 +117,15 @@ Where possible, batch your operations instead of making individual requests:
 | Connection Type | Limit |
 |-----------------|-------|
 | REST requests | 20/sec per IP |
-| gRPC streaming connections | 10 concurrent per account |
-| WebSocket connections | Not supported (use gRPC) |
+| gRPC/Connect streaming connections | 10 concurrent per account |
+| Streaming ingress (client → server) | 20 messages/sec |
+| WebSocket connections | Not supported (use gRPC/Connect) |
+
+<Warning>
+**Streaming Ingress Rate Limit**
+
+Client-to-server messages on streaming connections (gRPC and Connect) are limited to **20 messages per second**. This applies to requests sent by your client, not to server-pushed updates like market data. Messages exceeding this rate may be dropped or the connection may be throttled.
+</Warning>
 
 ## Monitoring Your Usage
 

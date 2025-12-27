@@ -131,6 +131,19 @@ graph LR
 [Learn more about Authentication →](/streaming-endpoints/authentication)
 
 
+## Rate Limits
+
+| Limit | Value |
+|-------|-------|
+| Ingress (client → server) | 20 messages/sec |
+| Concurrent connections | 10 per account |
+
+<Warning>
+**Ingress Rate Limit**
+
+Client-to-server messages are limited to **20 messages per second**. This applies to requests you send, not to server-pushed updates like market data. Messages exceeding this rate may be dropped or the connection may be throttled.
+</Warning>
+
 ## Key Concepts
 
 ### Heartbeats
