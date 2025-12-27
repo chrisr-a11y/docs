@@ -1,0 +1,104 @@
+---
+title: 'Connect API Overview'
+description: 'Real-time streaming via Connect protocol'
+---
+
+# Connect API
+
+The Connect API provides real-time streaming for market data, order updates, and position changes using the [Connect protocol](https://connectrpc.com/).
+
+<Info>
+**Why Connect?**
+
+Connect is a modern RPC protocol that works over HTTP/1.1, HTTP/2, and HTTP/3. It provides the benefits of gRPC (streaming, strong typing) while remaining compatible with standard HTTP tooling.
+</Info>
+
+## When to Use Connect
+
+| Use Case | Recommended API |
+|----------|-----------------|
+| Real-time market data | Connect Streaming |
+| Order execution updates | Connect Streaming |
+| Position changes | Connect Streaming |
+| Trade capture reports | Connect Streaming |
+| Request/response queries | REST API |
+| Historical data queries | REST API |
+
+## Available Streams
+
+| Service | Stream | Description |
+|---------|--------|-------------|
+| Market Data | `CreateMarketDataSubscription` | Real-time L2 order book updates |
+| Orders | `CreateOrderSubscription` | Order status and execution updates |
+| Positions | `CreatePositionSubscription` | Position and balance changes |
+| Drop Copy | `CreateDropCopySubscription` | Execution feed for all accounts |
+| Drop Copy | `CreateTradeCaptureReportSubscription` | Trade capture reports |
+| Drop Copy | `CreatePositionChangeSubscription` | Position change events |
+| Drop Copy | `CreateInstrumentStateChangeSubscription` | Instrument state changes |
+
+## Connect vs REST vs gRPC
+
+| Feature | REST | Connect | gRPC |
+|---------|------|---------|------|
+| Protocol | HTTP/1.1 | HTTP/1.1, HTTP/2 | HTTP/2 |
+| Streaming | No | Yes | Yes |
+| Browser support | Yes | Yes | Limited |
+| Code generation | Optional | Yes | Yes |
+| Debugging | Easy | Easy | Requires tools |
+
+<Tip>
+**Recommendation**
+
+Use **REST** for simple queries and one-off requests. Use **Connect** for real-time streaming when you need live updates. Use **gRPC** if you're already integrated with gRPC tooling.
+</Tip>
+
+## Quick Start
+
+```python
+import requests
+import json
+
+# Connect streaming uses Server-Sent Events (SSE)
+# The endpoint is the same as gRPC but over HTTP
+
+BASE_URL = "https://api.preprod.polymarketexchange.com"
+
+def stream_market_data(token: str, symbols: list[str]):
+    """Stream market data updates for given symbols."""
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "Accept": "application/connect+json"
+    }
+
+    payload = {
+        "symbols": symbols,
+        "depth": 5
+    }
+
+    # Connect streaming endpoint
+    url = f"{BASE_URL}/polymarket.v1.MarketDataSubscriptionAPI/CreateMarketDataSubscription"
+
+    with requests.post(url, headers=headers, json=payload, stream=True) as response:
+        for line in response.iter_lines():
+            if line:
+                data = json.loads(line)
+                print(f"Update: {data}")
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/connect-api/authentication">
+    Learn how to authenticate Connect streams
+  </Card>
+  <Card title="Market Data Stream" icon="chart-line" href="/connect-api/market-data">
+    Subscribe to real-time order book updates
+  </Card>
+  <Card title="Order Stream" icon="list-check" href="/connect-api/orders">
+    Get real-time order and execution updates
+  </Card>
+  <Card title="Position Stream" icon="wallet" href="/connect-api/positions">
+    Monitor position and balance changes
+  </Card>
+</CardGroup>

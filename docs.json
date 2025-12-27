@@ -123,6 +123,29 @@
         ]
       },
       {
+        "tab": "Connect API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "connect-api/overview"
+            ]
+          },
+          {
+            "group": "Authentication",
+            "pages": [
+              "connect-api/authentication"
+            ]
+          },
+          {
+            "group": "Streaming Endpoints",
+            "pages": [
+              "connect-api/streaming-endpoints"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "gRPC API",
         "groups": [
           {

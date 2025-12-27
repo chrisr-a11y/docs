@@ -1,0 +1,289 @@
+---
+title: 'Streaming Endpoints'
+description: 'All available Connect streaming endpoints'
+---
+
+# Streaming Endpoints
+
+All streaming endpoints use the Connect protocol for real-time data delivery. These endpoints are **not available via REST** - use Connect or gRPC clients.
+
+## Endpoint Format
+
+Connect endpoints follow this pattern:
+
+```
+POST https://{host}/{package}.{service}/{method}
+```
+
+Example:
+```
+POST https://api.preprod.polymarketexchange.com/polymarket.v1.MarketDataSubscriptionAPI/CreateMarketDataSubscription
+```
+
+---
+
+## Market Data
+
+### CreateMarketDataSubscription
+
+Real-time L2 order book updates for specified symbols.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.MarketDataSubscriptionAPI` |
+| Method | `CreateMarketDataSubscription` |
+| Scope | `read:marketdata` |
+
+**Request:**
+
+```json
+{
+  "symbols": ["tec-nfl-sbw-2026-02-08-kc"],
+  "depth": 5
+}
+```
+
+**Response Stream:**
+
+```json
+{
+  "result": {
+    "symbol": "tec-nfl-sbw-2026-02-08-kc",
+    "bids": [
+      {"px": "52000", "qty": "100"}
+    ],
+    "offers": [
+      {"px": "53000", "qty": "50"}
+    ],
+    "transactTime": "2024-12-27T10:30:00Z"
+  }
+}
+```
+
+---
+
+## Orders
+
+### CreateOrderSubscription
+
+Real-time order status and execution updates.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.OrderEntryAPI` |
+| Method | `CreateOrderSubscription` |
+| Scope | `read:orders` |
+
+**Request:**
+
+```json
+{
+  "symbols": ["tec-nfl-sbw-2026-02-08-kc"],
+  "accounts": ["firms/ISV-Alice/accounts/alice-trading"],
+  "snapshotOnly": false
+}
+```
+
+**Response Stream:**
+
+```json
+{
+  "result": {
+    "snapshot": {
+      "orders": [
+        {
+          "orderId": "order-123",
+          "symbol": "tec-nfl-sbw-2026-02-08-kc",
+          "side": "SIDE_BUY",
+          "orderQty": "100",
+          "price": "52000",
+          "orderStatus": "ORDER_STATUS_NEW"
+        }
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Positions
+
+### CreatePositionSubscription
+
+Real-time position and balance updates.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.PositionAPI` |
+| Method | `CreatePositionSubscription` |
+| Scope | `read:positions` |
+
+**Request:**
+
+```json
+{
+  "accounts": ["firms/ISV-Alice/accounts/alice-trading"]
+}
+```
+
+**Response Stream:**
+
+```json
+{
+  "result": {
+    "snapshot": {
+      "positions": [
+        {
+          "account": "firms/ISV-Alice/accounts/alice-trading",
+          "symbol": "tec-nfl-sbw-2026-02-08-kc",
+          "netPosition": "100",
+          "cost": "5200000"
+        }
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Drop Copy
+
+Drop Copy provides a complete audit trail of all executions for your firm.
+
+### CreateDropCopySubscription
+
+Main execution feed for all accounts.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.DropCopyAPI` |
+| Method | `CreateDropCopySubscription` |
+| Scope | `read:dropcopy` |
+
+**Request:**
+
+```json
+{
+  "accounts": []
+}
+```
+
+**Response Stream:**
+
+```json
+{
+  "result": {
+    "executionReport": {
+      "orderId": "order-123",
+      "execId": "exec-456",
+      "execType": "EXEC_TYPE_FILL",
+      "lastQty": "50",
+      "lastPx": "52000"
+    }
+  }
+}
+```
+
+### CreateTradeCaptureReportSubscription
+
+Trade capture reports for reconciliation.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.DropCopyAPI` |
+| Method | `CreateTradeCaptureReportSubscription` |
+| Scope | `read:dropcopy` |
+
+### CreatePositionChangeSubscription
+
+Position change events.
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.DropCopyAPI` |
+| Method | `CreatePositionChangeSubscription` |
+| Scope | `read:dropcopy` |
+
+### CreateInstrumentStateChangeSubscription
+
+Instrument state changes (OPEN, HALTED, EXPIRED, etc.).
+
+| Property | Value |
+|----------|-------|
+| Service | `polymarket.v1.DropCopyAPI` |
+| Method | `CreateInstrumentStateChangeSubscription` |
+| Scope | `read:dropcopy` |
+
+---
+
+## Connection Examples
+
+### Python with requests
+
+```python
+import requests
+import json
+
+def stream_orders(token: str, symbols: list[str]):
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "Accept": "application/connect+json",
+        "Connect-Protocol-Version": "1"
+    }
+
+    url = "https://api.preprod.polymarketexchange.com/polymarket.v1.OrderEntryAPI/CreateOrderSubscription"
+
+    payload = {
+        "symbols": symbols,
+        "snapshotOnly": False
+    }
+
+    with requests.post(url, headers=headers, json=payload, stream=True) as response:
+        response.raise_for_status()
+        for line in response.iter_lines():
+            if line:
+                data = json.loads(line)
+                yield data
+```
+
+### Go with Connect
+
+```go
+client := polymarketv1connect.NewOrderEntryAPIClient(
+    http.DefaultClient,
+    "https://api.preprod.polymarketexchange.com",
+)
+
+stream, err := client.CreateOrderSubscription(ctx, connect.NewRequest(&polymarketv1.CreateOrderSubscriptionRequest{
+    Symbols: []string{"tec-nfl-sbw-2026-02-08-kc"},
+}))
+if err != nil {
+    log.Fatal(err)
+}
+
+for stream.Receive() {
+    log.Printf("Order update: %+v", stream.Msg())
+}
+```
+
+---
+
+## Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Reconnection" icon="rotate">
+    Implement automatic reconnection with exponential backoff
+  </Card>
+  <Card title="Token Refresh" icon="key">
+    Refresh tokens before the 3-minute expiry
+  </Card>
+  <Card title="Error Handling" icon="triangle-exclamation">
+    Handle disconnections gracefully
+  </Card>
+  <Card title="Heartbeats" icon="heart-pulse">
+    Monitor stream health with heartbeat messages
+  </Card>
+</CardGroup>

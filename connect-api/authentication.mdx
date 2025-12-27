@@ -1,0 +1,192 @@
+---
+title: 'Connect Authentication'
+description: 'Authenticate streaming connections'
+---
+
+# Connect Authentication
+
+Connect streaming endpoints use the same Auth0 JWT authentication as the REST API. The token is passed in the `Authorization` header.
+
+## Authentication Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Auth0
+    participant Gateway
+
+    Client->>Auth0: POST /oauth/token (private_key_jwt)
+    Auth0-->>Client: Access Token (JWT)
+    Client->>Gateway: Connect Stream + Bearer Token
+    Gateway->>Gateway: Validate JWT
+    Gateway-->>Client: Stream Data
+```
+
+## Token Requirements
+
+| Requirement | Value |
+|-------------|-------|
+| Token Type | Bearer JWT |
+| Header | `Authorization: Bearer <token>` |
+| Expiry | 3 minutes |
+| Refresh | Before expiry |
+
+<Warning>
+**Token Refresh**
+
+Tokens expire every 3 minutes. For long-running streams, implement token refresh logic to avoid disconnection.
+</Warning>
+
+## Request Headers
+
+All Connect streaming requests require these headers:
+
+```http
+Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
+Content-Type: application/json
+Accept: application/connect+json
+Connect-Protocol-Version: 1
+```
+
+## Python Example
+
+```python
+import requests
+import json
+import time
+from datetime import datetime, timedelta
+
+class ConnectClient:
+    def __init__(self, base_url: str, token_provider):
+        self.base_url = base_url
+        self.token_provider = token_provider
+        self.token = None
+        self.token_expiry = None
+
+    def get_token(self) -> str:
+        """Get a valid token, refreshing if needed."""
+        if self.token is None or datetime.now() >= self.token_expiry:
+            self.token = self.token_provider()
+            # Tokens expire in 3 minutes, refresh at 2.5 minutes
+            self.token_expiry = datetime.now() + timedelta(minutes=2, seconds=30)
+        return self.token
+
+    def stream(self, service: str, method: str, payload: dict):
+        """Open a streaming connection."""
+        headers = {
+            "Authorization": f"Bearer {self.get_token()}",
+            "Content-Type": "application/json",
+            "Accept": "application/connect+json",
+            "Connect-Protocol-Version": "1"
+        }
+
+        url = f"{self.base_url}/{service}/{method}"
+
+        with requests.post(url, headers=headers, json=payload, stream=True) as response:
+            response.raise_for_status()
+            for line in response.iter_lines():
+                if line:
+                    yield json.loads(line)
+
+# Usage
+def get_auth_token():
+    # Implement your Auth0 token fetch here
+    # See REST API Authentication guide
+    pass
+
+client = ConnectClient(
+    base_url="https://api.preprod.polymarketexchange.com",
+    token_provider=get_auth_token
+)
+
+for update in client.stream(
+    "polymarket.v1.MarketDataSubscriptionAPI",
+    "CreateMarketDataSubscription",
+    {"symbols": ["tec-nfl-sbw-2026-02-08-kc"], "depth": 5}
+):
+    print(update)
+```
+
+## Go Example
+
+```go
+package main
+
+import (
+    "context"
+    "log"
+
+    "connectrpc.com/connect"
+    polymarketv1 "github.com/polymarket/go-exchange-gateway-us/gen/api/polymarket/v1"
+    "github.com/polymarket/go-exchange-gateway-us/gen/api/polymarket/v1/polymarketv1connect"
+)
+
+func main() {
+    // Create client with auth interceptor
+    client := polymarketv1connect.NewMarketDataSubscriptionAPIClient(
+        http.DefaultClient,
+        "https://api.preprod.polymarketexchange.com",
+        connect.WithInterceptors(authInterceptor()),
+    )
+
+    // Create subscription request
+    req := connect.NewRequest(&polymarketv1.CreateMarketDataSubscriptionRequest{
+        Symbols: []string{"tec-nfl-sbw-2026-02-08-kc"},
+        Depth:   5,
+    })
+
+    // Open stream
+    stream, err := client.CreateMarketDataSubscription(context.Background(), req)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer stream.Close()
+
+    // Read updates
+    for stream.Receive() {
+        msg := stream.Msg()
+        log.Printf("Update: %+v", msg)
+    }
+
+    if err := stream.Err(); err != nil {
+        log.Fatal(err)
+    }
+}
+
+func authInterceptor() connect.UnaryInterceptorFunc {
+    return func(next connect.UnaryFunc) connect.UnaryFunc {
+        return func(ctx context.Context, req connect.AnyRequest) (connect.AnyResponse, error) {
+            req.Header().Set("Authorization", "Bearer "+getToken())
+            return next(ctx, req)
+        }
+    }
+}
+```
+
+## Error Handling
+
+| Error Code | Description | Action |
+|------------|-------------|--------|
+| 401 | Unauthorized | Refresh token and retry |
+| 403 | Forbidden | Check permissions/scopes |
+| 429 | Rate limited | Back off and retry |
+| 503 | Service unavailable | Retry with backoff |
+
+## Scopes Required
+
+| Stream | Required Scope |
+|--------|----------------|
+| Market Data | `read:marketdata` |
+| Orders | `read:orders` |
+| Positions | `read:positions` |
+| Drop Copy | `read:dropcopy` |
+
+<Tip>
+**Connection Management**
+
+For production use, implement:
+- Automatic reconnection on disconnect
+- Token refresh before expiry
+- Exponential backoff on errors
+- Heartbeat monitoring
+</Tip>

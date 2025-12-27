@@ -310,60 +310,6 @@
           }
         }
       }
-    },
-    "/v1/trading/orders/subscription": {
-      "get": {
-        "tags": [
-          "Trading"
-        ],
-        "summary": "Create order subscription",
-        "description": "Creates a subscription for working orders and updates (streaming)",
-        "operationId": "OrderEntryAPI_CreateOrderSubscription",
-        "parameters": [
-          {
-            "name": "symbols",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "array"
-            }
-          },
-          {
-            "name": "accounts",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "array"
-            }
-          },
-          {
-            "name": "snapshotOnly",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreateOrderSubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreateOrderSubscriptionResponse"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {

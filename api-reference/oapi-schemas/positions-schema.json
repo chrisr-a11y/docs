@@ -120,44 +120,6 @@
           }
         }
       }
-    },
-    "/v1/positions/subscription": {
-      "post": {
-        "tags": [
-          "Positions"
-        ],
-        "summary": "Create position subscription",
-        "description": "Creates a subscription for position updates (streaming)",
-        "operationId": "PositionAPI_CreatePositionSubscription",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePositionSubscriptionRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "A successful response.(streaming responses)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "result": {
-                      "$ref": "#/components/schemas/CreatePositionSubscriptionResponse"
-                    }
-                  },
-                  "title": "Stream result of v1CreatePositionSubscriptionResponse"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
