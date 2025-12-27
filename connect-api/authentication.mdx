@@ -12,14 +12,14 @@ Connect streaming endpoints use the same Auth0 JWT authentication as the REST AP
 ```mermaid
 sequenceDiagram
     participant Client
-    participant Auth0
-    participant Gateway
+    participant Auth as Polymarket US Auth
+    participant API as Polymarket US API
 
-    Client->>Auth0: POST /oauth/token (private_key_jwt)
-    Auth0-->>Client: Access Token (JWT)
-    Client->>Gateway: Connect Stream + Bearer Token
-    Gateway->>Gateway: Validate JWT
-    Gateway-->>Client: Stream Data
+    Client->>Auth: POST /oauth/token (private_key_jwt)
+    Auth-->>Client: Access Token (JWT)
+    Client->>API: Connect Stream + Bearer Token
+    API->>API: Validate JWT
+    API-->>Client: Stream Data
 ```
 
 ## Token Requirements

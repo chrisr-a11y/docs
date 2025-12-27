@@ -31,16 +31,38 @@ The org repo (`origin` = Polymarket-US/website-dcm-docs) is NOT currently used f
 - Accounts - User/account management
 - Trading - Insert/cancel orders (OrderEntryAPI)
 - Orders - Search orders/trades (OrderAPI)
-- Positions - Balances and positions
+- Positions - Balances and positions (REST only, not subscriptions)
 - Reference Data - Instruments and symbols (RefDataAPI)
-- Drop Copy - Execution feeds
 - Order Book - L2 snapshots, BBO
 - KYC - Identity verification
 - Payments - Aeropay, Checkout.com, Funding
 
-**gRPC Streaming Tab** - Market data and order subscriptions
+**Connect API Tab** - Streaming endpoints via Connect protocol:
+- Market Data Subscription
+- Order Subscription
+- Position Subscription
+- Drop Copy (all 4 endpoints)
 
-**FIX API Tab** - FIX protocol documentation (unchanged from original)
+**gRPC API Tab** - Same streaming as Connect, but via gRPC
+
+**FIX API Tab** - FIX protocol documentation
+
+## Diagram Naming Convention
+
+In mermaid sequence diagrams, use these participant names consistently:
+- `Auth as Polymarket US Auth` - Authentication service
+- `API as Polymarket US API` - API service
+- `P as Polymarket US` - Short form when space is limited
+
+Example:
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Auth as Polymarket US Auth
+    participant API as Polymarket US API
+```
+
+Do NOT use "Gateway" or other internal names in public documentation.
 
 ## URL Path Convention
 
