@@ -11,9 +11,15 @@ The Reference Data API provides access to instrument definitions, symbol metadat
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/v1/refdata/instruments` | List all instruments |
-| `GET` | `/v1/refdata/instruments/{symbol}` | Get instrument details |
-| `GET` | `/v1/refdata/symbols` | List trading symbols |
+| `POST` | `/v1/refdata/symbols` | List all symbols |
+| `POST` | `/v1/refdata/instruments` | List instruments (filter by symbols in body) |
+| `POST` | `/v1/refdata/metadata` | Get instrument metadata |
+
+<Info>
+**No GET endpoint for single instrument**
+
+To get a single instrument, use `POST /v1/refdata/instruments` with `{"symbols": ["SYMBOL-NAME"]}` in the body.
+</Info>
 
 ## Instrument Data
 
