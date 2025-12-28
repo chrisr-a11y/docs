@@ -119,27 +119,12 @@
               "source": "/api-reference/oapi-schemas/refdata-schema.json",
               "directory": "api-reference"
             }
-          }
-        ]
-      },
-      {
-        "tab": "Connect API",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "connect-api/overview"
-            ]
           },
           {
-            "group": "Authentication",
+            "group": "Connect Protocol",
             "pages": [
-              "connect-api/authentication"
-            ]
-          },
-          {
-            "group": "Streaming Endpoints",
-            "pages": [
+              "connect-api/overview",
+              "connect-api/authentication",
               "connect-api/streaming-endpoints"
             ]
           }
