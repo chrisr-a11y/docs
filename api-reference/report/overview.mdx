@@ -17,10 +17,13 @@ The Report API provides search and export capabilities for historical order and 
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/v1/orders/search` | Search orders with filters |
-| `POST` | `/v1/trades/search` | Search trades with filters |
-| `GET` | `/v1/reports/orders` | Export orders to CSV |
-| `GET` | `/v1/reports/trades` | Export trades to CSV |
+| `POST` | `/v1/report/orders/search` | Search orders with filters |
+| `POST` | `/v1/report/trades/search` | Search trades with filters |
+| `POST` | `/v1/report/executions/search` | Search executions with filters |
+| `POST` | `/v1/report/orders/csv` | Export orders to CSV |
+| `POST` | `/v1/report/trades/csv` | Export trades to CSV |
+| `POST` | `/v1/report/executions/csv` | Export executions to CSV |
+| `POST` | `/v1/report/trades/stats` | Get aggregated trade statistics |
 
 ## When to Use
 
@@ -43,8 +46,8 @@ For any use case requiring real-time order or trade updates, use the streaming A
 
 ## Search vs Export
 
-- **Search endpoints** (`/v1/orders/search`, `/v1/trades/search`): Return paginated JSON results for programmatic access
-- **Export endpoints** (`/v1/reports/orders`, `/v1/reports/trades`): Return CSV files for spreadsheet analysis and reporting
+- **Search endpoints** (`/v1/report/orders/search`, `/v1/report/trades/search`, `/v1/report/executions/search`): Return paginated JSON results for programmatic access
+- **Export endpoints** (`/v1/report/orders/csv`, `/v1/report/trades/csv`, `/v1/report/executions/csv`): Return CSV file streams for spreadsheet analysis and reporting
 
 ## Common Filters
 

@@ -202,10 +202,28 @@ POST /v1/checkout/deposits
     "status": "Bad Request",
     "requestId": "req_xyz",
     "errorType": "processing_error",
-    "errorCodes": ["card_declined"]
+    "errorCodes": ["card_declined"],
+    "userMessage": "Your card was declined. Please try a different payment method."
   }
 }
 ```
+
+### Error Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `statusCode` | int | HTTP status code |
+| `status` | string | HTTP status text |
+| `requestId` | string | Unique request ID for debugging |
+| `errorType` | string | Error category |
+| `errorCodes` | array | Machine-readable error codes for programmatic handling |
+| `userMessage` | string | **Human-readable message safe to display to end users** |
+
+<Tip>
+**Display `userMessage` to Users**
+
+The `userMessage` field contains a user-friendly explanation of the error. Display this to your users instead of the raw `errorCodes`. The `errorCodes` array is for programmatic error handling and logging.
+</Tip>
 
 ## Step 4: Create Withdrawal
 

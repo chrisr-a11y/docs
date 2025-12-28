@@ -167,6 +167,7 @@
             "pages": [
               "streaming-endpoints/market-data-stream",
               "streaming-endpoints/order-stream",
+              "streaming-endpoints/dropcopy-stream",
               "streaming-endpoints/funding-stream"
             ]
           },
