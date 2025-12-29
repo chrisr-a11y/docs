@@ -11,9 +11,6 @@
     "default": "light",
     "strict": false
   },
-  "shield": {
-    "type": "password"
-  },
   "navigation": {
     "tabs": [
       {
