@@ -229,7 +229,8 @@
           {
             "group": "Client Libraries",
             "pages": [
-              "sample-code/python"
+              "sample-code/python",
+              "sample-code/go"
             ]
           }
         ]
