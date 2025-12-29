@@ -224,6 +224,17 @@
         ]
       },
       {
+        "tab": "Sample Code",
+        "groups": [
+          {
+            "group": "Client Libraries",
+            "pages": [
+              "sample-code/python"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "FAQ",
         "pages": ["faq"]
       },

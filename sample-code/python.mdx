@@ -1,0 +1,249 @@
+---
+title: "Python Sample Code"
+description: "Python client library and examples for the Polymarket Exchange API"
+---
+
+## Overview
+
+This Python sample code package demonstrates how to authenticate with and use the Polymarket Exchange API. It includes a complete client library and 10 example scripts covering all major API endpoints.
+
+<Card title="Download Sample Code" icon="download" href="/downloads/polymarket-client-sample-code.zip">
+  Download the complete Python sample code package (ZIP)
+</Card>
+
+## Prerequisites
+
+- Python 3.6 or higher
+- Auth0 credentials (Client ID and private key) provided by Polymarket
+- A registered trading account
+
+## Installation
+
+```bash
+# Extract the download
+unzip polymarket-client-sample-code.zip
+cd client_sample_code/python
+
+# Install dependencies
+pip3 install -r requirements.txt
+```
+
+## Configuration
+
+Copy the sample environment file and fill in your credentials:
+
+```bash
+cp sample_env.sh my_env.sh
+nano my_env.sh  # Edit with your credentials
+source my_env.sh
+```
+
+### Required Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `POLYMARKET_CLIENT_ID` | Your Auth0 Client ID |
+| `POLYMARKET_PRIVATE_KEY_PATH` | Path to your RSA private key (PEM format) |
+| `POLYMARKET_API_URL` | API base URL (e.g., `https://api.polymarketexchange.com`) |
+| `POLYMARKET_AUTH0_DOMAIN` | Auth0 domain provided by Polymarket |
+| `POLYMARKET_AUTH0_AUDIENCE` | Auth0 audience (matches API URL) |
+| `POLYMARKET_PARTICIPANT_ID` | Your participant ID (e.g., `firms/Your-Firm/users/your-user`) |
+| `POLYMARKET_ACCOUNT` | Your trading account (e.g., `firms/Your-Firm/accounts/your-account`) |
+
+### Optional Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `POLYMARKET_TEST_SYMBOL` | `SBLIX-KC-YES` | Symbol for order placement demo |
+| `POLYMARKET_VERBOSE` | `false` | Enable verbose logging |
+| `POLYMARKET_TIMEOUT` | `30` | Request timeout (seconds) |
+
+## Running Examples
+
+### Run All Examples
+
+```bash
+cd examples
+python3 run_all.py
+```
+
+### Run Individual Examples
+
+```bash
+# Health check (no authentication required)
+python3 examples/01_health_check.py
+
+# Get current user info
+python3 examples/02_whoami.py
+
+# List trading accounts
+python3 examples/03_list_accounts.py
+
+# Get account balance
+python3 examples/04_get_balance.py
+
+# List positions
+python3 examples/05_list_positions.py
+
+# List tradeable instruments
+python3 examples/06_list_instruments.py
+
+# List all symbols
+python3 examples/07_list_symbols.py
+
+# Search order history
+python3 examples/08_search_orders.py
+
+# List users in firm
+python3 examples/09_list_users.py
+
+# Place and cancel order (safe demo)
+python3 examples/10_place_and_cancel_order.py
+```
+
+## Code Examples
+
+### Authentication Flow
+
+The client uses **private_key_jwt** authentication with Auth0:
+
+```python
+import jwt
+from cryptography.hazmat.primitives import serialization
+
+def create_client_assertion(client_id: str, domain: str, private_key_path: str) -> str:
+    """Create a signed JWT for client authentication."""
+    # Load private key
+    with open(private_key_path, 'rb') as f:
+        private_key = serialization.load_pem_private_key(f.read(), password=None)
+
+    # Create claims
+    now = int(time.time())
+    claims = {
+        "iss": client_id,
+        "sub": client_id,
+        "aud": f"https://{domain}/oauth/token",
+        "iat": now,
+        "exp": now + 300,  # 5 minutes
+        "jti": str(uuid.uuid4()),
+    }
+
+    # Sign and return
+    return jwt.encode(claims, private_key, algorithm="RS256")
+```
+
+### Using the API Client
+
+```python
+from config import load_config
+from api_client import PolymarketClient
+
+# Load configuration from environment
+config = load_config()
+
+# Create client
+client = PolymarketClient(config)
+
+# Make API calls
+status, result = client.health()
+print(f"Health: {result}")
+
+status, result = client.whoami()
+print(f"User: {result.get('user')}")
+
+status, result = client.get_balance(config.account, "USD")
+print(f"Balance: ${float(result.get('balance', 0)):,.2f}")
+```
+
+### Placing and Canceling Orders
+
+```python
+import uuid
+
+# Generate unique client order ID
+clord_id = f"sample-{uuid.uuid4()}"
+
+# Place order at unattractive price (won't fill)
+status, result = client.place_order(
+    symbol="SBLIX-KC-YES",     # Kansas City wins Super Bowl
+    side="SIDE_BUY",
+    order_type="ORDER_TYPE_LIMIT",
+    quantity=1,
+    price=1,                   # $0.01 - very unattractive
+    account=config.account,
+    clord_id=clord_id,
+)
+
+# Get order ID from response
+order_id = result.get("orderId", "") or result.get("order_id", "")
+print(f"Order placed: {order_id}")
+
+# Cancel the order immediately
+cancel_status, cancel_result = client.cancel_order(
+    order_id=order_id,
+    account=config.account,
+    symbol="SBLIX-KC-YES"
+)
+print(f"Order cancelled: {cancel_status}")
+```
+
+## File Structure
+
+```
+client_sample_code/
+├── README.md                    # Overview documentation
+└── python/
+    ├── README.md                # Python-specific setup
+    ├── requirements.txt         # Dependencies (PyJWT, cryptography)
+    ├── sample_env.sh            # Sample environment configuration
+    ├── config.py                # Configuration loading and validation
+    ├── auth.py                  # Auth0 authentication
+    ├── api_client.py            # REST API client
+    └── examples/
+        ├── 01_health_check.py   # Health check (no auth)
+        ├── 02_whoami.py         # Get current user
+        ├── 03_list_accounts.py  # List accounts
+        ├── 04_get_balance.py    # Get balance
+        ├── 05_list_positions.py # List positions
+        ├── 06_list_instruments.py # List instruments
+        ├── 07_list_symbols.py   # List symbols
+        ├── 08_search_orders.py  # Search orders
+        ├── 09_list_users.py     # List users
+        ├── 10_place_and_cancel_order.py  # Place and cancel order
+        └── run_all.py           # Run all examples
+```
+
+## Troubleshooting
+
+### "Private key file not found"
+
+Ensure `POLYMARKET_PRIVATE_KEY_PATH` points to a valid PEM file:
+
+```bash
+# Check the file exists
+ls -la $POLYMARKET_PRIVATE_KEY_PATH
+
+# Verify it's a valid RSA private key
+openssl rsa -in $POLYMARKET_PRIVATE_KEY_PATH -check -noout
+```
+
+### "Missing required environment variables"
+
+Source your environment file before running:
+
+```bash
+source my_env.sh
+python3 examples/run_all.py
+```
+
+### "Auth0 returned 401"
+
+- Verify your Client ID is correct
+- Ensure your private key matches the public key registered with Auth0
+- Check that your credentials haven't expired
+
+## Support
+
+For API documentation, see the [REST API Reference](/api-reference/introduction).
+
+For issues with this sample code, contact **fix@qcex.com**.
