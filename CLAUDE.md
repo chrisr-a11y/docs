@@ -74,3 +74,24 @@ The REST API uses `/v1/` paths (RESTful style):
 
 Legacy `/v1beta1/` paths are supported for backwards compatibility but NOT documented.
 
+## MDX Syntax Restrictions
+
+Mintlify uses MDX (Markdown + JSX). Avoid these characters that break parsing:
+
+**Do NOT use:**
+- Curly braces `{ }` outside code blocks - interpreted as JSX expressions
+- Angle brackets `< >` in text - interpreted as HTML/JSX tags
+- Checkbox characters `☐ ☑` - cause parsing errors
+- Other special Unicode symbols that may conflict with JSX
+
+**Instead use:**
+- Square brackets `[ ]` for placeholders: `[companyname]` not `{companyname}`
+- Words for ranges: `Under $1M` not `<$1M`, `Over $100M` not `>$100M`
+- Markdown checkboxes: `- [ ]` in lists, or just leave blank fields in tables
+
+**Test locally before pushing:**
+```bash
+npx mintlify dev
+```
+Watch for "parsing error" messages in the terminal output.
+
