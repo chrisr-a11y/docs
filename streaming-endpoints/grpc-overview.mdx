@@ -79,6 +79,17 @@ grpc.api.polymarketexchange.com:443
 Both endpoints use **TLS/SSL** for secure communication. All connections must be encrypted.
 </Info>
 
+### Testing Connectivity
+
+From a machine with proper DNS (or after adding to `/etc/hosts`):
+
+```bash
+# Test preprod connectivity
+grpcurl -insecure grpc-api.preprod.polymarketexchange.com:443 list
+```
+
+This will list all available gRPC services if your connection is successful.
+
 ## Protocol Buffer Definitions
 
 The exchange uses **Protocol Buffers (proto3)** to define message structures. Proto files are available:
