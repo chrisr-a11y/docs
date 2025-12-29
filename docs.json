@@ -190,7 +190,10 @@
           {
             "group": "Onboarding",
             "pages": [
-              "isv-partners/onboarding-template"
+              "isv-partners/onboarding-template",
+              "isv-partners/participant-agreement",
+              "isv-partners/contact-form",
+              "isv-partners/corporate-application"
             ]
           },
           {
