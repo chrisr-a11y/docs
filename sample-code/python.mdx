@@ -1,20 +1,30 @@
 ---
 title: "Python Sample Code"
-description: "Python client library and examples for the Polymarket Exchange API"
+description: "Python client library for the Polymarket Exchange REST API"
 ---
 
 ## Overview
 
-This Python sample code package demonstrates how to authenticate with and use the Polymarket Exchange API. It includes a complete client library and 10 example scripts covering all major API endpoints.
+The Python sample code demonstrates how to authenticate and use the **Polymarket Exchange REST API**. It includes a complete client library and 10 example scripts covering all major REST endpoints.
+
+<Note>
+**Looking for gRPC streaming?** The [Go Sample Code](/sample-code/go) includes examples for real-time gRPC streaming connections (market data, orders, positions, funding, and drop copy).
+</Note>
 
 <Card title="Download Sample Code" icon="download" href="/downloads/polymarket-client-sample-code.zip">
-  Download the complete Python sample code package (ZIP)
+  Download the complete sample code package (includes Python and Go)
 </Card>
+
+## What's Included
+
+- **REST API Client** - Complete client for all REST endpoints
+- **10 Example Scripts** - Ready-to-run examples for each operation
+- **Authentication** - Private key JWT authentication flow
 
 ## Prerequisites
 
 - Python 3.6 or higher
-- Auth0 credentials (Client ID and private key) provided by Polymarket
+- Credentials (Client ID and private key) provided by Polymarket
 - A registered trading account
 
 ## Installation
@@ -42,11 +52,11 @@ source my_env.sh
 
 | Variable | Description |
 |----------|-------------|
-| `POLYMARKET_CLIENT_ID` | Your Auth0 Client ID |
+| `POLYMARKET_CLIENT_ID` | Your Client ID (provided by Polymarket) |
 | `POLYMARKET_PRIVATE_KEY_PATH` | Path to your RSA private key (PEM format) |
-| `POLYMARKET_API_URL` | API base URL (e.g., `https://api.polymarketexchange.com`) |
-| `POLYMARKET_AUTH0_DOMAIN` | Auth0 domain provided by Polymarket |
-| `POLYMARKET_AUTH0_AUDIENCE` | Auth0 audience (matches API URL) |
+| `POLYMARKET_API_URL` | API base URL (e.g., `https://api.preprod.polymarketexchange.com`) |
+| `POLYMARKET_AUTH_DOMAIN` | Authentication domain (e.g., `auth.preprod.polymarketexchange.com`) |
+| `POLYMARKET_AUTH_AUDIENCE` | Authentication audience (matches API URL) |
 | `POLYMARKET_PARTICIPANT_ID` | Your participant ID (e.g., `firms/Your-Firm/users/your-user`) |
 | `POLYMARKET_ACCOUNT` | Your trading account (e.g., `firms/Your-Firm/accounts/your-account`) |
 
@@ -57,6 +67,21 @@ source my_env.sh
 | `POLYMARKET_TEST_SYMBOL` | `SBLIX-KC-YES` | Symbol for order placement demo |
 | `POLYMARKET_VERBOSE` | `false` | Enable verbose logging |
 | `POLYMARKET_TIMEOUT` | `30` | Request timeout (seconds) |
+
+## REST API Examples
+
+| Example | Description |
+|---------|-------------|
+| `01_health_check.py` | Health check (no authentication required) |
+| `02_whoami.py` | Get current user info |
+| `03_list_accounts.py` | List trading accounts |
+| `04_get_balance.py` | Get account balance |
+| `05_list_positions.py` | List positions |
+| `06_list_instruments.py` | List tradeable instruments |
+| `07_list_symbols.py` | List all symbols |
+| `08_search_orders.py` | Search order history |
+| `09_list_users.py` | List users in firm |
+| `10_place_and_cancel_order.py` | Place and cancel order (safe demo) |
 
 ## Running Examples
 
@@ -70,34 +95,8 @@ python3 run_all.py
 ### Run Individual Examples
 
 ```bash
-# Health check (no authentication required)
 python3 examples/01_health_check.py
-
-# Get current user info
 python3 examples/02_whoami.py
-
-# List trading accounts
-python3 examples/03_list_accounts.py
-
-# Get account balance
-python3 examples/04_get_balance.py
-
-# List positions
-python3 examples/05_list_positions.py
-
-# List tradeable instruments
-python3 examples/06_list_instruments.py
-
-# List all symbols
-python3 examples/07_list_symbols.py
-
-# Search order history
-python3 examples/08_search_orders.py
-
-# List users in firm
-python3 examples/09_list_users.py
-
-# Place and cancel order (safe demo)
 python3 examples/10_place_and_cancel_order.py
 ```
 
@@ -105,7 +104,7 @@ python3 examples/10_place_and_cancel_order.py
 
 ### Authentication Flow
 
-The client uses **private_key_jwt** authentication with Auth0:
+The client uses **private_key_jwt** authentication:
 
 ```python
 import jwt
@@ -113,11 +112,9 @@ from cryptography.hazmat.primitives import serialization
 
 def create_client_assertion(client_id: str, domain: str, private_key_path: str) -> str:
     """Create a signed JWT for client authentication."""
-    # Load private key
     with open(private_key_path, 'rb') as f:
         private_key = serialization.load_pem_private_key(f.read(), password=None)
 
-    # Create claims
     now = int(time.time())
     claims = {
         "iss": client_id,
@@ -128,7 +125,6 @@ def create_client_assertion(client_id: str, domain: str, private_key_path: str) 
         "jti": str(uuid.uuid4()),
     }
 
-    # Sign and return
     return jwt.encode(claims, private_key, algorithm="RS256")
 ```
 
@@ -165,16 +161,15 @@ clord_id = f"sample-{uuid.uuid4()}"
 
 # Place order at unattractive price (won't fill)
 status, result = client.place_order(
-    symbol="SBLIX-KC-YES",     # Kansas City wins Super Bowl
+    symbol="SBLIX-KC-YES",
     side="SIDE_BUY",
     order_type="ORDER_TYPE_LIMIT",
     quantity=1,
-    price=1,                   # $0.01 - very unattractive
+    price=1,  # $0.01 - very unattractive
     account=config.account,
     clord_id=clord_id,
 )
 
-# Get order ID from response
 order_id = result.get("orderId", "") or result.get("order_id", "")
 print(f"Order placed: {order_id}")
 
@@ -190,27 +185,25 @@ print(f"Order cancelled: {cancel_status}")
 ## File Structure
 
 ```
-client_sample_code/
-├── README.md                    # Overview documentation
-└── python/
-    ├── README.md                # Python-specific setup
-    ├── requirements.txt         # Dependencies (PyJWT, cryptography)
-    ├── sample_env.sh            # Sample environment configuration
-    ├── config.py                # Configuration loading and validation
-    ├── auth.py                  # Auth0 authentication
-    ├── api_client.py            # REST API client
-    └── examples/
-        ├── 01_health_check.py   # Health check (no auth)
-        ├── 02_whoami.py         # Get current user
-        ├── 03_list_accounts.py  # List accounts
-        ├── 04_get_balance.py    # Get balance
-        ├── 05_list_positions.py # List positions
-        ├── 06_list_instruments.py # List instruments
-        ├── 07_list_symbols.py   # List symbols
-        ├── 08_search_orders.py  # Search orders
-        ├── 09_list_users.py     # List users
-        ├── 10_place_and_cancel_order.py  # Place and cancel order
-        └── run_all.py           # Run all examples
+client_sample_code/python/
+├── README.md                # Python-specific setup
+├── requirements.txt         # Dependencies (PyJWT, cryptography)
+├── sample_env.sh            # Sample environment configuration
+├── config.py                # Configuration loading and validation
+├── auth.py                  # Authentication
+├── api_client.py            # REST API client
+└── examples/
+    ├── 01_health_check.py   # Health check (no auth)
+    ├── 02_whoami.py         # Get current user
+    ├── 03_list_accounts.py  # List accounts
+    ├── 04_get_balance.py    # Get balance
+    ├── 05_list_positions.py # List positions
+    ├── 06_list_instruments.py # List instruments
+    ├── 07_list_symbols.py   # List symbols
+    ├── 08_search_orders.py  # Search orders
+    ├── 09_list_users.py     # List users
+    ├── 10_place_and_cancel_order.py  # Place and cancel order
+    └── run_all.py           # Run all examples
 ```
 
 ## Troubleshooting
@@ -220,10 +213,7 @@ client_sample_code/
 Ensure `POLYMARKET_PRIVATE_KEY_PATH` points to a valid PEM file:
 
 ```bash
-# Check the file exists
 ls -la $POLYMARKET_PRIVATE_KEY_PATH
-
-# Verify it's a valid RSA private key
 openssl rsa -in $POLYMARKET_PRIVATE_KEY_PATH -check -noout
 ```
 
@@ -236,10 +226,10 @@ source my_env.sh
 python3 examples/run_all.py
 ```
 
-### "Auth0 returned 401"
+### "Authentication server returned 401"
 
 - Verify your Client ID is correct
-- Ensure your private key matches the public key registered with Auth0
+- Ensure your private key matches the public key registered with Polymarket
 - Check that your credentials haven't expired
 
 ## Support

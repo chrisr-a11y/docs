@@ -1,27 +1,37 @@
 ---
 title: "Go Sample Code"
-description: "Go client library and examples for the Polymarket Exchange API with REST and gRPC streaming"
+description: "Go client library for the Polymarket Exchange API with REST and gRPC streaming"
 ---
 
 ## Overview
 
-This Go sample code package demonstrates how to authenticate with and use the Polymarket Exchange API. It includes a complete client library covering both **REST API** and **gRPC streaming** endpoints, with 16 example programs.
+The Go sample code demonstrates how to authenticate and use the **Polymarket Exchange API**, including both REST endpoints and **real-time gRPC streaming**. It includes 16 example programs covering all API operations.
 
 <Card title="Download Sample Code" icon="download" href="/downloads/polymarket-client-sample-code.zip">
   Download the complete sample code package (includes Python and Go)
 </Card>
 
-## Features
+## What's Included
 
-- **REST API Client** - All 10 REST operations (same as Python)
-- **gRPC Streaming** - Real-time market data, orders, positions, funding, and drop copy
-- **Connect Protocol** - HTTP/2 alternative to native gRPC
-- **Pre-generated Protos** - No protoc installation required
+<CardGroup cols={2}>
+  <Card title="REST API Client" icon="server">
+    Complete client for all 10 REST endpoints (same operations as Python)
+  </Card>
+  <Card title="gRPC Streaming" icon="bolt">
+    6 examples for real-time streaming: market data, orders, positions, funding, and drop copy
+  </Card>
+  <Card title="Connect Protocol" icon="plug">
+    HTTP/2 alternative to native gRPC for environments that don't support gRPC
+  </Card>
+  <Card title="Pre-generated Protos" icon="code">
+    No protoc installation required - all proto files are pre-generated
+  </Card>
+</CardGroup>
 
 ## Prerequisites
 
 - Go 1.21 or higher
-- Auth0 credentials (Client ID and private key) provided by Polymarket
+- Credentials (Client ID and private key) provided by Polymarket
 - A registered trading account
 
 ## Installation
@@ -49,11 +59,11 @@ source my_env.sh
 
 | Variable | Description |
 |----------|-------------|
-| `POLYMARKET_CLIENT_ID` | Your Auth0 Client ID |
+| `POLYMARKET_CLIENT_ID` | Your Client ID (provided by Polymarket) |
 | `POLYMARKET_PRIVATE_KEY_PATH` | Path to your RSA private key (PEM format) |
-| `POLYMARKET_API_URL` | API base URL (e.g., `https://api.polymarketexchange.com`) |
-| `POLYMARKET_AUTH0_DOMAIN` | Auth0 domain provided by Polymarket |
-| `POLYMARKET_AUTH0_AUDIENCE` | Auth0 audience (matches API URL) |
+| `POLYMARKET_API_URL` | API base URL (e.g., `https://api.preprod.polymarketexchange.com`) |
+| `POLYMARKET_AUTH_DOMAIN` | Authentication domain (e.g., `auth.preprod.polymarketexchange.com`) |
+| `POLYMARKET_AUTH_AUDIENCE` | Authentication audience (matches API URL) |
 | `POLYMARKET_PARTICIPANT_ID` | Your participant ID (e.g., `firms/Your-Firm/users/your-user`) |
 | `POLYMARKET_ACCOUNT` | Your trading account (e.g., `firms/Your-Firm/accounts/your-account`) |
 
@@ -62,7 +72,7 @@ source my_env.sh
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `POLYMARKET_TEST_SYMBOL` | `SBLIX-KC-YES` | Symbol for order placement demo |
-| `POLYMARKET_GRPC_ADDR` | (derived) | gRPC endpoint address |
+| `POLYMARKET_GRPC_ADDR` | (derived from API URL) | gRPC endpoint address |
 | `POLYMARKET_VERBOSE` | `false` | Enable verbose logging |
 | `POLYMARKET_TIMEOUT` | `30` | Request timeout (seconds) |
 
@@ -119,14 +129,16 @@ go run ./examples/11_grpc_market_data_stream
 
 ## gRPC Streaming Examples (11-16)
 
+These examples demonstrate real-time streaming connections for live market data and trading updates:
+
 | Example | Description |
 |---------|-------------|
-| `11_grpc_market_data_stream` | Real-time order book updates |
-| `12_grpc_order_subscription` | Order status notifications |
-| `13_grpc_position_subscription` | Position change updates |
-| `14_grpc_funding_subscription` | Funding notifications |
-| `15_grpc_dropcopy_subscription` | Execution reports (drop copy) |
-| `16_connect_streaming` | Streaming via Connect protocol |
+| `11_grpc_market_data_stream` | **Real-time order book updates** - Subscribe to bid/ask changes |
+| `12_grpc_order_subscription` | **Order status notifications** - Get live updates on your orders |
+| `13_grpc_position_subscription` | **Position change updates** - Track position changes in real-time |
+| `14_grpc_funding_subscription` | **Funding notifications** - Monitor deposits and withdrawals |
+| `15_grpc_dropcopy_subscription` | **Execution reports (drop copy)** - Receive trade confirmations |
+| `16_connect_streaming` | **Connect protocol** - Streaming via HTTP/2 (alternative to gRPC) |
 
 ## Code Examples
 
@@ -158,11 +170,11 @@ func main() {
 
     // Get balance
     balance, _ := client.GetBalance(cfg.Account, "USD")
-    fmt.Printf("Balance: $%.2f\n", balance.Balance)
+    fmt.Printf("Balance: %s\n", balance.Balance)
 }
 ```
 
-### gRPC Streaming
+### gRPC Streaming - Market Data
 
 ```go
 package main
@@ -185,12 +197,12 @@ func main() {
     ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
     defer cancel()
 
-    // Subscribe to market data
+    // Subscribe to market data for specific symbols
     sub, _ := client.SubscribeMarketData(ctx, []string{"SBLIX-KC-YES"}, 5)
     defer sub.Close()
 
-    // Receive updates
-    for i := 0; i < 5; i++ {
+    // Receive real-time order book updates
+    for i := 0; i < 10; i++ {
         select {
         case update := <-sub.Updates():
             fmt.Printf("Symbol: %s, Bids: %d, Offers: %d\n",
@@ -198,6 +210,21 @@ func main() {
         case <-sub.Done():
             return
         }
+    }
+}
+```
+
+### gRPC Streaming - Order Subscription
+
+```go
+// Subscribe to order status updates
+sub, _ := client.SubscribeOrders(ctx, []string{cfg.Account})
+defer sub.Close()
+
+for update := range sub.Updates() {
+    if order := update.GetOrder(); order != nil {
+        fmt.Printf("Order %s: Status=%s, Filled=%d\n",
+            order.OrderId, order.Status, order.FilledQty)
     }
 }
 ```
@@ -215,7 +242,7 @@ func createClientAssertion(cfg *config.Config) string {
     claims := jwt.MapClaims{
         "iss": cfg.ClientID,
         "sub": cfg.ClientID,
-        "aud": fmt.Sprintf("https://%s/oauth/token", cfg.Auth0Domain),
+        "aud": fmt.Sprintf("https://%s/oauth/token", cfg.AuthDomain),
         "iat": now.Unix(),
         "exp": now.Add(5 * time.Minute).Unix(),
         "jti": uuid.New().String(),
@@ -239,7 +266,7 @@ client_sample_code/go/
 ├── config/
 │   └── config.go            # Configuration loading and validation
 ├── auth/
-│   └── auth.go              # Auth0 JWT authentication
+│   └── auth.go              # JWT authentication
 ├── rest/
 │   └── client.go            # REST API client
 ├── grpc/
@@ -250,8 +277,12 @@ client_sample_code/go/
 ├── examples/
 │   ├── 01_health_check/     # REST examples (01-10)
 │   ├── ...
-│   ├── 11_grpc_market_data_stream/  # gRPC examples (11-16)
-│   └── ...
+│   ├── 11_grpc_market_data_stream/  # gRPC streaming examples (11-16)
+│   ├── 12_grpc_order_subscription/
+│   ├── 13_grpc_position_subscription/
+│   ├── 14_grpc_funding_subscription/
+│   ├── 15_grpc_dropcopy_subscription/
+│   └── 16_connect_streaming/
 └── cmd/
     └── run_all/             # Run all examples
 ```
@@ -263,10 +294,7 @@ client_sample_code/go/
 Ensure `POLYMARKET_PRIVATE_KEY_PATH` points to a valid PEM file:
 
 ```bash
-# Check the file exists
 ls -la $POLYMARKET_PRIVATE_KEY_PATH
-
-# Verify it's a valid RSA private key
 openssl rsa -in $POLYMARKET_PRIVATE_KEY_PATH -check -noout
 ```
 
@@ -279,10 +307,10 @@ source my_env.sh
 make run-all
 ```
 
-### "Auth0 returned 401"
+### "Authentication server returned 401"
 
 - Verify your Client ID is correct
-- Ensure your private key matches the public key registered with Auth0
+- Ensure your private key matches the public key registered with Polymarket
 - Check that your credentials haven't expired
 
 ### gRPC Connection Issues
@@ -293,6 +321,6 @@ make run-all
 
 ## Support
 
-For API documentation, see the [REST API Reference](/api-reference/introduction) and [gRPC Streaming](/streaming-endpoints/market-data).
+For API documentation, see the [REST API Reference](/api-reference/introduction) and [gRPC Streaming](/streaming-endpoints/grpc-overview).
 
 For issues with this sample code, contact **fix@qcex.com**.
