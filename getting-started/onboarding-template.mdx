@@ -59,7 +59,7 @@ description: 'Template for partner onboarding submission'
 |-------|-------|
 | **Public Key Filename** | `{firmname}_preprod_public_key.pem` |
 | **Key Generated Date** | |
-| **Key Fingerprint** | (output of `openssl rsa -pubin -in {firmname}_preprod_public_key.pem -fingerprint -noout`) |
+| **Key Fingerprint** | (output of `sha256sum {firmname}_preprod_public_key.pem`) |
 
 ### Production Key
 
@@ -67,7 +67,7 @@ description: 'Template for partner onboarding submission'
 |-------|-------|
 | **Public Key Filename** | `{firmname}_prod_public_key.pem` |
 | **Key Generated Date** | |
-| **Key Fingerprint** | (output of `openssl rsa -pubin -in {firmname}_prod_public_key.pem -fingerprint -noout`) |
+| **Key Fingerprint** | (output of `sha256sum {firmname}_prod_public_key.pem`) |
 
 ## Use Case Description
 

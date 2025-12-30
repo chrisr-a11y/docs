@@ -20,9 +20,9 @@ openssl rsa -in acme_preprod_private_key.pem -pubout -out acme_preprod_public_ke
 openssl genrsa -out acme_prod_private_key.pem 2048
 openssl rsa -in acme_prod_private_key.pem -pubout -out acme_prod_public_key.pem
 
-# Generate fingerprints for both keys (you'll need these for verification)
-openssl rsa -pubin -in acme_preprod_public_key.pem -fingerprint -noout
-openssl rsa -pubin -in acme_prod_public_key.pem -fingerprint -noout
+# Generate SHA256 hashes for both keys (you'll need these for verification)
+sha256sum acme_preprod_public_key.pem
+sha256sum acme_prod_public_key.pem
 ```
 
 <Info>
@@ -92,10 +92,10 @@ During the verification call:
 - Each contact must provide **government-issued photo ID** to verify their identity
 - You will verbally confirm the fingerprints of **both** public keys
 
-Have both key fingerprints ready:
+Have the SHA256 hashes ready for both keys:
 ```bash
-openssl rsa -pubin -in {companyname}_preprod_public_key.pem -fingerprint -noout
-openssl rsa -pubin -in {companyname}_prod_public_key.pem -fingerprint -noout
+sha256sum {companyname}_preprod_public_key.pem
+sha256sum {companyname}_prod_public_key.pem
 ```
 </Warning>
 

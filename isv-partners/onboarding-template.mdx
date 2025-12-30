@@ -73,7 +73,7 @@ Copy each template into a Google Document, fill it out, and include in your onbo
 |-------|-------|
 | **Public Key Filename** | `[companyname]_preprod_public_key.pem` |
 | **Key Generated Date** | |
-| **Key Fingerprint** | (output of `openssl rsa -pubin -in [companyname]_preprod_public_key.pem -fingerprint -noout`) |
+| **Key Fingerprint** | (output of `sha256sum [companyname]_preprod_public_key.pem`) |
 
 ### Production Key
 
@@ -81,7 +81,7 @@ Copy each template into a Google Document, fill it out, and include in your onbo
 |-------|-------|
 | **Public Key Filename** | `[companyname]_prod_public_key.pem` |
 | **Key Generated Date** | |
-| **Key Fingerprint** | (output of `openssl rsa -pubin -in [companyname]_prod_public_key.pem -fingerprint -noout`) |
+| **Key Fingerprint** | (output of `sha256sum [companyname]_prod_public_key.pem`) |
 
 ## Use Case Description
 
