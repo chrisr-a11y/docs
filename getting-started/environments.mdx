@@ -16,9 +16,9 @@ This is the **single source of truth** for all API endpoints. Bookmark this page
 
 | Environment | REST API | gRPC | Auth Domain | Audience |
 |-------------|----------|------|-------------|----------|
-| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc.dev01.polymarketexchange.com:443` | `auth.dev.polymarketexchange.com` | `pmx-dev01-api` |
-| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `pmx-preprod-api` |
-| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `pmx-prod-api` |
+| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc.dev01.polymarketexchange.com:443` | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` |
+| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` |
 
 ### API Path Patterns
 
@@ -49,7 +49,7 @@ Development environment for initial integration and testing.
 | **REST API** | `https://api.dev01.polymarketexchange.com` |
 | **gRPC** | `grpc.dev01.polymarketexchange.com:443` |
 | **Auth Domain** | `auth.dev.polymarketexchange.com` |
-| **Audience** | `pmx-dev01-api` |
+| **Audience** | `https://api.dev01.polymarketexchange.com` |
 
 <Card title="Dev Health Check" icon="heart-pulse" href="https://api.dev01.polymarketexchange.com/v1/health">
   Click to check dev environment health
@@ -66,7 +66,7 @@ Pre-production environment for final validation before going live.
 | **REST API** | `https://api.preprod.polymarketexchange.com` |
 | **gRPC** | `grpc.preprod.polymarketexchange.com:443` |
 | **Auth Domain** | `auth.preprod.polymarketexchange.com` |
-| **Audience** | `pmx-preprod-api` |
+| **Audience** | `https://api.preprod.polymarketexchange.com` |
 
 <Card title="Preprod Health Check" icon="heart-pulse" href="https://api.preprod.polymarketexchange.com/v1/health">
   Click to check preprod environment health
@@ -83,7 +83,7 @@ Live production environment for real trading.
 | **REST API** | `https://api.prod.polymarketexchange.com` |
 | **gRPC** | `grpc.prod.polymarketexchange.com:443` |
 | **Auth Domain** | `auth.polymarketexchange.com` |
-| **Audience** | `pmx-prod-api` |
+| **Audience** | `https://api.prod.polymarketexchange.com` |
 
 <Card title="Production Health Check" icon="heart-pulse" href="https://api.prod.polymarketexchange.com/v1/health">
   Click to check production environment health

@@ -81,7 +81,7 @@ curl --request POST \
     "client_id": "YOUR_CLIENT_ID",
     "client_assertion_type": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
     "client_assertion": "YOUR_SIGNED_JWT_ASSERTION",
-    "audience": "pmx-preprod-api",
+    "audience": "https://api.preprod.polymarketexchange.com",
     "grant_type": "client_credentials"
   }'
 ```
@@ -175,7 +175,7 @@ class AuthClient:
 auth_client = AuthClient(
     domain="auth.preprod.polymarketexchange.com",
     client_id="YOUR_CLIENT_ID",
-    audience="pmx-preprod-api",
+    audience="https://api.preprod.polymarketexchange.com",
     private_key_path="/path/to/my_private_key.pem"
 )
 
@@ -284,9 +284,9 @@ You can rotate your keys at any time:
 
 | Environment | Auth Domain | API Audience | API Base URL |
 |-------------|-------------|--------------|--------------|
-| Development | `auth.dev.polymarketexchange.com` | `pmx-dev01-api` | `api.dev01.polymarketexchange.com` |
-| Pre-production | `auth.preprod.polymarketexchange.com` | `pmx-preprod-api` | `api.preprod.polymarketexchange.com` |
-| Production | `auth.polymarketexchange.com` | `pmx-prod-api` | `api.prod.polymarketexchange.com` |
+| Development | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` | `api.dev01.polymarketexchange.com` |
+| Pre-production | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` | `api.preprod.polymarketexchange.com` |
+| Production | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` | `api.prod.polymarketexchange.com` |
 
 <Info>
 Each environment requires separate onboarding. Your pre-production credentials will not work in production.
@@ -333,14 +333,20 @@ Your application is granted specific **scopes** that control which API endpoints
 
 | Scope | Description |
 |-------|-------------|
-| `read:orders` | View orders and trade history |
-| `write:orders` | Create and cancel orders |
-| `read:positions` | View account positions and balances |
 | `read:marketdata` | Access BBO (best bid/offer) and streaming market data |
 | `read:l2marketdata` | Access L2 orderbook depth (premium) |
-| `instruments:read` | List instruments and metadata |
+| `read:instruments` | List instruments and metadata |
+| `read:orders` | View open orders, preview orders |
+| `write:orders` | Create and cancel orders |
+| `read:reports` | Search orders/trades/executions, download reports |
+| `read:positions` | View account positions and balances |
+| `read:dropcopy` | Drop copy subscriptions |
+| `read:accounts` | View users and account info |
+| `write:accounts` | Create/update users, API tokens |
 | `read:funding` | View funding accounts and transactions |
 | `write:funding` | Create deposits and withdrawals |
+| `read:kyc` | View KYC status and referral codes |
+| `write:kyc` | Start KYC verification, manage webhooks |
 
 ### Scope Requirements by Endpoint
 
@@ -348,18 +354,25 @@ Your application is granted specific **scopes** that control which API endpoints
 |----------|--------|----------------|
 | `/v1/trading/orders` | POST | `write:orders` |
 | `/v1/trading/orders/cancel` | POST | `write:orders` |
-| `/v1/orders/search` | POST | `read:orders` |
+| `/v1/trading/open-orders` | GET | `read:orders` |
+| `/v1/orders/search` | POST | `read:reports` |
+| `/v1/trades/search` | POST | `read:reports` |
 | `/v1/positions` | GET | `read:positions` |
 | `/v1/positions/balance` | POST | `read:positions` |
 | `/v1/positions/balances` | POST | `read:positions` |
 | `/v1/orderbook/{symbol}` | GET | `read:l2marketdata` |
 | `/v1/orderbook/{symbol}/bbo` | GET | `read:marketdata` |
-| `/v1/refdata/symbols` | POST | `instruments:read` |
-| `/v1/refdata/instruments` | POST | `instruments:read` |
-| `/v1/refdata/metadata` | POST | `instruments:read` |
+| `/v1/refdata/symbols` | POST | `read:instruments` |
+| `/v1/refdata/instruments` | POST | `read:instruments` |
+| `/v1/refdata/metadata` | POST | `read:instruments` |
+| `/v1/accounts/whoami` | GET | `read:accounts` |
+| `/v1/users` | GET | `read:accounts` |
+| `/v1/users` | POST | `write:accounts` |
 | `/v1/funding/accounts` | GET | `read:funding` |
 | `/v1/aeropay/deposits` | POST | `write:funding` |
 | `/v1/checkout/deposits` | POST | `write:funding` |
+| `/v1/kyc/status` | GET | `read:kyc` |
+| `/v1/kyc/verify` | POST | `write:kyc` |
 | `/v1/health` | GET | *(no auth required)* |
 
 ### Checking Your Scopes
