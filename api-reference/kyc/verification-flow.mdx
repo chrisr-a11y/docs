@@ -84,7 +84,9 @@ POST /v1/kyc/start
     "eventId": "event_123",
     "qrCode": "data:image/png;base64,...",
     "url": "https://verify.example.com/session/abc123"
-  }
+  },
+  "participantId": "",
+  "account": ""
 }
 ```
 
@@ -101,9 +103,13 @@ If the identity can be verified immediately:
     "status": "complete",
     "subStatus": "",
     "externalId": "ext_abc123"
-  }
+  },
+  "participantId": "firms/ISV-Participant-Acme/users/user_123",
+  "account": "firms/ISV-Acme/accounts/a1b2c3d4e5f6"
 }
 ```
+
+The `participantId` and `account` fields are populated only after approval. Use these identifiers for subsequent trading API calls.
 
 ### Document Verification Required
 
@@ -129,6 +135,7 @@ Poll the status endpoint to track verification progress:
 GET /v1/kyc/status?externalId=ext_abc123
 ```
 
+**Response when pending:**
 ```json
 {
   "status": {
@@ -136,7 +143,23 @@ GET /v1/kyc/status?externalId=ext_abc123
     "status": "document_review",
     "subStatus": "awaiting_review",
     "externalId": "ext_abc123"
-  }
+  },
+  "participantId": "",
+  "account": ""
+}
+```
+
+**Response when approved:**
+```json
+{
+  "status": {
+    "decision": "approved",
+    "status": "complete",
+    "subStatus": "",
+    "externalId": "ext_abc123"
+  },
+  "participantId": "firms/ISV-Participant-Acme/users/user_123",
+  "account": "firms/ISV-Acme/accounts/a1b2c3d4e5f6"
 }
 ```
 

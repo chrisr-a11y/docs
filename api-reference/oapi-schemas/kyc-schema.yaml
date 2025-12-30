@@ -184,6 +184,12 @@ definitions:
     properties:
       status:
         $ref: '#/definitions/v1KYCStatus'
+      participantId:
+        type: string
+        description: EP3 participant ID (populated after approval)
+      account:
+        type: string
+        description: EP3 account ID (populated after approval)
   v1GetReferralCodesResponse:
     type: object
     properties:
@@ -313,6 +319,12 @@ definitions:
         $ref: '#/definitions/v1KYCStatus'
       docv:
         $ref: '#/definitions/v1KYCDocv'
+      participantId:
+        type: string
+        description: EP3 participant ID (populated after approval)
+      account:
+        type: string
+        description: EP3 account ID (populated after approval)
   v1SubmitKYCPrefillOTPRequest:
     type: object
     properties:

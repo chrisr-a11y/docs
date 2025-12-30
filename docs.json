@@ -206,6 +206,7 @@
               "isv-partners/kyc/overview",
               "isv-partners/kyc/prefill-flow",
               "isv-partners/kyc/verification-flow",
+              "isv-partners/kyc/webhooks",
               "isv-partners/kyc/referral-codes"
             ]
           },

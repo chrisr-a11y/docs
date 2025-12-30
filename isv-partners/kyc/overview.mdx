@@ -36,6 +36,7 @@ graph TD
 | `POST` | `/v1/kyc/prefill/otp` | Submit OTP for prefill verification |
 | `POST` | `/v1/kyc/start` | Start KYC verification |
 | `GET` | `/v1/kyc/status` | Get current KYC status |
+| `POST` | `/v1/kyc/webhook` | Register webhook URL for status notifications |
 | `POST` | `/v1/kyc/referral-codes` | Create partner referral code |
 | `GET` | `/v1/kyc/referral-codes` | List referral codes |
 | `GET` | `/v1/kyc/referral-codes/{code}` | Validate a referral code |
@@ -130,6 +131,8 @@ The status response contains:
 | `status` | Current status: `NOT_STARTED`, `OPEN`, `ON_HOLD`, `CLOSED` |
 | `subStatus` | Detailed sub-status (e.g., `Document Request Initiated`) |
 | `externalId` | The user_id you provided |
+| `participantId` | EP3 participant ID (populated after approval) |
+| `account` | EP3 account ID (populated after approval) |
 
 ## Document Verification (DocV)
 
@@ -146,4 +149,5 @@ If additional document verification is required, the `StartKYCVerification` resp
 
 - [Prefill Flow Details](/isv-partners/kyc/prefill-flow)
 - [Verification Flow Details](/isv-partners/kyc/verification-flow)
+- [Webhooks](/isv-partners/kyc/webhooks)
 - [Referral Codes](/isv-partners/kyc/referral-codes)

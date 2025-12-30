@@ -1,0 +1,122 @@
+---
+title: 'KYC Webhooks'
+description: 'Receive real-time KYC status notifications'
+---
+
+# KYC Webhooks
+
+Instead of polling the `/v1/kyc/status` endpoint, you can register a webhook URL to receive real-time notifications when a user's KYC status changes.
+
+## Registering Your Webhook
+
+### Request
+
+```bash
+POST /v1/kyc/webhook
+```
+
+```json
+{
+  "webhookUrl": "https://your-domain.com/kyc-webhook"
+}
+```
+
+### Request Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `webhookUrl` | string | Yes | HTTPS URL where you want to receive KYC notifications |
+
+### Response
+
+```json
+{
+  "validated": true,
+  "message": "Webhook URL validated successfully"
+}
+```
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `validated` | boolean | True if the test request to your webhook URL succeeded |
+| `message` | string | Status message with details |
+
+## Webhook Validation
+
+When you register a webhook URL, the system sends a test request to verify:
+
+1. The URL is reachable
+2. Your server responds with a 2xx status code
+3. The response is received within the timeout period
+
+If validation fails, the registration is rejected and you'll receive an error message explaining the issue.
+
+## Webhook Payload
+
+When a user's KYC status changes, you'll receive a POST request to your webhook URL with the following payload:
+
+```json
+{
+  "externalId": "user_123",
+  "decision": "ACCEPT",
+  "status": "CLOSED",
+  "subStatus": "",
+  "participantId": "firms/ISV-Participant-Acme/users/user_123",
+  "account": "firms/ISV-Acme/accounts/a1b2c3d4e5f6"
+}
+```
+
+### Payload Fields
+
+| Field | Description |
+|-------|-------------|
+| `externalId` | The user_id you provided when starting KYC |
+| `decision` | Final decision: `ACCEPT`, `REJECT`, `REVIEW`, or empty |
+| `status` | Current status: `NOT_STARTED`, `OPEN`, `ON_HOLD`, `CLOSED` |
+| `subStatus` | Detailed sub-status (e.g., `Document Request Initiated`) |
+| `participantId` | EP3 participant ID (populated after approval) |
+| `account` | EP3 account ID (populated after approval) |
+
+## Best Practices
+
+1. **Respond quickly** - Return a 2xx response within 5 seconds to acknowledge receipt
+2. **Process asynchronously** - Queue the webhook payload for processing rather than handling inline
+3. **Implement idempotency** - You may receive duplicate notifications; use `externalId` to deduplicate
+4. **Secure your endpoint** - Use HTTPS and validate the request source
+5. **Handle all statuses** - Your webhook should gracefully handle any status value
+
+## Example Implementation
+
+```python
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/kyc-webhook', methods=['POST'])
+def kyc_webhook():
+    payload = request.json
+
+    external_id = payload.get('externalId')
+    decision = payload.get('decision')
+
+    if decision == 'ACCEPT':
+        # User approved - extract account identifiers
+        participant_id = payload.get('participantId')
+        account = payload.get('account')
+        # Store these for trading operations
+        update_user_account(external_id, participant_id, account)
+    elif decision == 'REJECT':
+        # User denied - notify them
+        notify_user_denied(external_id)
+    elif decision == 'REVIEW':
+        # User needs to complete document verification
+        notify_user_docs_required(external_id)
+
+    return jsonify({'received': True}), 200
+```
+
+## Updating Your Webhook URL
+
+To update your webhook URL, simply call the registration endpoint again with the new URL. The new URL will replace the existing one after validation succeeds.

@@ -103,7 +103,9 @@ If the identity can be verified immediately:
     "status": "CLOSED",
     "subStatus": "",
     "externalId": "user_123"
-  }
+  },
+  "participantId": "firms/ISV-Participant-Acme/users/user_123",
+  "account": "firms/ISV-Acme/accounts/a1b2c3d4e5f6"
 }
 ```
 
@@ -113,9 +115,9 @@ If the identity can be verified immediately:
 When a user receives `decision: "ACCEPT"`, the system automatically:
 1. Creates an EP3 participant for the user
 2. Provisions a trading account
-3. Makes the user ready for funding and trading
+3. Returns the `participantId` and `account` identifiers in the response
 
-There is no separate account creation step required. The user can proceed directly to [funding](/isv-partners/payments/overview) after KYC approval.
+Use these identifiers for subsequent trading API calls. There is no separate account creation step required. The user can proceed directly to [funding](/isv-partners/payments/overview) after KYC approval.
 </Info>
 
 ### Document Verification Required
@@ -150,7 +152,9 @@ GET /v1/kyc/status?externalId=user_123
     "status": "ON_HOLD",
     "subStatus": "Document Request Initiated",
     "externalId": "user_123"
-  }
+  },
+  "participantId": "",
+  "account": ""
 }
 ```
 
@@ -162,7 +166,9 @@ GET /v1/kyc/status?externalId=user_123
     "status": "CLOSED",
     "subStatus": "",
     "externalId": "user_123"
-  }
+  },
+  "participantId": "firms/ISV-Participant-Acme/users/user_123",
+  "account": "firms/ISV-Acme/accounts/a1b2c3d4e5f6"
 }
 ```
 
@@ -174,7 +180,9 @@ GET /v1/kyc/status?externalId=user_123
     "status": "NOT_STARTED",
     "subStatus": "",
     "externalId": "user_123"
-  }
+  },
+  "participantId": "",
+  "account": ""
 }
 ```
 
