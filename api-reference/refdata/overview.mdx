@@ -16,12 +16,6 @@ The Reference Data API provides access to instrument definitions, symbol metadat
 | `POST` | `/v1/refdata/metadata` | Get instrument metadata |
 
 <Info>
-**No `x-participant-id` header required**
-
-Reference data endpoints only require a valid access token with `read:instruments` scope. Unlike trading and position endpoints, you do not need to provide the `x-participant-id` header.
-</Info>
-
-<Info>
 **No GET endpoint for single instrument**
 
 To get a single instrument, use `POST /v1/refdata/instruments` with `{"symbols": ["SYMBOL-NAME"]}` in the body.
