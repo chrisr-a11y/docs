@@ -232,6 +232,12 @@ Each trade contains two executions:
 
 Stream market state changes (halts, opens, closes).
 
+<Info>
+**No Participant ID Required**
+
+This endpoint only requires Auth0 JWT authentication with `read:instruments` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access instrument state changes.
+</Info>
+
 ### Request Parameters
 
 | Field | Type | Required | Description |

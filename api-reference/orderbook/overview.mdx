@@ -20,6 +20,12 @@ The Order Book API provides access to aggregated order book data for any trading
 | `GET` | `/v1/orderbook/{symbol}` | Get L2 order book snapshot |
 | `GET` | `/v1/orderbook/{symbol}/bbo` | Get best bid/offer |
 
+<Info>
+**No Participant ID Required**
+
+These endpoints only require Auth0 JWT authentication with `read:marketdata` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access order book data.
+</Info>
+
 ## L2 Order Book
 
 The L2 (Level 2) order book provides aggregated price levels showing the total quantity available at each price point. This is useful for:

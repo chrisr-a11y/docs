@@ -25,6 +25,14 @@ The Report API provides search and export capabilities for historical order and 
 | `POST` | `/v1/report/executions/csv` | Export executions to CSV |
 | `POST` | `/v1/report/trades/stats` | Get aggregated trade statistics |
 
+<Info>
+**No Participant ID Required for Trade Stats**
+
+The `/v1/report/trades/stats` endpoint only requires Auth0 JWT authentication with `read:reports` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access aggregated trade statistics.
+
+Note: Other report endpoints (orders search, trades search, etc.) still require participant_id.
+</Info>
+
 ## When to Use
 
 | Use Case | Recommended API |

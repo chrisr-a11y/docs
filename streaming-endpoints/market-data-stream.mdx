@@ -8,6 +8,12 @@ description: "Real-time market data streaming via gRPC with Python"
 
 Subscribe to real-time market data updates including order book depth, instrument states, and trade statistics using Python and gRPC.
 
+<Info>
+**No Participant ID Required**
+
+This streaming endpoint only requires Auth0 JWT authentication with `read:marketdata` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access market data streams.
+</Info>
+
 ## Service Definition
 
 **Service:** `polymarket.v1.MarketDataSubscriptionAPI`

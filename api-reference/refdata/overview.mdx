@@ -16,6 +16,12 @@ The Reference Data API provides access to instrument definitions, symbol metadat
 | `POST` | `/v1/refdata/metadata` | Get instrument metadata |
 
 <Info>
+**No Participant ID Required**
+
+These endpoints only require Auth0 JWT authentication with `read:instruments` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access reference data.
+</Info>
+
+<Info>
 **No GET endpoint for single instrument**
 
 To get a single instrument, use `POST /v1/refdata/instruments` with `{"symbols": ["SYMBOL-NAME"]}` in the body.
