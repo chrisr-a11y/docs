@@ -35,6 +35,26 @@ description: "Frequently asked questions about Polymarket Exchange API"
     </Note>
   </Accordion>
 
+  <Accordion title="Why does my participant_id contain 'ISV-Participant'?">
+    The `ISV-Participant-{name}` portion is the **firm name**, not a description of the user.
+
+    **Example:**
+    ```
+    firms/ISV-Participant-Alice/users/bob
+    ```
+
+    | Component | Meaning |
+    |-----------|---------|
+    | `ISV-Participant-Alice` | Alice's firm (where users are created) |
+    | `bob` | The end user's username |
+
+    This is the expected format. All users belonging to an ISV have the ISV's firm name in their participant_id.
+
+    <Note>
+    The "ISV" prefix is a naming convention for the firm, not an indicator that the user is an ISV. Your end users are correctly provisioned under your firm.
+    </Note>
+  </Accordion>
+
   <Accordion title="Does /search-trades return my trades only, or all exchange trades?">
     **`/search-trades` returns only trades for your authenticated user**, not exchange-wide trades.
 
