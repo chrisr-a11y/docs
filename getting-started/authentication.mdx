@@ -246,14 +246,15 @@ func getAccessToken(domain, clientID, audience, privateKeyPath string) (string, 
 
 ## Using the Access Token
 
-Include the access token in the `Authorization` header for all API requests:
+Include the access token in the `Authorization` header for all API requests.
 
 ### REST API
 
 ```bash
-curl -X GET "https://api.preprod.polymarketexchange.com/v1/whoami" \
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -H "x-participant-id: firms/ISV-Participant-YourISV/users/your-user"
+  -H "Content-Type: application/json" \
+  -d '{}'
 ```
 
 ### gRPC
@@ -269,6 +270,43 @@ metadata = [
 # Make gRPC call with metadata
 response = stub.SomeMethod(request, metadata=metadata)
 ```
+
+## Participant ID Header
+
+Some endpoints require the `x-participant-id` header to identify the specific user/participant making the request. This enables per-user tracking for trading, positions, and order management.
+
+### When Required
+
+| Endpoint Category | Requires `x-participant-id` | Notes |
+|-------------------|----------------------------|-------|
+| Reference Data (`/v1/refdata/*`) | No | Public market data |
+| Order Book (`/v1/orderbook/*`) | No | Public market data |
+| Market Data Streaming | No | Public market data |
+| Trading (`/v1/trading/*`) | **Yes** | Per-user order tracking |
+| Orders/Reports (`/v1/orders/*`, `/v1/trades/*`) | **Yes** | Per-user order history |
+| Positions (`/v1/positions/*`) | **Yes** | Per-user balances |
+| Accounts (`/v1/accounts/*`, `/v1/users/*`) | **Yes** | Account management |
+| Drop Copy Streaming | No | Uses ISV dropcopy credentials |
+| Funding (`/v1/funding/*`, `/v1/aeropay/*`, `/v1/checkout/*`) | No | Uses ISV-level auth |
+| KYC (`/v1/kyc/*`) | No | Uses ISV-level auth |
+
+### Example with Participant ID
+
+For endpoints that require it, include the header:
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/trading/orders" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "x-participant-id: firms/ISV-Participant-YourISV/users/user-123" \
+  -H "Content-Type: application/json" \
+  -d '{"symbol": "BTC-USD-PERP", ...}'
+```
+
+The `participant_id` format is: `firms/ISV-Participant-[ISV_NAME]/users/[USER_ID]`
+
+<Info>
+If you receive an error about missing `participant_id`, check that you're including the `x-participant-id` header for endpoints that require it.
+</Info>
 
 ## Key Rotation
 
