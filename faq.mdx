@@ -4,6 +4,37 @@ description: "Frequently asked questions about Polymarket Exchange API"
 ---
 
 <AccordionGroup>
+  <Accordion title="What is a Participant ID?">
+    A **Participant ID** is the unique identifier for an individual trading user on the Polymarket Exchange. It represents the identity of the person authorized to trade.
+
+    **Format:**
+    ```
+    firms/[PARTICIPANT_FIRM]/users/[USER_ID]
+    ```
+
+    **Example:**
+    ```
+    firms/ISV-Participant-Acme/users/user-abc-123
+    ```
+
+    **Components:**
+    - `[PARTICIPANT_FIRM]`: Your ISV's participant firm name (assigned during onboarding)
+    - `[USER_ID]`: The user identifier you provide during KYC provisioning
+
+    **How it's used:**
+    1. **Token Creation**: Your Auth0 JWT is exchanged for a participant-scoped trading token via `/v1/participant/token`
+    2. **Trading Operations**: All orders are placed and tracked under your participant ID
+    3. **Audit Trail**: Trades, executions, and positions are attributed to your participant ID
+    4. **Funding**: Deposits and withdrawals are scoped to your participant's account
+
+    **When it's created:**
+    Your participant ID is automatically provisioned when you complete KYC verification. The ID is returned in the KYC response and stored for subsequent API calls.
+
+    <Note>
+    Each user has exactly one participant ID. All trading activity for that user is associated with this single identity.
+    </Note>
+  </Accordion>
+
   <Accordion title="Does /search-trades return my trades only, or all exchange trades?">
     **`/search-trades` returns only trades for your authenticated user**, not exchange-wide trades.
 
