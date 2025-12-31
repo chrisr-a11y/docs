@@ -80,6 +80,7 @@ POST /v1/kyc/start
     "externalId": "ext_abc123"
   },
   "docv": {
+    "sdkKey": "a0a1869f-cf3e-4acb-919a-62b9fef30e3f",
     "docvTransactionToken": "token_xyz",
     "eventId": "event_123",
     "qrCode": "data:image/png;base64,...",
@@ -117,12 +118,28 @@ If additional documents are needed, the response includes DocV details:
 
 | Field | Description |
 |-------|-------------|
-| `docvTransactionToken` | Token for the document verification session |
+| `sdkKey` | Socure SDK public key for initializing the DocV SDK |
+| `docvTransactionToken` | Session token passed to the SDK's `launch()` method |
 | `eventId` | Event tracking identifier |
 | `qrCode` | Base64-encoded QR code image for mobile scanning |
 | `url` | Direct URL for web-based document upload |
 
-**Document Verification Options:**
+### Socure SDK Integration
+
+For native mobile document capture, integrate the Socure DocV SDK:
+
+1. Initialize the SDK with `sdkKey`
+2. Launch verification with `docvTransactionToken`
+3. Poll `/v1/kyc/status` or use webhooks to get the final decision
+
+**Socure SDK Documentation:**
+- [iOS SDK](https://developer.socure.com/docs/sdks/docv/ios-sdk)
+- [Android SDK](https://developer.socure.com/docs/sdks/docv/android-sdk)
+- [Web SDK](https://developer.socure.com/docs/sdks/docv/web-sdk)
+
+### Alternative: Web-Based Verification
+
+If not using the SDK, users can complete document verification via:
 
 1. **QR Code** - User scans QR code with mobile device to capture documents
 2. **Direct URL** - User opens URL on any device to upload documents

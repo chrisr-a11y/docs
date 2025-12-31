@@ -220,14 +220,21 @@ definitions:
   v1KYCDocv:
     type: object
     properties:
+      sdkKey:
+        type: string
+        description: Socure SDK public key for initializing the DocV SDK
       docvTransactionToken:
         type: string
+        description: Session token passed to the SDK's launch() method
       eventId:
         type: string
+        description: Event tracking identifier
       qrCode:
         type: string
+        description: Base64-encoded QR code image for mobile scanning
       url:
         type: string
+        description: Direct URL for web-based document upload
   v1KYCStatus:
     type: object
     properties:
