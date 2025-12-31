@@ -1,5 +1,8 @@
 # Polymarket Exchange Partner Docs
 
+> **GitHub Account**: This repo uses the `chrisrodier-beep` account (default `gh auth`).
+> No special token needed - uses default gh CLI authentication.
+
 Mintlify documentation site for the Polymarket Exchange API.
 
 ## Publishing Setup
