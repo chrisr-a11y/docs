@@ -13,7 +13,7 @@ The prefill flow allows users to automatically populate their KYC information us
 2. System sends an OTP (One-Time Password) to the phone
 3. User enters the OTP to verify phone ownership
 4. System returns prefilled user data (name, address, SSN last 4, etc.)
-5. User reviews and submits for verification
+5. User reviews and submits for verification via `/v1/kyc/start`
 
 ## Step 1: Start Prefill
 
@@ -96,6 +96,7 @@ On successful OTP verification, the response includes prefilled user data:
     "externalId": "ext_abc123"
   },
   "firstName": "John",
+  "middleName": "Michael",
   "lastName": "Doe",
   "dateOfBirth": "1990-01-15",
   "phoneNumber": "+15551234567",
@@ -125,9 +126,89 @@ On successful OTP verification, the response includes prefilled user data:
 | `ssn` | string | Last 4 digits of SSN |
 | `address` | object | Address information |
 
-## Step 3: Proceed to Verification
+<Note>
+All fields except `status` are optional and may be null if data is not available from the prefill provider.
+</Note>
 
-After prefill, use the returned data to start the full verification process. See [Verification Flow](/api-reference/kyc/verification-flow) for details.
+## Step 3: Submit to KYC Verification
+
+After receiving prefill data, use it to start the full verification process. The prefill response fields map directly to the `/v1/kyc/start` request.
+
+### Mapping Prefill Data to Verification Request
+
+```json
+{
+  "userId": "user_123",
+  "firstName": "John",
+  "middleName": "Michael",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "phoneNumber": "+15551234567",
+  "dateOfBirth": "1990-01-15",
+  "ssn": "123-45-6789",
+  "address": {
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Apt 4B",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10001",
+    "country": "US"
+  },
+  "sessionToken": "session_abc",
+  "agreementTime": "2024-01-15T10:30:00Z",
+  "ipAddress": "192.168.1.1"
+}
+```
+
+<Warning>
+The prefill response returns only the last 4 digits of SSN. You must collect the full SSN from the user before submitting to `/v1/kyc/start`.
+</Warning>
+
+### Field Mapping
+
+| Prefill Response | Verification Request | Notes |
+|------------------|---------------------|-------|
+| `firstName` | `firstName` | Direct mapping |
+| `middleName` | `middleName` | Direct mapping |
+| `lastName` | `lastName` | Direct mapping |
+| `email` | `email` | Direct mapping, allow user to edit |
+| `phoneNumber` | `phoneNumber` | Direct mapping |
+| `dateOfBirth` | `dateOfBirth` | Direct mapping |
+| `ssn` (last 4) | `ssn` (full) | Collect full SSN from user |
+| `address` | `address` | Direct mapping |
+| - | `agreementTime` | Capture when user accepts terms |
+| - | `referralCode` | Optional, if applicable |
+
+See [Verification Flow](/api-reference/kyc/verification-flow) for complete details on the verification request and response.
+
+## Complete Integration Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant App
+    participant API as Polymarket US API
+
+    User->>App: Enter phone + DOB
+    App->>API: POST /v1/kyc/prefill
+    API-->>App: externalId + OTP sent
+
+    User->>App: Enter OTP from SMS
+    App->>API: POST /v1/kyc/prefill/otp
+    API-->>App: Prefilled data (name, address, SSN last 4)
+
+    App-->>User: Review prefilled data
+    User->>App: Confirm + provide full SSN + accept terms
+
+    App->>API: POST /v1/kyc/start (with prefill data)
+    API-->>App: Verification result
+
+    alt Instant Approval
+        App-->>User: Account ready!
+    else Document Required
+        App-->>User: Complete document verification
+    end
+```
 
 ## Error Handling
 
@@ -147,10 +228,38 @@ If OTP verification fails:
 2. After 3 failed attempts, require new OTP request
 3. Rate limit OTP requests to prevent abuse
 
+## Sandbox Testing
+
+For testing in the sandbox environment, use these Socure test values:
+
+### Prefill Match Test Data
+
+| Field | Value | Description |
+|-------|-------|-------------|
+| `dateOfBirth` | `1985-03-30` | Sandbox DOB that returns prefill data |
+| `phoneNumber` | `14155551212` | Sandbox phone that matches prefill |
+
+### No Prefill Match Test Data
+
+| Field | Value | Description |
+|-------|-------|-------------|
+| `dateOfBirth` | `1985-03-30` | Same DOB |
+| `phoneNumber` | `12067890036` | Phone that has no prefill data |
+
+### OTP Codes
+
+| Code | Result |
+|------|--------|
+| `123456` | Success - returns prefilled data |
+| `00000` (5 zeros) | Reject - OTP verification fails |
+| `000000` (6 zeros) | Pending - verification remains pending |
+
 ## Best Practices
 
-1. **Validate phone format** before sending to API
+1. **Validate phone format** before sending to API (E.164 format)
 2. **Display countdown timer** for OTP expiration (typically 10 minutes)
 3. **Allow users to skip prefill** and enter data manually
 4. **Pre-populate form fields** with prefill data but allow editing
 5. **Handle null fields gracefully** - not all data may be available
+6. **Collect full SSN** from user since prefill only returns last 4 digits
+7. **Track agreementTime** when user accepts terms, before calling `/v1/kyc/start`
