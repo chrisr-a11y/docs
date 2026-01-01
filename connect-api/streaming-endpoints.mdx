@@ -271,6 +271,35 @@ for stream.Receive() {
 
 ---
 
+## Slow Consumer Handling
+
+Streaming endpoints support a `slow_consumer_skip_to_head` option that controls what happens when your client falls behind the data stream.
+
+| Value | Behavior | Use Case |
+|-------|----------|----------|
+| `false` (default) | Disconnect the client | Trading apps that require every message |
+| `true` | Skip to latest data, dropping missed messages | Real-time displays, dashboards |
+
+**Supported on:**
+- `CreateMarketDataSubscription`
+- `CreateInstrumentStateChangeSubscription`
+
+**Example Request:**
+
+```json
+{
+  "symbols": ["tec-nfl-sbw-2026-02-08-kc"],
+  "depth": 5,
+  "slowConsumerSkipToHead": true
+}
+```
+
+<Note>
+If your application requires processing every message (e.g., for order tracking or reconciliation), use the default `false` setting. Implement reconnection logic to resume from your last known position using the `resume_token` field.
+</Note>
+
+---
+
 ## Rate Limits
 
 | Limit | Value |
