@@ -10,7 +10,7 @@ Mintlify documentation site for the Polymarket Exchange API.
 Documentation is published via Mintlify from the `docs-2026` repo:
 - **Remote name:** `docs-2026`
 - **Repo:** `git@github.com:Polymarket-US/website-dcm-docs-2026.git`
-- **Branch:** `main`
+- **Live site:** https://apidocs.polymarketexchange.com/ (deploys from `apidocs` branch)
 
 **Publishing workflow (after making changes):**
 ```bash
@@ -22,12 +22,18 @@ git commit -m "docs: Your change description"
 git checkout -b your-branch-name
 git push -u docs-2026 your-branch-name
 
-# 3. Create and merge PR to trigger Mintlify deployment
+# 3. Create and merge PR to main
 gh pr create --repo Polymarket-US/website-dcm-docs-2026 --title "docs: Your change" --body "Description" --base main
 gh pr merge <PR_NUMBER> --repo Polymarket-US/website-dcm-docs-2026 --merge --admin
+
+# 4. IMPORTANT: Deploy to live site by merging main into apidocs
+git checkout main && git pull docs-2026 main
+git checkout apidocs && git reset --hard docs-2026/apidocs
+git merge main -m "Merge main into apidocs for deployment"
+git push docs-2026 apidocs
 ```
 
-Merging to `docs-2026/main` triggers the Mintlify deployment automatically.
+The live site deploys from the `apidocs` branch - always merge main into apidocs after changes.
 
 ## API Documentation Structure
 
