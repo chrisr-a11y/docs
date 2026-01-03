@@ -1,0 +1,317 @@
+---
+title: 'Sports Reference Data'
+description: 'Sports metadata, teams, and provider mappings'
+---
+
+# Sports Reference Data API
+
+The Sports Reference Data API provides access to sports metadata, team information, and provider ID mappings for sports betting markets.
+
+<Info>
+**No Participant ID Required**
+
+These endpoints only require Auth0 JWT authentication with `read:instruments` scope. You do not need to provide the `x-participant-id` header or complete KYC onboarding to access reference data.
+</Info>
+
+## Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/refdata/sports` | List all sports with metadata |
+| `GET` | `/v1/refdata/sports/teams` | List teams with optional filtering |
+| `GET` | `/v1/refdata/sports/teams/provider` | Get teams by provider-specific IDs |
+
+---
+
+## Get Sports
+
+Returns all available sports with their configuration and metadata.
+
+```http
+GET /v1/refdata/sports
+```
+
+### Response
+
+```json
+{
+  "sports": [
+    {
+      "sport": "nfl",
+      "image": "https://example.com/nfl.png",
+      "resolution": "manual",
+      "ordering": "alphabetical",
+      "tags": "football,american",
+      "series": "NFL 2024",
+      "isOperational": true,
+      "automaticResolution": false,
+      "lsport": {
+        "id": 1,
+        "name": "American Football",
+        "sport": "nfl",
+        "abbreviation": "NFL",
+        "leagueId": 1,
+        "homeAway": true,
+        "enabled": true
+      }
+    }
+  ]
+}
+```
+
+### Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://api.dev01.polymarketexchange.com/v1/refdata/sports" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.dev01.polymarketexchange.com/v1/refdata/sports",
+    headers={"Authorization": f"Bearer {access_token}"}
+)
+sports = response.json()["sports"]
+print(f"Found {len(sports)} sports")
+```
+
+```go Go
+resp, err := client.Get("/v1/refdata/sports", participantID)
+if err != nil {
+    return err
+}
+var result map[string]interface{}
+resp.JSON(&result)
+```
+
+</CodeGroup>
+
+---
+
+## Get Teams
+
+Returns teams with optional filtering and pagination.
+
+```http
+GET /v1/refdata/sports/teams
+```
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `limit` | int32 | Maximum number of teams to return |
+| `offset` | int32 | Number of teams to skip for pagination |
+| `orderBy` | string | Field to order by |
+| `orderDirection` | string | Sort direction (`asc` or `desc`) |
+| `filters.league` | string[] | Filter by league (e.g., `nfl`, `nba`) |
+| `filters.name` | string[] | Filter by team name |
+| `filters.abbreviation` | string[] | Filter by team abbreviation |
+| `filters.id` | int64[] | Filter by team ID |
+
+### Response
+
+```json
+{
+  "teams": [
+    {
+      "id": "56",
+      "name": "Dallas Cowboys",
+      "abbreviation": "dal",
+      "league": "nfl",
+      "record": "7-8-1",
+      "logo": "https://example.com/dal.png",
+      "alias": "Cowboys",
+      "safeName": "Dallas",
+      "colorPrimary": "#003594",
+      "conference": "NFC East",
+      "providerRefs": [
+        {
+          "provider": "SPORTS_DATA_PROVIDER_SPORTSDATAIO",
+          "providerTeamId": "9"
+        },
+        {
+          "provider": "SPORTS_DATA_PROVIDER_SPORTRADAR",
+          "providerTeamId": "e627eec7-bbae-4fa4-8e73-8e1d6bc5c060"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Example
+
+<CodeGroup>
+
+```bash cURL
+# Get first 10 NFL teams
+curl -X GET "https://api.dev01.polymarketexchange.com/v1/refdata/sports/teams?limit=10&filters.league=nfl" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.dev01.polymarketexchange.com/v1/refdata/sports/teams",
+    headers={"Authorization": f"Bearer {access_token}"},
+    params={"limit": 10, "filters.league": "nfl"}
+)
+teams = response.json()["teams"]
+for team in teams:
+    print(f"{team['name']} ({team['abbreviation']})")
+```
+
+```go Go
+resp, err := client.Get("/v1/refdata/sports/teams?limit=10&filters.league=nfl", participantID)
+if err != nil {
+    return err
+}
+var result map[string]interface{}
+resp.JSON(&result)
+```
+
+</CodeGroup>
+
+---
+
+## Get Teams for Provider
+
+Returns teams mapped by provider-specific IDs. Useful for mapping external data provider team IDs to internal team data.
+
+```http
+GET /v1/refdata/sports/teams/provider
+```
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `provider` | string | Yes | Data provider enum (`SPORTS_DATA_PROVIDER_SPORTSDATAIO` or `SPORTS_DATA_PROVIDER_SPORTRADAR`) |
+| `league` | string | Yes | League filter (e.g., `nfl`, `nba`) |
+| `teamIds` | string[] | Yes | Provider-specific team IDs to look up |
+
+<Warning>
+**League Required**
+
+The `league` parameter is required for this endpoint. Without it, the response will return an empty teams map.
+</Warning>
+
+### Response
+
+Returns a map where keys are the provider team IDs and values are the team objects:
+
+```json
+{
+  "teams": {
+    "9": {
+      "id": "56",
+      "name": "Dallas Cowboys",
+      "abbreviation": "dal",
+      "league": "nfl",
+      "record": "7-8-1",
+      "logo": "https://example.com/dal.png",
+      "alias": "Cowboys",
+      "safeName": "Dallas",
+      "providerRefs": [
+        {
+          "provider": "SPORTS_DATA_PROVIDER_SPORTSDATAIO",
+          "providerTeamId": "9"
+        }
+      ]
+    },
+    "20": {
+      "id": "68",
+      "name": "Minnesota Vikings",
+      "abbreviation": "min",
+      "league": "nfl",
+      "providerRefs": [
+        {
+          "provider": "SPORTS_DATA_PROVIDER_SPORTSDATAIO",
+          "providerTeamId": "20"
+        }
+      ]
+    }
+  }
+}
+```
+
+### Example
+
+<CodeGroup>
+
+```bash cURL
+# Look up Cowboys (9) and Vikings (20) by SportsDataIO IDs
+curl -X GET "https://api.dev01.polymarketexchange.com/v1/refdata/sports/teams/provider?provider=SPORTS_DATA_PROVIDER_SPORTSDATAIO&league=nfl&teamIds=9&teamIds=20" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://api.dev01.polymarketexchange.com/v1/refdata/sports/teams/provider",
+    headers={"Authorization": f"Bearer {access_token}"},
+    params={
+        "provider": "SPORTS_DATA_PROVIDER_SPORTSDATAIO",
+        "league": "nfl",
+        "teamIds": ["9", "20"]  # SportsDataIO IDs
+    }
+)
+teams = response.json()["teams"]
+# Access by provider ID
+cowboys = teams.get("9")
+vikings = teams.get("20")
+```
+
+```go Go
+resp, err := client.Get(
+    "/v1/refdata/sports/teams/provider?provider=SPORTS_DATA_PROVIDER_SPORTSDATAIO&league=nfl&teamIds=9&teamIds=20",
+    participantID,
+)
+if err != nil {
+    return err
+}
+var result map[string]interface{}
+resp.JSON(&result)
+teams := result["teams"].(map[string]interface{})
+```
+
+</CodeGroup>
+
+---
+
+## Data Providers
+
+| Provider Enum | Description |
+|---------------|-------------|
+| `SPORTS_DATA_PROVIDER_SPORTSDATAIO` | SportsDataIO data provider |
+| `SPORTS_DATA_PROVIDER_SPORTRADAR` | Sportradar data provider |
+
+## Team Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Internal team ID |
+| `name` | string | Full team name |
+| `abbreviation` | string | Team abbreviation (e.g., `dal`) |
+| `league` | string | League identifier (e.g., `nfl`) |
+| `record` | string | Current win-loss record |
+| `logo` | string | URL to team logo image |
+| `alias` | string | Team nickname |
+| `safeName` | string | URL-safe team name |
+| `colorPrimary` | string | Team primary color (hex) |
+| `conference` | string | Conference/division |
+| `ranking` | int64 | Current ranking (optional) |
+| `providerRefs` | array | External provider ID mappings |
+
+<Tip>
+**Cache Team Data**
+
+Team metadata changes infrequently. Cache team data locally and refresh periodically (e.g., daily) rather than fetching for every request.
+</Tip>

@@ -9,11 +9,23 @@ The Reference Data API provides access to instrument definitions, symbol metadat
 
 ## Endpoints
 
+### Instruments & Symbols
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/v1/refdata/symbols` | List all symbols |
 | `POST` | `/v1/refdata/instruments` | List instruments (filter by symbols in body) |
 | `POST` | `/v1/refdata/metadata` | Get instrument metadata |
+
+### Sports Data
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/v1/refdata/sports` | List all sports with metadata |
+| `GET` | `/v1/refdata/sports/teams` | List teams with optional filtering |
+| `GET` | `/v1/refdata/sports/teams/provider` | Get teams by provider-specific IDs |
+
+See [Sports Reference Data](/api-reference/refdata/sports) for detailed documentation.
 
 <Info>
 **No Participant ID Required**

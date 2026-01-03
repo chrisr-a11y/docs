@@ -107,7 +107,8 @@
           {
             "group": "Reference Data",
             "pages": [
-              "api-reference/refdata/overview"
+              "api-reference/refdata/overview",
+              "api-reference/refdata/sports"
             ]
           },
           {
