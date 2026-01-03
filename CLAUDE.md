@@ -7,25 +7,27 @@ Mintlify documentation site for the Polymarket Exchange API.
 
 ## Publishing Setup
 
-**TEMPORARY**: Documentation is published from Chris's personal repo:
-- **Remote name:** `personal`
-- **Repo:** `git@github-polymarket:chrisr-a11y/docs.git`
+Documentation is published via Mintlify from the `docs-2026` repo:
+- **Remote name:** `docs-2026`
+- **Repo:** `git@github.com:Polymarket-US/website-dcm-docs-2026.git`
 - **Branch:** `main`
-- **Mintlify URL:** https://polymarket-7725624a.mintlify.app
 
-**Publishing workflow:**
+**Publishing workflow (after making changes):**
 ```bash
-# From go-exchange-gateway-us, sync swagger schemas:
-python3 scripts/sync-swagger-to-docs.py
-
-# Commit and push from website-dcm-docs:
-cd ../website-dcm-docs
+# 1. Commit changes locally
 git add .
-git commit -m "docs: Update API schemas"
-git push personal main
+git commit -m "docs: Your change description"
+
+# 2. Create a branch and push to docs-2026
+git checkout -b your-branch-name
+git push -u docs-2026 your-branch-name
+
+# 3. Create and merge PR to trigger Mintlify deployment
+gh pr create --repo Polymarket-US/website-dcm-docs-2026 --title "docs: Your change" --body "Description" --base main
+gh pr merge <PR_NUMBER> --repo Polymarket-US/website-dcm-docs-2026 --merge --admin
 ```
 
-The org repo (`origin` = Polymarket-US/website-dcm-docs) is NOT currently used for Mintlify publishing.
+Merging to `docs-2026/main` triggers the Mintlify deployment automatically.
 
 ## API Documentation Structure
 
