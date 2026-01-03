@@ -13,6 +13,18 @@ Before you can authenticate, you must complete the [Onboarding](/getting-started
 
 The Polymarket Exchange API uses **Private Key JWT** authentication. You sign a JWT with your private key and exchange it for an access token.
 
+## Environments
+
+| Environment | Auth Domain | API Audience | API Base URL |
+|-------------|-------------|--------------|--------------|
+| Development | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` | `api.dev01.polymarketexchange.com` |
+| Pre-production | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` | `api.preprod.polymarketexchange.com` |
+| Production | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` | `api.prod.polymarketexchange.com` |
+
+<Info>
+Each environment requires separate onboarding. Your pre-production credentials will not work in production.
+</Info>
+
 ## How It Works
 
 ```mermaid
@@ -279,18 +291,6 @@ You can rotate your keys at any time:
 3. We add the new key to your application
 4. Update your systems to use the new private key
 5. Notify us to remove the old public key
-
-## Environments
-
-| Environment | Auth Domain | API Audience | API Base URL |
-|-------------|-------------|--------------|--------------|
-| Development | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` | `api.dev01.polymarketexchange.com` |
-| Pre-production | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` | `api.preprod.polymarketexchange.com` |
-| Production | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` | `api.prod.polymarketexchange.com` |
-
-<Info>
-Each environment requires separate onboarding. Your pre-production credentials will not work in production.
-</Info>
 
 ## Troubleshooting
 
