@@ -39,6 +39,229 @@ These endpoints only require Auth0 JWT authentication with `read:instruments` sc
 To get a single instrument, use `POST /v1/refdata/instruments` with `{"symbols": ["SYMBOL-NAME"]}` in the body.
 </Info>
 
+---
+
+## Filtering Instruments
+
+The `/v1/refdata/instruments` endpoint supports configurable query parameters to filter and paginate results.
+
+### Request Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `pageSize` | int32 | Results per page (default: 50, max: 1000) |
+| `pageToken` | string | Pagination cursor from previous response |
+| `symbols` | string[] | Filter by specific instrument symbols |
+| `productId` | string | Filter by product ID |
+| `tradableFilter` | enum | `TRADABLE_FILTER_TRADABLE` or `TRADABLE_FILTER_NON_TRADABLE` |
+| `states` | enum[] | Filter by instrument states |
+| `type` | enum | Filter by instrument type |
+| `metadata` | object | Filter by metadata fields (see below) |
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `instruments` | array | List of matching instruments |
+| `nextPageToken` | string | Token for next page (empty if no more results) |
+| `eof` | boolean | True when no more results |
+
+---
+
+## Pagination
+
+Use `pageSize` and `pageToken` to paginate through large result sets.
+
+<CodeGroup>
+
+```bash cURL
+# First page
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"pageSize": 100}'
+
+# Next page (use nextPageToken from previous response)
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"pageSize": 100, "pageToken": "eyJvIjoxMDB9"}'
+```
+
+```python Python
+page_token = None
+all_instruments = []
+
+while True:
+    body = {"pageSize": 100}
+    if page_token:
+        body["pageToken"] = page_token
+
+    response = requests.post(
+        "https://api.preprod.polymarketexchange.com/v1/refdata/instruments",
+        headers={"Authorization": f"Bearer {token}"},
+        json=body
+    )
+    data = response.json()
+    all_instruments.extend(data["instruments"])
+
+    if data.get("eof", False):
+        break
+    page_token = data.get("nextPageToken")
+    if not page_token:
+        break
+
+print(f"Total instruments: {len(all_instruments)}")
+```
+
+```go Go
+var allInstruments []Instrument
+pageToken := ""
+
+for {
+    resp, err := client.ListInstrumentsWithPagination(rest.ListInstrumentsRequest{
+        PageSize:  100,
+        PageToken: pageToken,
+    })
+    if err != nil {
+        return err
+    }
+
+    allInstruments = append(allInstruments, resp.Instruments...)
+
+    if resp.Eof || resp.NextPageToken == "" {
+        break
+    }
+    pageToken = resp.NextPageToken
+}
+```
+
+</CodeGroup>
+
+---
+
+## Filtering by State
+
+Filter instruments by their current trading state using the `states` parameter.
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "states": ["INSTRUMENT_STATE_OPEN"],
+    "pageSize": 100
+  }'
+```
+
+You can specify multiple states to match any of them:
+
+```json
+{
+  "states": ["INSTRUMENT_STATE_OPEN", "INSTRUMENT_STATE_PREOPEN"],
+  "pageSize": 100
+}
+```
+
+---
+
+## Filtering by Sports League
+
+Filter instruments by sports league using the `metadata` parameter. This allows you to query instruments for specific leagues like NFL, NBA, or MLB.
+
+### Available League Filters
+
+| League | Value |
+|--------|-------|
+| NFL | `nfl` |
+| NBA | `nba` |
+| MLB | `mlb` |
+| NHL | `nhl` |
+| College Basketball | `cbb` |
+| College Football | `cfb` |
+
+### Example: Get NFL Instruments
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "metadata": {"sports_game_league": "nfl"},
+    "states": ["INSTRUMENT_STATE_OPEN"],
+    "pageSize": 100
+  }'
+```
+
+```python Python
+response = requests.post(
+    "https://api.preprod.polymarketexchange.com/v1/refdata/instruments",
+    headers={"Authorization": f"Bearer {token}"},
+    json={
+        "metadata": {"sports_game_league": "nfl"},
+        "states": ["INSTRUMENT_STATE_OPEN"],
+        "pageSize": 100
+    }
+)
+nfl_instruments = response.json()["instruments"]
+print(f"Found {len(nfl_instruments)} open NFL instruments")
+```
+
+```go Go
+resp, err := client.ListInstrumentsWithPagination(rest.ListInstrumentsRequest{
+    PageSize: 100,
+    States:   []string{"INSTRUMENT_STATE_OPEN"},
+    Metadata: map[string]string{
+        "sports_game_league": "nfl",
+    },
+})
+```
+
+</CodeGroup>
+
+### Additional Metadata Filters
+
+| Filter | Description | Example Values |
+|--------|-------------|----------------|
+| `sports_game_league` | Sports league | `nfl`, `nba`, `mlb`, `nhl`, `cbb`, `cfb` |
+| `market_category` | Market category | `sports`, `politics`, `crypto` |
+| `sports_game_id` | Specific game ID | Provider-specific game identifier |
+
+---
+
+## Instrument Metadata
+
+Each instrument includes a `metadata` map with additional attributes. Common metadata fields for sports instruments:
+
+| Field | Description |
+|-------|-------------|
+| `sports_game_league` | League identifier (e.g., `nfl`, `nba`) |
+| `market_category` | Category type (e.g., `sports`) |
+| `sports_game_id` | Game identifier |
+| `team_abbreviations` | Team codes |
+| `clearing_sym` | Clearing symbol (e.g., `AEC-NFL`) |
+
+Example instrument with metadata:
+
+```json
+{
+  "symbol": "aec-nfl-dal-phi-2026-01-05-moneyline-dal",
+  "description": "Dallas Cowboys vs Philadelphia Eagles - Moneyline DAL",
+  "state": "INSTRUMENT_STATE_OPEN",
+  "priceScale": "10000",
+  "metadata": {
+    "sports_game_league": "nfl",
+    "market_category": "sports",
+    "sports_game_id": "12345",
+    "clearing_sym": "AEC-NFL"
+  }
+}
+```
+
+---
+
 ## Instrument Data
 
 Each instrument includes:

@@ -235,6 +235,13 @@
           "settlementPriceScale": {
             "type": "string",
             "format": "int64"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Additional instrument metadata including sports league, market category, and game identifiers"
           }
         },
         "description": "Instrument represents a tradable instrument.\nWire-compatible with Connamara EP3 Instrument (core fields)."
@@ -278,34 +285,48 @@
         "properties": {
           "pageSize": {
             "type": "integer",
-            "format": "int32"
+            "format": "int32",
+            "description": "Results per page (default: 50, max: 1000)"
           },
           "pageToken": {
-            "type": "string"
+            "type": "string",
+            "description": "Pagination cursor from previous response"
           },
           "symbols": {
             "type": "array",
             "items": {
               "type": "string"
-            }
+            },
+            "description": "Filter by specific instrument symbols"
           },
           "productId": {
-            "type": "string"
+            "type": "string",
+            "description": "Filter by product ID"
           },
           "tradableFilter": {
-            "$ref": "#/components/schemas/TradableFilter"
+            "$ref": "#/components/schemas/TradableFilter",
+            "description": "Filter tradable vs non-tradable instruments"
           },
           "states": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/InstrumentState"
-            }
+            },
+            "description": "Filter by instrument states (e.g., INSTRUMENT_STATE_OPEN)"
           },
           "type": {
-            "$ref": "#/components/schemas/InstrumentType"
+            "$ref": "#/components/schemas/InstrumentType",
+            "description": "Filter by instrument type"
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Filter by metadata fields (e.g., sports_game_league: nfl)"
           }
         },
-        "description": "Request for listing instruments."
+        "description": "Request for listing instruments with optional filters and pagination."
       },
       "ListInstrumentsResponse": {
         "type": "object",
@@ -315,16 +336,19 @@
             "items": {
               "type": "object",
               "$ref": "#/components/schemas/Instrument"
-            }
+            },
+            "description": "List of matching instruments"
           },
           "nextPageToken": {
-            "type": "string"
+            "type": "string",
+            "description": "Token for fetching next page (empty if no more results)"
           },
           "eof": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "True when no more results available"
           }
         },
-        "description": "Response with list of instruments."
+        "description": "Response with list of instruments and pagination info."
       },
       "ListSymbolsRequest": {
         "type": "object",
