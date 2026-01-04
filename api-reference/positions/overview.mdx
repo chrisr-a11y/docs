@@ -23,10 +23,13 @@ Each position includes:
 |-------|-------------|
 | `symbol` | Trading instrument |
 | `account` | Trading account |
-| `qty` | Current position quantity |
-| `avgPx` | Average entry price |
-| `marketValue` | Current market value |
-| `unrealizedPnl` | Unrealized profit/loss |
+| `netPosition` | Current net position quantity |
+| `qtyBought` | Total quantity bought |
+| `qtySold` | Total quantity sold |
+| `cost` | Total cost basis (scaled integer) |
+| `realized` | Realized profit/loss (scaled integer) |
+| `bodPosition` | Beginning-of-day position |
+| `updateTime` | Last update timestamp |
 
 ## Balance Data
 
@@ -34,11 +37,14 @@ Account balances include:
 
 | Field | Description |
 |-------|-------------|
-| `account` | Account identifier |
-| `currency` | Currency code |
-| `available` | Available balance for trading |
-| `reserved` | Balance reserved for open orders |
-| `total` | Total balance |
+| `balance` | Current cash balance |
+| `buyingPower` | Available buying power for trading |
+| `capitalRequirement` | Required capital to maintain positions |
+| `excessCapital` | Capital above requirements |
+| `marginRequirement` | Margin required for open positions |
+| `unsettledFunds` | Funds pending settlement |
+| `openOrders` | Value reserved for open orders |
+| `updateTime` | Last update timestamp |
 
 ## Historical Position Queries
 
