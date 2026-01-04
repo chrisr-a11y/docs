@@ -79,6 +79,13 @@
             }
           },
           {
+            "group": "Valuation",
+            "openapi": {
+              "source": "/api-reference/oapi-schemas/valuation-schema.json",
+              "directory": "api-reference"
+            }
+          },
+          {
             "group": "Positions",
             "pages": [
               "api-reference/positions/overview"

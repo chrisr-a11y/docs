@@ -1,0 +1,350 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Valuation API",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.polymarketexchange.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "ValuationAPI"
+    }
+  ],
+  "paths": {
+    "/v1/valuations/positions": {
+      "get": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "List position valuations (MTM)",
+        "description": "Returns mark-to-market valuations for positions, including market value and unrealized P&L. Supports historical queries via as_of_time or as_of_date parameters.",
+        "operationId": "ValuationAPI_ListPositionValuations",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Required. Fully qualified resource name of the account. Example: \"firms/ISV-Alice/accounts/alice-trading-account\""
+          },
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Optional. Filter by symbol."
+          },
+          {
+            "name": "as_of_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Optional. Query valuations as of this timestamp. If set, returns historical position valuations. Mutually exclusive with as_of_date."
+          },
+          {
+            "name": "as_of_date.year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Year for end-of-trading-day valuation query (e.g., 2026). Use with as_of_date.month and as_of_date.day."
+          },
+          {
+            "name": "as_of_date.month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "description": "Month (1-12) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "description": "Day (1-31) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "mark_price_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarkPriceType"
+            },
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          },
+          {
+            "name": "include_zero_positions",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Optional. Include positions with zero quantity. Default is false."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListPositionValuationsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/valuations/positions/download": {
+      "get": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "Download position valuations as CSV",
+        "description": "Streams position valuations in CSV format for download. Supports historical queries via as_of_time or as_of_date parameters.",
+        "operationId": "ValuationAPI_DownloadPositionValuations",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Required. Fully qualified resource name of the account. Example: \"firms/ISV-Alice/accounts/alice-trading-account\""
+          },
+          {
+            "name": "as_of_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Optional. Query valuations as of this timestamp. If set, returns historical position valuations. Mutually exclusive with as_of_date."
+          },
+          {
+            "name": "as_of_date.year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Year for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "description": "Month (1-12) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "description": "Day (1-31) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "mark_price_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarkPriceType"
+            },
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          },
+          {
+            "name": "include_zero_positions",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Optional. Include positions with zero quantity. Default is false."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "CSV file stream containing position valuations."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MarkPriceType": {
+        "type": "string",
+        "enum": [
+          "MARK_PRICE_TYPE_LAST",
+          "MARK_PRICE_TYPE_VWAP",
+          "MARK_PRICE_TYPE_MID"
+        ],
+        "description": "MarkPriceType specifies how the mark price is determined. LAST uses last traded price, VWAP uses volume-weighted average price (notional / volume), MID uses mid price ((high + low) / 2)."
+      },
+      "PositionValuation": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Trading account (e.g., \"firms/ISV-Alice/accounts/trading\")"
+          },
+          "symbol": {
+            "type": "string",
+            "description": "Trading instrument symbol"
+          },
+          "netPosition": {
+            "type": "string",
+            "format": "int64",
+            "description": "Current net position quantity"
+          },
+          "cost": {
+            "type": "string",
+            "format": "int64",
+            "description": "Total cost basis (scaled integer)"
+          },
+          "realized": {
+            "type": "string",
+            "format": "int64",
+            "description": "Realized profit/loss (scaled integer)"
+          },
+          "markPrice": {
+            "type": "string",
+            "format": "int64",
+            "description": "Mark price used for valuation (scaled integer)"
+          },
+          "markPriceType": {
+            "$ref": "#/components/schemas/MarkPriceType",
+            "description": "Method used to determine mark price"
+          },
+          "marketValue": {
+            "type": "string",
+            "format": "int64",
+            "description": "Position market value = net_position x mark_price (scaled integer)"
+          },
+          "unrealizedPnl": {
+            "type": "string",
+            "format": "int64",
+            "description": "Unrealized P&L = market_value - cost (scaled integer)"
+          },
+          "valuationTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time of valuation"
+          },
+          "priceSource": {
+            "type": "string",
+            "description": "Source of price data (e.g., \"TradeStats\")"
+          }
+        },
+        "description": "PositionValuation represents a position with mark-to-market valuation."
+      },
+      "AccountValuationSummary": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Trading account"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Base currency (e.g., \"USD\")"
+          },
+          "totalCost": {
+            "type": "string",
+            "format": "int64",
+            "description": "Sum of all position costs"
+          },
+          "totalMarketValue": {
+            "type": "string",
+            "format": "int64",
+            "description": "Sum of all position market values"
+          },
+          "totalUnrealizedPnl": {
+            "type": "string",
+            "format": "int64",
+            "description": "Sum of all unrealized P&L"
+          },
+          "totalRealizedPnl": {
+            "type": "string",
+            "format": "int64",
+            "description": "Sum of all realized P&L"
+          },
+          "positionCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of positions"
+          },
+          "valuationTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time of valuation"
+          }
+        },
+        "description": "AccountValuationSummary provides aggregate totals for an account."
+      },
+      "ListPositionValuationsResponse": {
+        "type": "object",
+        "properties": {
+          "positions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PositionValuation"
+            },
+            "description": "Position valuations"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/AccountValuationSummary",
+            "description": "Account-level summary"
+          }
+        },
+        "description": "Response with position valuations."
+      }
+    }
+  }
+}

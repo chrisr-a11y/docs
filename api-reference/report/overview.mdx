@@ -1,6 +1,6 @@
 ---
 title: 'Report API Overview'
-description: 'Search and export orders, trades, and executions'
+description: 'Search and export orders, trades, executions, and valuations'
 ---
 
 # Report API
@@ -11,7 +11,7 @@ description: 'Search and export orders, trades, and executions'
 This polling API is subject to rate limits. For production applications that need continuous order and trade updates, use the [gRPC Order Stream](/streaming-endpoints/order-stream) instead. The streaming API provides real-time execution reports as they happen.
 </Warning>
 
-The Report API provides search and export capabilities for historical order and trade data.
+The Report API provides search and export capabilities for historical order, trade, and valuation data.
 
 ## Endpoints
 
@@ -24,6 +24,8 @@ The Report API provides search and export capabilities for historical order and 
 | `POST` | `/v1/report/trades/csv` | Export trades to CSV |
 | `POST` | `/v1/report/executions/csv` | Export executions to CSV |
 | `POST` | `/v1/report/trades/stats` | Get aggregated trade statistics |
+| `GET` | `/v1/valuations/positions` | List position valuations (mark-to-market) |
+| `GET` | `/v1/valuations/positions/download` | Download position valuations as CSV |
 
 <Info>
 **No Participant ID Required for Trade Stats**
@@ -68,3 +70,60 @@ For any use case requiring real-time order or trade updates, use the streaming A
 | `sides` | BUY or SELL |
 
 See the individual endpoint documentation for complete filter options.
+
+## Valuation API
+
+The Valuation API provides mark-to-market (MTM) valuations for positions, calculating market value and unrealized P&L.
+
+<Warning>
+**Rate Limit: 5 requests per minute**
+
+The Valuation API has a stricter rate limit of 5 requests per minute per account. Use this API for periodic reporting, not real-time monitoring.
+</Warning>
+
+### Mark Price Types
+
+| Type | Description |
+|------|-------------|
+| `MARK_PRICE_TYPE_LAST` | Last traded price (default) |
+| `MARK_PRICE_TYPE_VWAP` | Volume-weighted average price (notional / volume) |
+| `MARK_PRICE_TYPE_MID` | Mid price ((high + low) / 2) |
+
+### Valuation Data
+
+Each position valuation includes:
+
+| Field | Description |
+|-------|-------------|
+| `netPosition` | Current net position quantity |
+| `cost` | Total cost basis (scaled integer) |
+| `markPrice` | Mark price used for valuation |
+| `marketValue` | Position market value = net_position x mark_price |
+| `unrealizedPnl` | Unrealized P&L = market_value - cost |
+| `realized` | Realized profit/loss |
+| `valuationTime` | Time of valuation |
+
+### Account Summary
+
+The response includes an account-level summary with:
+
+| Field | Description |
+|-------|-------------|
+| `totalCost` | Sum of all position costs |
+| `totalMarketValue` | Sum of all position market values |
+| `totalUnrealizedPnl` | Sum of all unrealized P&L |
+| `totalRealizedPnl` | Sum of all realized P&L |
+| `positionCount` | Number of positions |
+
+### Historical Valuations
+
+Query valuations as they existed at a specific point in time:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `as_of_time` | RFC3339 timestamp | Exact point-in-time (e.g., `2026-01-02T17:00:00Z`) |
+| `as_of_date` | Date object | End-of-trading-day snapshot (year, month, day) |
+
+<Warning>
+**Mutually Exclusive**: Use `as_of_time` OR `as_of_date`, not both.
+</Warning>
