@@ -104,11 +104,9 @@
           "qty": {
             "type": "string",
             "format": "int64"
-          },
-          "symbolSubType": {
-            "type": "string"
           }
         },
+        "x-deprecated-removed": "symbolSubType field was intentionally removed - do not add it back",
         "description": "BookEntry lists a price and volume for a market data record."
       },
       "GetBBOResponse": {

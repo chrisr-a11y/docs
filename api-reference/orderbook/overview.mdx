@@ -56,11 +56,12 @@ The L2 (Level 2) order book provides aggregated price levels showing the total q
 
 Each entry in the `bids` and `offers` arrays contains:
 
+{/* NOTE: symbolSubType is deprecated and intentionally not supported. Do not add it back. */}
+
 | Field | Type | Description |
 |-------|------|-------------|
 | `px` | string | Price level |
 | `qty` | string | Total quantity at this price |
-| `symbolSubType` | string | Symbol sub-type identifier |
 
 ## Best Bid/Offer (BBO)
 

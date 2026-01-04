@@ -108,11 +108,12 @@ if response.HasField('update'):
 
 Each price level in the order book contains:
 
+{/* NOTE: symbol_sub_type is deprecated and intentionally not supported. Do not add it back. */}
+
 | Field | Type | Description |
 |-------|------|-------------|
 | `px` | `int64` | **Price as integer** (divide by price_scale) |
 | `qty` | `int64` | Aggregate quantity at this price level |
-| `symbol_sub_type` | `str` | Symbol subtype (if applicable) |
 
 <Warning>
     **Price Representation:**
