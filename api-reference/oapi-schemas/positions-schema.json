@@ -41,6 +41,47 @@
               "type": "string"
             },
             "description": "Symbol to filter (optional)."
+          },
+          {
+            "name": "as_of_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Query positions as of this timestamp (RFC3339 format, e.g., 2026-01-02T17:00:00Z). Returns historical positions instead of current. Mutually exclusive with as_of_date."
+          },
+          {
+            "name": "as_of_date.year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Year for end-of-trading-day position query (e.g., 2026). Use with as_of_date.month and as_of_date.day."
+          },
+          {
+            "name": "as_of_date.month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "description": "Month (1-12) for end-of-trading-day position query."
+          },
+          {
+            "name": "as_of_date.day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "description": "Day (1-31) for end-of-trading-day position query."
           }
         ],
         "responses": {

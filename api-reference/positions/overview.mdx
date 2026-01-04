@@ -40,6 +40,40 @@ Account balances include:
 | `reserved` | Balance reserved for open orders |
 | `total` | Total balance |
 
+## Historical Position Queries
+
+Query positions as they existed at a specific point in time. Useful for regulatory reporting, reconciliation, or end-of-day snapshots.
+
+### Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `as_of_time` | RFC3339 timestamp | Exact point-in-time (e.g., `2026-01-02T17:00:00Z`) |
+| `as_of_date` | Date object | End-of-trading-day snapshot (year, month, day) |
+
+<Warning>
+**Mutually Exclusive**: Use `as_of_time` OR `as_of_date`, not both. The `as_of_time` parameter already contains date information.
+</Warning>
+
+### Examples
+
+**Query by timestamp (exact point in time):**
+```bash
+GET /v1/positions?name=firms/ISV-Alice/accounts/trading&as_of_time=2026-01-02T17:00:00Z
+```
+
+**Query by trade date (end of trading day):**
+```bash
+GET /v1/positions?name=firms/ISV-Alice/accounts/trading&as_of_date.year=2026&as_of_date.month=1&as_of_date.day=2
+```
+
+### Use Cases
+
+- **End-of-Day Reports**: Query positions at market close for daily P&L calculations
+- **Regulatory Snapshots**: Capture position state at specific regulatory timestamps
+- **Reconciliation**: Compare historical positions against external records
+- **Audit Trail**: Review position history for compliance or dispute resolution
+
 ## Usage Notes
 
 <Info>
@@ -51,3 +85,4 @@ Position data is updated after each trade execution. For real-time trade notific
 - Positions are aggregated by symbol and account
 - Balances reflect current available and reserved amounts
 - Use the Order Stream for real-time execution updates that affect positions
+- Historical queries return the position state as of the specified time
