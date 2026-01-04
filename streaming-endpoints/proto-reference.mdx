@@ -43,7 +43,7 @@ Use gRPC reflection to discover services at runtime. Install [grpcurl](https://g
 
 ```bash
 # List all services
-grpcurl -authority grpc.prod.polymarketexchange.com grpc.prod.polymarketexchange.com:443 list
+grpcurl -authority grpc-prod.polymarketexchange.com grpc-prod.polymarketexchange.com:443 list
 
 # Example output:
 # polymarket.v1.AccountsAPI
@@ -53,11 +53,11 @@ grpcurl -authority grpc.prod.polymarketexchange.com grpc.prod.polymarketexchange
 # ...
 
 # Describe a specific service
-grpcurl -authority grpc.prod.polymarketexchange.com grpc.prod.polymarketexchange.com:443 \
+grpcurl -authority grpc-prod.polymarketexchange.com grpc-prod.polymarketexchange.com:443 \
   describe polymarket.v1.MarketDataSubscriptionAPI
 
 # Describe a message type
-grpcurl -authority grpc.prod.polymarketexchange.com grpc.prod.polymarketexchange.com:443 \
+grpcurl -authority grpc-prod.polymarketexchange.com grpc-prod.polymarketexchange.com:443 \
   describe polymarket.v1.CreateMarketDataSubscriptionRequest
 ```
 

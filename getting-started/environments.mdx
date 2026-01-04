@@ -17,8 +17,8 @@ This is the **single source of truth** for all API endpoints. Bookmark this page
 | Environment | REST API | gRPC | Auth Domain | Audience |
 |-------------|----------|------|-------------|----------|
 | **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc-dev01.polymarketexchange.com:443` | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` |
-| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc.preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` |
-| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc.prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc-preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` |
+| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc-prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` |
 
 ### API Path Patterns
 
@@ -64,7 +64,7 @@ Pre-production environment for final validation before going live.
 | Service | Endpoint |
 |---------|----------|
 | **REST API** | `https://api.preprod.polymarketexchange.com` |
-| **gRPC** | `grpc.preprod.polymarketexchange.com:443` |
+| **gRPC** | `grpc-preprod.polymarketexchange.com:443` |
 | **Auth Domain** | `auth.preprod.polymarketexchange.com` |
 | **Audience** | `https://api.preprod.polymarketexchange.com` |
 
@@ -81,7 +81,7 @@ Live production environment for real trading.
 | Service | Endpoint |
 |---------|----------|
 | **REST API** | `https://api.prod.polymarketexchange.com` |
-| **gRPC** | `grpc.prod.polymarketexchange.com:443` |
+| **gRPC** | `grpc-prod.polymarketexchange.com:443` |
 | **Auth Domain** | `auth.polymarketexchange.com` |
 | **Audience** | `https://api.prod.polymarketexchange.com` |
 
@@ -131,8 +131,8 @@ curl https://api.dev01.polymarketexchange.com/v1/health
 | Environment | Endpoint |
 |-------------|----------|
 | Dev | `grpc-dev01.polymarketexchange.com:443` |
-| Preprod | `grpc.preprod.polymarketexchange.com:443` |
-| Prod | `grpc.prod.polymarketexchange.com:443` |
+| Preprod | `grpc-preprod.polymarketexchange.com:443` |
+| Prod | `grpc-prod.polymarketexchange.com:443` |
 
 ---
 
