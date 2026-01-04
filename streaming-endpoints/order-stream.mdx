@@ -252,7 +252,7 @@ from polymarket.v1 import enums_pb2
 
 class PolymarketOrderStreamer:
     def __init__(self, base_url: str = "https://rest.preprod.polymarketexchange.com",
-                 grpc_server: str = "grpc.api.preprod.polymarketexchange.com:443"):
+                 grpc_server: str = "grpc-api.preprod.polymarketexchange.com:443"):
         self.base_url = base_url
         self.grpc_server = grpc_server
         self.access_token: Optional[str] = None

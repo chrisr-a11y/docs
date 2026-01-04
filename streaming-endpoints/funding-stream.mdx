@@ -132,7 +132,7 @@ from polymarket.v1 import funding_pb2_grpc
 
 
 class FundingTransactionStreamer:
-    def __init__(self, grpc_server: str = "grpc.api.preprod.polymarketexchange.com:443"):
+    def __init__(self, grpc_server: str = "grpc-api.preprod.polymarketexchange.com:443"):
         self.grpc_server = grpc_server
         self.access_token = None
         self.last_server_time = None  # For resume capability

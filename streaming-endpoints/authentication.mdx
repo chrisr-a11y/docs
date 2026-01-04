@@ -111,7 +111,7 @@ from polymarket.v1 import marketdatasubscription_pb2_grpc
 
 # Create secure channel
 credentials = grpc.ssl_channel_credentials()
-channel = grpc.secure_channel('grpc.api.preprod.polymarketexchange.com:443', credentials)
+channel = grpc.secure_channel('grpc-api.preprod.polymarketexchange.com:443', credentials)
 
 # Create stub
 stub = marketdatasubscription_pb2_grpc.MarketDataSubscriptionAPIStub(channel)

@@ -14,7 +14,7 @@ Before you begin, ensure you have:
 
 - **API Credentials**: Client ID from [authentication setup](/getting-started/authentication)
 - **Python 3.7+**: Python development environment
-- **Network Access**: Ability to connect to `grpc.api.preprod.polymarketexchange.com:443`
+- **Network Access**: Ability to connect to `grpc-api.preprod.polymarketexchange.com:443`
 
 ## Step 1: Install Python gRPC Libraries
 
@@ -47,10 +47,10 @@ Server reflection allows you to discover service definitions at runtime without 
 pip install grpcio-reflection
 
 # Use grpcurl to explore services (TLS connection - no -plaintext flag)
-grpcurl grpc.api.preprod.polymarketexchange.com:443 list
+grpcurl grpc-api.preprod.polymarketexchange.com:443 list
 
 # Describe a service
-grpcurl grpc.api.preprod.polymarketexchange.com:443 describe polymarket.v1.MarketDataSubscriptionAPI
+grpcurl grpc-api.preprod.polymarketexchange.com:443 describe polymarket.v1.MarketDataSubscriptionAPI
 ```
 
 ## Step 3: Generate Python Client Code
@@ -157,7 +157,7 @@ from polymarket.v1 import marketdatasubscription_pb2_grpc
 
 # Create secure channel
 credentials = grpc.ssl_channel_credentials()
-channel = grpc.secure_channel('grpc.api.preprod.polymarketexchange.com:443', credentials)
+channel = grpc.secure_channel('grpc-api.preprod.polymarketexchange.com:443', credentials)
 
 # Create stub
 stub = marketdatasubscription_pb2_grpc.MarketDataSubscriptionAPIStub(channel)
