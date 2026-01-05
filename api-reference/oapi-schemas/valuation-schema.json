@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Valuation API",
-    "version": "v1.0.0"
+    "version": "v1.1.0"
   },
   "servers": [
     {
@@ -214,6 +214,242 @@
           }
         }
       }
+    },
+    "/v1/valuations/accounts": {
+      "get": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "Get account valuation summary",
+        "description": "Returns account-level MTM totals only (no per-position rows). Used for book-close accounting and balance reporting without pulling all positions. Supports historical queries via as_of_time or as_of_date parameters.",
+        "operationId": "ValuationAPI_GetAccountValuation",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Required. Fully qualified resource name of the account. Example: \"firms/ISV-Alice/accounts/alice-trading-account\""
+          },
+          {
+            "name": "as_of_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Optional. Query valuations as of this timestamp. Mutually exclusive with as_of_date."
+          },
+          {
+            "name": "as_of_date.year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Year for end-of-trading-day valuation query (e.g., 2026)."
+          },
+          {
+            "name": "as_of_date.month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "description": "Month (1-12) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "description": "Day (1-31) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "mark_price_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarkPriceType"
+            },
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAccountValuationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/valuations/accounts/download": {
+      "get": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "Download account valuation as CSV",
+        "description": "Streams account-level MTM summary as CSV (single row per account). Use for single-account book-close exports.",
+        "operationId": "ValuationAPI_DownloadAccountValuation",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Required. Fully qualified resource name of the account."
+          },
+          {
+            "name": "as_of_time",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Optional. Query valuations as of this timestamp. Mutually exclusive with as_of_date."
+          },
+          {
+            "name": "as_of_date.year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Year for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.month",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "description": "Month (1-12) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "as_of_date.day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "description": "Day (1-31) for end-of-trading-day valuation query."
+          },
+          {
+            "name": "mark_price_type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/MarkPriceType"
+            },
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "CSV file stream containing account valuation summary. Columns: account, currency, total_cost, total_market_value, total_unrealized_pnl, total_realized_pnl, position_count, valuation_time, mark_price_type, price_source"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "Batch download account valuations as CSV",
+        "description": "Streams MTM summaries for multiple accounts as CSV (one row per account). Use for multi-account book-close exports.",
+        "operationId": "ValuationAPI_BatchDownloadAccountValuations",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchDownloadAccountValuationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response (streaming).",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string",
+                  "description": "CSV file stream containing account valuation summaries. One row per account. Columns: account, currency, total_cost, total_market_value, total_unrealized_pnl, total_realized_pnl, position_count, valuation_time, mark_price_type, price_source"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/valuations/accounts:batchGet": {
+      "post": {
+        "tags": [
+          "Valuation"
+        ],
+        "summary": "Batch get account valuations",
+        "description": "Returns MTM summaries for multiple accounts in one call. Supports partial success - valid accounts return summaries, invalid accounts return errors. Used for book-close across multiple subaccounts.",
+        "operationId": "ValuationAPI_BatchGetAccountValuations",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchGetAccountValuationsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchGetAccountValuationsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -344,6 +580,143 @@
           }
         },
         "description": "Response with position valuations."
+      },
+      "GetAccountValuationResponse": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/AccountValuationSummary",
+            "description": "Account-level MTM summary"
+          },
+          "priceSource": {
+            "type": "string",
+            "description": "Source of price data used for valuation (e.g., \"TradeStats\")"
+          }
+        },
+        "description": "Response with account-level valuation summary only (no position rows)."
+      },
+      "BatchGetAccountValuationsRequest": {
+        "type": "object",
+        "required": ["names"],
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Required. List of account resource names to query."
+          },
+          "asOfTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Optional. Query valuations as of this timestamp. Mutually exclusive with asOfDate."
+          },
+          "asOfDate": {
+            "$ref": "#/components/schemas/Date",
+            "description": "Optional. Query valuations as of end of this trade date. Mutually exclusive with asOfTime."
+          },
+          "markPriceType": {
+            "$ref": "#/components/schemas/MarkPriceType",
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          }
+        },
+        "description": "Request to get valuations for multiple accounts."
+      },
+      "BatchGetAccountValuationsResponse": {
+        "type": "object",
+        "properties": {
+          "summaries": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountValuationSummary"
+            },
+            "description": "Account summaries (one per successful account)"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountValuationError"
+            },
+            "description": "Errors for accounts that failed (partial success supported)"
+          },
+          "valuationTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Shared valuation time for the batch"
+          }
+        },
+        "description": "Response with valuations for multiple accounts. Supports partial success."
+      },
+      "AccountValuationError": {
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string",
+            "description": "Account that failed"
+          },
+          "code": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Error code (gRPC status code)"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          }
+        },
+        "description": "Error for a specific account in a batch request."
+      },
+      "BatchDownloadAccountValuationsRequest": {
+        "type": "object",
+        "required": ["names"],
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Required. List of account resource names to query."
+          },
+          "asOfTime": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Optional. Query valuations as of this timestamp. Mutually exclusive with asOfDate."
+          },
+          "asOfDate": {
+            "$ref": "#/components/schemas/Date",
+            "description": "Optional. Query valuations as of end of this trade date. Mutually exclusive with asOfTime."
+          },
+          "markPriceType": {
+            "$ref": "#/components/schemas/MarkPriceType",
+            "description": "Optional. Method for determining mark price. Default is LAST."
+          }
+        },
+        "description": "Request to download valuations for multiple accounts as CSV."
+      },
+      "Date": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Year (e.g., 2026)"
+          },
+          "month": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Month (1-12)"
+          },
+          "day": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1,
+            "maximum": 31,
+            "description": "Day (1-31)"
+          }
+        },
+        "description": "Represents a calendar date."
       }
     }
   }
