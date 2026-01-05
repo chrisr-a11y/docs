@@ -3,6 +3,15 @@ title: "Polymarket Exchange Changelog"
 description: "API Updates and Announcements"
 mode: "center"
 ---
+<Update label="January 4, 2026" description="v0.0.18">
+ - Added Account Valuation APIs for book-close accounting use cases
+ - `GET /v1/valuations/accounts`: Single account MTM summary (no position rows)
+ - `GET /v1/valuations/accounts/download`: Single account summary as CSV
+ - `POST /v1/valuations/accounts:batchGet`: Multi-account MTM summaries with partial success support
+ - `POST /v1/valuations/accounts/download`: Multi-account summaries as CSV
+ - All new endpoints support historical queries via `as_of_time` or `as_of_date`
+ - Cross-ISV protection enforced on all valuation endpoints
+</Update>
 <Update label="January 3, 2026" description="v0.0.17">
  - Documented configurable instrument queries: pagination, state filtering, and metadata filters
  - Added sports league filtering via `metadata.sports_game_league` (nfl, nba, mlb, nhl, cbb, cfb)

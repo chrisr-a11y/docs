@@ -26,6 +26,10 @@ The Report API provides search and export capabilities for historical order, tra
 | `POST` | `/v1/report/trades/stats` | Get aggregated trade statistics |
 | `GET` | `/v1/valuations/positions` | List position valuations (mark-to-market) |
 | `GET` | `/v1/valuations/positions/download` | Download position valuations as CSV |
+| `GET` | `/v1/valuations/accounts` | Get account-level MTM summary |
+| `GET` | `/v1/valuations/accounts/download` | Download account summary as CSV |
+| `POST` | `/v1/valuations/accounts:batchGet` | Batch get multi-account summaries |
+| `POST` | `/v1/valuations/accounts/download` | Batch download multi-account CSV |
 
 <Info>
 **No Participant ID Required for Trade Stats**
@@ -127,3 +131,32 @@ Query valuations as they existed at a specific point in time:
 <Warning>
 **Mutually Exclusive**: Use `as_of_time` OR `as_of_date`, not both.
 </Warning>
+
+### Position-Level vs Account-Level
+
+| Use Case | Endpoint |
+|----------|----------|
+| Full position detail with MTM | `GET /v1/valuations/positions` |
+| Export all positions to spreadsheet | `GET /v1/valuations/positions/download` |
+| Single account book-close (totals only) | `GET /v1/valuations/accounts` |
+| Multi-account book-close | `POST /v1/valuations/accounts:batchGet` |
+
+### Account-Level Valuations
+
+Account-level endpoints return MTM totals without individual position rows. Use these for book-close accounting and balance reporting when you don't need per-position detail.
+
+**Single Account:**
+- `GET /v1/valuations/accounts` - Returns account summary only
+- `GET /v1/valuations/accounts/download` - CSV with single summary row
+
+**Multi-Account (Batch):**
+- `POST /v1/valuations/accounts:batchGet` - Query multiple accounts in one call
+- `POST /v1/valuations/accounts/download` - CSV with one row per account
+
+### Batch Operations
+
+The batch endpoints support **partial success**. If some accounts are valid and others are not:
+- Valid accounts return their summaries in the `summaries` array
+- Invalid accounts return errors in the `errors` array with account name, error code, and message
+
+This allows you to process results for valid accounts without failing the entire request.
