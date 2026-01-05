@@ -66,10 +66,9 @@ Auth custom domain infrastructure is in place. Documentation updated to use:
 
 | Environment | Auth Domain |
 |-------------|-------------|
-| Production  | `auth.polymarketexchange.com` |
-| Preprod     | `auth.preprod.polymarketexchange.com` |
-| Staging     | `auth.staging.polymarketexchange.com` |
-| Dev         | `auth.dev.polymarketexchange.com` |
+| Production  | `pmx-prod.us.auth0.com` |
+| Preprod     | `pmx-preprod.us.auth0.com` |
+| Dev         | `pmx-dev.us.auth0.com` |
 
 ---
 

@@ -37,9 +37,9 @@ sequenceDiagram
 
 | Environment | Auth Domain |
 |-------------|-------------|
-| **Development** | `auth.dev.polymarketexchange.com` |
-| **Pre-production** | `auth.preprod.polymarketexchange.com` |
-| **Production** | `auth.polymarketexchange.com` |
+| **Development** | `pmx-dev.us.auth0.com` |
+| **Pre-production** | `pmx-preprod.us.auth0.com` |
+| **Production** | `pmx-prod.us.auth0.com` |
 
 During onboarding, you'll provide your **public key** and receive your `client_id` and `audience` values.
 
@@ -192,7 +192,7 @@ class TokenManager:
 
 # Usage
 token_manager = TokenManager(
-    auth0_domain="auth.preprod.polymarketexchange.com",
+    auth0_domain="pmx-preprod.us.auth0.com",
     client_id="YOUR_CLIENT_ID",
     audience="YOUR_API_AUDIENCE",
     private_key_path="/path/to/private_key.pem"

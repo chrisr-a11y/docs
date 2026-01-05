@@ -16,9 +16,9 @@ This is the **single source of truth** for all API endpoints. Bookmark this page
 
 | Environment | REST API | gRPC | Auth Domain | Audience |
 |-------------|----------|------|-------------|----------|
-| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc-dev01.polymarketexchange.com:443` | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` |
-| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc-preprod.polymarketexchange.com:443` | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` |
-| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc-prod.polymarketexchange.com:443` | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` |
+| **Dev** | `https://api.dev01.polymarketexchange.com` | `grpc-dev01.polymarketexchange.com:443` | `pmx-dev.us.auth0.com` | `https://api.dev01.polymarketexchange.com` |
+| **Preprod** | `https://api.preprod.polymarketexchange.com` | `grpc-preprod.polymarketexchange.com:443` | `pmx-preprod.us.auth0.com` | `https://api.preprod.polymarketexchange.com` |
+| **Prod** | `https://api.prod.polymarketexchange.com` | `grpc-prod.polymarketexchange.com:443` | `pmx-prod.us.auth0.com` | `https://api.prod.polymarketexchange.com` |
 
 ### API Path Patterns
 
@@ -34,9 +34,9 @@ This is the **single source of truth** for all API endpoints. Bookmark this page
 
 | Environment | Purpose | Auth Domain |
 |-------------|---------|-------------|
-| **Dev** | Development and testing | `auth.dev.polymarketexchange.com` |
-| **Preprod** | Pre-production validation | `auth.preprod.polymarketexchange.com` |
-| **Prod** | Production trading | `auth.polymarketexchange.com` |
+| **Dev** | Development and testing | `pmx-dev.us.auth0.com` |
+| **Preprod** | Pre-production validation | `pmx-preprod.us.auth0.com` |
+| **Prod** | Production trading | `pmx-prod.us.auth0.com` |
 
 ---
 
@@ -48,7 +48,7 @@ Development environment for initial integration and testing.
 |---------|----------|
 | **REST API** | `https://api.dev01.polymarketexchange.com` |
 | **gRPC** | `grpc-dev01.polymarketexchange.com:443` |
-| **Auth Domain** | `auth.dev.polymarketexchange.com` |
+| **Auth Domain** | `pmx-dev.us.auth0.com` |
 | **Audience** | `https://api.dev01.polymarketexchange.com` |
 
 <Card title="Dev Health Check" icon="heart-pulse" href="https://api.dev01.polymarketexchange.com/v1/health">
@@ -65,7 +65,7 @@ Pre-production environment for final validation before going live.
 |---------|----------|
 | **REST API** | `https://api.preprod.polymarketexchange.com` |
 | **gRPC** | `grpc-preprod.polymarketexchange.com:443` |
-| **Auth Domain** | `auth.preprod.polymarketexchange.com` |
+| **Auth Domain** | `pmx-preprod.us.auth0.com` |
 | **Audience** | `https://api.preprod.polymarketexchange.com` |
 
 <Card title="Preprod Health Check" icon="heart-pulse" href="https://api.preprod.polymarketexchange.com/v1/health">
@@ -82,7 +82,7 @@ Live production environment for real trading.
 |---------|----------|
 | **REST API** | `https://api.prod.polymarketexchange.com` |
 | **gRPC** | `grpc-prod.polymarketexchange.com:443` |
-| **Auth Domain** | `auth.polymarketexchange.com` |
+| **Auth Domain** | `pmx-prod.us.auth0.com` |
 | **Audience** | `https://api.prod.polymarketexchange.com` |
 
 <Card title="Production Health Check" icon="heart-pulse" href="https://api.prod.polymarketexchange.com/v1/health">

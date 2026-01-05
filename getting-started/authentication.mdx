@@ -17,9 +17,9 @@ The Polymarket Exchange API uses **Private Key JWT** authentication. You sign a 
 
 | Environment | Auth Domain | API Audience | API Base URL |
 |-------------|-------------|--------------|--------------|
-| Development | `auth.dev.polymarketexchange.com` | `https://api.dev01.polymarketexchange.com` | `api.dev01.polymarketexchange.com` |
-| Pre-production | `auth.preprod.polymarketexchange.com` | `https://api.preprod.polymarketexchange.com` | `api.preprod.polymarketexchange.com` |
-| Production | `auth.polymarketexchange.com` | `https://api.prod.polymarketexchange.com` | `api.prod.polymarketexchange.com` |
+| Development | `pmx-dev.us.auth0.com` | `https://api.dev01.polymarketexchange.com` | `api.dev01.polymarketexchange.com` |
+| Pre-production | `pmx-preprod.us.auth0.com` | `https://api.preprod.polymarketexchange.com` | `api.preprod.polymarketexchange.com` |
+| Production | `pmx-prod.us.auth0.com` | `https://api.prod.polymarketexchange.com` | `api.prod.polymarketexchange.com` |
 
 <Info>
 Each environment requires separate onboarding. Your pre-production credentials will not work in production.
@@ -185,7 +185,7 @@ class AuthClient:
 
 # Usage
 auth_client = AuthClient(
-    domain="auth.preprod.polymarketexchange.com",
+    domain="pmx-preprod.us.auth0.com",
     client_id="YOUR_CLIENT_ID",
     audience="https://api.preprod.polymarketexchange.com",
     private_key_path="/path/to/my_private_key.pem"
