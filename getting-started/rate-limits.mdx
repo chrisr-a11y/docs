@@ -68,7 +68,7 @@ The API is designed as a **streaming-first** system. Instead of repeatedly polli
 
 | Don't Poll | Use Streaming Instead |
 |------------|----------------------|
-| Repeated calls to `/v1/orders/search` | `CreateOrderSubscription` gRPC stream |
+| Repeated calls to `/v1/report/orders/search` | `CreateOrderSubscription` gRPC stream |
 | Repeated calls to `/v1/positions` | `CreatePositionSubscription` gRPC stream |
 | Repeated calls to `/v1/orderbook` | `CreateMarketDataSubscription` gRPC stream |
 
