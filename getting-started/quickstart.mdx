@@ -186,7 +186,7 @@ order = {
 
 # Submit order
 response = requests.post(
-    f"{BASE_URL}/v1/trading/order",
+    f"{BASE_URL}/v1/trading/orders",
     headers=headers,
     json=order
 )
@@ -224,7 +224,7 @@ Verify your order is in the book:
 ```python
 # Search for your orders
 response = requests.post(
-    f"{BASE_URL}/v1/orders/search",
+    f"{BASE_URL}/v1/report/orders/search",
     headers=headers,
     json={
         "symbols": [symbol],
@@ -248,7 +248,7 @@ Cancel the order if you don't want it to execute:
 ```python
 # Cancel by order ID
 response = requests.post(
-    f"{BASE_URL}/v1/trading/order/cancel",
+    f"{BASE_URL}/v1/trading/orders/cancel",
     headers=headers,
     json={
         "order_id": "ord_abc123"  # Use the order ID from Step 6
@@ -356,7 +356,7 @@ def main():
         "order_qty": 10,
         "price": int(0.50 * price_scale),
     }
-    resp = requests.post(f"{BASE_URL}/v1/trading/order", headers=headers, json=order)
+    resp = requests.post(f"{BASE_URL}/v1/trading/orders", headers=headers, json=order)
 
     if resp.status_code == 200:
         result = resp.json()
@@ -367,7 +367,7 @@ def main():
         # 5. Cancel order
         print("\n5. Cancelling order...")
         resp = requests.post(
-            f"{BASE_URL}/v1/trading/order/cancel",
+            f"{BASE_URL}/v1/trading/orders/cancel",
             headers=headers,
             json={"order_id": order_id}
         )
