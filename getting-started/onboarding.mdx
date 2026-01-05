@@ -1,137 +1,36 @@
 ---
 title: 'Onboarding'
-description: 'Complete onboarding before accessing the Polymarket Exchange API'
+description: 'Get started with the Polymarket Exchange API'
 ---
 
 # Onboarding
 
-Complete this onboarding process before you can authenticate and access the API.
-
 ## Step 1: Generate Your Key Pairs
 
-Generate **two RSA key pairs** - one for pre-production (testing) and one for production. You will share only the **public keys** with Polymarket.
+Generate an RSA key pair for each environment you need access to. You will share only the **public keys** with Polymarket.
 
 ```bash
-# Generate pre-production keys (for testing)
+# Replace 'acme' with your company name
+
+# Development
+openssl genrsa -out acme_dev_private_key.pem 2048
+openssl rsa -in acme_dev_private_key.pem -pubout -out acme_dev_public_key.pem
+
+# Pre-production
 openssl genrsa -out acme_preprod_private_key.pem 2048
 openssl rsa -in acme_preprod_private_key.pem -pubout -out acme_preprod_public_key.pem
 
-# Generate production keys
+# Production
 openssl genrsa -out acme_prod_private_key.pem 2048
 openssl rsa -in acme_prod_private_key.pem -pubout -out acme_prod_public_key.pem
-
-# Generate SHA256 hashes for both keys (you'll need these for verification)
-sha256sum acme_preprod_public_key.pem
-sha256sum acme_prod_public_key.pem
 ```
 
-<Info>
-**Key Naming Convention**
+Keep your private keys secure. Never share them with anyone.
 
-Replace `acme` with your company name. Your keys should be named:
-- `{companyname}_preprod_public_key.pem` - for pre-production/testing
-- `{companyname}_prod_public_key.pem` - for production
+## Step 2: Submit Your Onboarding Request
 
-Both environments require separate keys for security isolation.
-</Info>
+Email **onboarding@polymarket.com** with:
+- Your firm name
+- A Google Drive link containing your public key file(s) (grant Editor access to `onboarding@polymarket.com`)
 
-<Warning>
-**CRITICAL: Protect Your Private Key!**
-
-Your private key (`my_private_key.pem`) must NEVER be shared with anyone, including Polymarket. If your private key is compromised:
-
-- **Your account is at risk of unauthorized access**
-- **Contact Polymarket immediately to rotate your credentials**
-- Email: onboarding@qcex.com
-
-Secure your private key:
-```bash
-chmod 600 my_private_key.pem
-```
-
-Store it in encrypted storage or a secrets manager. Never commit it to version control.
-</Warning>
-
-## Step 2: Create Your Onboarding Folder
-
-Create a Google Drive folder for your onboarding submission:
-
-1. Create a new folder in Google Drive named: **"[Your Company Name] - Polymarket API Onboarding"**
-
-2. Add the following files to the folder:
-   - **Pre-production public key** (`{companyname}_preprod_public_key.pem`)
-   - **Production public key** (`{companyname}_prod_public_key.pem`)
-   - **Onboarding Document** (`{companyname} Onboarding Document`) - following the [Onboarding Template](/isv-partners/onboarding-template)
-   - **[Participant Agreement](/isv-partners/participant-agreement)** (`{companyname} Participant Agreement`)
-   - **[Contact Form](/isv-partners/contact-form)** (`{companyname} Contact Form`)
-   - **[Corporate Application](/isv-partners/corporate-application)** (`{companyname} Corporate Application`) - *only if applying as a corporate entity*
-
-3. Share the folder with **Editor** access to: `onboarding@qcex.com`
-
-<Note>
-**Upload the public key FILES, not the contents.** We need both actual `.pem` files in your shared folder - one for preprod and one for production.
-</Note>
-
-<Info>
-Polymarket needs Editor access to provide your credentials (including your Client ID) in the shared folder after verification.
-</Info>
-
-## Step 3: Verification Call
-
-After you share your onboarding folder:
-
-1. The Polymarket team will review your submission
-2. We will contact you using the information in your onboarding document
-3. We will schedule a **recorded online meeting** with both Polymarket contacts present
-
-<Warning>
-**Identity Verification Required**
-
-During the verification call:
-- **Both contacts** from your company (primary and secondary) must be present
-- Each contact must provide **government-issued photo ID** to verify their identity
-- You will verbally confirm the fingerprints of **both** public keys
-
-Have the SHA256 hashes ready for both keys:
-```bash
-sha256sum {companyname}_preprod_public_key.pem
-sha256sum {companyname}_prod_public_key.pem
-```
-</Warning>
-
-4. Once identity and key fingerprints are verified, both keys will be configured in the authentication system
-
-## Step 4: Receive Your Client ID
-
-After successful verification, Polymarket will add a `clientid.txt` file to your shared Google Drive folder containing your Auth0 Client ID.
-
-<Info>
-**Keep your Client ID secure.** You'll use it in the JWT authentication flow to obtain access tokens. See [Authentication](/getting-started/authentication) for details.
-</Info>
-
-## Step 5: Start Using the API
-
-After your key is verified and configured:
-
-1. You will receive your **Client ID** and environment details
-2. Follow the [Authentication Setup](/getting-started/authentication) guide to make API calls
-3. Use your private key to sign JWT assertions and obtain access tokens
-
-## Onboarding Checklist
-
-- [ ] Generated RSA key pairs for both preprod and production
-- [ ] Secured both private keys with restricted permissions (`chmod 600`)
-- [ ] Created Google Drive folder named "[Company Name] - Polymarket API Onboarding"
-- [ ] Uploaded `{companyname}_preprod_public_key.pem`
-- [ ] Uploaded `{companyname}_prod_public_key.pem`
-- [ ] Uploaded `{companyname} Onboarding Document`
-- [ ] Uploaded `{companyname} Participant Agreement` ([template](/isv-partners/participant-agreement))
-- [ ] Uploaded `{companyname} Contact Form` ([template](/isv-partners/contact-form))
-- [ ] Uploaded `{companyname} Corporate Application` ([template](/isv-partners/corporate-application)) (if corporate entity)
-- [ ] Shared folder with `onboarding@qcex.com` (Editor access)
-- [ ] Completed verification call with Polymarket team (both fingerprints verified)
-- [ ] Received Client IDs for preprod and production environments
-
-<Card title="Onboarding Document Template" icon="file-lines" href="/isv-partners/onboarding-template">
-  Use this template to create your onboarding document
-</Card>
+The Polymarket team will follow up with next steps and provide your Client ID credentials.

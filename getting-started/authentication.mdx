@@ -5,13 +5,29 @@ description: 'Using Private Key JWT authentication to access the API'
 
 # Authentication
 
-<Warning>
-**Complete Onboarding First**
-
-Before you can authenticate, you must complete the [Onboarding](/getting-started/onboarding) process to generate your key pair and receive your Client ID.
-</Warning>
-
 The Polymarket Exchange API uses **Private Key JWT** authentication. You sign a JWT with your private key and exchange it for an access token.
+
+## Generate Your Key Pairs
+
+Generate an RSA key pair for each environment you need access to. You will share only the **public keys** with Polymarket during [Onboarding](/getting-started/onboarding).
+
+```bash
+# Replace 'acme' with your company name
+
+# Development
+openssl genrsa -out acme_dev_private_key.pem 2048
+openssl rsa -in acme_dev_private_key.pem -pubout -out acme_dev_public_key.pem
+
+# Pre-production
+openssl genrsa -out acme_preprod_private_key.pem 2048
+openssl rsa -in acme_preprod_private_key.pem -pubout -out acme_preprod_public_key.pem
+
+# Production
+openssl genrsa -out acme_prod_private_key.pem 2048
+openssl rsa -in acme_prod_private_key.pem -pubout -out acme_prod_public_key.pem
+```
+
+Keep your private keys secure. Never share them with anyone.
 
 ## Environments
 
