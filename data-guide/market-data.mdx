@@ -1,0 +1,137 @@
+---
+title: 'Market Data'
+description: 'Access real-time and historical market data from the Polymarket Exchange'
+---
+
+# Market Data
+
+This guide covers how to access market data from the Polymarket Exchange for read-only consumption.
+
+## Overview
+
+Market data includes:
+
+- **Best Bid/Offer (BBO)** - Current best prices
+- **L2 Order Book** - Full depth of market
+- **Trades** - Executed transactions
+
+## Required Scopes
+
+| Scope | Data Access |
+|-------|-------------|
+| `read:marketdata` | BBO, streaming market data |
+| `read:l2marketdata` | Full L2 order book depth |
+
+## REST API Endpoints
+
+### Get Best Bid/Offer
+
+Retrieve the current best bid and offer for a symbol:
+
+```bash
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/orderbook/{symbol}/bbo" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "symbol": "BTCUSD-2024-01-YES",
+  "bid": {
+    "price": "0.65",
+    "size": "1000"
+  },
+  "ask": {
+    "price": "0.67",
+    "size": "500"
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+### Get L2 Order Book
+
+Retrieve the full order book depth:
+
+```bash
+curl -X GET "https://api.preprod.polymarketexchange.com/v1/orderbook/{symbol}" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "symbol": "BTCUSD-2024-01-YES",
+  "bids": [
+    {"price": "0.65", "size": "1000"},
+    {"price": "0.64", "size": "2000"},
+    {"price": "0.63", "size": "1500"}
+  ],
+  "asks": [
+    {"price": "0.67", "size": "500"},
+    {"price": "0.68", "size": "800"},
+    {"price": "0.69", "size": "1200"}
+  ],
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+## Streaming Market Data (gRPC)
+
+For real-time updates, use the gRPC [Market Data Stream](/streaming-endpoints/market-data-stream).
+
+### Subscribe to Market Data
+
+```python
+import grpc
+from polymarket_pb2 import MarketDataRequest
+from polymarket_pb2_grpc import MarketDataServiceStub
+
+# Create channel with credentials
+channel = grpc.secure_channel(
+    'grpc.preprod.polymarketexchange.com:443',
+    grpc.ssl_channel_credentials()
+)
+
+stub = MarketDataServiceStub(channel)
+
+# Subscribe to symbols
+request = MarketDataRequest(
+    symbols=["BTCUSD-2024-01-YES", "ETHUSD-2024-01-YES"]
+)
+
+# Stream updates
+for update in stub.Subscribe(request, metadata=[('authorization', f'Bearer {token}')]):
+    print(f"Symbol: {update.symbol}, Bid: {update.bid}, Ask: {update.ask}")
+```
+
+## Best Practices
+
+### Rate Limits
+
+- REST endpoints are subject to [rate limits](/getting-started/rate-limits)
+- Use streaming (gRPC) for real-time data to reduce API calls
+- Cache reference data locally
+
+### Connection Management
+
+- Implement reconnection logic for streaming connections
+- Handle network interruptions gracefully
+- Use heartbeats to detect connection issues
+
+### Data Handling
+
+- Validate timestamps to detect stale data
+- Handle gaps in sequence numbers appropriately
+- Store historical data locally for analysis
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Reference Data" icon="book" href="/data-guide/reference-data">
+    Query instruments and symbols
+  </Card>
+  <Card title="gRPC Streaming" icon="bolt" href="/streaming-endpoints/market-data-stream">
+    Set up real-time data streams
+  </Card>
+</CardGroup>

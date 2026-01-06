@@ -1,7 +1,72 @@
 ---
-title: "FAQ"
-description: "Frequently asked questions about Polymarket Exchange API"
+title: "FAQs"
+description: "Frequently asked questions about the Polymarket Exchange API"
 ---
+
+# Frequently Asked Questions
+
+## Trader FAQs
+
+These FAQs are for **DMA Participants** (Direct Market Access traders) using the Polymarket Exchange API.
+
+<AccordionGroup>
+  <Accordion title="What is the Polymarket Exchange?">
+    The Polymarket Exchange is a CFTC-regulated exchange for trading event contracts. DMA participants can trade directly on the exchange using the API, with real-time market data and order execution.
+  </Accordion>
+
+  <Accordion title="How do I get started as a trader?">
+    To start trading on the Polymarket Exchange:
+
+    1. Complete the [Onboarding](/getting-started/onboarding) process
+    2. Generate your RSA key pairs for authentication
+    3. Set up [Authentication](/getting-started/authentication) with Private Key JWT
+    4. Follow the [Quickstart](/getting-started/quickstart) guide to place your first order
+  </Accordion>
+
+  <Accordion title="What are the trading hours?">
+    The Polymarket Exchange operates 24/7 for most markets. Specific instruments may have different trading hours based on the underlying event. Check the instrument metadata for trading schedule details.
+  </Accordion>
+
+  <Accordion title="What are the fees for trading?">
+    Trading fees vary by instrument and order type. Contact Polymarket for the current fee schedule. Fees are deducted from your account balance when trades execute.
+  </Accordion>
+
+  <Accordion title="What are the position limits?">
+    Position limits are set per instrument and per account. These limits are enforced to manage risk. Check with Polymarket for specific limit details for your account type.
+  </Accordion>
+
+  <Accordion title="How do I fund my trading account?">
+    DMA participants typically fund accounts through wire transfer or other approved methods. Contact **onboarding@polymarket.com** for funding instructions specific to your account setup.
+
+    <Note>
+    Unlike retail users who use Aeropay or Checkout.com, DMA participants have different funding arrangements.
+    </Note>
+  </Accordion>
+
+  <Accordion title="Does /search-trades return my trades only, or all exchange trades?">
+    **`/search-trades` returns only trades for your authenticated user**, not exchange-wide trades.
+
+    The endpoint uses participant-scoped authentication, meaning:
+
+    1. **Per-User Token**: Your Auth0 JWT is exchanged for a participant token scoped to your `participant_id`
+    2. **Automatic Filtering**: The exchange automatically filters results to trades where you are a party (buyer or seller)
+    3. **No Cross-User Access**: You cannot see other participants' trades
+
+    The same scoping applies to related endpoints:
+    - `/search-orders` - only your orders
+    - `/search-executions` - only your executions
+    - `/positions/list` - only your positions
+    - `/accounts/balance` - only your account balances
+
+    <Note>
+    If you need exchange-wide trade data (e.g., for market analysis), use the public market data endpoints or the market data stream instead.
+    </Note>
+  </Accordion>
+</AccordionGroup>
+
+## Partner FAQs
+
+These FAQs are for **Partners** (ISVs, Independent Brokers, and FCMs) integrating with the Polymarket Exchange.
 
 <AccordionGroup>
   <Accordion title="What is a Participant ID?">
@@ -55,23 +120,64 @@ description: "Frequently asked questions about Polymarket Exchange API"
     </Note>
   </Accordion>
 
-  <Accordion title="Does /search-trades return my trades only, or all exchange trades?">
-    **`/search-trades` returns only trades for your authenticated user**, not exchange-wide trades.
+  <Accordion title="How do I onboard my end users?">
+    Partners onboard end users through the KYC verification flow:
 
-    The endpoint uses participant-scoped authentication, meaning:
+    1. Create a user record via the API
+    2. Initiate KYC verification for the user
+    3. User completes identity verification
+    4. Upon approval, the user receives a participant ID
+    5. User can now trade under your firm
 
-    1. **Per-User Token**: Your Auth0 JWT is exchanged for a participant token scoped to your `participant_id`
-    2. **Automatic Filtering**: The exchange automatically filters results to trades where you are a party (buyer or seller)
-    3. **No Cross-User Access**: You cannot see other participants' trades
+    See the [KYC Verification](/isv-partners/kyc/overview) guide for details.
+  </Accordion>
 
-    The same scoping applies to related endpoints:
-    - `/search-orders` - only your orders
-    - `/search-executions` - only your executions
-    - `/positions/list` - only your positions
-    - `/accounts/balance` - only your account balances
+  <Accordion title="How do I handle payments for my users?">
+    Partners can integrate payment methods for their users:
 
-    <Note>
-    If you need exchange-wide trade data (e.g., for market analysis), use the public market data endpoints or the market data stream instead.
-    </Note>
+    - **Aeropay**: Bank account linking for deposits/withdrawals
+    - **Checkout.com**: Card-based deposits
+
+    See the [Payments Overview](/isv-partners/payments/overview) for integration details.
+  </Accordion>
+
+  <Accordion title="What webhooks are available?">
+    Polymarket provides webhooks for real-time notifications:
+
+    - KYC status changes
+    - Funding events
+    - User account updates
+
+    See [Webhooks](/isv-partners/kyc/webhooks) for setup instructions.
+  </Accordion>
+</AccordionGroup>
+
+## General FAQs
+
+<AccordionGroup>
+  <Accordion title="Which environments are available?">
+    Polymarket provides three environments:
+
+    | Environment | Purpose |
+    |-------------|---------|
+    | Development | Initial integration and testing |
+    | Pre-production | Final testing before go-live |
+    | Production | Live trading |
+
+    Each environment requires separate credentials. See [Environments](/getting-started/environments) for details.
+  </Accordion>
+
+  <Accordion title="What authentication method is used?">
+    The Polymarket Exchange uses **Private Key JWT** authentication via Auth0. You sign a JWT with your RSA private key and exchange it for an access token.
+
+    See [Authentication](/getting-started/authentication) for complete details.
+  </Accordion>
+
+  <Accordion title="What are the API rate limits?">
+    Rate limits vary by endpoint and account type. See [Rate Limits](/getting-started/rate-limits) for current limits.
+  </Accordion>
+
+  <Accordion title="How do I get support?">
+    For integration support, contact **fix@qcex.com**
   </Accordion>
 </AccordionGroup>

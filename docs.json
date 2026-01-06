@@ -18,12 +18,11 @@
         "pages": ["index"]
       },
       {
-        "tab": "Getting Started",
+        "tab": "Trader Guide",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Trader Guide",
             "pages": [
-              "getting-started/getting-access",
               "getting-started/onboarding",
               "getting-started/authentication",
               "getting-started/quickstart",
@@ -32,6 +31,65 @@
               "getting-started/connection-options",
               "getting-started/health-check",
               "getting-started/common-pitfalls"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Partner Guide",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "isv-partners/overview"
+            ]
+          },
+          {
+            "group": "Onboarding",
+            "pages": [
+              "isv-partners/onboarding-template",
+              "isv-partners/participant-agreement",
+              "isv-partners/contact-form",
+              "isv-partners/corporate-application"
+            ]
+          },
+          {
+            "group": "Users & Accounts",
+            "pages": [
+              "isv-partners/users",
+              "isv-partners/accounts"
+            ]
+          },
+          {
+            "group": "KYC Verification",
+            "pages": [
+              "isv-partners/kyc/overview",
+              "isv-partners/kyc/prefill-flow",
+              "isv-partners/kyc/verification-flow",
+              "isv-partners/kyc/webhooks",
+              "isv-partners/kyc/referral-codes"
+            ]
+          },
+          {
+            "group": "Payments",
+            "pages": [
+              "isv-partners/payments/overview",
+              "isv-partners/payments/aeropay-guide",
+              "isv-partners/payments/checkout-guide",
+              "isv-partners/payments/funding-management"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Data Guide",
+        "groups": [
+          {
+            "group": "Data Guide",
+            "pages": [
+              "data-guide/overview",
+              "data-guide/market-data",
+              "data-guide/reference-data"
             ]
           }
         ]
@@ -184,52 +242,6 @@
         ]
       },
       {
-        "tab": "Partner Guide",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "isv-partners/overview"
-            ]
-          },
-          {
-            "group": "Onboarding",
-            "pages": [
-              "isv-partners/onboarding-template",
-              "isv-partners/participant-agreement",
-              "isv-partners/contact-form",
-              "isv-partners/corporate-application"
-            ]
-          },
-          {
-            "group": "Users & Accounts",
-            "pages": [
-              "isv-partners/users",
-              "isv-partners/accounts"
-            ]
-          },
-          {
-            "group": "KYC Verification",
-            "pages": [
-              "isv-partners/kyc/overview",
-              "isv-partners/kyc/prefill-flow",
-              "isv-partners/kyc/verification-flow",
-              "isv-partners/kyc/webhooks",
-              "isv-partners/kyc/referral-codes"
-            ]
-          },
-          {
-            "group": "Payments",
-            "pages": [
-              "isv-partners/payments/overview",
-              "isv-partners/payments/aeropay-guide",
-              "isv-partners/payments/checkout-guide",
-              "isv-partners/payments/funding-management"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "Sample Code",
         "groups": [
           {
@@ -242,12 +254,12 @@
         ]
       },
       {
-        "tab": "FAQ",
-        "pages": ["faq"]
-      },
-      {
         "tab": "Changelog",
         "pages": ["changelog"]
+      },
+      {
+        "tab": "FAQs",
+        "pages": ["faq"]
       }
     ],
     "global": {}

@@ -1,0 +1,92 @@
+---
+title: 'Data Guide Overview'
+description: 'Connect to the Polymarket Exchange for read-only market data consumption'
+---
+
+# Data Guide
+
+This guide is for users who want to connect to the Polymarket Exchange for **read-only market data consumption** without trading functionality.
+
+## Who Is This For?
+
+The Data Guide is designed for:
+
+- **Data vendors** building market data products
+- **Research teams** analyzing prediction market data
+- **Analytics platforms** displaying market information
+- **Developers** building read-only applications
+
+## What You Can Access
+
+With read-only access, you can consume:
+
+| Data Type | Description | Access Method |
+|-----------|-------------|---------------|
+| **Market Data** | Real-time quotes, BBO, L2 order book | REST API, gRPC Streaming |
+| **Reference Data** | Instruments, symbols, metadata | REST API |
+| **Historical Data** | Past trades and price history | REST API |
+
+## Getting Started
+
+### Step 1: Onboarding
+
+Contact Polymarket to request read-only API access:
+
+1. Email **onboarding@polymarket.com** with your use case
+2. Specify that you need **read-only data access** (no trading)
+3. Provide your company/organization details
+
+### Step 2: Authentication Setup
+
+Even for read-only access, you need to authenticate using [Private Key JWT](/getting-started/authentication):
+
+1. Generate an RSA key pair
+2. Share your public key with Polymarket
+3. Receive your Client ID credentials
+
+### Step 3: Request Required Scopes
+
+For read-only data access, request these scopes:
+
+| Scope | Description |
+|-------|-------------|
+| `read:marketdata` | BBO (best bid/offer) and streaming market data |
+| `read:l2marketdata` | L2 orderbook depth |
+| `read:instruments` | Instrument listings and metadata |
+
+## Available Endpoints
+
+### REST API
+
+| Endpoint | Description |
+|----------|-------------|
+| `/v1/orderbook/{symbol}/bbo` | Best bid/offer for a symbol |
+| `/v1/orderbook/{symbol}` | L2 order book depth |
+| `/v1/refdata/instruments` | List all instruments |
+| `/v1/refdata/symbols` | List all symbols |
+| `/v1/refdata/metadata` | Instrument metadata |
+
+### gRPC Streaming
+
+For real-time data, use the [Market Data Stream](/streaming-endpoints/market-data-stream):
+
+- Subscribe to BBO updates
+- Subscribe to L2 order book changes
+- Receive trade notifications
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Market Data" icon="chart-bar" href="/data-guide/market-data">
+    Access real-time and historical market data
+  </Card>
+  <Card title="Reference Data" icon="book" href="/data-guide/reference-data">
+    Query instruments and symbols
+  </Card>
+  <Card title="Authentication" icon="key" href="/getting-started/authentication">
+    Set up API authentication
+  </Card>
+  <Card title="REST API" icon="code" href="/api-reference/introduction">
+    Explore the REST API reference
+  </Card>
+</CardGroup>

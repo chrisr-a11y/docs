@@ -12,10 +12,33 @@ description: "Troubleshooting guide for common issues when integrating with Poly
 <Note>
 To ensure your order was successfully processed, always verify its status via the order stream. Do not rely solely on HTTP 200 responses or returned order IDs.
 </Note>
+
 **Common failure reasons:**
 - Invalid Account
 - Expired Instrument
 - Insufficient Balance
+
+## Authentication Issues
+
+### Invalid Client Errors
+
+If you receive `invalid_client` or `invalid_client_assertion` errors:
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `invalid_client` | JWT signature verification failed | Verify private key matches registered public key |
+| `invalid_client_assertion` | Malformed JWT or wrong claims | Check JWT claims (iss, sub, aud, exp) |
+| `401 Unauthorized` | Invalid or expired access token | Request a new access token |
+| `403 Forbidden` | Missing required scope | Contact support to request additional scopes |
+
+### Common JWT Mistakes
+
+- Wrong `aud` claim (must be the token endpoint URL, not the API URL)
+- Expired JWT (`exp` in the past)
+- Reused `jti` (must be unique per request)
+- Using development credentials in production (each environment requires separate keys)
+
+See [Authentication](/getting-started/authentication) for the correct JWT structure.
 
 ## Connection Issues
 
@@ -31,35 +54,50 @@ Host: rest.preprod.polymarketexchange.com
 Host: rest.prod.polymarketexchange.com
 ```
 
-
-
 Without this header, requests are routed to gRPC by default instead of REST.
 
 ### Timeout / No Response
 
-If curl commands hang without returning a response:
+If requests hang without returning a response:
 
-**Step 1: Verify DNS Configuration**
+**Step 1: Verify Your Token**
 
-Use the complete service name endpoint to test connectivity:
+Ensure your access token is valid and not expired:
 
-```bash
-https://traderapi.us-east-1.privatelink.preprod.polymarketexchange.com/auth/v1beta1/register
+```python
+import base64
+import json
+
+# Decode the payload (middle part of JWT)
+payload = access_token.split('.')[1]
+payload += '=' * (4 - len(payload) % 4)  # Add padding
+claims = json.loads(base64.urlsafe_b64decode(payload))
+
+print("Token expires:", claims.get("exp"))
+print("Granted scopes:", claims.get("scope", ""))
 ```
 
-If this URL works but your DNS/CNAME doesn't, the issue is with your DNS configuration.
+**Step 2: Check Endpoint URL**
 
-**Step 2: Check Security Group Settings**
+Ensure you're using the correct API base URL for your environment:
 
-If the full endpoint also times out, review your VPC security group settings:
+| Environment | API Base URL |
+|-------------|--------------|
+| Development | `api.dev01.polymarketexchange.com` |
+| Pre-production | `api.preprod.polymarketexchange.com` |
+| Production | `api.prod.polymarketexchange.com` |
 
-- Set inbound rules to `0.0.0.0/0` for all traffic
-- Set outbound rules to `0.0.0.0/0` for all traffic
-These settings are suggested for testing only and not recommended for production Security Groups
+**Step 3: Verify Network Connectivity**
+
+Test basic connectivity to the API:
+
+```bash
+curl -I https://api.preprod.polymarketexchange.com/v1/health
+```
 
 ### Curl Command Drops to Blinking Cursor
 
-If your curl command drops to a new line with a blinking cursor (`>_`), this indicates a formatting issue with the command itself—not a connection problem.
+If your curl command drops to a new line with a blinking cursor, this indicates a formatting issue with the command itself, not a connection problem.
 
 **Common causes:**
 - Missing quotation marks
@@ -68,33 +106,32 @@ If your curl command drops to a new line with a blinking cursor (`>_`), this ind
 
 ## Platform-Specific Issues
 
-### Windows & Python HTTP/2
+### Windows and Python HTTP/2
 
 Windows instances and Python applications may encounter HTTP/2 compatibility issues:
 
 - **Windows**: Ensure HTTP/2 is enabled
 - **Python**: Use the `httpx` library instead of `requests`
 
-## AWS Connectivity
+```python
+import httpx
 
-### Can't Connect to Service
+# Use httpx for HTTP/2 support
+with httpx.Client(http2=True) as client:
+    response = client.get(
+        "https://api.preprod.polymarketexchange.com/v1/health",
+        headers={"Authorization": f"Bearer {token}"}
+    )
+```
 
-If your AWS instance cannot find the service, verify your subnets match our availability zones.
+## Rate Limiting
 
-<Warning>
-Availability zone letter indicators (e.g., `us-east-1a`) can be mapped differently across AWS accounts. At least **one** availability zone ID must match.
-</Warning>
+### 429 Too Many Requests
 
-**Production Availability Zones:**
-- `use1-az1`
-- `use1-az2`
-- `use1-az6`
+If you receive 429 errors, you've exceeded the rate limit:
 
-**Pre-Production Availability Zones:**
-- `use1-az1`
-- `use1-az2`
-- `use1-az4`
+- Implement exponential backoff
+- Cache responses where possible
+- Use streaming endpoints for real-time data instead of polling
 
-<Note>
-Subnet matching only applies when connecting from **within AWS us-east-1**. Connections from other regions are mapped automatically.
-</Note>
+See [Rate Limits](/getting-started/rate-limits) for current limits.

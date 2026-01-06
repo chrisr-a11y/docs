@@ -1,0 +1,145 @@
+---
+title: 'Reference Data'
+description: 'Query instruments, symbols, and metadata from the Polymarket Exchange'
+---
+
+# Reference Data
+
+Reference data provides information about available instruments and symbols on the Polymarket Exchange.
+
+## Overview
+
+Reference data includes:
+
+- **Instruments** - Tradable contracts with full details
+- **Symbols** - Trading symbol identifiers
+- **Metadata** - Additional instrument information
+
+## Required Scope
+
+| Scope | Data Access |
+|-------|-------------|
+| `read:instruments` | All reference data endpoints |
+
+## REST API Endpoints
+
+### List Instruments
+
+Retrieve all available instruments:
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+**Response:**
+```json
+{
+  "instruments": [
+    {
+      "instrument_id": "12345",
+      "symbol": "BTCUSD-2024-01-YES",
+      "name": "Will BTC be above $50k on Jan 1, 2024? - Yes",
+      "status": "ACTIVE",
+      "expiration": "2024-01-01T00:00:00Z",
+      "tick_size": "0.01",
+      "min_order_size": "1"
+    }
+  ]
+}
+```
+
+### List Symbols
+
+Retrieve all trading symbols:
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/symbols" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+### Get Instrument Metadata
+
+Retrieve detailed metadata for instruments:
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/metadata" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "instrument_ids": ["12345", "12346"]
+  }'
+```
+
+## Instrument Lifecycle
+
+Instruments go through the following states:
+
+| Status | Description |
+|--------|-------------|
+| `PENDING` | Instrument created but not yet active |
+| `ACTIVE` | Available for trading |
+| `HALTED` | Trading temporarily suspended |
+| `EXPIRED` | Past expiration date, awaiting resolution |
+| `SETTLED` | Final outcome determined, positions settled |
+
+## Best Practices
+
+### Caching
+
+Reference data changes infrequently. Cache locally and refresh periodically:
+
+```python
+import time
+
+class ReferenceDataCache:
+    def __init__(self, api_client, refresh_interval=300):
+        self.api_client = api_client
+        self.refresh_interval = refresh_interval
+        self.instruments = {}
+        self.last_refresh = 0
+
+    def get_instruments(self):
+        if time.time() - self.last_refresh > self.refresh_interval:
+            self._refresh()
+        return self.instruments
+
+    def _refresh(self):
+        response = self.api_client.list_instruments()
+        self.instruments = {i['symbol']: i for i in response['instruments']}
+        self.last_refresh = time.time()
+```
+
+### Filtering
+
+Use filters to retrieve specific instruments:
+
+```bash
+curl -X POST "https://api.preprod.polymarketexchange.com/v1/refdata/instruments" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "ACTIVE"
+  }'
+```
+
+### Handling Updates
+
+- Subscribe to instrument updates for real-time changes
+- Check instrument status before placing orders
+- Monitor for new instruments being listed
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Market Data" icon="chart-bar" href="/data-guide/market-data">
+    Access real-time and historical market data
+  </Card>
+  <Card title="REST API Reference" icon="code" href="/api-reference/refdata/overview">
+    Full reference data API documentation
+  </Card>
+</CardGroup>
